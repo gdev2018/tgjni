@@ -1,1 +1,1 @@
-include ':app'
+include ':fnd_app_base'

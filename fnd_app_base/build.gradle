@@ -1,0 +1,100 @@
+//apply plugin: 'com.novoda.bintray-release'  // 4public custom module in maven/jcenter
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+    lintOptions {
+        disable 'MissingTranslation'
+        disable 'ExtraTranslation'
+
+        // 4public custom module in maven/jcenter. To avoid errors on compile
+        abortOnError false
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['./jni/']
+        }
+    }
+    externalNativeBuild {
+
+        ndkBuild {
+            path "jni/Android.mk"
+        }
+    }
+    defaultConfig {
+//        applicationId = "com.github.gdev2018.master"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        externalNativeBuild {
+            ndkBuild {
+                arguments "NDK_APPLICATION_MK:=jni/Application.mk", "APP_PLATFORM:=android-16", "-j8"
+                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            }
+        }
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    //    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    //jackson
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.4'
+    //  for PlaborExeption
+    // Dependencies for local unit tests
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-all:1.10.19'
+    testImplementation 'org.hamcrest:hamcrest-all:1.3'
+    // Espresso
+    implementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.2'
+    // tg --->
+    compileOnly 'org.checkerframework:checker-qual:2.5.2'
+    compileOnly 'org.checkerframework:checker-compat-qual:2.5.0'
+    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+    implementation 'com.google.firebase:firebase-config:16.1.3'
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+    implementation 'com.google.android.gms:play-services-vision:16.2.0'
+    implementation 'com.google.android.gms:play-services-wallet:16.0.1'
+    implementation 'com.google.android.gms:play-services-wearable:16.0.1'
+    implementation 'com.android.support:support-core-ui:28.0.0'
+    implementation 'com.android.support:support-compat:28.0.0'
+    implementation 'com.android.support:support-core-utils:28.0.0'
+    implementation 'com.android.support:support-v13:28.0.0'
+    implementation 'com.android.support:palette-v7:28.0.0'
+    implementation 'com.android.support:exifinterface:28.0.0'
+    implementation 'net.hockeyapp.android:HockeySDK:5.1.1'
+    implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
+    implementation 'com.stripe:stripe-android:2.0.2'
+}
+
+//// это блок будет обработан плагином bintray-release
+//publish {
+//    userOrg = 'gdev2018'
+//    groupId = 'com.github.gdev2018'
+//    repoName = 'tgjni'
+//    artifactId = 'fnd_app_base'
+//    publishVersion = '0.0.2'
+//    desc = 'tgjni project - fnd_app_base module/package/artifact'
+//    licences = ['GPL-2.0']
+//    website = 'https://github.com/gdev2018/tgjni'
+//}
+//apply plugin: 'com.google.gms.google-services'

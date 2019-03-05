@@ -5,20 +5,51 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
+
+        maven {
+            url 'https://dl.bintray.com/gdev2018/tgjni'
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.1'
-        
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath 'com.google.gms:google-services:4.0.2'
+//        classpath 'com.frogermcs.androiddevmetrics:androiddevmetrics-plugin:0.6'
+//        classpath 'org.jacoco:org.jacoco.core:0.8.1'
+
+        classpath 'com.novoda:bintray-release:0.9'    // 4public custom module in maven/jcenter
     }
+}
+
+//report will be here - https://scans.gradle.com/s/proqsyyqkcoju/performance/configuration?openScriptsAndPlugins=WzIsMF0
+//plugins {
+//    // Check for the latest version here: https://plugins.gradle.org/plugin/com.gradle.build-scan
+//    id("com.gradle.build-scan") version "1.16"
+//}
+//
+//buildScan {
+//    setTermsOfServiceUrl("https://gradle.com/terms-of-service")
+//    setTermsOfServiceAgree("yes")
+//
+//    // Keep this while optimizing your builds,
+//    // but then remove it once you're done — unless you want to share all future builds with Gradle.
+//    // If removed, you can still get build scans by using the --scan option.
+//    publishAlways()
+//}
+
+repositories {
+    google()
 }
 
 allprojects {
     repositories {
         google()
         jcenter()
+
+        maven {
+            url 'https://dl.bintray.com/gdev2018/tgjni'
+        }
     }
 }
 

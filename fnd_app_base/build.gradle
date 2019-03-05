@@ -1,4 +1,4 @@
-//apply plugin: 'com.novoda.bintray-release'  // 4public custom module in maven/jcenter
+apply plugin: 'com.novoda.bintray-release'  // 4public custom module in maven/jcenter
 apply plugin: 'com.android.library'
 
 android {
@@ -86,15 +86,15 @@ dependencies {
     implementation 'com.stripe:stripe-android:2.0.2'
 }
 
-//// это блок будет обработан плагином bintray-release
-//publish {
-//    userOrg = 'gdev2018'
-//    groupId = 'com.github.gdev2018'
-//    repoName = 'tgjni'
-//    artifactId = 'fnd_app_base'
-//    publishVersion = '0.0.2'
-//    desc = 'tgjni project - fnd_app_base module/package/artifact'
-//    licences = ['GPL-2.0']
-//    website = 'https://github.com/gdev2018/tgjni'
-//}
+// это блок будет обработан плагином bintray-release
+publish {
+    userOrg = 'gdev2018'
+    groupId = 'com.github.gdev2018'
+    repoName = 'tgjni'
+    artifactId = 'fnd_app_base'
+    publishVersion = '0.0.2'
+    desc = 'tgjni project - fnd_app_base module/package/artifact'
+    licences = ['GPL-2.0']
+    website = 'https://github.com/gdev2018/tgjni'
+}
 //apply plugin: 'com.google.gms.google-services'

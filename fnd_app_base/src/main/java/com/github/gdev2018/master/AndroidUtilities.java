@@ -119,7 +119,7 @@ import java.util.TimeZone;
  * Created by RET on 09.03.2018.
  */
 
-public final class AndroidUtilities {
+public class AndroidUtilities {
 
     public static final int RESULT_SUCCESS = 1;
     public static final int RESULT_NO_ACTION = 0;
@@ -152,108 +152,6 @@ public final class AndroidUtilities {
 
     private static Paint roundPaint;
     private static RectF bitmapRect;
-
-    // ************ View functions ************
-
-    // --- BaseViewItem.getters ---
-    /**
-     * Getter, like DW.GetItem series
-     * @param aView
-     * @param resName
-     * @return  String - view.getText()
-     *          null - if error
-     */
-    public static String getItemString(View aView, String resName) {
-        int resId = aView.getResources().getIdentifier(resName, "id", BuildConfig.APPLICATION_ID);    //BuildConfig.APPLICATION_ID = Context.getPackageName()
-        View view = aView.findViewById(resId);
-        String ls_rs = null;
-        if (view instanceof TextView)
-        {
-            ls_rs = ((TextView)view).getText().toString();
-        } else if (view instanceof EditText)
-        {
-            ls_rs = ((EditText)view).getText().toString();
-        }
-        return ls_rs;
-    }
-
-    /**
-     * Getter, like DW.GetItem series
-     * @param aView
-     * @param resName
-     * @return  Boolean - view.isChecked();
-     *          null - if error
-     */
-    public static Boolean getItemBoolean(View aView, String resName) {
-        int resId = aView.getResources().getIdentifier(resName, "id", BuildConfig.APPLICATION_ID);    //BuildConfig.APPLICATION_ID = Context.getPackageName()
-        View view = aView.findViewById(resId);
-        Boolean lb_return = null;
-        if (view instanceof Switch)
-        {
-            lb_return = ((Switch)view).isChecked();
-        }
-        return lb_return;
-    }
-
-    // --- BaseViewItem.setters ---
-    /**
-     * @param aView
-     * @param resName
-     * @param value
-     */
-    public static void setItemString(View aView, String resName, String value) {
-        int resId = aView.getResources().getIdentifier(resName, "id", BuildConfig.APPLICATION_ID);    //BuildConfig.APPLICATION_ID = Context.getPackageName()
-        View view = aView.findViewById(resId);
-        if (view instanceof TextView)
-        {
-            ((TextView)view).setText(value);
-        } else if (view instanceof EditText)
-        {
-            ((TextView)view).setText(value);
-        }
-    }
-
-    /**
-     * @param aView
-     * @param resName
-     * @param value
-     */
-    public static void setItemBoolean(View aView, String resName, Boolean value) {
-        int resId = aView.getResources().getIdentifier(resName, "id", BuildConfig.APPLICATION_ID);    //BuildConfig.APPLICATION_ID = Context.getPackageName()
-        View view = aView.findViewById(resId);
-        Boolean lb_return = null;
-        if (view instanceof Switch)
-        {
-            ((Switch)view).setChecked(value);
-        }
-    }
-
-    /**
-     * @param aView
-     * @param resName
-     * @param value
-     * @param format
-     */
-    public static void setItemDateFormat(View aView, String resName, Date value, String format) {
-        String formattedDate = dateToString(value, format);
-        setItemString(aView, resName, formattedDate);
-    }
-
-    /**
-     * @param aView
-     * @param resName
-     * @param seconds
-     * @param format
-     */
-    public static void setItemSecondsFormat(View aView, String resName, Long seconds, String format) {
-        // TODO/done: 2018-03-09 - next add function SecFormat2
-        String formattedTime = "";
-        if (seconds != null) {
-            formattedTime = AndroidUtilities.secondsToString(Integer.valueOf(seconds.intValue()));
-        }
-        setItemString(aView, resName, formattedTime);
-    }
-
 
 
     // ************ time functions ************

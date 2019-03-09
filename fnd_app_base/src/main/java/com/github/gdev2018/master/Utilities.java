@@ -45,9 +45,9 @@ public class Utilities {
         }
     }
 
-    static {
-        System.loadLibrary("jni_util");
-    }
+//    static {
+//        System.loadLibrary("jni_util");
+//    }
 
     public native static int pinBitmap(Bitmap bitmap);
     public native static void unpinBitmap(Bitmap bitmap);

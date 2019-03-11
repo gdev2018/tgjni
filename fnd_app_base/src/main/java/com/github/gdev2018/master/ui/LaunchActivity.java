@@ -421,8 +421,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 ///*                    presentFragment(new InviteContactsActivity());*/
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 8) {
-                    presentFragment(new SettingsActivity());
-                    drawerLayoutContainer.closeDrawer(false);
+//                    presentFragment(new SettingsActivity());
+//                    drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 9) {
                     Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl));
                     drawerLayoutContainer.closeDrawer(false);
@@ -490,9 +490,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                 }
                                 break;
                             case "settings": {
-                                SettingsActivity settings = new SettingsActivity();
-                                actionBarLayout.addFragmentToStack(settings);
-                                settings.restoreSelfArgs(savedInstanceState);
+//                                SettingsActivity settings = new SettingsActivity();
+//                                actionBarLayout.addFragmentToStack(settings);
+//                                settings.restoreSelfArgs(savedInstanceState);
                                 break;
                             }
                             case "group":
@@ -1404,7 +1404,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 ///*                    didSelectDialogs(null, dids, null, false);*/
                 }
             } else if (open_settings != 0) {
-                actionBarLayout.presentFragment(new SettingsActivity(), false, true, true, false);
+//                actionBarLayout.presentFragment(new SettingsActivity(), false, true, true, false);
                 if (AndroidUtilities.isTablet()) {
                     actionBarLayout.showLastFragment();
                     rightActionBarLayout.showLastFragment();
@@ -2828,9 +2828,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 //                    outState.putBundle("args", args);
 //                    outState.putString("fragment", "chat");
 //                } else*/
-                    if (lastFragment instanceof SettingsActivity) {
-                        outState.putString("fragment", "settings");
-                    }
+//                    if (lastFragment instanceof SettingsActivity) {
+//                        outState.putString("fragment", "settings");
+//                    }
 //                } /*else if (lastFragment instanceof GroupCreateFinalActivity && args != null) {
 //                    outState.putBundle("args", args);
 //                    outState.putString("fragment", "group");

@@ -26,9 +26,9 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         return -1;
     }
 
-//    if (registerNativeTgNetFunctions(vm, env) != JNI_TRUE) {
-//        return -1;
-//    }
+    if (registerNativeTgNetFunctions(vm, env) != JNI_TRUE) {
+        return -1;
+    }
 
 //    tgvoipRegisterNatives(env);
     

@@ -23,8 +23,8 @@ android {
     }
     defaultConfig {
 //        applicationId = "com.github.gdev2018.master"
-        minSdkVersion 19
-        targetSdkVersion 28
+        minSdkVersion 16
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
 
@@ -92,7 +92,7 @@ publish {
     groupId = 'com.github.gdev2018'
     repoName = 'tgjni'
     artifactId = 'fnd_app_base'
-    publishVersion = '0.0.7'
+    publishVersion = '0.0.8'
     desc = 'tgjni project - fnd_app_base module/package/artifact'
     licences = ['GPL-2.0']
     website = 'https://github.com/gdev2018/tgjni'

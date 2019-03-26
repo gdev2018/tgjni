@@ -58,7 +58,7 @@ public class DrawerLayoutContainer extends FrameLayout {
 
     private Paint scrimPaint = new Paint();
 
-    private Object lastInsets;
+    private Object lastInsets;  // поясни за чёлку - https://habr.com/ru/company/funcorp/blog/419109/
     private boolean inLayout;
     private int minDrawerMargin;
     private float scrimOpacity;
@@ -76,6 +76,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
         setFocusableInTouchMode(true);
 
+        // поясни за чёлку - https://habr.com/ru/company/funcorp/blog/419109/
         if (Build.VERSION.SDK_INT >= 21) {
             setFitsSystemWindows(true);
             setOnApplyWindowInsetsListener((v, insets) -> {
@@ -136,6 +137,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         setDrawerPosition(drawerPosition + dx);
     }
 
+    // tells to ProGuard don't delete this method
     @Keep
     public void setDrawerPosition(float value) {
         drawerPosition = value;
@@ -413,12 +415,12 @@ public class DrawerLayoutContainer extends FrameLayout {
         if (Build.VERSION.SDK_INT < 21) {
             inLayout = true;
             if (heightSize == AndroidUtilities.displaySize.y + AndroidUtilities.statusBarHeight) {
-                if (getLayoutParams() instanceof MarginLayoutParams) {
+                if (getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
                     setPadding(0, AndroidUtilities.statusBarHeight, 0, 0);
                 }
                 heightSize = AndroidUtilities.displaySize.y;
             } else {
-                if (getLayoutParams() instanceof MarginLayoutParams) {
+                if (getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
                     setPadding(0, 0, 0, 0);
                 }
             }

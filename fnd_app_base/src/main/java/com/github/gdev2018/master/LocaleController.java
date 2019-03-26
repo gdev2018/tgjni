@@ -274,7 +274,7 @@ public class LocaleController {
 
         loadOtherLanguages();
         if (remoteLanguages.isEmpty()) {
-            AndroidUtilities.runOnUIThread(() -> loadRemoteLanguages(UserConfig.selectedAccount));
+///*            AndroidUtilities.runOnUIThread(() -> loadRemoteLanguages(UserConfig.selectedAccount));*/
         }
 
         for (int a = 0; a < otherLanguages.size(); a++) {

@@ -194,6 +194,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
     public String imageSearchBot;
     public String dcDomainName;
     public int webFileDatacenterId;
+    public String suggestedLangCode;
     private String installReferer;
 
     private SharedPreferences notificationsPreferences;
@@ -387,6 +388,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
         blockedCountry = mainPreferences.getBoolean("blockedCountry", false);
         dcDomainName = mainPreferences.getString("dcDomainName", ConnectionsManager.native_isTestBackend(currentAccount) != 0 ? "tapv2.stel.com" : "apv2.stel.com");
         webFileDatacenterId = mainPreferences.getInt("webFileDatacenterId", ConnectionsManager.native_isTestBackend(currentAccount) != 0 ? 2 : 4);
+        suggestedLangCode = mainPreferences.getString("suggestedLangCode", "en");
     }
 //
 //    public void updateConfig(final TLRPC.TL_config config) {
@@ -432,6 +434,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
 //            blockedCountry = config.blocked_mode;
 //            dcDomainName = config.dc_txt_domain_name;
 //            webFileDatacenterId = config.webfile_dc_id;
+//            suggestedLangCode = config.suggested_lang_code;
 //
 //            if (config.static_maps_provider == null) {
 //                config.static_maps_provider = "google";
@@ -508,6 +511,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
 //            editor.putString("imageSearchBot", imageSearchBot);
 //            editor.putString("dcDomainName", dcDomainName);
 //            editor.putInt("webFileDatacenterId", webFileDatacenterId);
+//            editor.putString("suggestedLangCode", suggestedLangCode);
 //            editor.commit();
 //
 //            LocaleController.getInstance().checkUpdateForCurrentRemoteLocale(currentAccount, config.lang_pack_version);

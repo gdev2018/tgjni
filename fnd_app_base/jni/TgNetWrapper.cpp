@@ -121,7 +121,7 @@ void cancelLoadOperation(JNIEnv *env, jclass c, jint address) {
     }
 }
 
-static const char *FileLoadOperationClassPathName = "org/telegram/tgnet/FileLoadOperation";
+static const char *FileLoadOperationClassPathName = "com/github/gdev2018/master/tgnet/FileLoadOperation";
 static JNINativeMethod FileLoadOperationMethods[] = {
         {"native_createLoadOpetation", "(IJJJI[B[BLjava/lang/String;IILjava/lang/String;Ljava/lang/String;Ljava/lang/Object;)I", (void *) createLoadOpetation},
         {"native_startLoadOperation", "(I)V", (void *) startLoadOperation},
@@ -152,7 +152,7 @@ jobject getJavaByteBuffer(JNIEnv *env, jclass c, jlong address) {
     return buffer->getJavaByteBuffer();
 }
 
-static const char *NativeByteBufferClassPathName = "org/telegram/tgnet/NativeByteBuffer";
+static const char *NativeByteBufferClassPathName = "com/github/gdev2018/master/tgnet/NativeByteBuffer";
 static JNINativeMethod NativeByteBufferMethods[] = {
         {"native_getFreeBuffer", "(I)J", (void *) getFreeBuffer},
         {"native_limit", "(J)I", (void *) limit},
@@ -479,13 +479,13 @@ void setJava(JNIEnv *env, jclass c, jboolean useJavaByteBuffers) {
     }
 }
 
-static const char *ConnectionsManagerClassPathName = "org/telegram/tgnet/ConnectionsManager";
+static const char *ConnectionsManagerClassPathName = "com/github/gdev2018/master/tgnet/ConnectionsManager";
 static JNINativeMethod ConnectionsManagerMethods[] = {
         {"native_getCurrentTimeMillis", "(I)J", (void *) getCurrentTimeMillis},
         {"native_getCurrentTime", "(I)I", (void *) getCurrentTime},
         {"native_isTestBackend", "(I)I", (void *) isTestBackend},
         {"native_getTimeDifference", "(I)I", (void *) getTimeDifference},
-        {"native_sendRequest", "(IJLorg/telegram/tgnet/RequestDelegateInternal;Lorg/telegram/tgnet/QuickAckDelegate;Lorg/telegram/tgnet/WriteToSocketDelegate;IIIZI)V", (void *) sendRequest},
+        {"native_sendRequest", "(IJLcom/github/gdev2018/master/tgnet/RequestDelegateInternal;Lcom/github/gdev2018/master/tgnet/QuickAckDelegate;Lcom/github/gdev2018/master/tgnet/WriteToSocketDelegate;IIIZI)V", (void *) sendRequest},
         {"native_cancelRequest", "(IIZ)V", (void *) cancelRequest},
         {"native_cleanUp", "(IZ)V", (void *) cleanUp},
         {"native_cancelRequestsForGuid", "(II)V", (void *) cancelRequestsForGuid},
@@ -506,7 +506,7 @@ static JNINativeMethod ConnectionsManagerMethods[] = {
         {"native_setPushConnectionEnabled", "(IZ)V", (void *) setPushConnectionEnabled},
         {"native_setJava", "(Z)V", (void *) setJava},
         {"native_applyDnsConfig", "(IJLjava/lang/String;)V", (void *) applyDnsConfig},
-        {"native_checkProxy", "(ILjava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/telegram/tgnet/RequestTimeDelegate;)J", (void *) checkProxy}
+        {"native_checkProxy", "(ILjava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/github/gdev2018/master/tgnet/RequestTimeDelegate;)J", (void *) checkProxy}
 };
 
 inline int registerNativeMethods(JNIEnv *env, const char *className, JNINativeMethod *methods, int methodsCount) {
@@ -536,7 +536,7 @@ extern "C" int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env) {
         return JNI_FALSE;
     }
     
-    jclass_RequestDelegateInternal = (jclass) env->NewGlobalRef(env->FindClass("org/telegram/tgnet/RequestDelegateInternal"));
+    jclass_RequestDelegateInternal = (jclass) env->NewGlobalRef(env->FindClass("com/github/gdev2018/master/tgnet/RequestDelegateInternal"));
     if (jclass_RequestDelegateInternal == 0) {
         return JNI_FALSE;
     }
@@ -545,7 +545,7 @@ extern "C" int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env) {
         return JNI_FALSE;
     }
 
-    jclass_RequestTimeDelegate = (jclass) env->NewGlobalRef(env->FindClass("org/telegram/tgnet/RequestTimeDelegate"));
+    jclass_RequestTimeDelegate = (jclass) env->NewGlobalRef(env->FindClass("com/github/gdev2018/master/tgnet/RequestTimeDelegate"));
     if (jclass_RequestTimeDelegate == 0) {
         return JNI_FALSE;
     }
@@ -554,7 +554,7 @@ extern "C" int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env) {
         return JNI_FALSE;
     }
 
-    jclass_QuickAckDelegate = (jclass) env->NewGlobalRef(env->FindClass("org/telegram/tgnet/QuickAckDelegate"));
+    jclass_QuickAckDelegate = (jclass) env->NewGlobalRef(env->FindClass("com/github/gdev2018/master/tgnet/QuickAckDelegate"));
     if (jclass_RequestDelegateInternal == 0) {
         return JNI_FALSE;
     }
@@ -563,7 +563,7 @@ extern "C" int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env) {
         return JNI_FALSE;
     }
 
-    jclass_WriteToSocketDelegate = (jclass) env->NewGlobalRef(env->FindClass("org/telegram/tgnet/WriteToSocketDelegate"));
+    jclass_WriteToSocketDelegate = (jclass) env->NewGlobalRef(env->FindClass("com/github/gdev2018/master/tgnet/WriteToSocketDelegate"));
     if (jclass_WriteToSocketDelegate == 0) {
         return JNI_FALSE;
     }
@@ -572,7 +572,7 @@ extern "C" int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env) {
         return JNI_FALSE;
     }
 
-    jclass_FileLoadOperationDelegate = (jclass) env->NewGlobalRef(env->FindClass("org/telegram/tgnet/FileLoadOperationDelegate"));
+    jclass_FileLoadOperationDelegate = (jclass) env->NewGlobalRef(env->FindClass("com/github/gdev2018/master/tgnet/FileLoadOperationDelegate"));
     if (jclass_FileLoadOperationDelegate == 0) {
         return JNI_FALSE;
     }
@@ -592,7 +592,7 @@ extern "C" int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env) {
         return JNI_FALSE;
     }
 
-    jclass_ConnectionsManager = (jclass) env->NewGlobalRef(env->FindClass("org/telegram/tgnet/ConnectionsManager"));
+    jclass_ConnectionsManager = (jclass) env->NewGlobalRef(env->FindClass("com/github/gdev2018/master/tgnet/ConnectionsManager"));
     if (jclass_ConnectionsManager == 0) {
         return JNI_FALSE;
     }

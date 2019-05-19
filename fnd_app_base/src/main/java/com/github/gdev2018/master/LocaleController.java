@@ -101,6 +101,7 @@ public class LocaleController {
         public String nameEnglish;
         public String shortName;
         public String pathToFile;
+        public String baseLangCode;
         public int version;
         public boolean builtIn;
 
@@ -151,6 +152,14 @@ public class LocaleController {
 
         public boolean isBuiltIn() {
             return builtIn;
+        }
+
+        public String getLangCode() {
+            return shortName.replace("_", "-");
+        }
+
+        public String getBaseLangCode() {
+            return baseLangCode == null ? "" : baseLangCode.replace("_", "-");
         }
     }
 

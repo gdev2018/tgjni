@@ -1,11 +1,10 @@
 /*
- * This is the source code of Powerlabor (TM) for Android
+ * This is the source code of Telegram for Android v. 5.x.x.
  * It is licensed under GNU GPL v. 2 or later.
  * You should have received a copy of the license in this archive (see LICENSE).
  *
- * Copyright Livesey Inc. (c) 2007-2018.
+ * Copyright Nikolai Kudashov, 2013-2018.
  */
-
 package com.github.gdev2018.master.ui.ActionBar;
 
 import android.annotation.SuppressLint;
@@ -473,6 +472,10 @@ public class Theme {
     public static CombinedDrawable[][] chat_fileMiniStatesDrawable = new CombinedDrawable[6][2];
     public static Drawable[][] chat_ivStatesDrawable = new Drawable[4][2];
     public static Drawable[][] chat_photoStatesDrawables = new Drawable[13][2];
+
+    public static Drawable chat_fileIcon;
+    public static Drawable chat_flameIcon;
+    public static Drawable chat_gifIcon;
 
     public static final String key_dialogBackground = "dialogBackground";
     public static final String key_dialogBackgroundGray = "dialogBackgroundGray";
@@ -3052,6 +3055,10 @@ public class Theme {
             chat_fileMiniStatesDrawable[4][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.video_mini_arrow);
             chat_fileMiniStatesDrawable[5][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.video_mini_cancel);
             chat_fileMiniStatesDrawable[5][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.video_mini_cancel);
+
+            chat_fileIcon = resources.getDrawable(R.drawable.msg_round_file_s).mutate();
+            chat_flameIcon = resources.getDrawable(R.drawable.burn).mutate();
+            chat_gifIcon = resources.getDrawable(R.drawable.msg_round_gif_m).mutate();
 
             chat_fileStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_play_m);
             chat_fileStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_play_m);

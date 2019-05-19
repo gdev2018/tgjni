@@ -16,9 +16,13 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.os.Handler;
 
-import java.io.File;
-
 import com.github.gdev2018.master.BuildConfig;
+import com.github.gdev2018.master.FileLog;
+import com.github.gdev2018.master.NativeLoader;
+import com.github.gdev2018.master.tgnet.ConnectionsManager;
+import com.github.gdev2018.master.ui.Components.ForegroundDetector;
+
+import java.io.File;
 
 //import com.frogermcs.androiddevmetrics.AndroidDevMetrics;
 
@@ -48,10 +52,26 @@ public class BaseApplication extends Application {
 
     @Override
     public void onCreate() {
+        try {
+            mApplicationContext = getApplicationContext();
+        } catch (Throwable ignore) {
+
+        }
+
         super.onCreate();
 
-        mApplicationContext = getApplicationContext();
+        if (mApplicationContext == null) {
+            mApplicationContext = getApplicationContext();
+        }
+
+        // TODO: 2019-05-08 uncomment this
+        ////NativeLoader.initNativeLibs(mApplicationContext);
+        ////ConnectionsManager.native_setJava(false);
+        new ForegroundDetector(this);
+
         mApplicationHandler = new Handler(mApplicationContext.getMainLooper());
+
+//        AndroidUtilities.runOnUIThread(BaseApplication::startPushService);
 
         mMainPreferences = mApplicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
 
@@ -64,6 +84,8 @@ public class BaseApplication extends Application {
 //            Timber.plant(new Timber.DebugTree());*/
         }
 ///*        initAppComponent();*/
+
+
     }
 
     public static void postInitApplication() {
@@ -101,7 +123,6 @@ public class BaseApplication extends Application {
 //        return userComponent;
 //    }*/
 
-
     public static File getFilesDirFixed() {
         for (int a = 0; a < 10; a++) {
             File path = mApplicationContext.getFilesDir();
@@ -116,10 +137,10 @@ public class BaseApplication extends Application {
             return path;
         } catch (Exception e) {
             // TODO: 2019-02-14 uncomment after implements filelog
-//            FileLog.e(e);
+            FileLog.e(e);
         }
         return new File("/data/data/com.github.gdev2018.master/files");
     }
 
-
 }
+

@@ -20,8 +20,8 @@ public class SlideView extends LinearLayout {
 
     }
 
-    public void onBackPressed() {
-
+    public boolean onBackPressed(boolean force) {
+        return true;
     }
 
     public void onShow() {

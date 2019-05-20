@@ -58,7 +58,6 @@ import com.github.gdev2018.master.ui.ActionBar.BottomSheet;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.ActionBar.ThemeDescription;
 import com.github.gdev2018.master.ui.Cells.TextColorThemeCell;
-import com.github.gdev2018.master.ui.LaunchActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -741,7 +740,7 @@ public class ThemeEditorView {
                 previousScrollPosition = scrollOffsetY;
             } else {
                 if (parentActivity != null) {
-                    ((LaunchActivity) parentActivity).rebuildAllFragments(false);
+///*                    ((LaunchActivity) parentActivity).rebuildAllFragments(false);*/
                 }
                 Theme.saveCurrentTheme(currentThemeName, false);
                 AndroidUtilities.hideKeyboard(getCurrentFocus());
@@ -916,54 +915,54 @@ public class ThemeEditorView {
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (!dragging) {
                         if (editorAlert == null) {
-                            LaunchActivity launchActivity = (LaunchActivity) parentActivity;
-
-                            ActionBarLayout actionBarLayout = null;
-
-                            if (AndroidUtilities.isTablet()) {
-                                actionBarLayout = launchActivity.getLayersActionBarLayout();
-                                if (actionBarLayout != null && actionBarLayout.fragmentsStack.isEmpty()) {
-                                    actionBarLayout = null;
-                                }
-                                if (actionBarLayout == null) {
-                                    actionBarLayout = launchActivity.getRightActionBarLayout();
-                                    if (actionBarLayout != null && actionBarLayout.fragmentsStack.isEmpty()) {
-                                        actionBarLayout = null;
-                                    }
-                                }
-                            }
-                            if (actionBarLayout == null) {
-                                actionBarLayout = launchActivity.getActionBarLayout();
-                            }
-                            if (actionBarLayout != null) {
-                                BaseFragment fragment;
-                                if (!actionBarLayout.fragmentsStack.isEmpty()) {
-                                    fragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
-                                } else {
-                                    fragment = null;
-                                }
-                                if (fragment != null) {
-                                    ThemeDescription[] items = fragment.getThemeDescriptions();
-                                    if (items != null) {
-                                        editorAlert = new EditorAlert(parentActivity, items);
-                                        editorAlert.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                            @Override
-                                            public void onDismiss(DialogInterface dialog) {
-
-                                            }
-                                        });
-                                        editorAlert.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                            @Override
-                                            public void onDismiss(DialogInterface dialog) {
-                                                editorAlert = null;
-                                                show();
-                                            }
-                                        });
-                                        editorAlert.show();
-                                        hide();
-                                    }
-                                }
-                            }
+///*                            LaunchActivity launchActivity = (LaunchActivity) parentActivity;
+//
+//                            ActionBarLayout actionBarLayout = null;
+//
+//                            if (AndroidUtilities.isTablet()) {
+//                                actionBarLayout = launchActivity.getLayersActionBarLayout();
+//                                if (actionBarLayout != null && actionBarLayout.fragmentsStack.isEmpty()) {
+//                                    actionBarLayout = null;
+//                                }
+//                                if (actionBarLayout == null) {
+//                                    actionBarLayout = launchActivity.getRightActionBarLayout();
+//                                    if (actionBarLayout != null && actionBarLayout.fragmentsStack.isEmpty()) {
+//                                        actionBarLayout = null;
+//                                    }
+//                                }
+//                            }
+//                            if (actionBarLayout == null) {
+//                                actionBarLayout = launchActivity.getActionBarLayout();
+//                            }
+//                            if (actionBarLayout != null) {
+//                                BaseFragment fragment;
+//                                if (!actionBarLayout.fragmentsStack.isEmpty()) {
+//                                    fragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
+//                                } else {
+//                                    fragment = null;
+//                                }
+//                                if (fragment != null) {
+//                                    ThemeDescription[] items = fragment.getThemeDescriptions();
+//                                    if (items != null) {
+//                                        editorAlert = new EditorAlert(parentActivity, items);
+//                                        editorAlert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                                            @Override
+//                                            public void onDismiss(DialogInterface dialog) {
+//
+//                                            }
+//                                        });
+//                                        editorAlert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                                            @Override
+//                                            public void onDismiss(DialogInterface dialog) {
+//                                                editorAlert = null;
+//                                                show();
+//                                            }
+//                                        });
+//                                        editorAlert.show();
+//                                        hide();
+//                                    }
+//                                }
+//                            }*/
                         }
                     }
                 }

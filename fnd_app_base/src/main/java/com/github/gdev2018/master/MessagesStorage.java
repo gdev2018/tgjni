@@ -1455,9 +1455,12 @@ public class MessagesStorage {
                                     if (file != null && file.toString().length() > 0) {
                                         filesToDelete.add(file);
                                     }
-                                    file = FileLoader.getPathToAttach(message.media.document.thumb);
-                                    if (file != null && file.toString().length() > 0) {
-                                        filesToDelete.add(file);
+                                    for (int a = 0, N = message.media.document.thumbs.size(); a < N; a++) {
+                                        TLRPC.PhotoSize photoSize = message.media.document.thumbs.get(a);
+                                        file = FileLoader.getPathToAttach(photoSize);
+                                        if (file != null && file.toString().length() > 0) {
+                                            filesToDelete.add(file);
+                                        }
                                     }
                                 }
                             }
@@ -1517,9 +1520,12 @@ public class MessagesStorage {
                                         if (file != null && file.toString().length() > 0) {
                                             filesToDelete.add(file);
                                         }
-                                        file = FileLoader.getPathToAttach(message.media.document.thumb);
-                                        if (file != null && file.toString().length() > 0) {
-                                            filesToDelete.add(file);
+                                        for (int a = 0, N = message.media.document.thumbs.size(); a < N; a++) {
+                                            TLRPC.PhotoSize photoSize = message.media.document.thumbs.get(a);
+                                            file = FileLoader.getPathToAttach(photoSize);
+                                            if (file != null && file.toString().length() > 0) {
+                                                filesToDelete.add(file);
+                                            }
                                         }
                                     }
                                 }
@@ -1837,9 +1843,12 @@ public class MessagesStorage {
                                 if (file != null && file.toString().length() > 0) {
                                     filesToDelete.add(file);
                                 }
-                                file = FileLoader.getPathToAttach(message.media.document.thumb, true);
-                                if (file != null && file.toString().length() > 0) {
-                                    filesToDelete.add(file);
+                                for (int a = 0, N = message.media.document.thumbs.size(); a < N; a++) {
+                                    TLRPC.PhotoSize photoSize = message.media.document.thumbs.get(a);
+                                    file = FileLoader.getPathToAttach(photoSize);
+                                    if (file != null && file.toString().length() > 0) {
+                                        filesToDelete.add(file);
+                                    }
                                 }
                                 message.media.document = new TLRPC.TL_documentEmpty();
                             } else if (message.media.photo != null) {
@@ -4374,7 +4383,7 @@ public class MessagesStorage {
                                 oldChat.broadcast = chat.broadcast;
                                 oldChat.verified = chat.verified;
                                 oldChat.megagroup = chat.megagroup;
-                                oldChat.democracy = chat.democracy;
+///*                                oldChat.democracy = chat.democracy;*/
                                 if (chat.username != null) {
                                     oldChat.username = chat.username;
                                     oldChat.flags |= 64;
@@ -5686,9 +5695,12 @@ public class MessagesStorage {
                                 if (file != null && file.toString().length() > 0) {
                                     filesToDelete.add(file);
                                 }
-                                file = FileLoader.getPathToAttach(message.media.document.thumb);
-                                if (file != null && file.toString().length() > 0) {
-                                    filesToDelete.add(file);
+                                for (int a = 0, N = message.media.document.thumbs.size(); a < N; a++) {
+                                    TLRPC.PhotoSize photoSize = message.media.document.thumbs.get(a);
+                                    file = FileLoader.getPathToAttach(photoSize);
+                                    if (file != null && file.toString().length() > 0) {
+                                        filesToDelete.add(file);
+                                    }
                                 }
                             }
                         }
@@ -6000,9 +6012,12 @@ public class MessagesStorage {
                                 if (file != null && file.toString().length() > 0) {
                                     filesToDelete.add(file);
                                 }
-                                file = FileLoader.getPathToAttach(message.media.document.thumb);
-                                if (file != null && file.toString().length() > 0) {
-                                    filesToDelete.add(file);
+                                for (int a = 0, N = message.media.document.thumbs.size(); a < N; a++) {
+                                    TLRPC.PhotoSize photoSize = message.media.document.thumbs.get(a);
+                                    file = FileLoader.getPathToAttach(photoSize);
+                                    if (file != null && file.toString().length() > 0) {
+                                        filesToDelete.add(file);
+                                    }
                                 }
                             }
                         }

@@ -65,29 +65,29 @@ public class WallpaperCell extends FrameLayout {
         } else {
             imageView.setVisibility(VISIBLE);
             imageView2.setVisibility(INVISIBLE);
-            selectionView.setVisibility(selectedBackground == wallpaper.id ? View.VISIBLE : INVISIBLE);
+///*            selectionView.setVisibility(selectedBackground == wallpaper.id ? View.VISIBLE : INVISIBLE);*/
 
-            if (wallpaper instanceof TLRPC.TL_wallPaperSolid) {
-                imageView.setImageBitmap(null);
-                imageView.setBackgroundColor(0xff000000 | wallpaper.bg_color);
-            } else {
-                int side = AndroidUtilities.dp(100);
-                TLRPC.PhotoSize size = null;
-                for (int a = 0; a < wallpaper.sizes.size(); a++) {
-                    TLRPC.PhotoSize obj = wallpaper.sizes.get(a);
-                    if (obj == null) {
-                        continue;
-                    }
-                    int currentSide = obj.w >= obj.h ? obj.w : obj.h;
-                    if (size == null || side > 100 && size.location != null && size.location.dc_id == Integer.MIN_VALUE || obj instanceof TLRPC.TL_photoCachedSize || currentSide <= side) {
-                        size = obj;
-                    }
-                }
-                if (size != null && size.location != null) {
-                    imageView.setImage(size.location, "100_100", (Drawable) null);
-                }
-                imageView.setBackgroundColor(0x5a475866);
-            }
+///*            if (wallpaper instanceof TLRPC.TL_wallPaperSolid) {
+//                imageView.setImageBitmap(null);
+//                imageView.setBackgroundColor(0xff000000 | wallpaper.bg_color);
+//            } else {
+//                int side = AndroidUtilities.dp(100);
+//                TLRPC.PhotoSize size = null;
+//                for (int a = 0; a < wallpaper.sizes.size(); a++) {
+//                    TLRPC.PhotoSize obj = wallpaper.sizes.get(a);
+//                    if (obj == null) {
+//                        continue;
+//                    }
+//                    int currentSide = obj.w >= obj.h ? obj.w : obj.h;
+//                    if (size == null || side > 100 && size.location != null && size.location.dc_id == Integer.MIN_VALUE || obj instanceof TLRPC.TL_photoCachedSize || currentSide <= side) {
+//                        size = obj;
+//                    }
+//                }
+//                if (size != null && size.location != null) {
+//                    imageView.setImage(size.location, "100_100", (Drawable) null);
+//                }
+//                imageView.setBackgroundColor(0x5a475866);
+//            }*/
         }
     }
 }

@@ -11,8 +11,6 @@ package com.github.gdev2018.master;
 import android.app.IntentService;
 import android.content.Intent;
 
-import com.github.gdev2018.master.ui.LaunchActivity;
-
 public class BringAppForegroundService extends IntentService {
 
     public BringAppForegroundService() {
@@ -21,8 +19,8 @@ public class BringAppForegroundService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Intent intent2 = new Intent(this, LaunchActivity.class);
-        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent2);
+///*        Intent intent2 = new Intent(this, LaunchActivity.class);
+//        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(intent2);*/
     }
 }

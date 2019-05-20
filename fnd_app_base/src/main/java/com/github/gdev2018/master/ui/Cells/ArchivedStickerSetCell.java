@@ -98,11 +98,11 @@ public class ArchivedStickerSetCell extends FrameLayout {
         textView.setText(stickersSet.set.title);
 
         valueTextView.setText(LocaleController.formatPluralString("Stickers", set.set.count));
-        if (set.cover != null && set.cover.thumb != null && set.cover.thumb.location != null) {
-            imageView.setImage(set.cover.thumb.location, null, "webp", null);
-        } else if (!set.covers.isEmpty()) {
-            imageView.setImage(set.covers.get(0).thumb.location, null, "webp", null);
-        }
+///*        if (set.cover != null && set.cover.thumb != null && set.cover.thumb.location != null) {
+//            imageView.setImage(set.cover.thumb.location, null, "webp", null);
+//        } else if (!set.covers.isEmpty()) {
+//            imageView.setImage(set.covers.get(0).thumb.location, null, "webp", null);
+//        }*/
     }
 
     public void setOnCheckClick(CompoundButton.OnCheckedChangeListener listener) {

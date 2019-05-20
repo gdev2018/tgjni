@@ -19,7 +19,7 @@ public class BaseBuildVars {
     public static boolean DEBUG_VERSION = true;
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean LOGS_ENABLED = true;
-
+    public static boolean USE_CLOUD_STRINGS = true;
     public static boolean CHECK_UPDATES = false;
     public static int BUILD_VERSION = 1358;
     public static String BUILD_VERSION_STRING = "2.0.1";
@@ -28,6 +28,7 @@ public class BaseBuildVars {
     public static String HOCKEY_APP_HASH = "your-hockeyapp-api-key-here";
     public static String HOCKEY_APP_HASH_DEBUG = "your-hockeyapp-api-key-here";
     public static String PLAYSTORE_APP_URL = "";
+    public static String SMS_HASH = ""; //https://developers.google.com/identity/sms-retriever/overview
 
     static {
         if (BaseApplication.mApplicationContext != null) {
@@ -35,4 +36,5 @@ public class BaseBuildVars {
             LOGS_ENABLED = sharedPreferences.getBoolean("logsEnabled", DEBUG_VERSION);
         }
     }
+
 }

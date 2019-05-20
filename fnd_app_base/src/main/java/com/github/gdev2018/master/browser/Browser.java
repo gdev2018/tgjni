@@ -37,7 +37,6 @@ import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.ui.ActionBar.AlertDialog;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.LaunchActivity;
 
 
 import java.lang.ref.WeakReference;
@@ -300,8 +299,8 @@ public class Browser {
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             if (internalUri) {
-                ComponentName componentName = new ComponentName(context.getPackageName(), LaunchActivity.class.getName());
-                intent.setComponent(componentName);
+///*                ComponentName componentName = new ComponentName(context.getPackageName(), LaunchActivity.class.getName());
+//                intent.setComponent(componentName);*/
             }
             intent.putExtra(android.provider.Browser.EXTRA_CREATE_NEW_TAB, true);
             intent.putExtra(android.provider.Browser.EXTRA_APPLICATION_ID, context.getPackageName());

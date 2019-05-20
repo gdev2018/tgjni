@@ -58,9 +58,9 @@ public class StickerCell extends FrameLayout {
     }
 
     public void setSticker(TLRPC.Document document, int side) {
-        if (document != null && document.thumb != null) {
-            imageView.setImage(document.thumb.location, null, "webp", null);
-        }
+///*        if (document != null && document.thumb != null) {
+//            imageView.setImage(document.thumb.location, null, "webp", null);
+//        }*/
         sticker = document;
         if (side == -1) {
             setBackgroundResource(R.drawable.stickers_back_left);

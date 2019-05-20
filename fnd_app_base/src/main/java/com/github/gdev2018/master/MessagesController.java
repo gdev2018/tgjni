@@ -697,8 +697,8 @@ public class MessagesController implements NotificationCenter.NotificationCenter
             }
         }
     }
-//
-//    public void cleanup() {
+
+    public void cleanup() {
 //        ContactsController.getInstance(currentAccount).cleanup();
 //        MediaController.getInstance().cleanup();
 //        NotificationsController.getInstance(currentAccount).cleanup();
@@ -814,8 +814,8 @@ public class MessagesController implements NotificationCenter.NotificationCenter
 //
 //        addSupportUser();
 //        NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload);
-//    }
-//
+    }
+
     public TLRPC.User getUser(Integer id) {
         return users.get(id);
     }
@@ -2629,11 +2629,11 @@ public class MessagesController implements NotificationCenter.NotificationCenter
 //            notificationsPreferences.edit().putInt("nextTosCheckTime", nextTosCheckTime).commit();
 //        });
 //    }
-//
-//    public void checkProxyInfo(final boolean reset) {
-//        Utilities.stageQueue.postRunnable(() -> checkProxyInfoInternal(reset));
-//    }
-//
+
+    public void checkProxyInfo(final boolean reset) {
+///*        Utilities.stageQueue.postRunnable(() -> checkProxyInfoInternal(reset));*/
+    }
+
 //    private void checkProxyInfoInternal(boolean reset) {
 //        if (reset && checkingProxyInfo) {
 //            checkingProxyInfo = false;

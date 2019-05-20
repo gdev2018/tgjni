@@ -39,6 +39,7 @@ import android.os.Handler;
 import android.provider.CallLog;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.EdgeEffectCompat;
@@ -87,6 +88,7 @@ import com.github.gdev2018.master.SharedConfig;
 import com.github.gdev2018.master.UserConfig;
 import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.di.BaseApplication;
+import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.ForegroundDetector;
 import com.github.gdev2018.master.ui.Components.TypefaceSpan;
@@ -522,6 +524,15 @@ public class AndroidUtilities {
         }
     }
 
+    public static byte[] getStringBytes(String src) {
+        try {
+            return src.getBytes("UTF-8");
+        } catch (Exception ignore) {
+
+        }
+        return new byte[0];
+    }
+
     public static void setViewPagerEdgeEffectColor(ViewPager viewPager, int color) {
         if (Build.VERSION.SDK_INT >= 21) {
             try {
@@ -670,6 +681,14 @@ public class AndroidUtilities {
         return size;
     }
 
+    public static boolean isAirplaneModeOn() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            return Settings.System.getInt(BaseApplication.mApplicationContext.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+        } else {
+            return Settings.Global.getInt(BaseApplication.mApplicationContext.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
+        }
+    }
+
     public static File generateVideoPath() {
         try {
             File storageDir = getAlbumDir();
@@ -768,16 +787,17 @@ public class AndroidUtilities {
         return pathString != null && pathString.toLowerCase().contains("/data/data/" + BaseApplication.mApplicationContext.getPackageName() + "/files");
     }
 
-    public static void showKeyboard(View view) {
+    public static boolean showKeyboard(View view) {
         if (view == null) {
-            return;
+            return false;
         }
         try {
             InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+            return inputManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
         } catch (Exception e) {
             FileLog.e(e);
         }
+        return false;
     }
 
     public static boolean isKeyboardShowed(View view) {
@@ -1322,6 +1342,10 @@ public class AndroidUtilities {
             }
         }
         return null;
+    }
+
+    public static boolean isBannedForever(TLRPC.TL_chatBannedRights rights) {
+        return rights == null || Math.abs(rights.until_date - System.currentTimeMillis() / 1000) > 5 * 365 * 24 * 60 * 60;
     }
 
     private static void registerLoginContentObserver(boolean shouldRegister, final String number) {

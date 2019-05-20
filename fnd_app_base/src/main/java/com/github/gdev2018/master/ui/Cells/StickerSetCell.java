@@ -145,9 +145,9 @@ public class StickerSetCell extends FrameLayout {
         if (documents != null && !documents.isEmpty()) {
             valueTextView.setText(LocaleController.formatPluralString("Stickers", documents.size()));
             TLRPC.Document document = documents.get(0);
-            if (document.thumb != null && document.thumb.location != null) {
-                imageView.setImage(document.thumb.location, null, "webp", null);
-            }
+///*            if (document.thumb != null && document.thumb.location != null) {
+//                imageView.setImage(document.thumb.location, null, "webp", null);
+//            }*/
         } else {
             valueTextView.setText(LocaleController.formatPluralString("Stickers", 0));
         }

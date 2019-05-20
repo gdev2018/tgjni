@@ -138,7 +138,7 @@ public class ConnectionsManager {
 
     public ConnectionsManager(int instance) {
         currentAccount = instance;
-        connectionState = native_getConnectionState(currentAccount);
+///*        connectionState = native_getConnectionState(currentAccount);*/
         String deviceModel;
         String systemLangCode;
         String langCode;

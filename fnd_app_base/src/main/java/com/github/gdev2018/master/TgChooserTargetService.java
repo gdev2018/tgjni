@@ -52,7 +52,8 @@ public class TgChooserTargetService extends ChooserTargetService {
         if (!UserConfig.getInstance(currentAccount).isClientActivated()) {
             return targets;
         }
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+//        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         if (!preferences.getBoolean("direct_share", true)) {
             return targets;
         }

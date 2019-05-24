@@ -331,7 +331,7 @@ public class LocaleController {
 
         loadOtherLanguages();
         if (remoteLanguages.isEmpty()) {
-            AndroidUtilities.runOnUIThread(() -> loadRemoteLanguages(UserConfig.selectedAccount));
+///*            AndroidUtilities.runOnUIThread(() -> loadRemoteLanguages(UserConfig.selectedAccount));*/
         }
 
         for (int a = 0; a < otherLanguages.size(); a++) {
@@ -375,7 +375,8 @@ public class LocaleController {
         boolean override = false;
 
         try {
-            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+//            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
             String lang = preferences.getString("language", null);
             if (lang != null) {
                 currentInfo = getLanguageFromDict(lang);
@@ -871,7 +872,8 @@ public class LocaleController {
             if (override) {
                 languageOverride = localeInfo.shortName;
 
-                SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+//                SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("language", localeInfo.getKey());
                 editor.commit();
@@ -1702,7 +1704,8 @@ public class LocaleController {
                         if (newLocale != null) {
                             languageOverride = localeInfo.shortName;
 
-                            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+//                            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("language", localeInfo.getKey());
                             editor.commit();

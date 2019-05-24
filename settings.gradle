@@ -1,1 +1,2 @@
+include ':app'  //  for testing
 include ':fnd_app_base'

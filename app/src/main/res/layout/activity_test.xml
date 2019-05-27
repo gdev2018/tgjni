@@ -6,4 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".TestActivity">
 
+    <TextView
+        android:id="@+id/seconds_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="124dp"
+        tools:layout_editor_absoluteY="186dp" />
 </android.support.constraint.ConstraintLayout>

@@ -4,18 +4,46 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "gdev2018.github.com.fnd_app_base"
-        minSdkVersion 15
+//        minSdkVersion 'o at least 1'
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
+    signingConfigs {
+        debug {
+            // config_signing_debug.values()
+            storeFile file("config/debug.keystore")
+            keyPassword 'debugkeystore'
+            keyAlias 'key0'
+            storePassword 'debugkeystore'
+        }
+
+        release {
+            // config_signing_release.values()
+            storeFile file('S:/Android/ks/ks12')
+            keyPassword 'Ukfdgjxnfvgks_12'
+            keyAlias 'ks12'
+            storePassword 'Ukfdgjxnfvgks_12'
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
 }
 
 dependencies {
@@ -25,4 +53,7 @@ dependencies {
 //    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 //    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+
+    // for testing
+    implementation project(path: ':fnd_app_base')
 }

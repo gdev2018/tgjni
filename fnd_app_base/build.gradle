@@ -39,6 +39,35 @@ android {
 
     }
     buildTypes {
+        debug {
+            debuggable true
+            jniDebuggable true
+//            signingConfig signingConfigs.debug
+//            applicationIdSuffix ".beta"
+//            minifyEnabled true  // @todo dex limit
+//            shrinkResources true
+//            useProguard true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules-debug.pro'
+//
+//            // Run code coverage reports by default on debug builds.
+//            testCoverageEnabled true
+//
+//            //Techniques for faster app builds
+//            // https://medium.com/linedevth/build-your-android-app-faster-and-smaller-than-ever-25f53fdd3cdc
+//            // Technique 3: Disable Multi APK
+//            splits.abi.enable = false
+//            splits.density.enable = false
+//
+//            // Technique 5: Disable PNG Crunching
+//            aaptOptions.cruncherEnabled = false
+//
+//            // Technique 7: Disable Updating Build ID
+//            ext.alwaysUpdateBuildId = false
+
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

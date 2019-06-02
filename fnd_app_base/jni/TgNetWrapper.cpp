@@ -164,6 +164,9 @@ static JNINativeMethod NativeByteBufferMethods[] = {
 jlong getCurrentTimeMillis(JNIEnv *env, jclass c, jint instanceNum) {
     return ConnectionsManager::getInstance(instanceNum).getCurrentTimeMillis();
 }
+jlong getCurrentTimeMillis2(JNIEnv *env, jclass c, jint instanceNum) {
+    return 100;
+}
 
 jint getCurrentTime(JNIEnv *env, jclass c, jint instanceNum) {
     return ConnectionsManager::getInstance(instanceNum).getCurrentTime();
@@ -479,9 +482,13 @@ void setJava(JNIEnv *env, jclass c, jboolean useJavaByteBuffers) {
     }
 }
 
+//gdev2018.github.com.fnd_app_base.TestActivity.native_getCurrentTimeMillis2
+
 static const char *ConnectionsManagerClassPathName = "com/github/gdev2018/master/tgnet/ConnectionsManager";
+//static const char *ConnectionsManagerClassPathName = "gdev2018/github/com/master/tgnet/ConnectionsManager";
 static JNINativeMethod ConnectionsManagerMethods[] = {
         {"native_getCurrentTimeMillis", "(I)J", (void *) getCurrentTimeMillis},
+        {"native_getCurrentTimeMillis2", "(I)J", (void *) getCurrentTimeMillis2},
         {"native_getCurrentTime", "(I)I", (void *) getCurrentTime},
         {"native_isTestBackend", "(I)I", (void *) isTestBackend},
         {"native_getTimeDifference", "(I)I", (void *) getTimeDifference},

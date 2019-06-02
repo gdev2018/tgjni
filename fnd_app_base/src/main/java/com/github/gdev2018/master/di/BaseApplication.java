@@ -65,8 +65,8 @@ public class BaseApplication extends Application {
         }
 
         // TODO: 2019-05-08 uncomment this
-        ////NativeLoader.initNativeLibs(mApplicationContext);
-        ////ConnectionsManager.native_setJava(false);
+        NativeLoader.initNativeLibs(mApplicationContext);
+        ConnectionsManager.native_setJava(false);
         new ForegroundDetector(this);
 
         mApplicationHandler = new Handler(mApplicationContext.getMainLooper());

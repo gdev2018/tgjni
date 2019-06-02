@@ -1,5 +1,3 @@
-/*  * This is the source code of Telegram for Android v. 5.x.x.  * It is licensed under GNU GPL v. 2 or later.  * You should have received a copy of the license in this archive (see LICENSE).  *  * Copyright Nikolai Kudashov, 2013-2018.  */
-
 package com.github.gdev2018.master.tgnet;
 
 import android.annotation.SuppressLint;
@@ -103,12 +101,16 @@ public class ConnectionsManager {
 
     private static class ResolvedDomain {
 
-        public String address;
+        public ArrayList<String> addresses;
         long ttl;
 
-        public ResolvedDomain(String a, long t) {
-            address = a;
+        public ResolvedDomain(ArrayList<String> a, long t) {
+            addresses = a;
             ttl = t;
+        }
+
+        public String getAddress() {
+            return addresses.get(Utilities.random.nextInt(addresses.size()));
         }
     }
 
@@ -185,6 +187,9 @@ public class ConnectionsManager {
 
     public long getCurrentTimeMillis() {
         return native_getCurrentTimeMillis(currentAccount);
+    }
+    public long getCurrentTimeMillis2() {
+        return native_getCurrentTimeMillis2(20);
     }
 
     public int getCurrentTime() {
@@ -340,6 +345,13 @@ public class ConnectionsManager {
         langCode = langCode.replace('_', '-').toLowerCase();
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
             native_setLangCode(a, langCode);
+        }
+    }
+
+    public static void setSystemLangCode(String langCode) {
+        langCode = langCode.replace('_', '-').toLowerCase();
+        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+            native_setSystemLangCode(a, langCode);
         }
     }
 
@@ -553,7 +565,7 @@ public class ConnectionsManager {
         HashMap<String, ResolvedDomain> cache = dnsCache.get();
         ResolvedDomain resolvedDomain = cache.get(domain);
         if (resolvedDomain != null && SystemClock.elapsedRealtime() - resolvedDomain.ttl < 5 * 60 * 1000) {
-            return resolvedDomain.address;
+            return resolvedDomain.getAddress();
         }
 
         ByteArrayOutputStream outbuf = null;
@@ -586,10 +598,13 @@ public class ConnectionsManager {
             JSONArray array = jsonObject.getJSONArray("Answer");
             int len = array.length();
             if (len > 0) {
-                String ip = array.getJSONObject(Utilities.random.nextInt(array.length())).getString("data");
-                ResolvedDomain newResolvedDomain = new ResolvedDomain(ip, SystemClock.elapsedRealtime());
+                ArrayList<String> addresses = new ArrayList<>(len);
+                for (int a = 0; a < len; a++) {
+                    addresses.add(array.getJSONObject(a).getString("data"));
+                }
+                ResolvedDomain newResolvedDomain = new ResolvedDomain(addresses, SystemClock.elapsedRealtime());
                 cache.put(domain, newResolvedDomain);
-                return ip;
+                return newResolvedDomain.getAddress();
             }
         } catch (Throwable e) {
             FileLog.e(e);
@@ -675,6 +690,7 @@ public class ConnectionsManager {
     public static native void native_setNetworkAvailable(int currentAccount, boolean value, int networkType, boolean slow);
     public static native void native_resumeNetwork(int currentAccount, boolean partial);
     public static native long native_getCurrentTimeMillis(int currentAccount);
+    public static native long native_getCurrentTimeMillis2(int test2);
     public static native int native_getCurrentTime(int currentAccount);
     public static native int native_getTimeDifference(int currentAccount);
     public static native void native_sendRequest(int currentAccount, long object, RequestDelegateInternal onComplete, QuickAckDelegate onQuickAck, WriteToSocketDelegate onWriteToSocket, int flags, int datacenterId, int connetionType, boolean immediate, int requestToken);
@@ -688,6 +704,8 @@ public class ConnectionsManager {
     public static native void native_init(int currentAccount, int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, int userId, boolean enablePushConnection, boolean hasNetwork, int networkType);
     public static native void native_setProxySettings(int currentAccount, String address, int port, String username, String password, String secret);
     public static native void native_setLangCode(int currentAccount, String langCode);
+    public static native void native_setSystemLangCode(int currentAccount, String langCode);
+    public static native void native_seSystemLangCode(int currentAccount, String langCode);
     public static native void native_setJava(boolean useJavaByteBuffers);
     public static native void native_setPushConnectionEnabled(int currentAccount, boolean value);
     public static native void native_applyDnsConfig(int currentAccount, long address, String phone);

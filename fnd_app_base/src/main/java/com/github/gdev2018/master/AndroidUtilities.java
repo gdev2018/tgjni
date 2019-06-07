@@ -491,28 +491,26 @@ public class AndroidUtilities {
         }
     }
 
-
-
-    public static void checkForCrashes(Activity context) {
-        CrashManager.register(context, BaseBuildVars.DEBUG_VERSION ? BaseBuildVars.HOCKEY_APP_HASH_DEBUG : BaseBuildVars.HOCKEY_APP_HASH, new CrashManagerListener() {
-            @Override
-            public boolean includeDeviceData() {
-                return true;
-            }
-        });
-    }
-
-    public static void checkForUpdates(Activity context) {
-        if (BaseBuildVars.DEBUG_VERSION) {
-            UpdateManager.register(context, BaseBuildVars.DEBUG_VERSION ? BaseBuildVars.HOCKEY_APP_HASH_DEBUG : BaseBuildVars.HOCKEY_APP_HASH);
-        }
-    }
-
-    public static void unregisterUpdates() {
-        if (BaseBuildVars.DEBUG_VERSION) {
-            UpdateManager.unregister();
-        }
-    }
+//    public static void checkForCrashes(Activity context) {
+//        CrashManager.register(context, BaseBuildVars.DEBUG_VERSION ? BaseBuildVars.HOCKEY_APP_HASH_DEBUG : BaseBuildVars.HOCKEY_APP_HASH, new CrashManagerListener() {
+//            @Override
+//            public boolean includeDeviceData() {
+//                return true;
+//            }
+//        });
+//    }
+//
+//    public static void checkForUpdates(Activity context) {
+//        if (BaseBuildVars.DEBUG_VERSION) {
+//            UpdateManager.register(context, BaseBuildVars.DEBUG_VERSION ? BaseBuildVars.HOCKEY_APP_HASH_DEBUG : BaseBuildVars.HOCKEY_APP_HASH);
+//        }
+//    }
+//
+//    public static void unregisterUpdates() {
+//        if (BaseBuildVars.DEBUG_VERSION) {
+//            UpdateManager.unregister();
+//        }
+//    }
 
     public static void addToClipboard(CharSequence str) {
         try {

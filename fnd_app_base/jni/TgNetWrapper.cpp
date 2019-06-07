@@ -487,8 +487,8 @@ void setJava(JNIEnv *env, jclass c, jboolean useJavaByteBuffers) {
 static const char *ConnectionsManagerClassPathName = "com/github/gdev2018/master/tgnet/ConnectionsManager";
 //static const char *ConnectionsManagerClassPathName = "gdev2018/github/com/master/tgnet/ConnectionsManager";
 static JNINativeMethod ConnectionsManagerMethods[] = {
-        {"native_getCurrentTimeMillis", "(I)J", (void *) getCurrentTimeMillis},
         {"native_getCurrentTimeMillis2", "(I)J", (void *) getCurrentTimeMillis2},
+        {"native_getCurrentTimeMillis", "(I)J", (void *) getCurrentTimeMillis},
         {"native_getCurrentTime", "(I)I", (void *) getCurrentTime},
         {"native_isTestBackend", "(I)I", (void *) isTestBackend},
         {"native_getTimeDifference", "(I)I", (void *) getTimeDifference},

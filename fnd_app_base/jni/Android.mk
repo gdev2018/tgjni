@@ -157,12 +157,14 @@ LOCAL_STATIC_LIBRARIES := webp sqlite tgnet crypto
 
 
 LOCAL_C_INCLUDES    := \
-./jni/boringssl/include
+./jni/boringssl/include \
+./jni/intro
 
 
 LOCAL_SRC_FILES     += \
 ./jni.c \
 ./image.c \
+./intro/IntroRenderer.c \
 ./SqliteWrapper.cpp \
 ./TgNetWrapper.cpp \
 ./NativeLoader.cpp

@@ -57,6 +57,7 @@ public class UserConfig {
     public int dialogsLoadOffsetChannelId = 0;
     public long dialogsLoadOffsetAccess = 0;
     public boolean notificationsSettingsLoaded;
+    public boolean notificationsSignUpSettingsLoaded;
     public boolean syncContacts = true;
     public boolean suggestContacts = true;
     public boolean hasSecureData;
@@ -66,6 +67,7 @@ public class UserConfig {
     public int pendingAppUpdateBuildVersion;
     public long pendingAppUpdateInstallTime;
     public long lastUpdateCheckTime;
+    public long autoDownloadConfigLoadTime;
 
     public volatile byte[] savedPasswordHash;
     public volatile byte[] savedSaltedPassword;

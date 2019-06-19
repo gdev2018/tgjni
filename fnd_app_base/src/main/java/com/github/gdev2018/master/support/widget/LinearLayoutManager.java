@@ -164,7 +164,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * @param reverseLayout When set to true, layouts from end to start.
      */
     public LinearLayoutManager(Context context, @RecyclerView.Orientation int orientation,
-            boolean reverseLayout) {
+                               boolean reverseLayout) {
         setOrientation(orientation);
         setReverseLayout(reverseLayout);
     }
@@ -432,7 +432,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
 
     @Override
     public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state,
-            int position) {
+                                       int position) {
         LinearSmoothScroller linearSmoothScroller =
                 new LinearSmoothScroller(recyclerView.getContext());
         linearSmoothScroller.setTargetPosition(position);
@@ -492,7 +492,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             updateAnchorInfoForLayout(recycler, state, mAnchorInfo);
             mAnchorInfo.mValid = true;
         } else if (focused != null && (mOrientationHelper.getDecoratedStart(focused)
-                        >= mOrientationHelper.getEndAfterPadding()
+                >= mOrientationHelper.getEndAfterPadding()
                 || mOrientationHelper.getDecoratedEnd(focused)
                 <= mOrientationHelper.getStartAfterPadding())) {
             // This case relates to when the anchor child is the focused view and due to layout
@@ -674,15 +674,15 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      *                                 indices.
      */
     void onAnchorReady(RecyclerView.Recycler recycler, RecyclerView.State state,
-            AnchorInfo anchorInfo, int firstLayoutItemDirection) {
+                       AnchorInfo anchorInfo, int firstLayoutItemDirection) {
     }
 
     /**
      * If necessary, layouts new items for predictive animations
      */
     private void layoutForPredictiveAnimations(RecyclerView.Recycler recycler,
-            RecyclerView.State state, int startOffset,
-            int endOffset) {
+                                               RecyclerView.State state, int startOffset,
+                                               int endOffset) {
         // If there are scrap children that we did not layout, we need to find where they did go
         // and layout them accordingly so that animations can work as expected.
         // This case may happen if new views are added or an existing view expands and pushes
@@ -737,7 +737,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     }
 
     private void updateAnchorInfoForLayout(RecyclerView.Recycler recycler, RecyclerView.State state,
-            AnchorInfo anchorInfo) {
+                                           AnchorInfo anchorInfo) {
         if (updateAnchorFromPendingData(state, anchorInfo)) {
             if (DEBUG) {
                 Log.d(TAG, "updated anchor info from pending information");
@@ -765,7 +765,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * If a child has focus, it is given priority.
      */
     private boolean updateAnchorFromChildren(RecyclerView.Recycler recycler,
-            RecyclerView.State state, AnchorInfo anchorInfo) {
+                                             RecyclerView.State state, AnchorInfo anchorInfo) {
         if (getChildCount() == 0) {
             return false;
         }
@@ -892,7 +892,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * @return The final offset amount for children
      */
     private int fixLayoutEndGap(int endOffset, RecyclerView.Recycler recycler,
-            RecyclerView.State state, boolean canOffsetChildren) {
+                                RecyclerView.State state, boolean canOffsetChildren) {
         int gap = mOrientationHelper.getEndAfterPadding() - endOffset;
         int fixOffset = 0;
         if (gap > 0) {
@@ -917,7 +917,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * @return The final offset amount for children
      */
     private int fixLayoutStartGap(int startOffset, RecyclerView.Recycler recycler,
-            RecyclerView.State state, boolean canOffsetChildren) {
+                                  RecyclerView.State state, boolean canOffsetChildren) {
         int gap = startOffset - mOrientationHelper.getStartAfterPadding();
         int fixOffset = 0;
         if (gap > 0) {
@@ -1013,7 +1013,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     /**
      * Scroll to the specified adapter position with the given offset from resolved layout
      * start. Resolved layout start depends on {@link #getReverseLayout()},
-     * {@link ViewCompat#getLayoutDirection(View)} and {@link #getStackFromEnd()}.
+     * {@link ViewCompat#getLayoutDirection(android.view.View)} and {@link #getStackFromEnd()}.
      * <p>
      * For example, if layout is {@link #VERTICAL} and {@link #getStackFromEnd()} is true, calling
      * <code>scrollToPositionWithOffset(10, 20)</code> will layout such that
@@ -1048,7 +1048,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      */
     @Override
     public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler,
-            RecyclerView.State state) {
+                                    RecyclerView.State state) {
         if (mOrientation == VERTICAL) {
             return 0;
         }
@@ -1060,7 +1060,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      */
     @Override
     public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler,
-            RecyclerView.State state) {
+                                  RecyclerView.State state) {
         if (mOrientation == HORIZONTAL) {
             return 0;
         }
@@ -1163,7 +1163,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     }
 
     private void updateLayoutState(int layoutDirection, int requiredSpace,
-            boolean canUseExistingSpace, RecyclerView.State state) {
+                                   boolean canUseExistingSpace, RecyclerView.State state) {
         // If parent provides a hint, don't measure unlimited.
         mLayoutState.mInfinite = resolveIsInfinite();
         mLayoutState.mExtra = getExtraLayoutSpace(state);
@@ -1205,7 +1205,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     }
 
     void collectPrefetchPositionsForLayoutState(RecyclerView.State state, LayoutState layoutState,
-            LayoutPrefetchRegistry layoutPrefetchRegistry) {
+                                                LayoutPrefetchRegistry layoutPrefetchRegistry) {
         final int pos = layoutState.mCurrentPosition;
         if (pos >= 0 && pos < state.getItemCount()) {
             layoutPrefetchRegistry.addPosition(pos, Math.max(0, layoutState.mScrollingOffset));
@@ -1214,7 +1214,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
 
     @Override
     public void collectInitialPrefetchPositions(int adapterItemCount,
-            LayoutPrefetchRegistry layoutPrefetchRegistry) {
+                                                LayoutPrefetchRegistry layoutPrefetchRegistry) {
         final boolean fromEnd;
         final int anchorPos;
         if (mPendingSavedState != null && mPendingSavedState.hasValidAnchor()) {
@@ -1296,7 +1296,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
 
     @Override
     public void collectAdjacentPrefetchPositions(int dx, int dy, RecyclerView.State state,
-            LayoutPrefetchRegistry layoutPrefetchRegistry) {
+                                                 LayoutPrefetchRegistry layoutPrefetchRegistry) {
         int delta = (mOrientation == HORIZONTAL) ? dx : dy;
         if (getChildCount() == 0 || delta == 0) {
             // can't support this scroll, so don't bother prefetching
@@ -1489,7 +1489,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * @return Number of pixels that it added. Useful for scroll functions.
      */
     int fill(RecyclerView.Recycler recycler, LayoutState layoutState,
-            RecyclerView.State state, boolean stopOnFocusable) {
+             RecyclerView.State state, boolean stopOnFocusable) {
         // max offset we should set is mFastScroll + available
         final int start = layoutState.mAvailable;
         if (layoutState.mScrollingOffset != LayoutState.SCROLLING_OFFSET_NaN) {
@@ -1545,7 +1545,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     }
 
     void layoutChunk(RecyclerView.Recycler recycler, RecyclerView.State state,
-            LayoutState layoutState, LayoutChunkResult result) {
+                     LayoutState layoutState, LayoutChunkResult result) {
         View view = layoutState.next(recycler);
         if (view == null) {
             if (DEBUG && layoutState.mScrapList == null) {
@@ -1701,7 +1701,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * @return The first visible child closest to start of the layout from user's perspective.
      */
     private View findFirstVisibleChildClosestToStart(boolean completelyVisible,
-            boolean acceptPartiallyVisible) {
+                                                     boolean acceptPartiallyVisible) {
         if (mShouldReverseLayout) {
             return findOneVisibleChild(getChildCount() - 1, -1, completelyVisible,
                     acceptPartiallyVisible);
@@ -1719,7 +1719,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * @return The first visible child closest to end of the layout from user's perspective.
      */
     private View findFirstVisibleChildClosestToEnd(boolean completelyVisible,
-            boolean acceptPartiallyVisible) {
+                                                   boolean acceptPartiallyVisible) {
         if (mShouldReverseLayout) {
             return findOneVisibleChild(0, getChildCount(), completelyVisible,
                     acceptPartiallyVisible);
@@ -1741,7 +1741,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * @return A View that can be used an an anchor View.
      */
     private View findReferenceChildClosestToEnd(RecyclerView.Recycler recycler,
-            RecyclerView.State state) {
+                                                RecyclerView.State state) {
         return mShouldReverseLayout ? findFirstReferenceChild(recycler, state) :
                 findLastReferenceChild(recycler, state);
     }
@@ -1758,7 +1758,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * @return A View that can be used an an anchor View.
      */
     private View findReferenceChildClosestToStart(RecyclerView.Recycler recycler,
-            RecyclerView.State state) {
+                                                  RecyclerView.State state) {
         return mShouldReverseLayout ? findLastReferenceChild(recycler, state) :
                 findFirstReferenceChild(recycler, state);
     }
@@ -1773,7 +1773,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
 
     // overridden by GridLayoutManager
     View findReferenceChild(RecyclerView.Recycler recycler, RecyclerView.State state,
-            int start, int end, int itemCount) {
+                            int start, int end, int itemCount) {
         ensureLayoutState();
         View invalidMatch = null;
         View outOfBoundsMatch = null;
@@ -1804,7 +1804,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     // returns the out-of-bound child view closest to RV's end bounds. An out-of-bound child is
     // defined as a child that's either partially or fully invisible (outside RV's padding area).
     private View findPartiallyOrCompletelyInvisibleChildClosestToEnd(RecyclerView.Recycler recycler,
-            RecyclerView.State state) {
+                                                                     RecyclerView.State state) {
         return mShouldReverseLayout ? findFirstPartiallyOrCompletelyInvisibleChild(recycler, state)
                 : findLastPartiallyOrCompletelyInvisibleChild(recycler, state);
     }
@@ -1818,12 +1818,12 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     }
 
     private View findFirstPartiallyOrCompletelyInvisibleChild(RecyclerView.Recycler recycler,
-            RecyclerView.State state) {
+                                                              RecyclerView.State state) {
         return findOnePartiallyOrCompletelyInvisibleChild(0, getChildCount());
     }
 
     private View findLastPartiallyOrCompletelyInvisibleChild(RecyclerView.Recycler recycler,
-            RecyclerView.State state) {
+                                                             RecyclerView.State state) {
         return findOnePartiallyOrCompletelyInvisibleChild(getChildCount() - 1, -1);
     }
 
@@ -1912,7 +1912,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     // acceptable by this method, but could be returned
     // using #findOnePartiallyOrCompletelyInvisibleChild
     View findOneVisibleChild(int fromIndex, int toIndex, boolean completelyVisible,
-            boolean acceptPartiallyVisible) {
+                             boolean acceptPartiallyVisible) {
         ensureLayoutState();
         @ViewBoundsCheck.ViewBounds int preferredBoundsFlag = 0;
         @ViewBoundsCheck.ViewBounds int acceptableBoundsFlag = 0;
@@ -1963,7 +1963,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
 
     @Override
     public View onFocusSearchFailed(View focused, int focusDirection,
-            RecyclerView.Recycler recycler, RecyclerView.State state) {
+                                    RecyclerView.Recycler recycler, RecyclerView.State state) {
         resolveShouldLayoutReverse();
         if (getChildCount() == 0) {
             return null;
@@ -2344,8 +2344,8 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             dest.writeInt(mAnchorLayoutFromEnd ? 1 : 0);
         }
 
-        public static final Creator<SavedState> CREATOR =
-                new Creator<SavedState>() {
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
                     @Override
                     public SavedState createFromParcel(Parcel in) {
                         return new SavedState(in);

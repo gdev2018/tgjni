@@ -17,7 +17,7 @@ import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 
 import com.github.gdev2018.master.support.SparseLongArray;
-///*import org.telegram.messenger.voip.VoIPService;*/
+///*import com.github.gdev2018.master.voip.VoIPService;*/
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
@@ -558,20 +558,20 @@ public class MessagesController implements NotificationCenter.NotificationCenter
 //        return getInputUser(user);
 //    }
 //
-//    public static TLRPC.InputChannel getInputChannel(TLRPC.Chat chat) {
-//        if (chat instanceof TLRPC.TL_channel || chat instanceof TLRPC.TL_channelForbidden) {
-//            TLRPC.InputChannel inputChat = new TLRPC.TL_inputChannel();
-//            inputChat.channel_id = chat.id;
-//            inputChat.access_hash = chat.access_hash;
-//            return inputChat;
-//        } else {
-//            return new TLRPC.TL_inputChannelEmpty();
-//        }
-//    }
-//
-//    public TLRPC.InputChannel getInputChannel(int chatId) {
-//        return getInputChannel(getChat(chatId));
-//    }
+    public static TLRPC.InputChannel getInputChannel(TLRPC.Chat chat) {
+        if (chat instanceof TLRPC.TL_channel || chat instanceof TLRPC.TL_channelForbidden) {
+            TLRPC.InputChannel inputChat = new TLRPC.TL_inputChannel();
+            inputChat.channel_id = chat.id;
+            inputChat.access_hash = chat.access_hash;
+            return inputChat;
+        } else {
+            return new TLRPC.TL_inputChannelEmpty();
+        }
+    }
+
+    public TLRPC.InputChannel getInputChannel(int chatId) {
+        return getInputChannel(getChat(chatId));
+    }
 //
 //    public TLRPC.InputPeer getInputPeer(int id) {
 //        TLRPC.InputPeer inputPeer;
@@ -831,9 +831,9 @@ public class MessagesController implements NotificationCenter.NotificationCenter
 //        return users;
 //    }
 //
-//    public TLRPC.Chat getChat(Integer id) {
-//        return chats.get(id);
-//    }
+    public TLRPC.Chat getChat(Integer id) {
+        return chats.get(id);
+    }
 //
 //    public TLRPC.EncryptedChat getEncryptedChat(Integer id) {
 //        return encryptedChats.get(id);

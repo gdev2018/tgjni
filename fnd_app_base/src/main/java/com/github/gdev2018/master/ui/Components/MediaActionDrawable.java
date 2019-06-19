@@ -16,7 +16,7 @@ import android.view.animation.DecelerateInterpolator;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 
-//import org.telegram.messenger.AndroidUtilities;
+//import com.github.gdev2018.master.AndroidUtilities;
 //import org.telegram.ui.ActionBar.Theme;
 
 public class MediaActionDrawable extends Drawable {

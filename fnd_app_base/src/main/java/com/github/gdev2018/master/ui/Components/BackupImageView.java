@@ -13,13 +13,14 @@ import android.util.AttributeSet;
 import android.view.View;
 
 ///*import com.github.gdev2018.master.ImageReceiver;*/
+import com.github.gdev2018.master.ImageReceiver;
 import com.github.gdev2018.master.SecureDocument;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 
 public class BackupImageView extends View {
 
-///*    private ImageReceiver imageReceiver;*/
+    private ImageReceiver imageReceiver;
     private int width = -1;
     private int height = -1;
 
@@ -39,59 +40,67 @@ public class BackupImageView extends View {
     }
 
     private void init() {
-///*        imageReceiver = new ImageReceiver(this);*/
+        imageReceiver = new ImageReceiver(this);
     }
 
     public void setImage(SecureDocument path, String filter) {
-        setImage(path, null, filter, null, null, null, null, null, 0);
+        setImage(path, filter, null, null, null, null, null, 0, null);
     }
 
-    public void setImage(TLObject path, String filter, String ext, Drawable thumb) {
-        setImage(path, null, filter, thumb, null, null, null, ext, 0);
+    public void setImage(TLObject path, String filter, String ext, Drawable thumb, Object parentObject) {
+        setImage(path, filter, thumb, null, null, null, ext, 0, parentObject);
     }
 
-    public void setImage(TLObject path, String filter, Drawable thumb) {
-        setImage(path, null, filter, thumb, null, null, null, null, 0);
+    public void setImage(TLObject path, String filter, Drawable thumb, Object parentObject) {
+        setImage(path, filter, thumb, null, null, null, null, 0, parentObject);
     }
 
-    public void setImage(TLObject path, String filter, Bitmap thumb) {
-        setImage(path, null, filter, null, thumb, null, null, null, 0);
+    public void setImage(TLObject path, String filter, Bitmap thumb, Object parentObject) {
+        setImage(path, filter, null, thumb, null, null, null, 0, parentObject);
     }
 
-    public void setImage(TLObject path, String filter, Drawable thumb, int size) {
-        setImage(path, null, filter, thumb, null, null, null, null, size);
+    public void setImage(TLObject path, String filter, Drawable thumb, int size, Object parentObject) {
+        setImage(path, filter, thumb, null, null, null, null, size, parentObject);
     }
 
-    public void setImage(TLObject path, String filter, Bitmap thumb, int size) {
-        setImage(path, null, filter, null, thumb, null, null, null, size);
+    public void setImage(TLObject path, String filter, Bitmap thumb, int size, Object parentObject) {
+        setImage(path, filter, null, thumb, null, null, null, size, parentObject);
     }
 
-    public void setImage(TLObject path, String filter, TLRPC.FileLocation thumb, int size) {
-        setImage(path, null, filter, null, null, thumb, null, null, size);
+    public void setImage(TLObject path, String filter, TLObject thumb, int size, Object parentObject) {
+        setImage(path, filter, null, null, thumb, null, null, size, parentObject);
     }
 
     public void setImage(String path, String filter, Drawable thumb) {
-        setImage(null, path, filter, thumb, null, null, null, null, 0);
+        setImage(path, filter, thumb, null, null, null, null, 0, null);
+    }
+
+    public void setImage(String path, String filter, String thumbPath, String thumbFilter) {
+        setImage(path, filter, null, null, thumbPath, thumbFilter, null, 0, null);
     }
 
     public void setOrientation(int angle, boolean center) {
-///*        imageReceiver.setOrientation(angle, center);*/
+        imageReceiver.setOrientation(angle, center);
     }
 
-    public void setImage(TLObject path, String httpUrl, String filter, Drawable thumb, Bitmap thumbBitmap, TLRPC.FileLocation thumbLocation, String thumbFilter, String ext, int size) {
+    public void setImage(Object path, String filter, Drawable thumb, Bitmap thumbBitmap, Object thumbLocation, String thumbFilter, String ext, int size, Object parentObject) {
         if (thumbBitmap != null) {
             thumb = new BitmapDrawable(null, thumbBitmap);
         }
-///*        imageReceiver.setImage(path, httpUrl, filter, thumb, thumbLocation, thumbFilter, size, ext, 0);*/
+        imageReceiver.setImage(path, filter, thumb, thumbLocation, thumbFilter, size, ext, parentObject, 0);
+    }
+
+    public void setImage(TLObject path, String filter, TLObject thumbLocation, String thumbFilter, String ext, int size, int cacheType, Object parentObject) {
+        imageReceiver.setImage(path, filter, null, thumbLocation, thumbFilter, size, ext, parentObject, cacheType);
     }
 
     public void setImageBitmap(Bitmap bitmap) {
-///*        imageReceiver.setImageBitmap(bitmap);*/
+        imageReceiver.setImageBitmap(bitmap);
     }
 
     public void setImageResource(int resId) {
         Drawable drawable = getResources().getDrawable(resId);
-///*        imageReceiver.setImageBitmap(drawable);*/
+        imageReceiver.setImageBitmap(drawable);
         invalidate();
     }
 
@@ -100,31 +109,30 @@ public class BackupImageView extends View {
         if (drawable != null) {
             drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
         }
-///*        imageReceiver.setImageBitmap(drawable);*/
+        imageReceiver.setImageBitmap(drawable);
         invalidate();
     }
 
     public void setImageDrawable(Drawable drawable) {
-///*        imageReceiver.setImageBitmap(drawable);*/
+        imageReceiver.setImageBitmap(drawable);
     }
 
     public void setRoundRadius(int value) {
-///*        imageReceiver.setRoundRadius(value);*/
+        imageReceiver.setRoundRadius(value);
         invalidate();
     }
 
     public int getRoundRadius() {
-///*        return imageReceiver.getRoundRadius();*/
-        return 0;
+        return imageReceiver.getRoundRadius();
     }
 
     public void setAspectFit(boolean value) {
-///*        imageReceiver.setAspectFit(value);*/
+        imageReceiver.setAspectFit(value);
     }
 
-///*    public ImageReceiver getImageReceiver() {
-//        return imageReceiver;
-//    }*/
+    public ImageReceiver getImageReceiver() {
+        return imageReceiver;
+    }
 
     public void setSize(int w, int h) {
         width = w;
@@ -134,22 +142,23 @@ public class BackupImageView extends View {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-///*        imageReceiver.onDetachedFromWindow();*/
+        imageReceiver.onDetachedFromWindow();
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-///*        imageReceiver.onAttachedToWindow();*/
+        imageReceiver.onAttachedToWindow();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-///*        if (width != -1 && height != -1) {
-//            imageReceiver.setImageCoords((getWidth() - width) / 2, (getHeight() - height) / 2, width, height);
-//        } else {
-//            imageReceiver.setImageCoords(0, 0, getWidth(), getHeight());
-//        }
-//        imageReceiver.draw(canvas);*/
+        if (width != -1 && height != -1) {
+            imageReceiver.setImageCoords((getWidth() - width) / 2, (getHeight() - height) / 2, width, height);
+        } else {
+            imageReceiver.setImageCoords(0, 0, getWidth(), getHeight());
+        }
+        imageReceiver.draw(canvas);
     }
 }
+

@@ -77,7 +77,7 @@ public class TestApplication extends BaseApplication {
 //        try {
 //            PowerManager pm = (PowerManager)PlaborApplication.mApplicationContext.getSystemService(Context.POWER_SERVICE);
 //            isScreenOn = pm.isScreenOn();
-//            if (BuildVars.LOGS_ENABLED) {
+//            if (BaseBuildVars.LOGS_ENABLED) {
 //                FileLog.d("screen state = " + isScreenOn);
 //            }
 //        } catch (Exception e) {
@@ -101,7 +101,7 @@ public class TestApplication extends BaseApplication {
 //
 //        PlaborApplication app = (PlaborApplication)PlaborApplication.mApplicationContext;
 //        app.initPlayServices();
-//        if (BuildVars.LOGS_ENABLED) {
+//        if (BaseBuildVars.LOGS_ENABLED) {
 //            FileLog.d("app initied");
 //        }
 //
@@ -156,11 +156,11 @@ public class TestApplication extends BaseApplication {
 //            if (checkPlayServices()) {
 //                final String currentPushString = SharedConfig.pushString;
 //                if (!TextUtils.isEmpty(currentPushString)) {
-//                    if (BuildVars.LOGS_ENABLED) {
+//                    if (BaseBuildVars.LOGS_ENABLED) {
 //                        FileLog.d("GCM regId = " + currentPushString);
 //                    }
 //                } else {
-//                    if (BuildVars.LOGS_ENABLED) {
+//                    if (BaseBuildVars.LOGS_ENABLED) {
 //                        FileLog.d("GCM Registration not found.");
 //                    }
 //                }
@@ -175,7 +175,7 @@ public class TestApplication extends BaseApplication {
 //                    }
 //                });
 //            } else {
-//                if (BuildVars.LOGS_ENABLED) {
+//                if (BaseBuildVars.LOGS_ENABLED) {
 //                    FileLog.d("No valid Google Play Services APK found.");
 //                }
 //            }

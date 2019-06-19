@@ -216,6 +216,7 @@ public class ConnectionsManager {
         return sendRequest(object, completionBlock, quickAckBlock, null, flags, DEFAULT_DATACENTER_ID, ConnectionTypeGeneric, true);
     }
 
+    // mock request
     public int sendRequest(final TLObject object, final RequestDelegate onComplete, final QuickAckDelegate onQuickAck, final WriteToSocketDelegate onWriteToSocket, final int flags, final int datacenterId, final int connetionType, final boolean immediate) {
         final int requestToken = lastRequestToken.getAndIncrement();
         Utilities.stageQueue.postRunnable(new Runnable() {
@@ -229,32 +230,34 @@ public class ConnectionsManager {
                     object.serializeToStream(buffer);
                     object.freeResources();
 
-                    native_sendRequest(currentAccount, buffer.address, new RequestDelegateInternal() {
-                        @Override
-                        public void run(long response, int errorCode, String errorText, int networkType) {
-                            try {
-                                TLObject resp = null;
-                                TLRPC.TL_error error = null;
-                                if (response != 0) {
-                                    NativeByteBuffer buff = NativeByteBuffer.wrap(response);
-                                    buff.reused = true;
-                                    resp = object.deserializeResponse(buff, buff.readInt32(true), true);
-                                } else if (errorText != null) {
-                                    error = new TLRPC.TL_error();
-                                    error.code = errorCode;
-                                    error.text = errorText;
-                                    if (BaseBuildVars.LOGS_ENABLED) {
-                                        FileLog.e(object + " got error " + error.code + " " + error.text);
-                                    }
-                                }
-                                if (resp != null) {
-                                    resp.networkType = networkType;
-                                }
-                                if (BaseBuildVars.LOGS_ENABLED) {
-                                    FileLog.d("java received " + resp + " error = " + error);
-                                }
-                                final TLObject finalResponse = resp;
-                                final TLRPC.TL_error finalError = error;
+//                    native_sendRequest(currentAccount, buffer.address, new RequestDelegateInternal() {
+//                        @Override
+//                        public void run(long response, int errorCode, String errorText, int networkType) {
+//                            try {
+//                                TLObject resp = null;
+//                                TLRPC.TL_error error = null;
+//                                if (response != 0) {
+//                                    NativeByteBuffer buff = NativeByteBuffer.wrap(response);
+//                                    buff.reused = true;
+//                                    resp = object.deserializeResponse(buff, buff.readInt32(true), true);
+//                                } else if (errorText != null) {
+//                                    error = new TLRPC.TL_error();
+//                                    error.code = errorCode;
+//                                    error.text = errorText;
+//                                    if (BaseBuildVars.LOGS_ENABLED) {
+//                                        FileLog.e(object + " got error " + error.code + " " + error.text);
+//                                    }
+//                                }
+//                                if (resp != null) {
+//                                    resp.networkType = networkType;
+//                                }
+//                                if (BaseBuildVars.LOGS_ENABLED) {
+//                                    FileLog.d("java received " + resp + " error = " + error);
+//                                }
+                                final TLObject finalResponse = new TLRPC.TL_auth_sentCode();
+//                                final TLObject finalResponse = resp;
+                                final TLRPC.TL_error finalError = null;
+//                                final TLRPC.TL_error finalError = error;
                                 Utilities.stageQueue.postRunnable(new Runnable() {
                                     @Override
                                     public void run() {
@@ -264,11 +267,11 @@ public class ConnectionsManager {
                                         }
                                     }
                                 });
-                            } catch (Exception e) {
-                                FileLog.e(e);
-                            }
-                        }
-                    }, onQuickAck, onWriteToSocket, flags, datacenterId, connetionType, immediate, requestToken);
+//                            } catch (Exception e) {
+//                                FileLog.e(e);
+//                            }
+//                        }
+//                    }, onQuickAck, onWriteToSocket, flags, datacenterId, connetionType, immediate, requestToken);
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
@@ -276,6 +279,67 @@ public class ConnectionsManager {
         });
         return requestToken;
     }
+
+///*    public int sendRequest(final TLObject object, final RequestDelegate onComplete, final QuickAckDelegate onQuickAck, final WriteToSocketDelegate onWriteToSocket, final int flags, final int datacenterId, final int connetionType, final boolean immediate) {
+//        final int requestToken = lastRequestToken.getAndIncrement();
+//        Utilities.stageQueue.postRunnable(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (BaseBuildVars.LOGS_ENABLED) {
+//                    FileLog.d("send request " + object + " with token = " + requestToken);
+//                }
+//                try {
+//                    NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());
+//                    object.serializeToStream(buffer);
+//                    object.freeResources();
+//
+//                    native_sendRequest(currentAccount, buffer.address, new RequestDelegateInternal() {
+//                        @Override
+//                        public void run(long response, int errorCode, String errorText, int networkType) {
+//                            try {
+//                                TLObject resp = null;
+//                                TLRPC.TL_error error = null;
+//                                if (response != 0) {
+//                                    NativeByteBuffer buff = NativeByteBuffer.wrap(response);
+//                                    buff.reused = true;
+//                                    resp = object.deserializeResponse(buff, buff.readInt32(true), true);
+//                                } else if (errorText != null) {
+//                                    error = new TLRPC.TL_error();
+//                                    error.code = errorCode;
+//                                    error.text = errorText;
+//                                    if (BaseBuildVars.LOGS_ENABLED) {
+//                                        FileLog.e(object + " got error " + error.code + " " + error.text);
+//                                    }
+//                                }
+//                                if (resp != null) {
+//                                    resp.networkType = networkType;
+//                                }
+//                                if (BaseBuildVars.LOGS_ENABLED) {
+//                                    FileLog.d("java received " + resp + " error = " + error);
+//                                }
+//                                final TLObject finalResponse = resp;
+//                                final TLRPC.TL_error finalError = error;
+//                                Utilities.stageQueue.postRunnable(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        onComplete.run(finalResponse, finalError);
+//                                        if (finalResponse != null) {
+//                                            finalResponse.freeResources();
+//                                        }
+//                                    }
+//                                });
+//                            } catch (Exception e) {
+//                                FileLog.e(e);
+//                            }
+//                        }
+//                    }, onQuickAck, onWriteToSocket, flags, datacenterId, connetionType, immediate, requestToken);
+//                } catch (Exception e) {
+//                    FileLog.e(e);
+//                }
+//            }
+//        });
+//        return requestToken;
+//    }*/
 
     public void cancelRequest(int token, boolean notifyServer) {
         native_cancelRequest(currentAccount, token, notifyServer);

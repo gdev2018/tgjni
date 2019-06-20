@@ -22,21 +22,21 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-///*import com.github.gdev2018.master.PhoneFormat.PhoneFormat;*/
-import com.github.gdev2018.master.AndroidUtilities;
-import com.github.gdev2018.master.UserObject;
-import com.github.gdev2018.master.FileLog;
-import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
-import com.github.gdev2018.master.ui.Components.LayoutHelper;
-import com.github.gdev2018.master.ui.ActionBar.Theme;
+import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.UserObject;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.R;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.SnowflakesEffect;
 
 public class DrawerProfileCell extends FrameLayout {
 
@@ -49,6 +49,7 @@ public class DrawerProfileCell extends FrameLayout {
     private Rect destRect = new Rect();
     private Paint paint = new Paint();
     private Integer currentColor;
+    private SnowflakesEffect snowflakesEffect;
     private boolean accountsShowed;
 
     public DrawerProfileCell(Context context) {
@@ -61,7 +62,7 @@ public class DrawerProfileCell extends FrameLayout {
         addView(shadowView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 70, Gravity.LEFT | Gravity.BOTTOM));
 
         avatarImageView = new BackupImageView(context);
-///*        avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(32));*/
+        avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(32));
         addView(avatarImageView, LayoutHelper.createFrame(64, 64, Gravity.LEFT | Gravity.BOTTOM, 16, 0, 0, 67));
 
         nameTextView = new TextView(context);
@@ -85,6 +86,10 @@ public class DrawerProfileCell extends FrameLayout {
         arrowView = new ImageView(context);
         arrowView.setScaleType(ImageView.ScaleType.CENTER);
         addView(arrowView, LayoutHelper.createFrame(59, 59, Gravity.RIGHT | Gravity.BOTTOM));
+
+        if (Theme.getEventType() == 0) {
+            snowflakesEffect = new SnowflakesEffect();
+        }
     }
 
     @Override
@@ -115,7 +120,7 @@ public class DrawerProfileCell extends FrameLayout {
             shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
         }
         nameTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
-        if (Theme.isCustomTheme() && backgroundDrawable != null) {
+        if (Theme.isCustomTheme() && !Theme.isPatternWallpaper() && backgroundDrawable != null) {
             phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
             shadowView.setVisibility(VISIBLE);
             if (backgroundDrawable instanceof ColorDrawable) {
@@ -143,6 +148,10 @@ public class DrawerProfileCell extends FrameLayout {
             phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhoneCats));
             super.onDraw(canvas);
         }
+
+        if (snowflakesEffect != null) {
+            snowflakesEffect.onDraw(this, canvas);
+        }
     }
 
     public boolean isAccountsShowed() {
@@ -158,13 +167,10 @@ public class DrawerProfileCell extends FrameLayout {
     }
 
     public void setOnArrowClickListener(final OnClickListener onClickListener) {
-        arrowView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                accountsShowed = !accountsShowed;
-                arrowView.setImageResource(accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
-                onClickListener.onClick(DrawerProfileCell.this);
-            }
+        arrowView.setOnClickListener(v -> {
+            accountsShowed = !accountsShowed;
+            arrowView.setImageResource(accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
+            onClickListener.onClick(DrawerProfileCell.this);
         });
     }
 
@@ -179,9 +185,9 @@ public class DrawerProfileCell extends FrameLayout {
         accountsShowed = accounts;
         arrowView.setImageResource(accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
         nameTextView.setText(UserObject.getUserName(user));
-///*        phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));*/
+        phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
         AvatarDrawable avatarDrawable = new AvatarDrawable(user);
         avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
-        avatarImageView.setImage(photo, "50_50", avatarDrawable);
+        avatarImageView.setImage(photo, "50_50", avatarDrawable, user);
     }
 }

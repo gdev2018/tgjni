@@ -45,28 +45,46 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStructure;
 
+import com.github.gdev2018.master.PhoneFormat.PhoneFormat;
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.ChatObject;
+import com.github.gdev2018.master.ContactsController;
 import com.github.gdev2018.master.DownloadController;
 import com.github.gdev2018.master.Emoji;
-import com.github.gdev2018.master.FileLoader;
-import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.ImageLoader;
 import com.github.gdev2018.master.ImageReceiver;
 import com.github.gdev2018.master.LocaleController;
+import com.github.gdev2018.master.MediaController;
+import com.github.gdev2018.master.FileLoader;
+import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.MessageObject;
+import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.R;
+import com.github.gdev2018.master.SendMessagesHelper;
 import com.github.gdev2018.master.SharedConfig;
+import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserObject;
+import com.github.gdev2018.master.Utilities;
+import com.github.gdev2018.master.WebFile;
+import com.github.gdev2018.master.browser.Browser;
+import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.AnimatedFileDrawable;
 import com.github.gdev2018.master.ui.Components.AvatarDrawable;
 import com.github.gdev2018.master.ui.Components.LinkPath;
 import com.github.gdev2018.master.ui.Components.MediaActionDrawable;
 import com.github.gdev2018.master.ui.Components.RadialProgress2;
+import com.github.gdev2018.master.ui.Components.RoundVideoPlayingDrawable;
 import com.github.gdev2018.master.ui.Components.SeekBar;
 import com.github.gdev2018.master.ui.Components.SeekBarWaveform;
+import com.github.gdev2018.master.ui.Components.StaticLayoutEx;
+import com.github.gdev2018.master.ui.ActionBar.Theme;
+import com.github.gdev2018.master.ui.Components.TypefaceSpan;
 import com.github.gdev2018.master.ui.Components.URLSpanBotCommand;
 import com.github.gdev2018.master.ui.Components.URLSpanMono;
+import com.github.gdev2018.master.ui.Components.URLSpanNoUnderline;
+import com.github.gdev2018.master.ui.PhotoViewer;
+import com.github.gdev2018.master.ui.SecretMediaViewer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -3930,7 +3948,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
                     if (SharedConfig.autoplayVideo && messageObject.type == 3 && !messageObject.needDrawBluredPreview() && (
                             currentMessageObject.mediaExists ||
-                            messageObject.canStreamVideo() && DownloadController.getInstance(currentAccount).canDownloadMedia(currentMessageObject)
+                                    messageObject.canStreamVideo() && DownloadController.getInstance(currentAccount).canDownloadMedia(currentMessageObject)
                     )) {
                         if (currentPosition != null) {
                             autoPlayingVideo = (currentPosition.flags & MessageObject.POSITION_FLAG_LEFT) != 0 && (currentPosition.flags & MessageObject.POSITION_FLAG_RIGHT) != 0;
@@ -4691,7 +4709,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
                 @Override
                 public void draw(Canvas canvas) {
-                    Rect bounds = getBounds();
+                    android.graphics.Rect bounds = getBounds();
                     rect.set(bounds.left, bounds.top, bounds.right, bounds.bottom);
                     canvas.drawRoundRect(rect, AndroidUtilities.dp(6), AndroidUtilities.dp(6), maskPaint);
                 }
@@ -5961,7 +5979,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         canStreamVideo = currentMessageObject.isSent() && documentAttachType == DOCUMENT_ATTACH_TYPE_VIDEO && currentMessageObject.canStreamVideo() && !currentMessageObject.needDrawBluredPreview();
         if (SharedConfig.streamMedia && (int) currentMessageObject.getDialogId() != 0 && !currentMessageObject.isSecretMedia() &&
                 (documentAttachType == DOCUMENT_ATTACH_TYPE_MUSIC ||
-                canStreamVideo && currentPosition != null && ((currentPosition.flags & MessageObject.POSITION_FLAG_LEFT) == 0 || (currentPosition.flags & MessageObject.POSITION_FLAG_RIGHT) == 0))) {
+                        canStreamVideo && currentPosition != null && ((currentPosition.flags & MessageObject.POSITION_FLAG_LEFT) == 0 || (currentPosition.flags & MessageObject.POSITION_FLAG_RIGHT) == 0))) {
             hasMiniProgress = fileExists ? 1 : 2;
             fileExists = true;
         }
@@ -6246,7 +6264,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             radialProgress.setIcon(getIconForCurrentState(), ifSame, animated);
                             videoRadialProgress.setIcon(MediaActionDrawable.ICON_NONE, ifSame, false);
                             if (!drawVideoSize && animatingDrawVideoImageButton == 0) {
-                               animatingDrawVideoImageButtonProgress = 0.0f;
+                                animatingDrawVideoImageButtonProgress = 0.0f;
                             }
                         }
                     } else {
@@ -6513,7 +6531,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         boolean animationLoaded = !thumb && imageReceiver.getAnimation() != null;
         if (currentMessageObject != null && set && !thumb && !currentMessageObject.mediaExists && !currentMessageObject.attachPathExists &&
                 (currentMessageObject.type == 0 && (documentAttachType == DOCUMENT_ATTACH_TYPE_WALLPAPER || documentAttachType == DOCUMENT_ATTACH_TYPE_NONE || documentAttachType == DOCUMENT_ATTACH_TYPE_STICKER || animationLoaded && (documentAttachType == DOCUMENT_ATTACH_TYPE_GIF || documentAttachType == DOCUMENT_ATTACH_TYPE_ROUND)) ||
-                 currentMessageObject.type == 1 || animationLoaded && (currentMessageObject.type == 5 || currentMessageObject.type == 8))) {
+                        currentMessageObject.type == 1 || animationLoaded && (currentMessageObject.type == 5 || currentMessageObject.type == 8))) {
             currentMessageObject.mediaExists = true;
             updateButtonState(false, true, false);
         }

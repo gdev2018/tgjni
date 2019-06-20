@@ -24,7 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
-import org.telegram.ui.ActionBar.Theme;
+import com.github.gdev2018.master.ui.ActionBar.Theme;
 
 public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
 

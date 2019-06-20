@@ -12,19 +12,20 @@ import android.content.Context;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 
-import com.github.gdev2018.master.AndroidUtilities;
-import com.github.gdev2018.master.LocaleController;
-///*import com.github.gdev2018.master.MessagesController;*/
-import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfig;
-import com.github.gdev2018.master.UserObject;
-import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.ui.ActionBar.SimpleTextView;
-import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
-import com.github.gdev2018.master.ui.Components.GroupCreateCheckBox;
-import com.github.gdev2018.master.ui.Components.LayoutHelper;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
+import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.SimpleTextView;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.GroupCreateCheckBox;
+import org.telegram.ui.Components.LayoutHelper;
 
 public class GroupCreateUserCell extends FrameLayout {
 
@@ -43,30 +44,30 @@ public class GroupCreateUserCell extends FrameLayout {
     private int lastStatus;
     private TLRPC.FileLocation lastAvatar;
 
-    public GroupCreateUserCell(Context context, boolean needCheck) {
+    public GroupCreateUserCell(Context context, boolean needCheck, int padding) {
         super(context);
         avatarDrawable = new AvatarDrawable();
 
         avatarImageView = new BackupImageView(context);
         avatarImageView.setRoundRadius(AndroidUtilities.dp(24));
-        addView(avatarImageView, LayoutHelper.createFrame(50, 50, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 11, 11, LocaleController.isRTL ? 11 : 0, 0));
+        addView(avatarImageView, LayoutHelper.createFrame(46, 46, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : (13 + padding), 6, LocaleController.isRTL ? (13 + padding) : 0, 0));
 
         nameTextView = new SimpleTextView(context);
         nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        nameTextView.setTextSize(17);
+        nameTextView.setTextSize(16);
         nameTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-        addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 28 : 72, 14, LocaleController.isRTL ? 72 : 28, 0));
+        addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 28 : 72) + padding, 10, (LocaleController.isRTL ? 72 : 28) + padding, 0));
 
         statusTextView = new SimpleTextView(context);
-        statusTextView.setTextSize(16);
+        statusTextView.setTextSize(15);
         statusTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-        addView(statusTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 28 : 72, 39, LocaleController.isRTL ? 72 : 28, 0));
+        addView(statusTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 28 : 72) + padding, 32, (LocaleController.isRTL ? 72 : 28) + padding, 0));
 
         if (needCheck) {
             checkBox = new GroupCreateCheckBox(context);
             checkBox.setVisibility(VISIBLE);
-            addView(checkBox, LayoutHelper.createFrame(24, 24, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 41, 41, LocaleController.isRTL ? 41 : 0, 0));
+            addView(checkBox, LayoutHelper.createFrame(24, 24, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 40, 31, LocaleController.isRTL ? 40 : 0, 0));
         }
     }
 
@@ -87,11 +88,11 @@ public class GroupCreateUserCell extends FrameLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(72), MeasureSpec.EXACTLY));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(58), MeasureSpec.EXACTLY));
     }
 
     public void recycle() {
-///*        avatarImageView.getImageReceiver().cancelLoadImage();*/
+        avatarImageView.getImageReceiver().cancelLoadImage();
     }
 
     public void update(int mask) {
@@ -106,26 +107,26 @@ public class GroupCreateUserCell extends FrameLayout {
 
         if (mask != 0) {
             boolean continueUpdate = false;
-///*            if ((mask & MessagesController.UPDATE_MASK_AVATAR) != 0) {
-//                if (lastAvatar != null && photo == null || lastAvatar == null && photo != null && lastAvatar != null && photo != null && (lastAvatar.volume_id != photo.volume_id || lastAvatar.local_id != photo.local_id)) {
-//                    continueUpdate = true;
-//                }
-//            }
-//            if (currentUser != null && currentStatus == null && !continueUpdate && (mask & MessagesController.UPDATE_MASK_STATUS) != 0) {
-//                int newStatus = 0;
-//                if (currentUser.status != null) {
-//                    newStatus = currentUser.status.expires;
-//                }
-//                if (newStatus != lastStatus) {
-//                    continueUpdate = true;
-//                }
-//            }
-//            if (!continueUpdate && currentName == null && lastName != null && (mask & MessagesController.UPDATE_MASK_NAME) != 0) {
-//                newName = UserObject.getUserName(currentUser);
-//                if (!newName.equals(lastName)) {
-//                    continueUpdate = true;
-//                }
-//            }*/
+            if ((mask & MessagesController.UPDATE_MASK_AVATAR) != 0) {
+                if (lastAvatar != null && photo == null || lastAvatar == null && photo != null && lastAvatar != null && photo != null && (lastAvatar.volume_id != photo.volume_id || lastAvatar.local_id != photo.local_id)) {
+                    continueUpdate = true;
+                }
+            }
+            if (currentUser != null && currentStatus == null && !continueUpdate && (mask & MessagesController.UPDATE_MASK_STATUS) != 0) {
+                int newStatus = 0;
+                if (currentUser.status != null) {
+                    newStatus = currentUser.status.expires;
+                }
+                if (newStatus != lastStatus) {
+                    continueUpdate = true;
+                }
+            }
+            if (!continueUpdate && currentName == null && lastName != null && (mask & MessagesController.UPDATE_MASK_NAME) != 0) {
+                newName = UserObject.getUserName(currentUser);
+                if (!newName.equals(lastName)) {
+                    continueUpdate = true;
+                }
+            }
             if (!continueUpdate) {
                 return;
             }
@@ -144,27 +145,27 @@ public class GroupCreateUserCell extends FrameLayout {
 
         if (currentStatus != null) {
             statusTextView.setText(currentStatus, true);
-            statusTextView.setTag(Theme.key_groupcreate_offlineText);
-            statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
+            statusTextView.setTag(Theme.key_windowBackgroundWhiteGrayText);
+            statusTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
         } else {
             if (currentUser.bot) {
-                statusTextView.setTag(Theme.key_groupcreate_offlineText);
-                statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
+                statusTextView.setTag(Theme.key_windowBackgroundWhiteGrayText);
+                statusTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
                 statusTextView.setText(LocaleController.getString("Bot", R.string.Bot));
             } else {
-///*                if (currentUser.id == UserConfig.getInstance(currentAccount).getClientUserId() || currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime() || MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(currentUser.id)) {
-//                    statusTextView.setTag(Theme.key_groupcreate_offlineText);
-//                    statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_onlineText));
-//                    statusTextView.setText(LocaleController.getString("Online", R.string.Online));
-//                } else {
-//                    statusTextView.setTag(Theme.key_groupcreate_offlineText);
-//                    statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
-//                    statusTextView.setText(LocaleController.formatUserStatus(currentAccount, currentUser));
-//                }*/
+                if (currentUser.id == UserConfig.getInstance(currentAccount).getClientUserId() || currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime() || MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(currentUser.id)) {
+                    statusTextView.setTag(Theme.key_windowBackgroundWhiteBlueText);
+                    statusTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText));
+                    statusTextView.setText(LocaleController.getString("Online", R.string.Online));
+                } else {
+                    statusTextView.setTag(Theme.key_windowBackgroundWhiteGrayText);
+                    statusTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
+                    statusTextView.setText(LocaleController.formatUserStatus(currentAccount, currentUser));
+                }
             }
         }
 
-        avatarImageView.setImage(photo, "50_50", avatarDrawable);
+        avatarImageView.setImage(photo, "50_50", avatarDrawable, currentUser);
     }
 
     @Override

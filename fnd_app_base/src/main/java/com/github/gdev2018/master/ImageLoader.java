@@ -17,23 +17,25 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.media.ExifInterface;
 import android.text.TextUtils;
 import android.util.SparseArray;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.secretmedia.EncryptedFileInputStream;
-import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.Components.AnimatedFileDrawable;
+import com.github.gdev2018.master.tgnet.ConnectionsManager;
+import com.github.gdev2018.master.tgnet.TLObject;
+import com.github.gdev2018.master.tgnet.TLRPC;
+import com.github.gdev2018.master.ui.Components.AnimatedFileDrawable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -170,7 +172,7 @@ public class ImageLoader {
                 fileOutputStream = new RandomAccessFile(tempFile, "rws");
             } catch (Throwable e) {
                 if (e instanceof SocketTimeoutException) {
-                    if (ApplicationLoader.isNetworkOnline()) {
+                    if (BaseApplication.isNetworkOnline()) {
                         canRetry = false;
                     }
                 } else if (e instanceof UnknownHostException) {
@@ -347,7 +349,7 @@ public class ImageLoader {
                 }
             } catch (Throwable e) {
                 if (e instanceof SocketTimeoutException) {
-                    if (ApplicationLoader.isNetworkOnline()) {
+                    if (BaseApplication.isNetworkOnline()) {
                         canRetry = false;
                     }
                 } else if (e instanceof UnknownHostException) {
@@ -473,7 +475,7 @@ public class ImageLoader {
                     }
                 } catch (Throwable e) {
                     if (e instanceof SocketTimeoutException) {
-                        if (ApplicationLoader.isNetworkOnline()) {
+                        if (BaseApplication.isNetworkOnline()) {
                             canRetry = false;
                         }
                     } else if (e instanceof UnknownHostException) {

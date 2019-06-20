@@ -55,17 +55,31 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.ChatObject;
+import com.github.gdev2018.master.DataQuery;
 import com.github.gdev2018.master.Emoji;
 import com.github.gdev2018.master.EmojiData;
-import com.github.gdev2018.master.FileLog;
+import com.github.gdev2018.master.EmojiSuggestion;
+import com.github.gdev2018.master.FileLoader;
+import com.github.gdev2018.master.LocaleController;
+import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.NotificationCenter;
+import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.UserConfig;
 import com.github.gdev2018.master.support.widget.GridLayoutManager;
 import com.github.gdev2018.master.support.widget.RecyclerView;
+import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
+import com.github.gdev2018.master.ui.ActionBar.AlertDialog;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
+import com.github.gdev2018.master.ui.Cells.ContextLinkCell;
 import com.github.gdev2018.master.ui.Cells.EmptyCell;
+import com.github.gdev2018.master.ui.Cells.FeaturedStickerSetInfoCell;
+import com.github.gdev2018.master.ui.Cells.StickerEmojiCell;
+import com.github.gdev2018.master.ui.Cells.StickerSetGroupInfoCell;
+import com.github.gdev2018.master.ui.Cells.StickerSetNameCell;
+import com.github.gdev2018.master.ui.StickerPreviewViewer;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -259,7 +273,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 return false;
             });
             setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            setScaleType(ScaleType.CENTER);
+            setScaleType(ImageView.ScaleType.CENTER);
         }
 
         private void sendEmoji(String override) {
@@ -286,7 +300,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
         @Override
         public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(widthMeasureSpec));
+            setMeasuredDimension(View.MeasureSpec.getSize(widthMeasureSpec), View.MeasureSpec.getSize(widthMeasureSpec));
         }
 
         @Override
@@ -720,17 +734,16 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         if (needStickers) {
             stickersWrap = new FrameLayout(context);
 
-///*            DataQuery.getInstance(currentAccount).checkStickers(DataQuery.TYPE_IMAGE);
-//            DataQuery.getInstance(currentAccount).checkFeaturedStickers();*/
+            DataQuery.getInstance(currentAccount).checkStickers(DataQuery.TYPE_IMAGE);
+            DataQuery.getInstance(currentAccount).checkFeaturedStickers();
             stickersGridView = new RecyclerListView(context) {
 
                 boolean ignoreLayout;
 
                 @Override
                 public boolean onInterceptTouchEvent(MotionEvent event) {
-///*                    boolean result = StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, stickersGridView, EmojiView.this.getMeasuredHeight(), stickerPreviewViewerDelegate);
-//                    return super.onInterceptTouchEvent(event) || result;*/
-                    return super.onInterceptTouchEvent(event);
+                    boolean result = StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, stickersGridView, EmojiView.this.getMeasuredHeight(), stickerPreviewViewerDelegate);
+                    return super.onInterceptTouchEvent(event) || result;
                 }
 
                 @Override
@@ -1956,11 +1969,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
         }
 
-        LayoutParams layoutParams = (LayoutParams) emojiTab.getLayoutParams();
-        LayoutParams layoutParams1 = null;
-        layoutParams.width = MeasureSpec.getSize(widthMeasureSpec);
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) emojiTab.getLayoutParams();
+        FrameLayout.LayoutParams layoutParams1 = null;
+        layoutParams.width = View.MeasureSpec.getSize(widthMeasureSpec);
         if (stickersTab != null) {
-            layoutParams1 = (LayoutParams) stickersTab.getLayoutParams();
+            layoutParams1 = (FrameLayout.LayoutParams) stickersTab.getLayoutParams();
             if (layoutParams1 != null) {
                 layoutParams1.width = layoutParams.width;
             }
@@ -1973,7 +1986,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             emojiTab.setLayoutParams(layoutParams);
             oldWidth = layoutParams.width;
         }
-        super.onMeasure(MeasureSpec.makeMeasureSpec(layoutParams.width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(heightMeasureSpec), MeasureSpec.EXACTLY));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(layoutParams.width, MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(heightMeasureSpec), MeasureSpec.EXACTLY));
         isLayout = false;
     }
 

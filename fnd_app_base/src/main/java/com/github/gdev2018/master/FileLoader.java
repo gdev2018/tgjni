@@ -13,11 +13,9 @@ import android.text.TextUtils;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
-import com.google.android.exoplayer2.upstream.TransferListener;
-
+import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.di.BaseApplication;
 
 import java.io.File;
 import java.util.ArrayList;

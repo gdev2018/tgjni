@@ -59,17 +59,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.gdev2018.master.AndroidUtilities;
-import com.github.gdev2018.master.FileLog;
+import com.github.gdev2018.master.ChatObject;
+import com.github.gdev2018.master.DataQuery;
+import com.github.gdev2018.master.Emoji;
 import com.github.gdev2018.master.LocaleController;
+import com.github.gdev2018.master.MediaController;
 import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.MessagesController;
+import com.github.gdev2018.master.NotificationsController;
+import com.github.gdev2018.master.SendMessagesHelper;
+import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.SharedConfig;
+import com.github.gdev2018.master.VideoEditedInfo;
+import com.github.gdev2018.master.camera.CameraController;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
+import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.ui.ActionBar.ActionBar;
+import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.ui.ActionBar.AlertDialog;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
+import com.github.gdev2018.master.ui.ChatActivity;
+///*import com.github.gdev2018.master.ui.DialogsActivity;
+//import com.github.gdev2018.master.ui.GroupStickersActivity;
+//import com.github.gdev2018.master.ui.LaunchActivity;
+//import com.github.gdev2018.master.ui.StickersActivity;*/
 
 import java.io.File;
 import java.util.ArrayList;
@@ -110,7 +126,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             seekBarWaveform.setDelegate(progress -> {
                 if (audioToSendMessageObject != null) {
                     audioToSendMessageObject.audioProgress = progress;
-///*                    MediaController.getInstance().seekToProgress(audioToSendMessageObject, progress);*/
+                    MediaController.getInstance().seekToProgress(audioToSendMessageObject, progress);
                 }
             });
         }
@@ -2450,7 +2466,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         if (messageEditText == null || editingMessageObject != null) {
             return;
         }
-        LayoutParams layoutParams = (LayoutParams) messageEditText.getLayoutParams();
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) messageEditText.getLayoutParams();
         if (attachVisible == 1) {
             if (botButton != null && botButton.getVisibility() == VISIBLE || notifyButton != null && notifyButton.getVisibility() == VISIBLE) {
                 layoutParams.rightMargin = AndroidUtilities.dp(98);
@@ -2499,7 +2515,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             lastTimeString = null;
             lastTypingSendTime = -1;
 
-            LayoutParams params = (LayoutParams) slideText.getLayoutParams();
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) slideText.getLayoutParams();
             params.leftMargin = AndroidUtilities.dp(30);
             slideText.setLayoutParams(params);
             slideText.setAlpha(1);
@@ -2550,7 +2566,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 @Override
                 public void onAnimationEnd(Animator animator) {
                     if (runningAnimationAudio != null && runningAnimationAudio.equals(animator)) {
-                        LayoutParams params = (LayoutParams) slideText.getLayoutParams();
+                        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) slideText.getLayoutParams();
                         params.leftMargin = AndroidUtilities.dp(30);
                         slideText.setLayoutParams(params);
                         slideText.setAlpha(1);
@@ -2691,7 +2707,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
             messageEditText.setFilters(inputFilters);
             openKeyboard();
-            LayoutParams layoutParams = (LayoutParams) messageEditText.getLayoutParams();
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) messageEditText.getLayoutParams();
             layoutParams.rightMargin = AndroidUtilities.dp(4);
             messageEditText.setLayoutParams(layoutParams);
             sendButton.setVisibility(GONE);
@@ -2816,31 +2832,31 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             return;
         }
         if (focus) {
-             if (!searchingStickers && !messageEditText.isFocused()) {
+            if (!searchingStickers && !messageEditText.isFocused()) {
                 messageEditText.postDelayed(() -> {
-                    boolean allowFocus;
-                    if (AndroidUtilities.isTablet()) {
-                        if (parentActivity instanceof LaunchActivity) {
-                            LaunchActivity launchActivity = (LaunchActivity) parentActivity;
-                            if (launchActivity != null) {
-                                View layout = launchActivity.getLayersActionBarLayout();
-                                allowFocus = layout == null || layout.getVisibility() != View.VISIBLE;
-                            } else {
-                                allowFocus = true;
-                            }
-                        } else {
-                            allowFocus = true;
-                        }
-                    } else {
-                        allowFocus = true;
-                    }
-                    if (allowFocus && messageEditText != null) {
-                        try {
-                            messageEditText.requestFocus();
-                        } catch (Exception e) {
-                            FileLog.e(e);
-                        }
-                    }
+///*                    boolean allowFocus;
+//                    if (AndroidUtilities.isTablet()) {
+//                        if (parentActivity instanceof LaunchActivity) {
+//                            LaunchActivity launchActivity = (LaunchActivity) parentActivity;
+//                            if (launchActivity != null) {
+//                                View layout = launchActivity.getLayersActionBarLayout();
+//                                allowFocus = layout == null || layout.getVisibility() != View.VISIBLE;
+//                            } else {
+//                                allowFocus = true;
+//                            }
+//                        } else {
+//                            allowFocus = true;
+//                        }
+//                    } else {
+//                        allowFocus = true;
+//                    }
+//                    if (allowFocus && messageEditText != null) {
+//                        try {
+//                            messageEditText.requestFocus();
+//                        } catch (Exception e) {
+//                            FileLog.e(e);
+//                        }
+//                    }*/
                 }, 600);
             }
         } else {
@@ -2999,50 +3015,50 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 setFieldText("@" + user.username + " " + button.query);
             } else {
-                Bundle args = new Bundle();
-                args.putBoolean("onlySelect", true);
-                args.putInt("dialogsType", 1);
-                DialogsActivity fragment = new DialogsActivity(args);
-                fragment.setDelegate((fragment1, dids, message, param) -> {
-                    int uid = messageObject.messageOwner.from_id;
-                    if (messageObject.messageOwner.via_bot_id != 0) {
-                        uid = messageObject.messageOwner.via_bot_id;
-                    }
-                    TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(uid);
-                    if (user == null) {
-                        fragment1.finishFragment();
-                        return;
-                    }
-                    long did = dids.get(0);
-                    DataQuery.getInstance(currentAccount).saveDraft(did, "@" + user.username + " " + button.query, null, null, true);
-                    if (did != dialog_id) {
-                        int lower_part = (int) did;
-                        if (lower_part != 0) {
-                            Bundle args1 = new Bundle();
-                            if (lower_part > 0) {
-                                args1.putInt("user_id", lower_part);
-                            } else if (lower_part < 0) {
-                                args1.putInt("chat_id", -lower_part);
-                            }
-                            if (!MessagesController.getInstance(currentAccount).checkCanOpenChat(args1, fragment1)) {
-                                return;
-                            }
-                            ChatActivity chatActivity = new ChatActivity(args1);
-                            if (parentFragment.presentFragment(chatActivity, true)) {
-                                if (!AndroidUtilities.isTablet()) {
-                                    parentFragment.removeSelfFromStack();
-                                }
-                            } else {
-                                fragment1.finishFragment();
-                            }
-                        } else {
-                            fragment1.finishFragment();
-                        }
-                    } else {
-                        fragment1.finishFragment();
-                    }
-                });
-                parentFragment.presentFragment(fragment);
+// /*               Bundle args = new Bundle();
+//                args.putBoolean("onlySelect", true);
+//                args.putInt("dialogsType", 1);
+//                DialogsActivity fragment = new DialogsActivity(args);
+//                fragment.setDelegate((fragment1, dids, message, param) -> {
+//                    int uid = messageObject.messageOwner.from_id;
+//                    if (messageObject.messageOwner.via_bot_id != 0) {
+//                        uid = messageObject.messageOwner.via_bot_id;
+//                    }
+//                    TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(uid);
+//                    if (user == null) {
+//                        fragment1.finishFragment();
+//                        return;
+//                    }
+//                    long did = dids.get(0);
+//                    DataQuery.getInstance(currentAccount).saveDraft(did, "@" + user.username + " " + button.query, null, null, true);
+//                    if (did != dialog_id) {
+//                        int lower_part = (int) did;
+//                        if (lower_part != 0) {
+//                            Bundle args1 = new Bundle();
+//                            if (lower_part > 0) {
+//                                args1.putInt("user_id", lower_part);
+//                            } else if (lower_part < 0) {
+//                                args1.putInt("chat_id", -lower_part);
+//                            }
+//                            if (!MessagesController.getInstance(currentAccount).checkCanOpenChat(args1, fragment1)) {
+//                                return;
+//                            }
+//                            ChatActivity chatActivity = new ChatActivity(args1);
+//                            if (parentFragment.presentFragment(chatActivity, true)) {
+//                                if (!AndroidUtilities.isTablet()) {
+//                                    parentFragment.removeSelfFromStack();
+//                                }
+//                            } else {
+//                                fragment1.finishFragment();
+//                            }
+//                        } else {
+//                            fragment1.finishFragment();
+//                        }
+//                    } else {
+//                        fragment1.finishFragment();
+//                    }
+//                });
+//                parentFragment.presentFragment(fragment);*/
             }
         }
     }
@@ -3110,7 +3126,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             @Override
             public void onStickersSettingsClick() {
                 if (parentFragment != null) {
-                    parentFragment.presentFragment(new StickersActivity(DataQuery.TYPE_IMAGE));
+///*                    parentFragment.presentFragment(new StickersActivity(DataQuery.TYPE_IMAGE));*/
                 }
             }
 
@@ -3192,9 +3208,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     if (AndroidUtilities.isTablet()) {
                         hidePopup(false);
                     }
-                    GroupStickersActivity fragment = new GroupStickersActivity(chatId);
-                    fragment.setInfo(info);
-                    parentFragment.presentFragment(fragment);
+///*                    GroupStickersActivity fragment = new GroupStickersActivity(chatId);
+//                    fragment.setInfo(info);
+//                    parentFragment.presentFragment(fragment);*/
                 }
             }
 
@@ -3344,7 +3360,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 botKeyboardView.setPanelHeight(currentHeight);
             }
 
-            LayoutParams layoutParams = (LayoutParams) currentView.getLayoutParams();
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) currentView.getLayoutParams();
             layoutParams.height = currentHeight;
             currentView.setLayoutParams(layoutParams);
             if (!AndroidUtilities.isInMultiwindow) {
@@ -3538,7 +3554,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 botKeyboardView.setPanelHeight(newHeight);
             }
 
-            LayoutParams layoutParams = (LayoutParams) currentView.getLayoutParams();
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) currentView.getLayoutParams();
             if (!closeAnimationInProgress && (layoutParams.width != AndroidUtilities.displaySize.x || layoutParams.height != newHeight) && !stickersExpanded) {
                 layoutParams.width = AndroidUtilities.displaySize.x;
                 layoutParams.height = newHeight;

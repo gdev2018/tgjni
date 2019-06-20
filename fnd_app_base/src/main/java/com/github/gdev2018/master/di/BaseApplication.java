@@ -43,16 +43,45 @@ public class BaseApplication extends Application {
 
     @SuppressLint("StaticFieldLeak")
     public static volatile Context mApplicationContext;
+    public static volatile NetworkInfo currentNetworkInfo;
+    public static volatile boolean unableGetCurrentNetwork;
     public static volatile Handler mApplicationHandler;
     public static SharedPreferences mMainPreferences;
 
-    //    @SuppressLint("StaticFieldLeak")
     protected static volatile boolean mApplicationInited = false;
     public static volatile boolean isScreenOn = false;
     public static volatile boolean mainInterfacePaused = true;
     public static volatile boolean externalInterfacePaused = true;
     public static volatile boolean mainInterfacePausedStageQueue = true;
     public static volatile long mainInterfacePausedStageQueueTime;
+    private static ConnectivityManager connectivityManager;
+
+
+    public static File getFilesDirFixed() {
+        for (int a = 0; a < 10; a++) {
+            File path = mApplicationContext.getFilesDir();
+            if (path != null) {
+                return path;
+            }
+        }
+        try {
+            ApplicationInfo info = mApplicationContext.getApplicationInfo();
+            File path = new File(info.dataDir, "files");
+            path.mkdirs();
+            return path;
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return new File("/data/data/com.github.gdev2018.master/files");
+    }
+
+    public static void postInitApplication() {
+
+    }
+
+    public BaseApplication() {
+        super();
+    }
 
     @Override
     public void onCreate() {
@@ -92,9 +121,7 @@ public class BaseApplication extends Application {
 
     }
 
-    public static void postInitApplication() {
 
-    }
 
     public static SharedPreferences getGlobalMainSettings() {
         return mMainPreferences;
@@ -127,24 +154,7 @@ public class BaseApplication extends Application {
 //        return userComponent;
 //    }*/
 
-    public static File getFilesDirFixed() {
-        for (int a = 0; a < 10; a++) {
-            File path = mApplicationContext.getFilesDir();
-            if (path != null) {
-                return path;
-            }
-        }
-        try {
-            ApplicationInfo info = mApplicationContext.getApplicationInfo();
-            File path = new File(info.dataDir, "files");
-            path.mkdirs();
-            return path;
-        } catch (Exception e) {
-            // TODO: 2019-02-14 uncomment after implements filelog
-            FileLog.e(e);
-        }
-        return new File("/data/data/com.github.gdev2018.master/files");
-    }
+
 
 
 

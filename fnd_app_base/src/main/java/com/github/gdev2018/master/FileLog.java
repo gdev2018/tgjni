@@ -12,7 +12,6 @@ import android.util.Log;
 
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.time.FastDateFormat;
-//import com.github.gdev2018.master.di.BaseApplication;
 
 import java.io.File;
 import java.io.FileOutputStream;

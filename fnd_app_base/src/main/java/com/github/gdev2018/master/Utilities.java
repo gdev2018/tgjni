@@ -52,9 +52,10 @@ public class Utilities {
     public native static int pinBitmap(Bitmap bitmap);
     public native static void unpinBitmap(Bitmap bitmap);
     public native static void blurBitmap(Object bitmap, int radius, int unpin, int width, int height, int stride);
+    public native static int needInvert(Object bitmap, int unpin, int width, int height, int stride);
     public native static void calcCDT(ByteBuffer hsvBuffer, int width, int height, ByteBuffer buffer);
     public native static boolean loadWebpImage(Bitmap bitmap, ByteBuffer buffer, int len, BitmapFactory.Options options, boolean unpin);
-//    public native static int convertVideoFrame(ByteBuffer src, ByteBuffer dest, int destFormat, int width, int height, int padding, int swap);
+    public native static int convertVideoFrame(ByteBuffer src, ByteBuffer dest, int destFormat, int width, int height, int padding, int swap);
     private native static void aesIgeEncryption(ByteBuffer buffer, byte[] key, byte[] iv, boolean encrypt, int offset, int length);
     public native static void aesCtrDecryption(ByteBuffer buffer, byte[] key, byte[] iv, int offset, int length);
     public native static void aesCtrDecryptionByteArray(byte[] buffer, byte[] key, byte[] iv, int offset, int length, int n);
@@ -64,7 +65,8 @@ public class Utilities {
     public native static long getDirSize(String path, int docType);
     public native static void clearDir(String path, int docType, long time);
     private native static int pbkdf2(byte[] password, byte[] salt, byte[] dst, int iterations);
-//    public native static int argon2(int iterations);
+    public native static int argon2(int iterations);
+    public static native void stackBlurBitmap(Bitmap bitmap, int radius);
 
     public static void aesIgeEncryption(ByteBuffer buffer, byte[] key, byte[] iv, boolean encrypt, boolean changeIv, int offset, int length) {
         aesIgeEncryption(buffer, key, changeIv ? iv : iv.clone(), encrypt, offset, length);

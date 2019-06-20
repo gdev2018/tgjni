@@ -7,7 +7,6 @@
  */
 
 package com.github.gdev2018.master;
-
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -53,8 +52,6 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.github.gdev2018.master.R;
-
 public class MessageObject {
 
     public static final int MESSAGE_SEND_STATE_SENT = 0;
@@ -91,7 +88,7 @@ public class MessageObject {
     public boolean isDateObject;
     public ArrayList<TLRPC.PhotoSize> photoThumbs;
     public ArrayList<TLRPC.PhotoSize> photoThumbs2;
-///*    public VideoEditedInfo videoEditedInfo;*/
+    public VideoEditedInfo videoEditedInfo;
     public boolean viewsReloaded;
     public boolean pollVisibleOnScreen;
     public long pollLastCheckTime;
@@ -1191,32 +1188,32 @@ public class MessageObject {
                 paint = Theme.chat_msgTextPaint;
             }
             int[] emojiOnly = SharedConfig.allowBigEmoji ? new int[1] : null;
-///*            messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly);
-//            if (emojiOnly != null && emojiOnly[0] >= 1 && emojiOnly[0] <= 3) {
-//                TextPaint emojiPaint;
-//                int size;
-//                switch (emojiOnly[0]) {
-//                    case 1:
-//                        emojiPaint = Theme.chat_msgTextPaintOneEmoji;
-//                        size = AndroidUtilities.dp(32);
-//                        break;
-//                    case 2:
-//                        emojiPaint = Theme.chat_msgTextPaintTwoEmoji;
-//                        size = AndroidUtilities.dp(28);
-//                        break;
-//                    case 3:
-//                    default:
-//                        emojiPaint = Theme.chat_msgTextPaintThreeEmoji;
-//                        size = AndroidUtilities.dp(24);
-//                        break;
-//                }
-//                Emoji.EmojiSpan[] spans = ((Spannable) messageText).getSpans(0, messageText.length(), Emoji.EmojiSpan.class);
-//                if (spans != null && spans.length > 0) {
-//                    for (int a = 0; a < spans.length; a++) {
-//                        spans[a].replaceFontMetrics(emojiPaint.getFontMetricsInt(), size);
-//                    }
-//                }
-//            }*/
+            messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly);
+            if (emojiOnly != null && emojiOnly[0] >= 1 && emojiOnly[0] <= 3) {
+                TextPaint emojiPaint;
+                int size;
+                switch (emojiOnly[0]) {
+                    case 1:
+                        emojiPaint = Theme.chat_msgTextPaintOneEmoji;
+                        size = AndroidUtilities.dp(32);
+                        break;
+                    case 2:
+                        emojiPaint = Theme.chat_msgTextPaintTwoEmoji;
+                        size = AndroidUtilities.dp(28);
+                        break;
+                    case 3:
+                    default:
+                        emojiPaint = Theme.chat_msgTextPaintThreeEmoji;
+                        size = AndroidUtilities.dp(24);
+                        break;
+                }
+                Emoji.EmojiSpan[] spans = ((Spannable) messageText).getSpans(0, messageText.length(), Emoji.EmojiSpan.class);
+                if (spans != null && spans.length > 0) {
+                    for (int a = 0; a < spans.length; a++) {
+                        spans[a].replaceFontMetrics(emojiPaint.getFontMetricsInt(), size);
+                    }
+                }
+            }
             generateLayout(fromUser);
         }
         layoutCreated = generateLayout;
@@ -1774,7 +1771,7 @@ public class MessageObject {
         if (chat.megagroup) {
             messageOwner.flags |= TLRPC.MESSAGE_FLAG_MEGAGROUP;
         }
-///*        MediaController mediaController = MediaController.getInstance();*/
+        MediaController mediaController = MediaController.getInstance();
 
         if (event.action.message != null && !(event.action.message instanceof TLRPC.TL_messageEmpty)) {
             message = event.action.message;
@@ -1790,11 +1787,11 @@ public class MessageObject {
             }
             MessageObject messageObject = new MessageObject(accountNum, message, null, null, true, eventId);
             if (messageObject.contentType >= 0) {
-///*                if (mediaController.isPlayingMessage(messageObject)) {
-//                    MessageObject player = mediaController.getPlayingMessageObject();
-//                    messageObject.audioProgress = player.audioProgress;
-//                    messageObject.audioProgressSec = player.audioProgressSec;
-//                }*/
+                if (mediaController.isPlayingMessage(messageObject)) {
+                    MessageObject player = mediaController.getPlayingMessageObject();
+                    messageObject.audioProgress = player.audioProgress;
+                    messageObject.audioProgressSec = player.audioProgressSec;
+                }
                 createDateArray(accountNum, event, messageObjects, messagesByDays);
                 messageObjects.add(messageObjects.size() - 1, messageObject);
             } else {
@@ -1823,37 +1820,37 @@ public class MessageObject {
             paint = Theme.chat_msgTextPaint;
         }
         int[] emojiOnly = SharedConfig.allowBigEmoji ? new int[1] : null;
-///*        messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly);
-//        if (emojiOnly != null && emojiOnly[0] >= 1 && emojiOnly[0] <= 3) {
-//            TextPaint emojiPaint;
-//            int size;
-//            switch (emojiOnly[0]) {
-//                case 1:
-//                    emojiPaint = Theme.chat_msgTextPaintOneEmoji;
-//                    size = AndroidUtilities.dp(32);
-//                    break;
-//                case 2:
-//                    emojiPaint = Theme.chat_msgTextPaintTwoEmoji;
-//                    size = AndroidUtilities.dp(28);
-//                    break;
-//                case 3:
-//                default:
-//                    emojiPaint = Theme.chat_msgTextPaintThreeEmoji;
-//                    size = AndroidUtilities.dp(24);
-//                    break;
-//            }
-//            Emoji.EmojiSpan[] spans = ((Spannable) messageText).getSpans(0, messageText.length(), Emoji.EmojiSpan.class);
-//            if (spans != null && spans.length > 0) {
-//                for (int a = 0; a < spans.length; a++) {
-//                    spans[a].replaceFontMetrics(emojiPaint.getFontMetricsInt(), size);
-//                }
-//            }
-//        }*/
-///*        if (mediaController.isPlayingMessage(this)) {
-//            MessageObject player = mediaController.getPlayingMessageObject();
-//            audioProgress = player.audioProgress;
-//            audioProgressSec = player.audioProgressSec;
-//        }*/
+        messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly);
+        if (emojiOnly != null && emojiOnly[0] >= 1 && emojiOnly[0] <= 3) {
+            TextPaint emojiPaint;
+            int size;
+            switch (emojiOnly[0]) {
+                case 1:
+                    emojiPaint = Theme.chat_msgTextPaintOneEmoji;
+                    size = AndroidUtilities.dp(32);
+                    break;
+                case 2:
+                    emojiPaint = Theme.chat_msgTextPaintTwoEmoji;
+                    size = AndroidUtilities.dp(28);
+                    break;
+                case 3:
+                default:
+                    emojiPaint = Theme.chat_msgTextPaintThreeEmoji;
+                    size = AndroidUtilities.dp(24);
+                    break;
+            }
+            Emoji.EmojiSpan[] spans = ((Spannable) messageText).getSpans(0, messageText.length(), Emoji.EmojiSpan.class);
+            if (spans != null && spans.length > 0) {
+                for (int a = 0; a < spans.length; a++) {
+                    spans[a].replaceFontMetrics(emojiPaint.getFontMetricsInt(), size);
+                }
+            }
+        }
+        if (mediaController.isPlayingMessage(this)) {
+            MessageObject player = mediaController.getPlayingMessageObject();
+            audioProgress = player.audioProgress;
+            audioProgressSec = player.audioProgressSec;
+        }
         generateLayout(fromUser);
         layoutCreated = true;
         generateThumbs(false);
@@ -1861,29 +1858,29 @@ public class MessageObject {
     }
 
     private String getUserName(TLRPC.User user, ArrayList<TLRPC.MessageEntity> entities, int offset) {
-///*        String name;*/
-        String name = "";
+        String name;
         if (user == null) {
             name = "";
         } else {
 ///*            name = ContactsController.formatName(user.first_name, user.last_name);*/
+            name = "sdgfwegfhb";
         }
         if (offset >= 0) {
             TLRPC.TL_messageEntityMentionName entity = new TLRPC.TL_messageEntityMentionName();
             entity.user_id = user.id;
             entity.offset = offset;
-///*            entity.length = name.length();*/
+            entity.length = name.length();
             entities.add(entity);
         }
         if (!TextUtils.isEmpty(user.username)) {
             if (offset >= 0) {
                 TLRPC.TL_messageEntityMentionName entity = new TLRPC.TL_messageEntityMentionName();
                 entity.user_id = user.id;
-///*                entity.offset = offset + name.length() + 2;*/
+                entity.offset = offset + name.length() + 2;
                 entity.length = user.username.length() + 1;
                 entities.add(entity);
             }
-///*            return String.format("%1$s (@%2$s)", name, user.username);*/
+            return String.format("%1$s (@%2$s)", name, user.username);
         }
         return name;
     }
@@ -1903,7 +1900,7 @@ public class MessageObject {
         } else {
             paint = Theme.chat_msgTextPaint;
         }
-///*        messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false);*/
+        messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
         generateLayout(fromUser);
     }
 
@@ -1960,7 +1957,7 @@ public class MessageObject {
                 fromUser = MessagesController.getInstance(currentAccount).getUser(messageOwner.from_id);
             }
             if (fromUser == null) {
-///*                chat = MessagesController.getInstance(currentAccount).getChat(messageOwner.to_id.channel_id);*/
+                chat = MessagesController.getInstance(currentAccount).getChat(messageOwner.to_id.channel_id);
             }
         }
         if (replyMessageObject == null || replyMessageObject.messageOwner instanceof TLRPC.TL_messageEmpty || replyMessageObject.messageOwner.action instanceof TLRPC.TL_messageActionHistoryClear) {
@@ -1992,13 +1989,13 @@ public class MessageObject {
                 messageText = replaceWithLink(LocaleController.getString("ActionPinnedPhoto", R.string.ActionPinnedPhoto), "un1", fromUser != null ? fromUser : chat);
             } else if (replyMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
                 messageText = replaceWithLink(LocaleController.formatString("ActionPinnedGame", R.string.ActionPinnedGame, "\uD83C\uDFAE " + replyMessageObject.messageOwner.media.game.title), "un1", fromUser != null ? fromUser : chat);
-///*                messageText = Emoji.replaceEmoji(messageText, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);*/
+                messageText = Emoji.replaceEmoji(messageText, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
             } else if (replyMessageObject.messageText != null && replyMessageObject.messageText.length() > 0) {
                 CharSequence mess = replyMessageObject.messageText;
                 if (mess.length() > 20) {
                     mess = mess.subSequence(0, 20) + "...";
                 }
-///*                mess = Emoji.replaceEmoji(mess, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);*/
+                mess = Emoji.replaceEmoji(mess, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
                 messageText = replaceWithLink(LocaleController.formatString("ActionPinnedText", R.string.ActionPinnedText, mess), "un1", fromUser != null ? fromUser : chat);
             } else {
                 messageText = replaceWithLink(LocaleController.getString("ActionPinnedNoText", R.string.ActionPinnedNoText), "un1", fromUser != null ? fromUser : chat);
@@ -2158,12 +2155,12 @@ public class MessageObject {
         if (messageOwner.message != null && (messageOwner.id < 0 || isEditing()) && messageOwner.params != null) {
             String param;
             if ((param = messageOwner.params.get("ve")) != null && (isVideo() || isNewGif() || isRoundVideo())) {
-///*                videoEditedInfo = new VideoEditedInfo();
-//                if (!videoEditedInfo.parseString(param)) {
-//                    videoEditedInfo = null;
-//                } else {
-//                    videoEditedInfo.roundVideo = isRoundVideo();
-//                }*/
+                videoEditedInfo = new VideoEditedInfo();
+                if (!videoEditedInfo.parseString(param)) {
+                    videoEditedInfo = null;
+                } else {
+                    videoEditedInfo.roundVideo = isRoundVideo();
+                }
             }
             if (messageOwner.send_state == MESSAGE_SEND_STATE_EDITING && (param = messageOwner.params.get("prevMedia")) != null) {
                 SerializedData serializedData = new SerializedData(Base64.decode(param, Base64.DEFAULT));
@@ -2205,17 +2202,17 @@ public class MessageObject {
                 if (button instanceof TLRPC.TL_keyboardButtonBuy && (messageOwner.media.flags & 4) != 0) {
                     text = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt);
                 } else {
-///*                    text = Emoji.replaceEmoji(button.text, Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15), false);*/
+                    text = Emoji.replaceEmoji(button.text, Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15), false);
                 }
-///*                StaticLayout staticLayout = new StaticLayout(text, Theme.chat_msgBotButtonPaint, AndroidUtilities.dp(2000), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-//                if (staticLayout.getLineCount() > 0) {
-//                    float width = staticLayout.getLineWidth(0);
-//                    float left = staticLayout.getLineLeft(0);
-//                    if (left < width) {
-//                        width -= left;
-//                    }
-//                    maxButtonSize = Math.max(maxButtonSize, (int) Math.ceil(width) + AndroidUtilities.dp(4));
-//                }*/
+                StaticLayout staticLayout = new StaticLayout(text, Theme.chat_msgBotButtonPaint, AndroidUtilities.dp(2000), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                if (staticLayout.getLineCount() > 0) {
+                    float width = staticLayout.getLineWidth(0);
+                    float left = staticLayout.getLineLeft(0);
+                    if (left < width) {
+                        width -= left;
+                    }
+                    maxButtonSize = Math.max(maxButtonSize, (int) Math.ceil(width) + AndroidUtilities.dp(4));
+                }
             }
             wantedBotKeyboardWidth = Math.max(wantedBotKeyboardWidth, (maxButtonSize + AndroidUtilities.dp(12)) * size + AndroidUtilities.dp(5) * (size - 1));
         }
@@ -2323,7 +2320,7 @@ public class MessageObject {
             } else {
                 paint = Theme.chat_msgTextPaint;
             }
-///*            messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false);*/
+            messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
             generateLayout(fromUser);
             return true;
         }
@@ -2765,7 +2762,7 @@ public class MessageObject {
                     FileLog.e(e);
                 }
             }
-///*            linkDescription = Emoji.replaceEmoji(linkDescription, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);*/
+            linkDescription = Emoji.replaceEmoji(linkDescription, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
             if (hashtagsType != 0) {
                 if (!(linkDescription instanceof Spannable)) {
                     linkDescription = new SpannableStringBuilder(linkDescription);
@@ -2780,7 +2777,7 @@ public class MessageObject {
             return;
         }
         if (!isMediaEmpty() && !(messageOwner.media instanceof TLRPC.TL_messageMediaGame) && !TextUtils.isEmpty(messageOwner.message)) {
-///*            caption = Emoji.replaceEmoji(messageOwner.message, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);*/
+            caption = Emoji.replaceEmoji(messageOwner.message, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
 
             boolean hasEntities;
             if (messageOwner.send_state != MESSAGE_SEND_STATE_SENT) {
@@ -3104,10 +3101,10 @@ public class MessageObject {
                 if (messageOwner.media instanceof TLRPC.TL_messageMediaGame || messageOwner.media instanceof TLRPC.TL_messageMediaInvoice) {
                     return true;
                 }
-///*                if (isMegagroup()) {
-//                    TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(messageOwner.to_id.channel_id);
-//                    return chat != null && chat.username != null && chat.username.length() > 0 && !(messageOwner.media instanceof TLRPC.TL_messageMediaContact) && !(messageOwner.media instanceof TLRPC.TL_messageMediaGeo);
-//                }*/
+                if (isMegagroup()) {
+                    TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(messageOwner.to_id.channel_id);
+                    return chat != null && chat.username != null && chat.username.length() > 0 && !(messageOwner.media instanceof TLRPC.TL_messageMediaContact) && !(messageOwner.media instanceof TLRPC.TL_messageMediaGeo);
+                }
             }
         } else if (messageOwner.from_id < 0 || messageOwner.post) {
             if (messageOwner.to_id.channel_id != 0 && (messageOwner.via_bot_id == 0 && messageOwner.reply_to_msg_id == 0 || type != 13)) {
@@ -3423,8 +3420,8 @@ public class MessageObject {
             return true;
         }
         if (messageOwner.to_id != null && messageOwner.to_id.channel_id != 0) {
-///*            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(messageOwner.to_id.channel_id);
-//            return chat != null && chat.megagroup;*/
+            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(messageOwner.to_id.channel_id);
+            return chat != null && chat.megagroup;
         }
         return false;
     }
@@ -3562,10 +3559,10 @@ public class MessageObject {
     }
 
     public boolean isSavedFromMegagroup() {
-///*        if (messageOwner.fwd_from != null && messageOwner.fwd_from.saved_from_peer != null && messageOwner.fwd_from.saved_from_peer.channel_id != 0) {
-//            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(messageOwner.fwd_from.saved_from_peer.channel_id);
-//            return ChatObject.isMegagroup(chat);
-//        }*/
+        if (messageOwner.fwd_from != null && messageOwner.fwd_from.saved_from_peer != null && messageOwner.fwd_from.saved_from_peer.channel_id != 0) {
+            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(messageOwner.fwd_from.saved_from_peer.channel_id);
+            return ChatObject.isMegagroup(chat);
+        }
         return false;
     }
 
@@ -3595,9 +3592,9 @@ public class MessageObject {
                 return attribute.supports_streaming;
             }
         }
-///*        if (SharedConfig.streamMkv && "video/x-matroska".equals(document.mime_type)) {
-//            return true;
-//        }*/
+        if (SharedConfig.streamMkv && "video/x-matroska".equals(document.mime_type)) {
+            return true;
+        }
         return false;
     }
 
@@ -3758,9 +3755,9 @@ public class MessageObject {
             if (isAnimated && (width > 1280 || height > 1280)) {
                 isAnimated = false;
             }
-///*            if (SharedConfig.streamMkv && !isVideo && "video/x-matroska".equals(document.mime_type)) {
-//                isVideo = true;
-//            }*/
+            if (SharedConfig.streamMkv && !isVideo && "video/x-matroska".equals(document.mime_type)) {
+                isVideo = true;
+            }
             return isVideo && !isAnimated;
         }
         return false;
@@ -4178,17 +4175,17 @@ public class MessageObject {
                     }
                     TLRPC.User user = null;
                     TLRPC.Chat chat = null;
-///*                    if (messageOwner.fwd_from != null && messageOwner.fwd_from.channel_id != 0) {
-//                        chat = MessagesController.getInstance(currentAccount).getChat(messageOwner.fwd_from.channel_id);
-//                    } else if (messageOwner.fwd_from != null && messageOwner.fwd_from.from_id != 0) {
-//                        user = MessagesController.getInstance(currentAccount).getUser(messageOwner.fwd_from.from_id);
-//                    } else if (messageOwner.from_id < 0) {
-//                        chat = MessagesController.getInstance(currentAccount).getChat(-messageOwner.from_id);
-//                    } else if (messageOwner.from_id == 0 && messageOwner.to_id.channel_id != 0) {
-//                        chat = MessagesController.getInstance(currentAccount).getChat(messageOwner.to_id.channel_id);
-//                    } else {
-//                        user = MessagesController.getInstance(currentAccount).getUser(messageOwner.from_id);
-//                    }*/
+                    if (messageOwner.fwd_from != null && messageOwner.fwd_from.channel_id != 0) {
+                        chat = MessagesController.getInstance(currentAccount).getChat(messageOwner.fwd_from.channel_id);
+                    } else if (messageOwner.fwd_from != null && messageOwner.fwd_from.from_id != 0) {
+                        user = MessagesController.getInstance(currentAccount).getUser(messageOwner.fwd_from.from_id);
+                    } else if (messageOwner.from_id < 0) {
+                        chat = MessagesController.getInstance(currentAccount).getChat(-messageOwner.from_id);
+                    } else if (messageOwner.from_id == 0 && messageOwner.to_id.channel_id != 0) {
+                        chat = MessagesController.getInstance(currentAccount).getChat(messageOwner.to_id.channel_id);
+                    } else {
+                        user = MessagesController.getInstance(currentAccount).getUser(messageOwner.from_id);
+                    }
                     if (user != null) {
                         return UserObject.getUserName(user);
                     } else if (chat != null) {
@@ -4263,10 +4260,10 @@ public class MessageObject {
             return true;
         }
         if (chat == null && message.to_id.channel_id != 0) {
-///*            chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(message.to_id.channel_id);
-//            if (chat == null) {
-//                return false;
-//            }*/
+            chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(message.to_id.channel_id);
+            if (chat == null) {
+                return false;
+            }
         }
         if (message.out && chat != null && chat.megagroup && (chat.creator || chat.admin_rights != null && chat.admin_rights.pin_messages)) {
             return true;
@@ -4286,10 +4283,10 @@ public class MessageObject {
             return true;
         }
         if (chat == null && message.to_id.channel_id != 0) {
-///*            chat = MessagesController.getInstance(currentAccount).getChat(message.to_id.channel_id);
-//            if (chat == null) {
-//                return false;
-//            }*/
+            chat = MessagesController.getInstance(currentAccount).getChat(message.to_id.channel_id);
+            if (chat == null) {
+                return false;
+            }
         }
         if (message.media != null && !(message.media instanceof TLRPC.TL_messageMediaEmpty) && !(message.media instanceof TLRPC.TL_messageMediaPhoto) && !(message.media instanceof TLRPC.TL_messageMediaDocument) && !(message.media instanceof TLRPC.TL_messageMediaWebPage)) {
             return false;
@@ -4327,23 +4324,22 @@ public class MessageObject {
         if (message.id < 0) {
             return true;
         }
-///*        if (chat == null && message.to_id.channel_id != 0) {
-//            chat = MessagesController.getInstance(currentAccount).getChat(message.to_id.channel_id);
-//        }
-//        if (ChatObject.isChannel(chat)) {
-//            return message.id != 1 && (chat.creator || chat.admin_rights != null && (chat.admin_rights.delete_messages || message.out) || chat.megagroup && message.out && message.from_id > 0);
-//        }
-//        return isOut(message) || !ChatObject.isChannel(chat);*/
-        return isOut(message);
+        if (chat == null && message.to_id.channel_id != 0) {
+            chat = MessagesController.getInstance(currentAccount).getChat(message.to_id.channel_id);
+        }
+        if (ChatObject.isChannel(chat)) {
+            return message.id != 1 && (chat.creator || chat.admin_rights != null && (chat.admin_rights.delete_messages || message.out) || chat.megagroup && message.out && message.from_id > 0);
+        }
+        return isOut(message) || !ChatObject.isChannel(chat);
     }
 
     public String getForwardedName() {
         if (messageOwner.fwd_from != null) {
             if (messageOwner.fwd_from.channel_id != 0) {
-///*                TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(messageOwner.fwd_from.channel_id);
-//                if (chat != null) {
-//                    return chat.title;
-//                }*/
+                TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(messageOwner.fwd_from.channel_id);
+                if (chat != null) {
+                    return chat.title;
+                }
             } else if (messageOwner.fwd_from.from_id != 0) {
                 TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(messageOwner.fwd_from.from_id);
                 if (user != null) {

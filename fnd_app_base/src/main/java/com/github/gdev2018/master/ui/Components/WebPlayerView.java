@@ -510,7 +510,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             }
         } catch (Throwable e) {
             if (e instanceof SocketTimeoutException) {
-                if (ApplicationLoader.isNetworkOnline()) {
+                if (BaseApplication.isNetworkOnline()) {
                     canRetry = false;
                 }
             } else if (e instanceof UnknownHostException) {

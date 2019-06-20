@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/Settings"/>
+    <PreferenceScreen android:key="account_settings"
+        android:title="@string/AccountSettings"
+        android:summary="">
+        <intent android:action="com.github.gdev2018.master.OPEN_ACCOUNT"
+            android:targetPackage="com.github.gdev2018.master"
+            android:targetClass="com.github.gdev2018.master.ui.LaunchActivity"/>
+    </PreferenceScreen>
+</PreferenceScreen>

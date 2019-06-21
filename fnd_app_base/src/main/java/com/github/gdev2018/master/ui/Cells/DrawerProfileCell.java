@@ -26,17 +26,17 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.telegram.PhoneFormat.PhoneFormat;
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.UserObject;
-import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.Components.AvatarDrawable;
-import org.telegram.ui.Components.BackupImageView;
-import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.SnowflakesEffect;
+import com.github.gdev2018.master.PhoneFormat.PhoneFormat;
+import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.UserObject;
+import com.github.gdev2018.master.FileLog;
+import com.github.gdev2018.master.R;
+import com.github.gdev2018.master.tgnet.TLRPC;
+import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.LayoutHelper;
+import com.github.gdev2018.master.ui.ActionBar.Theme;
+import com.github.gdev2018.master.ui.Components.SnowflakesEffect;
 
 public class DrawerProfileCell extends FrameLayout {
 

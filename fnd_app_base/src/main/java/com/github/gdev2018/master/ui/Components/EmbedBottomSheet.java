@@ -23,7 +23,6 @@ import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
@@ -51,7 +50,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.BringAppForegroundService;
@@ -60,7 +58,6 @@ import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.browser.Browser;
-import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.ui.ActionBar.AlertDialog;
 import com.github.gdev2018.master.ui.ActionBar.BottomSheet;
 import com.github.gdev2018.master.ui.ActionBar.Theme;

@@ -4,13 +4,14 @@ package com.github.gdev2018.master.ui.Components;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.Rect;
 import android.os.SystemClock;
 import android.support.annotation.Keep;
 import android.text.Layout;
@@ -19,11 +20,11 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
-import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.R;
 
@@ -56,6 +57,7 @@ public class EditTextBoldCursor extends EditText {
     private StaticLayout hintLayout;
     private StaticLayout errorLayout;
     private CharSequence errorText;
+    private Class editorClass;
     private int hintColor;
     private int headerHintColor;
     private boolean hintVisible = true;
@@ -76,6 +78,10 @@ public class EditTextBoldCursor extends EditText {
     private AnimatorSet headerTransformAnimation;
     private float headerAnimationProgress;
 
+    private boolean fixed;
+    private ViewTreeObserver.OnPreDrawListener listenerFixer;
+
+    @SuppressLint("PrivateApi")
     public EditTextBoldCursor(Context context) {
         super(context);
 
@@ -89,17 +95,19 @@ public class EditTextBoldCursor extends EditText {
                 mScrollYField.setAccessible(true);
                 mCursorDrawableResField = TextView.class.getDeclaredField("mCursorDrawableRes");
                 mCursorDrawableResField.setAccessible(true);
-                mEditor = TextView.class.getDeclaredField("mEditor");
-                mEditor.setAccessible(true);
-                Class editorClass = Class.forName("android.widget.Editor");
+                if (editorClass == null) {
+                    mEditor = TextView.class.getDeclaredField("mEditor");
+                    mEditor.setAccessible(true);
+                    editorClass = Class.forName("android.widget.Editor");
+                }
                 mShowCursorField = editorClass.getDeclaredField("mShowCursor");
                 mShowCursorField.setAccessible(true);
                 mCursorDrawableField = editorClass.getDeclaredField("mCursorDrawable");
                 mCursorDrawableField.setAccessible(true);
                 getVerticalOffsetMethod = TextView.class.getDeclaredMethod("getVerticalOffset", boolean.class);
                 getVerticalOffsetMethod.setAccessible(true);
-            } catch (Throwable e) {
-                //
+            } catch (Throwable ignore) {
+
             }
         }
         try {
@@ -109,10 +117,35 @@ public class EditTextBoldCursor extends EditText {
                 mCursorDrawable = (Drawable[]) mCursorDrawableField.get(editor);
                 mCursorDrawableResField.set(this, R.drawable.field_carret_empty);
             }
-        } catch (Exception e) {
-            FileLog.e(e);
+        } catch (Throwable ignore) {
+
         }
         cursorSize = AndroidUtilities.dp(24);
+    }
+
+    @SuppressLint("PrivateApi")
+    public void fixHandleView(boolean reset) {
+        if (reset) {
+            fixed = false;
+        } else if (!fixed) {
+            try {
+                if (editorClass == null) {
+                    editorClass = Class.forName("android.widget.Editor");
+                    mEditor = TextView.class.getDeclaredField("mEditor");
+                    mEditor.setAccessible(true);
+                    editor = mEditor.get(this);
+                }
+                if (listenerFixer == null) {
+                    Method initDrawablesMethod = editorClass.getDeclaredMethod("getPositionListener");
+                    initDrawablesMethod.setAccessible(true);
+                    listenerFixer = (ViewTreeObserver.OnPreDrawListener) initDrawablesMethod.invoke(editor);
+                }
+                AndroidUtilities.runOnUIThread(listenerFixer::onPreDraw, 500);
+            } catch (Throwable ignore) {
+
+            }
+            fixed = true;
+        }
     }
 
     public void setTransformHintToHeader(boolean value) {
@@ -366,6 +399,8 @@ public class EditTextBoldCursor extends EditText {
 
                 if (supportRtlHint && LocaleController.isRTL) {
                     canvas.translate((hintWidth + lineLeft) - (hintWidth + lineLeft) * scale, 0);
+                } else if (lineLeft != 0) {
+                    canvas.translate(lineLeft * (1.0f - scale), 0);
                 }
                 canvas.scale(scale, scale);
                 canvas.translate(0, translation);
@@ -432,3 +467,4 @@ public class EditTextBoldCursor extends EditText {
         }*/
     }
 }
+

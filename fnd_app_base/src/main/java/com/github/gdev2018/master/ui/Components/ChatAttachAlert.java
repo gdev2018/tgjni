@@ -973,12 +973,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     return;
                 }
                 Integer num = (Integer) v.getTag();
-                if (deviceHasGoodCamera && num == 0 && baseFragment instanceof ChatActivity && ((ChatActivity) parentFragment).isSecretChat()) {
-                    openCamera(true);
-                } else {
-                    buttonPressed = true;
-                    delegate.didPressedButton(num);
-                }
+///*                if (deviceHasGoodCamera && num == 0 && baseFragment instanceof ChatActivity && ((ChatActivity) parentFragment).isSecretChat()) {
+//                    openCamera(true);
+//                } else {
+//                    buttonPressed = true;
+//                    delegate.didPressedButton(num);
+//                }*/
             });
         }
 
@@ -1079,7 +1079,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     flashModeButton[a].setAlpha(0.0f);
                 }
                 switchCameraButton.setAlpha(0.0f);
-                outputFile = AndroidUtilities.generateVideoPath(baseFragment instanceof ChatActivity && ((ChatActivity) baseFragment).isSecretChat());
+//               /* outputFile = AndroidUtilities.generateVideoPath(baseFragment instanceof ChatActivity && ((ChatActivity) baseFragment).isSecretChat());*/
+                outputFile = AndroidUtilities.generateVideoPath(baseFragment instanceof ChatActivity);
                 recordTime.setAlpha(1.0f);
                 recordTime.setText(String.format("%02d:%02d", 0, 0));
                 videoRecordTime = 0;
@@ -1131,37 +1132,37 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     shutterButton.setState(ShutterButton.State.DEFAULT, true);
                     return;
                 }
-                final File cameraFile = AndroidUtilities.generatePicturePath(baseFragment instanceof ChatActivity && ((ChatActivity) baseFragment).isSecretChat());
-                final boolean sameTakePictureOrientation = cameraView.getCameraSession().isSameTakePictureOrientation();
-                cameraView.getCameraSession().setFlipFront(parentFragment instanceof ChatActivity);
-                takingPhoto = CameraController.getInstance().takePicture(cameraFile, cameraView.getCameraSession(), () -> {
-                    takingPhoto = false;
-                    if (cameraFile == null || baseFragment == null) {
-                        return;
-                    }
-                    int orientation = 0;
-                    try {
-                        ExifInterface ei = new ExifInterface(cameraFile.getAbsolutePath());
-                        int exif = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-                        switch (exif) {
-                            case ExifInterface.ORIENTATION_ROTATE_90:
-                                orientation = 90;
-                                break;
-                            case ExifInterface.ORIENTATION_ROTATE_180:
-                                orientation = 180;
-                                break;
-                            case ExifInterface.ORIENTATION_ROTATE_270:
-                                orientation = 270;
-                                break;
-                        }
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-                    mediaFromExternalCamera = false;
-                    MediaController.PhotoEntry photoEntry = new MediaController.PhotoEntry(0, lastImageId--, 0, cameraFile.getAbsolutePath(), orientation, false);
-                    photoEntry.canDeleteAfter = true;
-                    openPhotoViewer(photoEntry, sameTakePictureOrientation, false);
-                });
+//    /*            final File cameraFile = AndroidUtilities.generatePicturePath(baseFragment instanceof ChatActivity && ((ChatActivity) baseFragment).isSecretChat());
+//                final boolean sameTakePictureOrientation = cameraView.getCameraSession().isSameTakePictureOrientation();
+//                cameraView.getCameraSession().setFlipFront(parentFragment instanceof ChatActivity);
+//                takingPhoto = CameraController.getInstance().takePicture(cameraFile, cameraView.getCameraSession(), () -> {
+//                    takingPhoto = false;
+//                    if (cameraFile == null || baseFragment == null) {
+//                        return;
+//                    }
+//                    int orientation = 0;
+//                    try {
+//                        ExifInterface ei = new ExifInterface(cameraFile.getAbsolutePath());
+//                        int exif = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+//                        switch (exif) {
+//                            case ExifInterface.ORIENTATION_ROTATE_90:
+//                                orientation = 90;
+//                                break;
+//                            case ExifInterface.ORIENTATION_ROTATE_180:
+//                                orientation = 180;
+//                                break;
+//                            case ExifInterface.ORIENTATION_ROTATE_270:
+//                                orientation = 270;
+//                                break;
+//                        }
+//                    } catch (Exception e) {
+//                        FileLog.e(e);
+//                    }
+//                    mediaFromExternalCamera = false;
+//                    MediaController.PhotoEntry photoEntry = new MediaController.PhotoEntry(0, lastImageId--, 0, cameraFile.getAbsolutePath(), orientation, false);
+//                    photoEntry.canDeleteAfter = true;
+//                    openPhotoViewer(photoEntry, sameTakePictureOrientation, false);
+//                });*/
             }
         });
 
@@ -1296,16 +1297,16 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 return;
             }
             boolean allowPoll;
-            if (editingMessageObject != null) {
-                allowPoll = false;
-            } else {
-                TLRPC.Chat currentChat = ((ChatActivity) baseFragment).getCurrentChat();
-                allowPoll = currentChat != null && ChatObject.canSendPolls(currentChat);
-            }
-            String text = allowPoll ? LocaleController.getString("Poll", R.string.Poll) : LocaleController.getString("AttachMusic", R.string.AttachMusic);
-            AttachButton attachButton = attachButtons.get(3);
-            attachButton.setTag(allowPoll ? 9 : 3);
-            attachButton.setTextAndIcon(text, Theme.chat_attachButtonDrawables[allowPoll ? 9 : 3]);
+///*            if (editingMessageObject != null) {
+//                allowPoll = false;
+//            } else {
+//                TLRPC.Chat currentChat = ((ChatActivity) baseFragment).getCurrentChat();
+//                allowPoll = currentChat != null && ChatObject.canSendPolls(currentChat);
+//            }
+//            String text = allowPoll ? LocaleController.getString("Poll", R.string.Poll) : LocaleController.getString("AttachMusic", R.string.AttachMusic);
+//            AttachButton attachButton = attachButtons.get(3);
+//            attachButton.setTag(allowPoll ? 9 : 3);
+//            attachButton.setTextAndIcon(text, Theme.chat_attachButtonDrawables[allowPoll ? 9 : 3]);*/
         }
     }
 
@@ -1885,9 +1886,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 } else {
                     videoPath = currentPicturePath;
                 }
-                if (!(baseFragment instanceof ChatActivity) || !((ChatActivity) baseFragment).isSecretChat()) {
-                    AndroidUtilities.addMediaToGallery(currentPicturePath);
-                }
+///*                if (!(baseFragment instanceof ChatActivity) || !((ChatActivity) baseFragment).isSecretChat()) {
+//                    AndroidUtilities.addMediaToGallery(currentPicturePath);
+//                }*/
                 currentPicturePath = null;
             }
             if (videoPath == null && currentPicturePath != null) {
@@ -2990,45 +2991,45 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         if (useRevealAnimation) {
             setUseRevealAnimation(true);
         }
-        if (baseFragment instanceof ChatActivity) {
-            updatePollMusicButton();
-            TLRPC.Chat chat = ((ChatActivity) baseFragment).getCurrentChat();
-            if (chat != null) {
-                mediaEnabled = ChatObject.canSendMedia(chat);
-                for (int a = 0; a < 5; a++) {
-                    boolean enabled;
-                    if (a > 2 && editingMessageObject != null && editingMessageObject.hasValidGroupId()) {
-                        attachButtons.get(3 + a).setEnabled(false);
-                        attachButtons.get(3 + a).setAlpha(0.2f);
-                    } else {
-                        AttachButton attachButton = attachButtons.get(a);
-                        Integer tag = (Integer) attachButton.getTag();
-                        attachButton.setAlpha(mediaEnabled || tag == 9 ? 1.0f : 0.2f);
-                        attachButton.setEnabled(mediaEnabled || tag == 9);
-                    }
-                }
-                attachPhotoRecyclerView.setAlpha(mediaEnabled ? 1.0f : 0.2f);
-                attachPhotoRecyclerView.setEnabled(mediaEnabled);
-                if (!mediaEnabled) {
-                    if (ChatObject.isActionBannedByDefault(chat, ChatObject.ACTION_SEND_MEDIA)) {
-                        mediaBanTooltip.setText(LocaleController.getString("GlobalAttachMediaRestricted", R.string.GlobalAttachMediaRestricted));
-                    } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                        mediaBanTooltip.setText(LocaleController.formatString("AttachMediaRestrictedForever", R.string.AttachMediaRestrictedForever));
-                    } else {
-                        mediaBanTooltip.setText(LocaleController.formatString("AttachMediaRestricted", R.string.AttachMediaRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
-                    }
-                }
-                mediaBanTooltip.setVisibility(mediaEnabled ? View.INVISIBLE : View.VISIBLE);
-                if (cameraView != null) {
-                    cameraView.setAlpha(mediaEnabled ? 1.0f : 0.2f);
-                    cameraView.setEnabled(mediaEnabled);
-                }
-                if (cameraIcon != null) {
-                    cameraIcon.setAlpha(mediaEnabled ? 1.0f : 0.2f);
-                    cameraIcon.setEnabled(mediaEnabled);
-                }
-            }
-        }
+//       /* if (baseFragment instanceof ChatActivity) {
+//            updatePollMusicButton();
+//            TLRPC.Chat chat = ((ChatActivity) baseFragment).getCurrentChat();
+//            if (chat != null) {
+//                mediaEnabled = ChatObject.canSendMedia(chat);
+//                for (int a = 0; a < 5; a++) {
+//                    boolean enabled;
+//                    if (a > 2 && editingMessageObject != null && editingMessageObject.hasValidGroupId()) {
+//                        attachButtons.get(3 + a).setEnabled(false);
+//                        attachButtons.get(3 + a).setAlpha(0.2f);
+//                    } else {
+//                        AttachButton attachButton = attachButtons.get(a);
+//                        Integer tag = (Integer) attachButton.getTag();
+//                        attachButton.setAlpha(mediaEnabled || tag == 9 ? 1.0f : 0.2f);
+//                        attachButton.setEnabled(mediaEnabled || tag == 9);
+//                    }
+//                }
+//                attachPhotoRecyclerView.setAlpha(mediaEnabled ? 1.0f : 0.2f);
+//                attachPhotoRecyclerView.setEnabled(mediaEnabled);
+//                if (!mediaEnabled) {
+//                    if (ChatObject.isActionBannedByDefault(chat, ChatObject.ACTION_SEND_MEDIA)) {
+//                        mediaBanTooltip.setText(LocaleController.getString("GlobalAttachMediaRestricted", R.string.GlobalAttachMediaRestricted));
+//                    } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
+//                        mediaBanTooltip.setText(LocaleController.formatString("AttachMediaRestrictedForever", R.string.AttachMediaRestrictedForever));
+//                    } else {
+//                        mediaBanTooltip.setText(LocaleController.formatString("AttachMediaRestricted", R.string.AttachMediaRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
+//                    }
+//                }
+//                mediaBanTooltip.setVisibility(mediaEnabled ? View.INVISIBLE : View.VISIBLE);
+//                if (cameraView != null) {
+//                    cameraView.setAlpha(mediaEnabled ? 1.0f : 0.2f);
+//                    cameraView.setEnabled(mediaEnabled);
+//                }
+//                if (cameraIcon != null) {
+//                    cameraIcon.setAlpha(mediaEnabled ? 1.0f : 0.2f);
+//                    cameraIcon.setEnabled(mediaEnabled);
+//                }
+//            }
+//        }*/
         if (useRevealAnimation) {
             startRevealAnimation(true);
             return true;

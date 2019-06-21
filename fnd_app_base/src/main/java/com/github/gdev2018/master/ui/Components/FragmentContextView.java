@@ -195,10 +195,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     } else {
                         long dialog_id = 0;
                         if (fragment instanceof ChatActivity) {
-                            dialog_id = ((ChatActivity) fragment).getDialogId();
+///*                            dialog_id = ((ChatActivity) fragment).getDialogId();*/
                         }
                         if (messageObject.getDialogId() == dialog_id) {
-                            ((ChatActivity) fragment).scrollToMessageId(messageObject.getId(), 0, false, 0, true);
+///*                            ((ChatActivity) fragment).scrollToMessageId(messageObject.getId(), 0, false, 0, true);*/
                         } else {
                             dialog_id = messageObject.getDialogId();
                             Bundle args = new Bundle();
@@ -218,7 +218,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                                 args.putInt("enc_id", high_id);
                             }
                             args.putInt("message_id", messageObject.getId());
-                            fragment.presentFragment(new ChatActivity(args), fragment instanceof ChatActivity);
+///*                            fragment.presentFragment(new ChatActivity(args), fragment instanceof ChatActivity);*/
                         }
                     }
                 }
@@ -230,8 +230,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 long did = 0;
                 int account = UserConfig.selectedAccount;
                 if (fragment instanceof ChatActivity) {
-                    did = ((ChatActivity) fragment).getDialogId();
-                    account = fragment.getCurrentAccount();
+///*                    did = ((ChatActivity) fragment).getDialogId();
+//                    account = fragment.getCurrentAccount();*/
                 } else if (LocationController.getLocationsCount() == 1) {
                     for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
                         ArrayList<LocationController.SharingLocationInfo> arrayList = LocationController.getInstance(a).sharingLocationsUI;
@@ -427,9 +427,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         } else if (id == NotificationCenter.liveLocationsCacheChanged) {
             if (fragment instanceof ChatActivity) {
                 long did = (Long) args[0];
-                if (((ChatActivity) fragment).getDialogId() == did) {
-                    checkLocationString();
-                }
+///*                if (((ChatActivity) fragment).getDialogId() == did) {
+//                    checkLocationString();
+//                }*/
             }
         } else if (id == NotificationCenter.messagePlayingDidStart || id == NotificationCenter.messagePlayingPlayStateChanged || id == NotificationCenter.messagePlayingDidReset || id == NotificationCenter.didEndedCall) {
             checkPlayer(false);
@@ -556,7 +556,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             return;
         }
         ChatActivity chatActivity = (ChatActivity) fragment;
-        long dialogId = chatActivity.getDialogId();
+///*        long dialogId = chatActivity.getDialogId();*/
+        long dialogId = 0;
         int currentAccount = chatActivity.getCurrentAccount();
         ArrayList<TLRPC.Message> messages = LocationController.getInstance(currentAccount).locationsCache.get(dialogId);
         if (!firstLocationsLoaded) {

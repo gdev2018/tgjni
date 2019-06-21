@@ -12,20 +12,20 @@ import android.content.Context;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
-import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.UserObject;
-import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.SimpleTextView;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.AvatarDrawable;
-import org.telegram.ui.Components.BackupImageView;
-import org.telegram.ui.Components.GroupCreateCheckBox;
-import org.telegram.ui.Components.LayoutHelper;
+import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.LocaleController;
+import com.github.gdev2018.master.MessagesController;
+import com.github.gdev2018.master.R;
+import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserObject;
+import com.github.gdev2018.master.tgnet.ConnectionsManager;
+import com.github.gdev2018.master.tgnet.TLRPC;
+import com.github.gdev2018.master.ui.ActionBar.SimpleTextView;
+import com.github.gdev2018.master.ui.ActionBar.Theme;
+import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.GroupCreateCheckBox;
+import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
 public class GroupCreateUserCell extends FrameLayout {
 

@@ -42,6 +42,7 @@ import com.coremedia.iso.boxes.SampleSizeBox;
 import com.coremedia.iso.boxes.TimeToSampleBox;
 import com.coremedia.iso.boxes.TrackBox;
 import com.coremedia.iso.boxes.TrackHeaderBox;
+import com.github.gdev2018.master.di.BaseApplication;
 import com.googlecode.mp4parser.util.Matrix;
 import com.googlecode.mp4parser.util.Path;
 
@@ -57,7 +58,7 @@ import com.github.gdev2018.master.ui.ActionBar.AlertDialog;
 import com.github.gdev2018.master.ui.ActionBar.BaseFragment;
 import com.github.gdev2018.master.ui.ChatActivity;
 import com.github.gdev2018.master.ui.Components.AlertsCreator;
-import com.github.gdev2018.master.ui.PaymentFormActivity;
+///*import com.github.gdev2018.master.ui.PaymentFormActivity;*/
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -152,7 +153,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                 if (location == null || locationQueryCancelRunnable == null) {
                     return;
                 }
-                if (BuildVars.LOGS_ENABLED) {
+                if (BaseBuildVars.LOGS_ENABLED) {
                     FileLog.d("found location " + location);
                 }
                 lastKnownLocation = location;
@@ -716,7 +717,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                                         performSendDelayedMessage(message);
                                     }
                                 } else {
-                                    if (BuildVars.LOGS_ENABLED) {
+                                    if (BaseBuildVars.LOGS_ENABLED) {
                                         FileLog.e("can't load image " + path + " to file " + cacheFile.toString());
                                     }
                                     message.markAsError();
@@ -1346,7 +1347,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                 putToSendingMessages(newMsg);
                 boolean differentDialog = false;
 
-                if (BuildVars.LOGS_ENABLED) {
+                if (BaseBuildVars.LOGS_ENABLED) {
                     FileLog.d("forward message user_id = " + inputPeer.user_id + " chat_id = " + inputPeer.chat_id + " channel_id = " + inputPeer.channel_id + " access_hash = " + inputPeer.access_hash);
                 }
 
@@ -1679,7 +1680,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                     uploadedDocument.attributes = document.attributes;
                     if (!messageObject.isGif() && (videoEditedInfo == null || !videoEditedInfo.muted)) {
                         uploadedDocument.nosound_video = true;
-                        if (BuildVars.DEBUG_VERSION) {
+                        if (BaseBuildVars.DEBUG_VERSION) {
                             FileLog.d("nosound_video = true");
                         }
                     }
@@ -1986,9 +1987,9 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                     if (response instanceof TLRPC.TL_payments_paymentForm) {
                         final TLRPC.TL_payments_paymentForm form = (TLRPC.TL_payments_paymentForm) response;
                         MessagesController.getInstance(currentAccount).putUsers(form.users, false);
-                        parentFragment.presentFragment(new PaymentFormActivity(form, messageObject));
+///*                        parentFragment.presentFragment(new PaymentFormActivity(form, messageObject));*/
                     } else if (response instanceof TLRPC.TL_payments_paymentReceipt) {
-                        parentFragment.presentFragment(new PaymentFormActivity(messageObject, (TLRPC.TL_payments_paymentReceipt) response));
+///*                        parentFragment.presentFragment(new PaymentFormActivity(messageObject, (TLRPC.TL_payments_paymentReceipt) response));*/
                     }
                 } else {
                     TLRPC.TL_messages_botCallbackAnswer res = (TLRPC.TL_messages_botCallbackAnswer) response;
@@ -2025,7 +2026,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                             builder.setMessage(res.message);
                             parentFragment.showDialog(builder.create());
                         } else {
-                            parentFragment.showAlert(name, res.message);
+///*                            parentFragment.showAlert(name, res.message);*/
                         }
                     } else if (res.url != null) {
                         if (parentFragment.getParentActivity() == null) {
@@ -2042,9 +2043,9 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                             if (game == null) {
                                 return;
                             }
-                            parentFragment.showOpenGameAlert(game, messageObject, res.url, !verified && MessagesController.getNotificationsSettings(currentAccount).getBoolean("askgame_" + uid, true), uid);
+///*                            parentFragment.showOpenGameAlert(game, messageObject, res.url, !verified && MessagesController.getNotificationsSettings(currentAccount).getBoolean("askgame_" + uid, true), uid);*/
                         } else {
-                            parentFragment.showOpenUrlAlert(res.url, false);
+///*                            parentFragment.showOpenUrlAlert(res.url, false);*/
                         }
                     }
                 }
@@ -2624,7 +2625,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                 }
             }
 
-            if (BuildVars.LOGS_ENABLED) {
+            if (BaseBuildVars.LOGS_ENABLED) {
                 if (sendToPeer != null) {
                     FileLog.d("send message user_id = " + sendToPeer.user_id + " chat_id = " + sendToPeer.chat_id + " channel_id = " + sendToPeer.channel_id + " access_hash = " + sendToPeer.access_hash);
                 }
@@ -2776,7 +2777,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                         uploadedDocument.attributes = document.attributes;
                         if (!MessageObject.isRoundVideoDocument(document) && (videoEditedInfo == null || !videoEditedInfo.muted && !videoEditedInfo.roundVideo)) {
                             uploadedDocument.nosound_video = true;
-                            if (BuildVars.DEBUG_VERSION) {
+                            if (BaseBuildVars.DEBUG_VERSION) {
                                 FileLog.d("nosound_video = true");
                             }
                         }
@@ -5848,7 +5849,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                     prepareSendingDocumentInternal(currentAccount, sendAsDocuments.get(a), sendAsDocumentsOriginal.get(a), null, extension, dialog_id, reply_to_msg, sendAsDocumentsCaptions.get(a), sendAsDocumentsEntities.get(a), editingMessageObject, forceDocument);
                 }
             }
-            if (BuildVars.LOGS_ENABLED) {
+            if (BaseBuildVars.LOGS_ENABLED) {
                 FileLog.d("total send time = " + (System.currentTimeMillis() - beginTime));
             }
         });
@@ -5964,14 +5965,14 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
 
             Box boxTest = Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/mp4a/");
             if (boxTest == null) {
-                if (BuildVars.LOGS_ENABLED) {
+                if (BaseBuildVars.LOGS_ENABLED) {
                     FileLog.d("video hasn't mp4a atom");
                 }
             }
 
             boxTest = Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/avc1/");
             if (boxTest == null) {
-                if (BuildVars.LOGS_ENABLED) {
+                if (BaseBuildVars.LOGS_ENABLED) {
                     FileLog.d("video hasn't avc1 atom");
                 }
                 return null;
@@ -6059,7 +6060,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
             return null;
         }
         if (trackHeaderBox == null) {
-            if (BuildVars.LOGS_ENABLED) {
+            if (BaseBuildVars.LOGS_ENABLED) {
                 FileLog.d("video hasn't trackHeaderBox atom");
             }
             return null;
@@ -6069,7 +6070,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
             try {
                 MediaCodecInfo codecInfo = MediaController.selectCodec(MediaController.MIME_TYPE);
                 if (codecInfo == null) {
-                    if (BuildVars.LOGS_ENABLED) {
+                    if (BaseBuildVars.LOGS_ENABLED) {
                         FileLog.d("no codec info for " + MediaController.MIME_TYPE);
                     }
                     return null;
@@ -6082,13 +6083,13 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                             name.equals("OMX.MARVELL.VIDEO.H264ENCODER") ||
                             name.equals("OMX.k3.video.encoder.avc") ||
                             name.equals("OMX.TI.DUCATI1.VIDEO.H264E")) {
-                        if (BuildVars.LOGS_ENABLED) {
+                        if (BaseBuildVars.LOGS_ENABLED) {
                             FileLog.d("unsupported encoder = " + name);
                         }
                         return null;
                     } else {
                         if (MediaController.selectColorFormat(codecInfo, MediaController.MIME_TYPE) == 0) {
-                            if (BuildVars.LOGS_ENABLED) {
+                            if (BaseBuildVars.LOGS_ENABLED) {
                                 FileLog.d("no color format for " + MediaController.MIME_TYPE);
                             }
                             return null;

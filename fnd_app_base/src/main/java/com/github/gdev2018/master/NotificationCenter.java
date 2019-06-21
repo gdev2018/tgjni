@@ -345,4 +345,8 @@ public class NotificationCenter {
             objects.remove(observer);
         }
     }
+
+    public boolean hasObservers(int id) {
+        return observers.indexOfKey(id) >= 0;
+    }
 }

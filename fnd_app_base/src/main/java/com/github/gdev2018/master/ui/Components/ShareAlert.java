@@ -59,6 +59,7 @@ import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.BottomSheet;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
+import com.github.gdev2018.master.ui.Cells.ShareDialogCell;
 ///*import com.github.gdev2018.master.ui.Cells.ShareDialogCell;
 //import com.github.gdev2018.master.ui.DialogsActivity;*/
 

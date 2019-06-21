@@ -828,9 +828,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         });
         updateFieldHint();
         int flags = EditorInfo.IME_FLAG_NO_EXTRACT_UI;
-        if (parentFragment != null && parentFragment.getCurrentEncryptedChat() != null) {
-            flags |= 0x01000000; //EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING;
-        }
+///*        if (parentFragment != null && parentFragment.getCurrentEncryptedChat() != null) {
+//            flags |= 0x01000000; //EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING;
+//        }*/
         messageEditText.setImeOptions(flags);
         messageEditText.setInputType(messageEditText.getInputType() | EditorInfo.TYPE_TEXT_FLAG_CAP_SENTENCES | EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE);
         messageEditText.setSingleLine(false);
@@ -1225,11 +1225,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     return false;
                 }
                 if (parentFragment != null) {
-                    TLRPC.Chat chat = parentFragment.getCurrentChat();
-                    if (chat != null && !ChatObject.canSendMedia(chat)) {
-                        delegate.needShowMediaBanHint();
-                        return false;
-                    }
+///*                    TLRPC.Chat chat = parentFragment.getCurrentChat();
+//                    if (chat != null && !ChatObject.canSendMedia(chat)) {
+//                        delegate.needShowMediaBanHint();
+//                        return false;
+//                    }*/
                 }
                 if (hasRecordVideo) {
                     calledRecordRunnable = false;
@@ -1844,13 +1844,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         if (parentFragment == null) {
             return;
         }
-        TLRPC.Chat chat = parentFragment.getCurrentChat();
-        if (chat != null) {
-            audioVideoButtonContainer.setAlpha(ChatObject.canSendMedia(chat) ? 1.0f : 0.5f);
-            if (emojiView != null) {
-                emojiView.setStickersBanned(!ChatObject.canSendStickers(chat), chat.id);
-            }
-        }
+///*        TLRPC.Chat chat = parentFragment.getCurrentChat();
+//        if (chat != null) {
+//            audioVideoButtonContainer.setAlpha(ChatObject.canSendMedia(chat) ? 1.0f : 0.5f);
+//            if (emojiView != null) {
+//                emojiView.setStickersBanned(!ChatObject.canSendStickers(chat), chat.id);
+//            }
+//        }*/
     }
 
     public void onPause() {
@@ -2979,10 +2979,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
         if (button instanceof TLRPC.TL_keyboardButton) {
             SendMessagesHelper.getInstance(currentAccount).sendMessage(button.text, dialog_id, replyMessageObject, null, false, null, null, null);
-        } else if (button instanceof TLRPC.TL_keyboardButtonUrl) {
-            parentFragment.showOpenUrlAlert(button.url, true);
-        } else if (button instanceof TLRPC.TL_keyboardButtonRequestPhone) {
-            parentFragment.shareMyContact(messageObject);
+///*        } else if (button instanceof TLRPC.TL_keyboardButtonUrl) {
+//            parentFragment.showOpenUrlAlert(button.url, true);
+//        } else if (button instanceof TLRPC.TL_keyboardButtonRequestPhone) {
+//            parentFragment.shareMyContact(messageObject);*/
         } else if (button instanceof TLRPC.TL_keyboardButtonRequestGeoLocation) {
             AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
             builder.setTitle(LocaleController.getString("ShareYouLocationTitle", R.string.ShareYouLocationTitle));
@@ -3001,9 +3001,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         } else if (button instanceof TLRPC.TL_keyboardButtonCallback || button instanceof TLRPC.TL_keyboardButtonGame || button instanceof TLRPC.TL_keyboardButtonBuy) {
             SendMessagesHelper.getInstance(currentAccount).sendCallback(true, messageObject, button, parentFragment);
         } else if (button instanceof TLRPC.TL_keyboardButtonSwitchInline) {
-            if (parentFragment.processSwitchButton((TLRPC.TL_keyboardButtonSwitchInline) button)) {
-                return;
-            }
+///*            if (parentFragment.processSwitchButton((TLRPC.TL_keyboardButtonSwitchInline) button)) {
+//                return;
+//            }*/
             if (button.same_peer) {
                 int uid = messageObject.messageOwner.from_id;
                 if (messageObject.messageOwner.via_bot_id != 0) {

@@ -12,11 +12,9 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
-///*import com.github.gdev2018.master.ImageReceiver;*/
 import com.github.gdev2018.master.ImageReceiver;
 import com.github.gdev2018.master.SecureDocument;
 import com.github.gdev2018.master.tgnet.TLObject;
-import com.github.gdev2018.master.tgnet.TLRPC;
 
 public class BackupImageView extends View {
 
@@ -161,4 +159,3 @@ public class BackupImageView extends View {
         imageReceiver.draw(canvas);
     }
 }
-

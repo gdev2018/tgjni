@@ -16,7 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
-///*import com.github.gdev2018.master.ContactsController;*/
+import com.github.gdev2018.master.ContactsController;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
@@ -55,18 +55,18 @@ public class JoinSheetUserCell extends FrameLayout {
     }
 
     public void setUser(TLRPC.User user) {
-///*        nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));*/
+        nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
         avatarDrawable.setInfo(user);
         TLRPC.FileLocation photo = null;
         if (user != null && user.photo != null) {
             photo = user.photo.photo_small;
         }
-        imageView.setImage(photo, "50_50", avatarDrawable);
+        imageView.setImage(photo, "50_50", avatarDrawable, user);
     }
 
     public void setCount(int count) {
         nameTextView.setText("");
         avatarDrawable.setInfo(0, null, null, false, "+" + LocaleController.formatShortNumber(count, result));
-        imageView.setImage((TLRPC.FileLocation) null, "50_50", avatarDrawable);
+        imageView.setImage(null, "50_50", avatarDrawable, null);
     }
 }

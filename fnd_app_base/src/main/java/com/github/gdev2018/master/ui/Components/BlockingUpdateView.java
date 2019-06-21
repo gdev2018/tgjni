@@ -31,7 +31,7 @@ import com.github.gdev2018.master.BuildConfig;
 import com.github.gdev2018.master.FileLoader;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.LocaleController;
-///*import com.github.gdev2018.master.MessageObject;*/
+import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.UserConfig;
@@ -66,7 +66,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
 
         FrameLayout view = new FrameLayout(context);
         view.setBackgroundColor(0xff4fa9e6);
-        addView(view, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(176) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
+        addView(view, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(176) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
 
         ImageView imageView = new ImageView(context);
         imageView.setImageResource(R.drawable.intro_tg_plane);
@@ -122,7 +122,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
             }
             if (appUpdate.document instanceof TLRPC.TL_document) {
                 if (!openApkInstall((Activity) getContext(), appUpdate.document)) {
-                    FileLoader.getInstance(accountNum).loadFile(appUpdate.document, true, 1);
+                    FileLoader.getInstance(accountNum).loadFile(appUpdate.document, "update", 2, 1);
                     showProgress(true);
                 }
             } else if (appUpdate.url != null) {
@@ -170,21 +170,21 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
     public void setVisibility(int visibility) {
         super.setVisibility(visibility);
         if (visibility == GONE) {
-            NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.FileDidLoaded);
-            NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.FileDidFailedLoad);
+            NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.fileDidFailedLoad);
             NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
         }
     }
 
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.FileDidLoaded) {
+        if (id == NotificationCenter.fileDidLoad) {
             String location = (String) args[0];
             if (fileName != null && fileName.equals(location)) {
                 showProgress(false);
                 openApkInstall((Activity) getContext(), appUpdate.document);
             }
-        } else if (id == NotificationCenter.FileDidFailedLoad) {
+        } else if (id == NotificationCenter.fileDidFailedLoad) {
             String location = (String) args[0];
             if (fileName != null && fileName.equals(location)) {
                 showProgress(false);
@@ -304,15 +304,15 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
             setVisibility(VISIBLE);
         }
         SpannableStringBuilder builder = new SpannableStringBuilder(update.text);
-///*        MessageObject.addEntitiesToText(builder, update.entities, false, 0, false, false, false);*/
+        MessageObject.addEntitiesToText(builder, update.entities, false, 0, false, false, false);
         textView.setText(builder);
         if (update.document instanceof TLRPC.TL_document) {
             acceptTextView.setText(LocaleController.getString("Update", R.string.Update).toUpperCase() + String.format(Locale.US, " (%1$s)", AndroidUtilities.formatFileSize(update.document.size)));
         } else {
             acceptTextView.setText(LocaleController.getString("Update", R.string.Update).toUpperCase());
         }
-        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.FileDidLoaded);
-        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.FileDidFailedLoad);
+        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileDidFailedLoad);
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.FileLoadProgressChanged);
     }
 }

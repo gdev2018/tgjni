@@ -19,6 +19,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.FileLoader;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
@@ -50,17 +51,20 @@ public class StickerCell extends FrameLayout {
 
     @Override
     public void setPressed(boolean pressed) {
-///*        if (imageView.getImageReceiver().getPressed() != pressed) {
-//            imageView.getImageReceiver().setPressed(pressed ? 1 : 0);
-//            imageView.invalidate();
-//        }*/
+        if (imageView.getImageReceiver().getPressed() != pressed) {
+            imageView.getImageReceiver().setPressed(pressed ? 1 : 0);
+            imageView.invalidate();
+        }
         super.setPressed(pressed);
     }
 
-    public void setSticker(TLRPC.Document document, int side) {
-///*        if (document != null && document.thumb != null) {
-//            imageView.setImage(document.thumb.location, null, "webp", null);
-//        }*/
+    public void setSticker(TLRPC.Document document, Object parentObject, int side) {
+        if (document != null) {
+            TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
+            if (thumb != null) {
+                imageView.setImage(thumb, null, "webp", null, parentObject);
+            }
+        }
         sticker = document;
         if (side == -1) {
             setBackgroundResource(R.drawable.stickers_back_left);
@@ -92,9 +96,9 @@ public class StickerCell extends FrameLayout {
         invalidate();
     }
 
-///*    public boolean showingBitmap() {
-//        return imageView.getImageReceiver().getBitmap() != null;
-//    }*/
+    public boolean showingBitmap() {
+        return imageView.getImageReceiver().getBitmap() != null;
+    }
 
     @Override
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {

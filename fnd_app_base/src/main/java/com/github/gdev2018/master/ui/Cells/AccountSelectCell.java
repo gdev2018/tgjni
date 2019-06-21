@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
-///*import com.github.gdev2018.master.ContactsController;*/
+import com.github.gdev2018.master.ContactsController;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.UserConfig;
 import com.github.gdev2018.master.tgnet.TLRPC;
@@ -81,15 +81,15 @@ public class AccountSelectCell extends FrameLayout {
         accountNumber = account;
         TLRPC.User user = UserConfig.getInstance(accountNumber).getCurrentUser();
         avatarDrawable.setInfo(user);
-///*        textView.setText(ContactsController.formatName(user.first_name, user.last_name));*/
+        textView.setText(ContactsController.formatName(user.first_name, user.last_name));
         TLRPC.FileLocation avatar;
         if (user.photo != null && user.photo.photo_small != null && user.photo.photo_small.volume_id != 0 && user.photo.photo_small.local_id != 0) {
             avatar = user.photo.photo_small;
         } else {
             avatar = null;
         }
-///*        imageView.getImageReceiver().setCurrentAccount(account);*/
-        imageView.setImage(avatar, "50_50", avatarDrawable);
+        imageView.getImageReceiver().setCurrentAccount(account);
+        imageView.setImage(avatar, "50_50", avatarDrawable, user);
         checkImageView.setVisibility(check && account == UserConfig.selectedAccount ? VISIBLE : INVISIBLE);
     }
 

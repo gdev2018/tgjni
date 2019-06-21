@@ -178,16 +178,16 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
         currentAccount = UserConfig.selectedAccount;
         info = chatInfo;
         if (!inlineMediaEnabled && foundContextBot != null && parentFragment != null) {
-            TLRPC.Chat chat = parentFragment.getCurrentChat();
-            if (chat != null) {
-                inlineMediaEnabled = ChatObject.canSendStickers(chat);
-                if (inlineMediaEnabled) {
-                    searchResultUsernames = null;
-                    notifyDataSetChanged();
-                    delegate.needChangePanelVisibility(false);
-                    processFoundUser(foundContextBot);
-                }
-            }
+///*            TLRPC.Chat chat = parentFragment.getCurrentChat();
+//            if (chat != null) {
+//                inlineMediaEnabled = ChatObject.canSendStickers(chat);
+//                if (inlineMediaEnabled) {
+//                    searchResultUsernames = null;
+//                    notifyDataSetChanged();
+//                    delegate.needChangePanelVisibility(false);
+//                    processFoundUser(foundContextBot);
+//                }
+//            }*/
         }
         if (lastText != null) {
             searchUsernameOrHashtag(lastText, lastPosition, messages, lastUsernameOnly);
@@ -241,15 +241,15 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
         if (user != null && user.bot && user.bot_inline_placeholder != null) {
             foundContextBot = user;
             if (parentFragment != null) {
-                TLRPC.Chat chat = parentFragment.getCurrentChat();
-                if (chat != null) {
-                    inlineMediaEnabled = ChatObject.canSendStickers(chat);
-                    if (!inlineMediaEnabled) {
-                        notifyDataSetChanged();
-                        delegate.needChangePanelVisibility(true);
-                        return;
-                    }
-                }
+///*                TLRPC.Chat chat = parentFragment.getCurrentChat();
+//                if (chat != null) {
+//                    inlineMediaEnabled = ChatObject.canSendStickers(chat);
+//                    if (!inlineMediaEnabled) {
+//                        notifyDataSetChanged();
+//                        delegate.needChangePanelVisibility(true);
+//                        return;
+//                    }
+//                }*/
             }
             if (foundContextBot.bot_inline_geo) {
                 SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
@@ -694,7 +694,8 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
             }
             final TLRPC.Chat chat;
             if (parentFragment != null) {
-                chat = parentFragment.getCurrentChat();
+///*                chat = parentFragment.getCurrentChat();*/
+                chat = messagesController.getChat(info.id);
             } else if (info != null) {
                 chat = messagesController.getChat(info.id);
             } else {
@@ -1038,16 +1039,16 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder.getItemViewType() == 3) {
             TextView textView = (TextView) holder.itemView;
-            TLRPC.Chat chat = parentFragment.getCurrentChat();
-            if (chat != null) {
-                if (!ChatObject.hasAdminRights(chat) && chat.default_banned_rights != null && chat.default_banned_rights.send_inline) {
-                    textView.setText(LocaleController.getString("GlobalAttachInlineRestricted", R.string.GlobalAttachInlineRestricted));
-                } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                    textView.setText(LocaleController.getString("AttachInlineRestrictedForever", R.string.AttachInlineRestrictedForever));
-                } else {
-                    textView.setText(LocaleController.formatString("AttachInlineRestricted", R.string.AttachInlineRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
-                }
-            }
+///*            TLRPC.Chat chat = parentFragment.getCurrentChat();
+//            if (chat != null) {
+//                if (!ChatObject.hasAdminRights(chat) && chat.default_banned_rights != null && chat.default_banned_rights.send_inline) {
+//                    textView.setText(LocaleController.getString("GlobalAttachInlineRestricted", R.string.GlobalAttachInlineRestricted));
+//                } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
+//                    textView.setText(LocaleController.getString("AttachInlineRestrictedForever", R.string.AttachInlineRestrictedForever));
+//                } else {
+//                    textView.setText(LocaleController.formatString("AttachInlineRestricted", R.string.AttachInlineRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
+//                }
+//            }*/
         } else if (searchResultBotContext != null) {
             boolean hasTop = searchResultBotContextSwitch != null;
             if (holder.getItemViewType() == 2) {

@@ -38,6 +38,7 @@ import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.LetterDrawable;
 import com.github.gdev2018.master.ui.Components.MediaActionDrawable;
 import com.github.gdev2018.master.ui.Components.RadialProgress2;
+import com.github.gdev2018.master.ui.PhotoViewer;
 
 import java.io.File;
 import java.util.ArrayList;

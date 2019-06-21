@@ -275,9 +275,9 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         @Keep
         @Override
         public void setAlpha(int alpha) {
-            if (parentActivity instanceof LaunchActivity) {
-                ((LaunchActivity) parentActivity).drawerLayoutContainer.setAllowDrawContent(!isPhotoVisible || alpha != 255);
-            }
+// /*           if (parentActivity instanceof LaunchActivity) {
+//                ((LaunchActivity) parentActivity).drawerLayoutContainer.setAllowDrawContent(!isPhotoVisible || alpha != 255);
+//            }*/
             super.setAlpha(alpha);
         }
 

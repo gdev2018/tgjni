@@ -23,16 +23,17 @@ import android.widget.TextView;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.ui.Components.AvatarDrawable;
-///*import com.github.gdev2018.master.ui.Components.BackupImageView;*/
-///*import com.github.gdev2018.master.ui.Components.ChatBigEmptyView;*/
+import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.ChatBigEmptyView;
 import com.github.gdev2018.master.ui.Components.CheckBox;
 import com.github.gdev2018.master.ui.Components.CombinedDrawable;
 import com.github.gdev2018.master.ui.Components.ContextProgressView;
 import com.github.gdev2018.master.ui.Components.EditTextBoldCursor;
 import com.github.gdev2018.master.ui.Components.EditTextCaption;
+import com.github.gdev2018.master.ui.Components.EditTextEmoji;
 import com.github.gdev2018.master.ui.Components.EmptyTextProgressView;
 import com.github.gdev2018.master.ui.Components.GroupCreateCheckBox;
-///*import com.github.gdev2018.master.ui.Components.GroupCreateSpan;*/
+import com.github.gdev2018.master.ui.Components.GroupCreateSpan;
 import com.github.gdev2018.master.ui.Components.LetterDrawable;
 import com.github.gdev2018.master.ui.Components.LineProgressView;
 import com.github.gdev2018.master.ui.Components.NumberTextView;
@@ -40,7 +41,6 @@ import com.github.gdev2018.master.ui.Components.RadialProgressView;
 import com.github.gdev2018.master.ui.Components.RadioButton;
 import com.github.gdev2018.master.ui.Components.RecyclerListView;
 import com.github.gdev2018.master.ui.Components.SeekBarView;
-import com.github.gdev2018.master.ui.Components.Switch;
 import com.github.gdev2018.master.ui.Components.TypefaceSpan;
 
 import java.lang.reflect.Field;
@@ -110,6 +110,9 @@ public class ThemeDescription {
         changeFlags = flags;
         listClasses = classes;
         delegate = themeDescriptionDelegate;
+        if (viewToInvalidate instanceof EditTextEmoji) {
+            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
+        }
     }
 
     public ThemeDescription(View view, int flags, Class[] classes, Paint paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
@@ -122,6 +125,9 @@ public class ThemeDescription {
         changeFlags = flags;
         listClasses = classes;
         delegate = themeDescriptionDelegate;
+        if (viewToInvalidate instanceof EditTextEmoji) {
+            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
+        }
     }
 
     public ThemeDescription(View view, int flags, Class[] classes, String[] classesFields, Paint[] paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
@@ -135,6 +141,9 @@ public class ThemeDescription {
         delegate = themeDescriptionDelegate;
         cachedFields = new HashMap<>();
         notFoundCachedFields = new HashMap<>();
+        if (viewToInvalidate instanceof EditTextEmoji) {
+            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
+        }
     }
 
     public ThemeDescriptionDelegate setDelegateDisabled() {
@@ -285,10 +294,9 @@ public class ThemeDescription {
                     ((NumberTextView) viewToInvalidate).setTextColor(color);
                 } else if (viewToInvalidate instanceof SimpleTextView) {
                     ((SimpleTextView) viewToInvalidate).setTextColor(color);
+                } else if (viewToInvalidate instanceof ChatBigEmptyView) {
+                    ((ChatBigEmptyView) viewToInvalidate).setTextColor(color);
                 }
-///*                else if (viewToInvalidate instanceof ChatBigEmptyView) {
-//                    ((ChatBigEmptyView) viewToInvalidate).setTextColor(color);
-//                }*/
             }
         }
         if ((changeFlags & FLAG_CURSORCOLOR) != 0) {
@@ -324,10 +332,9 @@ public class ThemeDescription {
                     } else {
                         ((ImageView) viewToInvalidate).setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                     }
+                } else if (viewToInvalidate instanceof BackupImageView) {
+                    //((BackupImageView) viewToInvalidate).setResourceImageColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                 }
-///*                else if (viewToInvalidate instanceof BackupImageView) {
-//                    //((BackupImageView) viewToInvalidate).setResourceImageColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-//                }*/
             }
         }
         if (viewToInvalidate instanceof ScrollView) {
@@ -482,8 +489,6 @@ public class ThemeDescription {
                                 }
                                 if ((changeFlags & FLAG_BACKGROUND) != 0 && object instanceof View) {
                                     ((View) object).setBackgroundColor(color);
-                                } else if (object instanceof Switch) {
-                                    ((Switch) object).checkColorFilters();
                                 } else if (object instanceof EditTextCaption) {
                                     if ((changeFlags & FLAG_HINTTEXTCOLOR) != 0) {
                                         ((EditTextCaption) object).setHintColor(color);
@@ -526,17 +531,17 @@ public class ThemeDescription {
                                     }
                                 } else if (object instanceof ImageView) {
                                     ((ImageView) object).setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-///*                                } else if (object instanceof BackupImageView) {
-//                                    Drawable drawable = ((BackupImageView) object).getImageReceiver().getStaticThumb();
-//                                    if (drawable instanceof CombinedDrawable) {
-//                                        if ((changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
-//                                            ((CombinedDrawable) drawable).getBackground().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-//                                        } else {
-//                                            ((CombinedDrawable) drawable).getIcon().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-//                                        }
-//                                    } else if (drawable != null) {
-//                                        drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-//                                    }*/
+                                } else if (object instanceof BackupImageView) {
+                                    Drawable drawable = ((BackupImageView) object).getImageReceiver().getStaticThumb();
+                                    if (drawable instanceof CombinedDrawable) {
+                                        if ((changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
+                                            ((CombinedDrawable) drawable).getBackground().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                                        } else {
+                                            ((CombinedDrawable) drawable).getIcon().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                                        }
+                                    } else if (drawable != null) {
+                                        drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                                    }
                                 } else if (object instanceof Drawable) {
                                     if (object instanceof LetterDrawable) {
                                         if ((changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
@@ -600,10 +605,9 @@ public class ThemeDescription {
                         FileLog.e(e);
                         notFoundCachedFields.put(key, true);
                     }
+                } else if (child instanceof GroupCreateSpan) {
+                    ((GroupCreateSpan) child).updateColors();
                 }
-///*                else if (child instanceof GroupCreateSpan) {
-//                    ((GroupCreateSpan) child).updateColors();
-//                }*/
             }
         }
     }

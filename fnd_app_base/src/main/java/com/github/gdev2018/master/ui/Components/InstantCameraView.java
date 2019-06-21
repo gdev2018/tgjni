@@ -74,13 +74,13 @@ import com.github.gdev2018.master.VideoEditedInfo;
 import com.github.gdev2018.master.camera.CameraController;
 import com.github.gdev2018.master.camera.CameraInfo;
 import com.github.gdev2018.master.camera.CameraSession;
+import com.github.gdev2018.master.camera.Size;
 import com.github.gdev2018.master.video.MP4Builder;
 import com.github.gdev2018.master.video.Mp4Movie;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.ChatActivity;
-import com.github.gdev2018.master.ui.Components.Size;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -166,38 +166,38 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private float[] moldSTMatrix = new float[16];
     private static final String VERTEX_SHADER =
             "uniform mat4 uMVPMatrix;\n" +
-            "uniform mat4 uSTMatrix;\n" +
-            "attribute vec4 aPosition;\n" +
-            "attribute vec4 aTextureCoord;\n" +
-            "varying vec2 vTextureCoord;\n" +
-            "void main() {\n" +
-            "   gl_Position = uMVPMatrix * aPosition;\n" +
-            "   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n" +
-            "}\n";
+                    "uniform mat4 uSTMatrix;\n" +
+                    "attribute vec4 aPosition;\n" +
+                    "attribute vec4 aTextureCoord;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "void main() {\n" +
+                    "   gl_Position = uMVPMatrix * aPosition;\n" +
+                    "   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n" +
+                    "}\n";
 
     private static final String FRAGMENT_SHADER =
             "#extension GL_OES_EGL_image_external : require\n" +
-            "precision highp float;\n" +
-            "varying vec2 vTextureCoord;\n" +
-            "uniform float scaleX;\n" +
-            "uniform float scaleY;\n" +
-            "uniform float alpha;\n" +
-            "uniform samplerExternalOES sTexture;\n" +
-            "void main() {\n" +
-            "   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n" +
-            "   float coef = ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n" +
-            "   vec3 color = texture2D(sTexture, vTextureCoord).rgb * coef + (1.0 - step(0.001, coef));\n" +
-            "   gl_FragColor = vec4(color * alpha, alpha);\n" +
-            "}\n";
+                    "precision highp float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform float scaleX;\n" +
+                    "uniform float scaleY;\n" +
+                    "uniform float alpha;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "void main() {\n" +
+                    "   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n" +
+                    "   float coef = ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n" +
+                    "   vec3 color = texture2D(sTexture, vTextureCoord).rgb * coef + (1.0 - step(0.001, coef));\n" +
+                    "   gl_FragColor = vec4(color * alpha, alpha);\n" +
+                    "}\n";
 
     private static final String FRAGMENT_SCREEN_SHADER =
             "#extension GL_OES_EGL_image_external : require\n" +
-            "precision lowp float;\n" +
-            "varying vec2 vTextureCoord;\n" +
-            "uniform samplerExternalOES sTexture;\n" +
-            "void main() {\n" +
-            "   gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
-            "}\n";
+                    "precision lowp float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "void main() {\n" +
+                    "   gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
+                    "}\n";
 
     private FloatBuffer vertexBuffer;
     private FloatBuffer textureBuffer;
@@ -231,7 +231,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     muteAnimation.setInterpolator(new DecelerateInterpolator());
                     muteAnimation.start();
                 } else {
-                    baseFragment.checkRecordLocked();
+///*                    baseFragment.checkRecordLocked();*/
                 }
             }
             return true;
@@ -239,7 +239,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         setWillNotDraw(false);
         setBackgroundColor(0xc0000000);
         baseFragment = parentFragment;
-        isSecretChat = baseFragment.getCurrentEncryptedChat() != null;
+///*        isSecretChat = baseFragment.getCurrentEncryptedChat() != null;*/
+        isSecretChat = false;
         paint = new Paint(Paint.ANTI_ALIAS_FLAG) {
             @Override
             public void setAlpha(int a) {
@@ -312,7 +313,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             cameraContainer.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
 
-        addView(cameraContainer, new LayoutParams(AndroidUtilities.roundMessageSize, AndroidUtilities.roundMessageSize, Gravity.CENTER));
+        addView(cameraContainer, new FrameLayout.LayoutParams(AndroidUtilities.roundMessageSize, AndroidUtilities.roundMessageSize, Gravity.CENTER));
 
         switchCameraButton = new ImageView(context);
         switchCameraButton.setScaleType(ImageView.ScaleType.CENTER);
@@ -342,7 +343,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         textureOverlayView = new BackupImageView(getContext());
         textureOverlayView.setRoundRadius(AndroidUtilities.roundMessageSize / 2);
-        addView(textureOverlayView, new LayoutParams(AndroidUtilities.roundMessageSize, AndroidUtilities.roundMessageSize, Gravity.CENTER));
+        addView(textureOverlayView, new FrameLayout.LayoutParams(AndroidUtilities.roundMessageSize, AndroidUtilities.roundMessageSize, Gravity.CENTER));
 
         setVisibility(INVISIBLE);
     }
@@ -643,7 +644,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             videoEditedInfo.encryptedFile = encryptedFile;
             videoEditedInfo.key = key;
             videoEditedInfo.iv = iv;
-            baseFragment.sendMedia(new MediaController.PhotoEntry(0, 0, 0, cameraFile.getAbsolutePath(), 0, true), videoEditedInfo);
+//            /*baseFragment.sendMedia(new MediaController.PhotoEntry(0, 0, 0, cameraFile.getAbsolutePath(), 0, true), videoEditedInfo);*/
         } else {
             cancelled = recordedTime < 800;
             recording = false;
@@ -1848,7 +1849,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     videoEditedInfo.resultHeight = videoEditedInfo.originalHeight = 240;
                     videoEditedInfo.originalPath = videoFile.getAbsolutePath();
                     if (send == 1) {
-                        baseFragment.sendMedia(new MediaController.PhotoEntry(0, 0, 0, videoFile.getAbsolutePath(), 0, true), videoEditedInfo);
+//                        /*baseFragment.sendMedia(new MediaController.PhotoEntry(0, 0, 0, videoFile.getAbsolutePath(), 0, true), videoEditedInfo);*/
                     } else {
                         videoPlayer = new VideoPlayer();
                         videoPlayer.setDelegate(new VideoPlayer.VideoPlayerDelegate() {

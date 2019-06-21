@@ -16,8 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
-///*import com.github.gdev2018.master.Emoji;
-//import com.github.gdev2018.master.EmojiSuggestion;*/
+import com.github.gdev2018.master.Emoji;
+import com.github.gdev2018.master.EmojiSuggestion;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
@@ -75,7 +75,7 @@ public class MentionCell extends LinearLayout {
         }
         avatarDrawable.setInfo(user);
         if (user.photo != null && user.photo.photo_small != null) {
-            imageView.setImage(user.photo.photo_small, "50_50", avatarDrawable);
+            imageView.setImage(user.photo.photo_small, "50_50", avatarDrawable, user);
         } else {
             imageView.setImageDrawable(avatarDrawable);
         }
@@ -100,23 +100,23 @@ public class MentionCell extends LinearLayout {
         super.invalidate();
         nameTextView.invalidate();
     }
-///*
-//    public void setEmojiSuggestion(EmojiSuggestion suggestion) {
-//        imageView.setVisibility(INVISIBLE);
-//        usernameTextView.setVisibility(INVISIBLE);
-//        StringBuilder stringBuilder = new StringBuilder(suggestion.emoji.length() + suggestion.label.length() + 3);
-//        stringBuilder.append(suggestion.emoji);
-//        stringBuilder.append("   ");
-//        stringBuilder.append(suggestion.label);
-//        nameTextView.setText(Emoji.replaceEmoji(stringBuilder, nameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false));
-//    }*/
+
+    public void setEmojiSuggestion(EmojiSuggestion suggestion) {
+        imageView.setVisibility(INVISIBLE);
+        usernameTextView.setVisibility(INVISIBLE);
+        StringBuilder stringBuilder = new StringBuilder(suggestion.emoji.length() + suggestion.label.length() + 3);
+        stringBuilder.append(suggestion.emoji);
+        stringBuilder.append("   ");
+        stringBuilder.append(suggestion.label);
+        nameTextView.setText(Emoji.replaceEmoji(stringBuilder, nameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false));
+    }
 
     public void setBotCommand(String command, String help, TLRPC.User user) {
         if (user != null) {
             imageView.setVisibility(VISIBLE);
             avatarDrawable.setInfo(user);
             if (user.photo != null && user.photo.photo_small != null) {
-                imageView.setImage(user.photo.photo_small, "50_50", avatarDrawable);
+                imageView.setImage(user.photo.photo_small, "50_50", avatarDrawable, user);
             } else {
                 imageView.setImageDrawable(avatarDrawable);
             }
@@ -125,7 +125,7 @@ public class MentionCell extends LinearLayout {
         }
         usernameTextView.setVisibility(VISIBLE);
         nameTextView.setText(command);
-///*        usernameTextView.setText(Emoji.replaceEmoji(help, usernameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false));*/
+        usernameTextView.setText(Emoji.replaceEmoji(help, usernameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false));
     }
 
     public void setIsDarkTheme(boolean isDarkTheme) {
@@ -138,3 +138,4 @@ public class MentionCell extends LinearLayout {
         }
     }
 }
+

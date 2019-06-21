@@ -31,12 +31,12 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 
-
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.DataQuery;
 import com.github.gdev2018.master.Emoji;
 import com.github.gdev2018.master.FileLoader;
-import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.ImageReceiver;
+import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.R;
@@ -102,8 +102,7 @@ public class StickerPreviewViewer {
             if (parentActivity == null || currentSet == null) {
                 return;
             }
-///*            final boolean inFavs = DataQuery.getInstance(currentAccount).isStickerInFavorites(currentSticker);*/
-            final boolean inFavs = false;
+            final boolean inFavs = DataQuery.getInstance(currentAccount).isStickerInFavorites(currentSticker);
             BottomSheet.Builder builder = new BottomSheet.Builder(parentActivity);
             ArrayList<CharSequence> items = new ArrayList<>();
             final ArrayList<Integer> actions = new ArrayList<>();
@@ -120,8 +119,7 @@ public class StickerPreviewViewer {
                     actions.add(1);
                 }
             }
-///*            if (!MessageObject.isMaskDocument(currentSticker) && (inFavs || DataQuery.getInstance(currentAccount).canAddStickerToFavorites())) {*/
-            if (!MessageObject.isMaskDocument(currentSticker) && (inFavs)) {
+            if (!MessageObject.isMaskDocument(currentSticker) && (inFavs || DataQuery.getInstance(currentAccount).canAddStickerToFavorites())) {
                 items.add(inFavs ? LocaleController.getString("DeleteFromFavorites", R.string.DeleteFromFavorites) : LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
                 icons.add(inFavs ? R.drawable.stickers_unfavorite : R.drawable.stickers_favorite);
                 actions.add(2);
@@ -146,7 +144,7 @@ public class StickerPreviewViewer {
                         delegate.openSet(currentSet);
                     }
                 } else if (actions.get(which) == 2) {
-//                    /*DataQuery.getInstance(currentAccount).addRecentSticker(DataQuery.TYPE_FAVE, currentSet, currentSticker, (int) (System.currentTimeMillis() / 1000), inFavs);*/
+                    DataQuery.getInstance(currentAccount).addRecentSticker(DataQuery.TYPE_FAVE, currentSet, currentSticker, (int) (System.currentTimeMillis() / 1000), inFavs);
                 }
             });
             visibleDialog = builder.create();
@@ -167,12 +165,12 @@ public class StickerPreviewViewer {
     public static StickerPreviewViewer getInstance() {
         StickerPreviewViewer localInstance = Instance;
         if (localInstance == null) {
-///*            synchronized (PhotoViewer.class) {
-//                localInstance = Instance;
-//                if (localInstance == null) {
-//                    Instance = localInstance = new StickerPreviewViewer();
-//                }
-//            }*/
+            synchronized (PhotoViewer.class) {
+                localInstance = Instance;
+                if (localInstance == null) {
+                    Instance = localInstance = new StickerPreviewViewer();
+                }
+            }
         }
         return localInstance;
     }

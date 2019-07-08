@@ -5,6 +5,7 @@
  *
  * Copyright Nikolai Kudashov, 2013-2018.
  */
+
 package com.github.gdev2018.master.ui.ActionBar;
 
 import android.annotation.SuppressLint;

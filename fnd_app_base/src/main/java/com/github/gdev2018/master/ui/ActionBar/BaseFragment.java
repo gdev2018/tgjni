@@ -1,4 +1,10 @@
-/*  * This is the source code of Telegram for Android v. 5.x.x.  * It is licensed under GNU GPL v. 2 or later.  * You should have received a copy of the license in this archive (see LICENSE).  *  * Copyright Nikolai Kudashov, 2013-2018.  */
+/*
+ * This is the source code of Telegram for Android v. 5.x.x.
+ * It is licensed under GNU GPL v. 2 or later.
+ * You should have received a copy of the license in this archive (see LICENSE).
+ *
+ * Copyright Nikolai Kudashov, 2013-2018.
+ */
 
 package com.github.gdev2018.master.ui.ActionBar;
 
@@ -200,7 +206,7 @@ public class BaseFragment {
     }
 
     public void onFragmentDestroy() {
-///*        ConnectionsManager.getInstance(currentAccount).cancelRequestsForGuid(classGuid);*/
+        ConnectionsManager.getInstance(currentAccount).cancelRequestsForGuid(classGuid);
         isFinished = true;
         if (actionBar != null) {
             actionBar.setEnabled(false);
@@ -328,6 +334,10 @@ public class BaseFragment {
     }
 
     protected void onBecomeFullyVisible() {
+
+    }
+
+    protected void onBecomeFullyHidden() {
 
     }
 

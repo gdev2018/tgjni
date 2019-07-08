@@ -1,4 +1,10 @@
-/*  * This is the source code of Telegram for Android v. 5.x.x.  * It is licensed under GNU GPL v. 2 or later.  * You should have received a copy of the license in this archive (see LICENSE).  *  * Copyright Nikolai Kudashov, 2013-2018.  */
+/*
+ * This is the source code of Telegram for Android v. 5.x.x.
+ * It is licensed under GNU GPL v. 2 or later.
+ * You should have received a copy of the license in this archive (see LICENSE).
+ *
+ * Copyright Nikolai Kudashov, 2013-2018.
+ */
 
 //Thanks to https://github.com/JakeWharton/ActionBarSherlock/
 
@@ -98,7 +104,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(LinearLayout.VERTICAL);
             if (scrollView != null) {
-                scrollView.addView(linearLayout, new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                scrollView.addView(linearLayout, new ScrollView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             } else {
                 addView(linearLayout, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
             }

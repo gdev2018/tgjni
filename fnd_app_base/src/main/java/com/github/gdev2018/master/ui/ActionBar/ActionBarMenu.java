@@ -1,4 +1,10 @@
-/*  * This is the source code of Telegram for Android v. 5.x.x.  * It is licensed under GNU GPL v. 2 or later.  * You should have received a copy of the license in this archive (see LICENSE).  *  * Copyright Nikolai Kudashov, 2013-2018.  */
+/*
+ * This is the source code of Telegram for Android v. 5.x.x.
+ * It is licensed under GNU GPL v. 2 or later.
+ * You should have received a copy of the license in this archive (see LICENSE).
+ *
+ * Copyright Nikolai Kudashov, 2013-2018.
+ */
 
 package com.github.gdev2018.master.ui.ActionBar;
 
@@ -69,7 +75,7 @@ public class ActionBarMenu extends LinearLayout {
         } else if (icon != 0) {
             menuItem.iconView.setImageResource(icon);
         }
-        addView(menuItem, new LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT));
+        addView(menuItem, new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT));
         menuItem.setOnClickListener(view -> {
             ActionBarMenuItem item = (ActionBarMenuItem) view;
             if (item.hasSubMenu()) {
@@ -180,7 +186,7 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
-    public void openSearchField(boolean toggle, String text) {
+    public void openSearchField(boolean toggle, String text, boolean animated) {
         int count = getChildCount();
         for (int a = 0; a < count; a++) {
             View view = getChildAt(a);
@@ -190,7 +196,7 @@ public class ActionBarMenu extends LinearLayout {
                     if (toggle) {
                         parentActionBar.onSearchFieldVisibilityChanged(item.toggleSearch(true));
                     }
-                    item.getSearchField().setText(text);
+                    item.setSearchFieldText(text, animated);
                     item.getSearchField().setSelection(text.length());
                     break;
                 }

@@ -1,4 +1,10 @@
-/*  * This is the source code of Telegram for Android v. 5.x.x.  * It is licensed under GNU GPL v. 2 or later.  * You should have received a copy of the license in this archive (see LICENSE).  *  * Copyright Nikolai Kudashov, 2013-2018.  */
+/*
+ * This is the source code of Telegram for Android v. 5.x.x.
+ * It is licensed under GNU GPL v. 2 or later.
+ * You should have received a copy of the license in this archive (see LICENSE).
+ *
+ * Copyright Nikolai Kudashov, 2013-2018.
+ */
 
 package com.github.gdev2018.master.ui.ActionBar;
 
@@ -52,7 +58,7 @@ public class DrawerLayoutContainer extends FrameLayout {
 
     private Paint scrimPaint = new Paint();
 
-    private Object lastInsets;  // поясни за чёлку - https://habr.com/ru/company/funcorp/blog/419109/
+    private Object lastInsets;
     private boolean inLayout;
     private int minDrawerMargin;
     private float scrimOpacity;
@@ -70,7 +76,6 @@ public class DrawerLayoutContainer extends FrameLayout {
         setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
         setFocusableInTouchMode(true);
 
-        // поясни за чёлку - https://habr.com/ru/company/funcorp/blog/419109/
         if (Build.VERSION.SDK_INT >= 21) {
             setFitsSystemWindows(true);
             setOnApplyWindowInsetsListener((v, insets) -> {
@@ -131,7 +136,6 @@ public class DrawerLayoutContainer extends FrameLayout {
         setDrawerPosition(drawerPosition + dx);
     }
 
-    // tells to ProGuard don't delete this method
     @Keep
     public void setDrawerPosition(float value) {
         drawerPosition = value;

@@ -11,16 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.gdev2018.master.AndroidUtilities;
-///*import com.github.gdev2018.master.ContactsController;*/
-import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.LocaleController;
-///*import com.github.gdev2018.master.MessagesController;*/
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfig;
-import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.support.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
+import com.github.gdev2018.master.ContactsController;
+import com.github.gdev2018.master.FileLog;
+import com.github.gdev2018.master.MessagesController;
+import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Cells.GraySectionCell;
 import com.github.gdev2018.master.ui.Cells.ProfileSearchCell;
@@ -36,7 +36,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
 
     private Context mContext;
     private SparseArray<TLRPC.User> ignoreUsers;
-    private ArrayList<TLRPC.User> searchResult = new ArrayList<>();
+    private ArrayList<TLObject> searchResult = new ArrayList<>();
     private ArrayList<CharSequence> searchResultNames = new ArrayList<>();
     private SearchAdapterHelper searchAdapterHelper;
     private SparseArray<?> checkedMap;
@@ -67,6 +67,11 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
             public void onSetHashtags(ArrayList<SearchAdapterHelper.HashtagObject> arrayList, HashMap<String, SearchAdapterHelper.HashtagObject> hashMap) {
 
             }
+
+            @Override
+            public SparseArray<TLRPC.User> getExcludeUsers() {
+                return ignoreUsers;
+            }
         });
     }
 
@@ -90,7 +95,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
             searchResult.clear();
             searchResultNames.clear();
             if (allowUsernameSearch) {
-                searchAdapterHelper.queryServerSearch(null, true, allowChats, allowBots, true, channelId, false);
+                searchAdapterHelper.queryServerSearch(null, true, allowChats, allowBots, true, channelId, 0);
             }
             notifyDataSetChanged();
         } else {
@@ -113,10 +118,10 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
     private void processSearch(final String query) {
         AndroidUtilities.runOnUIThread(() -> {
             if (allowUsernameSearch) {
-                searchAdapterHelper.queryServerSearch(query, true, allowChats, allowBots, true, channelId, false);
+                searchAdapterHelper.queryServerSearch(query, true, allowChats, allowBots, true, channelId, -1);
             }
             final int currentAccount = UserConfig.selectedAccount;
-///*            final ArrayList<TLRPC.TL_contact> contactsCopy = new ArrayList<>(ContactsController.getInstance(currentAccount).contacts);*/
+            final ArrayList<TLRPC.TL_contact> contactsCopy = new ArrayList<>(ContactsController.getInstance(currentAccount).contacts);
             Utilities.searchQueue.postRunnable(() -> {
                 String search1 = query.trim().toLowerCase();
                 if (search1.length() == 0) {
@@ -133,58 +138,59 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                     search[1] = search2;
                 }
 
-                ArrayList<TLRPC.User> resultArray = new ArrayList<>();
+                ArrayList<TLObject> resultArray = new ArrayList<>();
                 ArrayList<CharSequence> resultArrayNames = new ArrayList<>();
 
-///*                for (int a = 0; a < contactsCopy.size(); a++) {
-//                    TLRPC.TL_contact contact = contactsCopy.get(a);
-//                    TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(contact.user_id);
-//                    if (user.id == UserConfig.getInstance(currentAccount).getClientUserId() || onlyMutual && !user.mutual_contact) {
-//                        continue;
-//                    }
-//
-//                    String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
-//                    String tName = LocaleController.getInstance().getTranslitString(name);
-//                    if (name.equals(tName)) {
-//                        tName = null;
-//                    }
-//
-//                    int found = 0;
-//                    for (String q : search) {
-//                        if (name.startsWith(q) || name.contains(" " + q) || tName != null && (tName.startsWith(q) || tName.contains(" " + q))) {
-//                            found = 1;
-//                        } else if (user.username != null && user.username.startsWith(q)) {
-//                            found = 2;
-//                        }
-//
-//                        if (found != 0) {
-//                            if (found == 1) {
-//                                resultArrayNames.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, q));
-//                            } else {
-//                                resultArrayNames.add(AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q));
-//                            }
-//                            resultArray.add(user);
-//                            break;
-//                        }
-//                    }
-//                }*/
+                for (int a = 0; a < contactsCopy.size(); a++) {
+                    TLRPC.TL_contact contact = contactsCopy.get(a);
+                    TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(contact.user_id);
+                    if (user.id == UserConfig.getInstance(currentAccount).getClientUserId() || onlyMutual && !user.mutual_contact || ignoreUsers != null && ignoreUsers.indexOfKey(contact.user_id) >= 0) {
+                        continue;
+                    }
+
+                    String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
+                    String tName = LocaleController.getInstance().getTranslitString(name);
+                    if (name.equals(tName)) {
+                        tName = null;
+                    }
+
+                    int found = 0;
+                    for (String q : search) {
+                        if (name.startsWith(q) || name.contains(" " + q) || tName != null && (tName.startsWith(q) || tName.contains(" " + q))) {
+                            found = 1;
+                        } else if (user.username != null && user.username.startsWith(q)) {
+                            found = 2;
+                        }
+
+                        if (found != 0) {
+                            if (found == 1) {
+                                resultArrayNames.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, q));
+                            } else {
+                                resultArrayNames.add(AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q));
+                            }
+                            resultArray.add(user);
+                            break;
+                        }
+                    }
+                }
 
                 updateSearchResults(resultArray, resultArrayNames);
             });
         });
     }
 
-    private void updateSearchResults(final ArrayList<TLRPC.User> users, final ArrayList<CharSequence> names) {
+    private void updateSearchResults(final ArrayList<TLObject> users, final ArrayList<CharSequence> names) {
         AndroidUtilities.runOnUIThread(() -> {
             searchResult = users;
             searchResultNames = names;
+            searchAdapterHelper.mergeResults(users);
             notifyDataSetChanged();
         });
     }
 
     @Override
     public boolean isEnabled(RecyclerView.ViewHolder holder) {
-        return holder.getAdapterPosition() != searchResult.size();
+        return holder.getItemViewType() == 0;
     }
 
     @Override

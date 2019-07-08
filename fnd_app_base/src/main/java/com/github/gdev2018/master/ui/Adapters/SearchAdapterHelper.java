@@ -4,15 +4,20 @@ package com.github.gdev2018.master.ui.Adapters;
 
 import android.util.SparseArray;
 
+import com.github.gdev2018.master.SQLite.SQLiteCursor;
+import com.github.gdev2018.master.SQLite.SQLitePreparedStatement;
 import com.github.gdev2018.master.AndroidUtilities;
-///*import com.github.gdev2018.master.MessagesController;
-//import com.github.gdev2018.master.MessagesStorage;*/
+import com.github.gdev2018.master.FileLog;
+import com.github.gdev2018.master.MessagesController;
+import com.github.gdev2018.master.MessagesStorage;
 import com.github.gdev2018.master.UserConfig;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
+///*import com.github.gdev2018.master.ui.ChatUsersActivity;*/
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,6 +32,10 @@ public class SearchAdapterHelper {
     public interface SearchAdapterHelperDelegate {
         void onDataSetChanged();
         void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap);
+
+        default SparseArray<TLRPC.User> getExcludeUsers() {
+            return null;
+        }
     }
 
     private SearchAdapterHelperDelegate delegate;
@@ -34,11 +43,11 @@ public class SearchAdapterHelper {
     private int reqId = 0;
     private int lastReqId;
     private String lastFoundUsername = null;
-    private ArrayList<TLObject> globalSearch = new ArrayList<>();
     private ArrayList<TLObject> localServerSearch = new ArrayList<>();
+    private ArrayList<TLObject> globalSearch = new ArrayList<>();
     private SparseArray<TLObject> globalSearchMap = new SparseArray<>();
-    private ArrayList<TLRPC.ChannelParticipant> groupSearch = new ArrayList<>();
-    private ArrayList<TLRPC.ChannelParticipant> groupSearch2 = new ArrayList<>();
+    private ArrayList<TLObject> groupSearch = new ArrayList<>();
+    private SparseArray<TLObject> groupSearchMap = new SparseArray<>();
     private ArrayList<TLObject> localSearchResults;
 
     private int currentAccount = UserConfig.selectedAccount;
@@ -46,10 +55,6 @@ public class SearchAdapterHelper {
     private int channelReqId = 0;
     private int channelLastReqId;
     private String lastFoundChannel;
-
-    private int channelReqId2 = 0;
-    private int channelLastReqId2;
-    private String lastFoundChannel2;
 
     private boolean allResultsAreGlobal;
 
@@ -67,7 +72,7 @@ public class SearchAdapterHelper {
         allResultsAreGlobal = global;
     }
 
-    public void queryServerSearch(final String query, final boolean allowUsername, final boolean allowChats, final boolean allowBots, final boolean allowSelf, final int channelId, final boolean kicked) {
+    public void queryServerSearch(final String query, final boolean allowUsername, final boolean allowChats, final boolean allowBots, final boolean allowSelf, final int channelId, final int type) {
         if (reqId != 0) {
             ConnectionsManager.getInstance(currentAccount).cancelRequest(reqId, true);
             reqId = 0;
@@ -76,70 +81,61 @@ public class SearchAdapterHelper {
             ConnectionsManager.getInstance(currentAccount).cancelRequest(channelReqId, true);
             channelReqId = 0;
         }
-        if (channelReqId2 != 0) {
-            ConnectionsManager.getInstance(currentAccount).cancelRequest(channelReqId2, true);
-            channelReqId2 = 0;
-        }
         if (query == null) {
             groupSearch.clear();
-            groupSearch2.clear();
+            groupSearchMap.clear();
             globalSearch.clear();
             globalSearchMap.clear();
             localServerSearch.clear();
             lastReqId = 0;
             channelLastReqId = 0;
-            channelLastReqId2 = 0;
             delegate.onDataSetChanged();
             return;
         }
-        if (query.length() > 0 && channelId != 0) {
-            TLRPC.TL_channels_getParticipants req = new TLRPC.TL_channels_getParticipants();
-            if (kicked) {
-                req.filter = new TLRPC.TL_channelParticipantsBanned();
-            } else {
-                req.filter = new TLRPC.TL_channelParticipantsSearch();
-            }
-            req.filter.q = query;
-            req.limit = 50;
-            req.offset = 0;
-///*            req.channel = MessagesController.getInstance(currentAccount).getInputChannel(channelId);*/
-            final int currentReqId = ++channelLastReqId;
-            channelReqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-                if (currentReqId == channelLastReqId) {
-                    if (error == null) {
-                        TLRPC.TL_channels_channelParticipants res = (TLRPC.TL_channels_channelParticipants) response;
-                        lastFoundChannel = query.toLowerCase();
-///*                        MessagesController.getInstance(currentAccount).putUsers(res.users, false);*/
-                        groupSearch = res.participants;
-                        delegate.onDataSetChanged();
-                    }
-                }
-                channelReqId = 0;
-            }), ConnectionsManager.RequestFlagFailOnServerErrors);
-            if (kicked) {
-                req = new TLRPC.TL_channels_getParticipants();
-                req.filter = new TLRPC.TL_channelParticipantsKicked();
+        if (query.length() > 0) {
+            if (channelId != 0) {
+                TLRPC.TL_channels_getParticipants req = new TLRPC.TL_channels_getParticipants();
+///*                if (type == ChatUsersActivity.TYPE_ADMIN) {
+//                    req.filter = new TLRPC.TL_channelParticipantsAdmins();
+//                } else if (type == ChatUsersActivity.TYPE_KICKED) {
+//                    req.filter = new TLRPC.TL_channelParticipantsBanned();
+//                } else if (type == ChatUsersActivity.TYPE_BANNED) {
+//                    req.filter = new TLRPC.TL_channelParticipantsKicked();
+//                } else {
+//                    req.filter = new TLRPC.TL_channelParticipantsSearch();
+//                }*/
                 req.filter.q = query;
                 req.limit = 50;
                 req.offset = 0;
-///*                req.channel = MessagesController.getInstance(currentAccount).getInputChannel(channelId);*/
-                final int currentReqId2 = ++channelLastReqId2;
-                channelReqId2 = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-                    if (currentReqId2 == channelLastReqId2) {
+                req.channel = MessagesController.getInstance(currentAccount).getInputChannel(channelId);
+                final int currentReqId = ++channelLastReqId;
+                channelReqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                    if (currentReqId == channelLastReqId) {
                         if (error == null) {
                             TLRPC.TL_channels_channelParticipants res = (TLRPC.TL_channels_channelParticipants) response;
-                            lastFoundChannel2 = query.toLowerCase();
-///*                            MessagesController.getInstance(currentAccount).putUsers(res.users, false);*/
-                            groupSearch2 = res.participants;
+                            lastFoundChannel = query.toLowerCase();
+                            MessagesController.getInstance(currentAccount).putUsers(res.users, false);
+                            groupSearch.clear();
+                            groupSearchMap.clear();
+                            groupSearch.addAll(res.participants);
+                            for (int a = 0, N = res.participants.size(); a < N; a++) {
+                                TLRPC.ChannelParticipant participant = res.participants.get(a);
+                                groupSearchMap.put(participant.user_id, participant);
+                            }
+                            if (localSearchResults != null) {
+                                mergeResults(localSearchResults);
+                            }
                             delegate.onDataSetChanged();
                         }
                     }
-                    channelReqId2 = 0;
+                    channelReqId = 0;
                 }), ConnectionsManager.RequestFlagFailOnServerErrors);
+            } else {
+                lastFoundChannel = query.toLowerCase();
             }
         } else {
             groupSearch.clear();
-            groupSearch2.clear();
+            groupSearchMap.clear();
             channelLastReqId = 0;
             delegate.onDataSetChanged();
         }
@@ -156,9 +152,9 @@ public class SearchAdapterHelper {
                             globalSearch.clear();
                             globalSearchMap.clear();
                             localServerSearch.clear();
-///*                            MessagesController.getInstance(currentAccount).putChats(res.chats, false);
-//                            MessagesController.getInstance(currentAccount).putUsers(res.users, false);
-//                            MessagesStorage.getInstance(currentAccount).putUsersAndChats(res.users, res.chats, true, true);*/
+                            MessagesController.getInstance(currentAccount).putChats(res.chats, false);
+                            MessagesController.getInstance(currentAccount).putUsers(res.users, false);
+                            MessagesStorage.getInstance(currentAccount).putUsersAndChats(res.users, res.chats, true, true);
                             SparseArray<TLRPC.Chat> chatsMap = new SparseArray<>();
                             SparseArray<TLRPC.User> usersMap = new SparseArray<>();
                             for (int a = 0; a < res.chats.size(); a++) {
@@ -230,6 +226,7 @@ public class SearchAdapterHelper {
                             if (localSearchResults != null) {
                                 mergeResults(localSearchResults);
                             }
+                            mergeExcludeResults();
                             delegate.onDataSetChanged();
                         }
                     }
@@ -253,33 +250,33 @@ public class SearchAdapterHelper {
         if (hashtagsLoadedFromDb) {
             return true;
         }
-///*        MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
-//            try {
-//                SQLiteCursor cursor = MessagesStorage.getInstance(currentAccount).getDatabase().queryFinalized("SELECT id, date FROM hashtag_recent_v2 WHERE 1");
-//                final ArrayList<HashtagObject> arrayList = new ArrayList<>();
-//                final HashMap<String, HashtagObject> hashMap = new HashMap<>();
-//                while (cursor.next()) {
-//                    HashtagObject hashtagObject = new HashtagObject();
-//                    hashtagObject.hashtag = cursor.stringValue(0);
-//                    hashtagObject.date = cursor.intValue(1);
-//                    arrayList.add(hashtagObject);
-//                    hashMap.put(hashtagObject.hashtag, hashtagObject);
-//                }
-//                cursor.dispose();
-//                Collections.sort(arrayList, (lhs, rhs) -> {
-//                    if (lhs.date < rhs.date) {
-//                        return 1;
-//                    } else if (lhs.date > rhs.date) {
-//                        return -1;
-//                    } else {
-//                        return 0;
-//                    }
-//                });
-//                AndroidUtilities.runOnUIThread(() -> setHashtags(arrayList, hashMap));
-//            } catch (Exception e) {
-//                FileLog.e(e);
-//            }
-//        });*/
+        MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
+            try {
+                SQLiteCursor cursor = MessagesStorage.getInstance(currentAccount).getDatabase().queryFinalized("SELECT id, date FROM hashtag_recent_v2 WHERE 1");
+                final ArrayList<HashtagObject> arrayList = new ArrayList<>();
+                final HashMap<String, HashtagObject> hashMap = new HashMap<>();
+                while (cursor.next()) {
+                    HashtagObject hashtagObject = new HashtagObject();
+                    hashtagObject.hashtag = cursor.stringValue(0);
+                    hashtagObject.date = cursor.intValue(1);
+                    arrayList.add(hashtagObject);
+                    hashMap.put(hashtagObject.hashtag, hashtagObject);
+                }
+                cursor.dispose();
+                Collections.sort(arrayList, (lhs, rhs) -> {
+                    if (lhs.date < rhs.date) {
+                        return 1;
+                    } else if (lhs.date > rhs.date) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                });
+                AndroidUtilities.runOnUIThread(() -> setHashtags(arrayList, hashMap));
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
         return false;
     }
 
@@ -299,6 +296,11 @@ public class SearchAdapterHelper {
                     localServerSearch.remove(u);
                     globalSearchMap.remove(u.id);
                 }
+                TLObject participant = groupSearchMap.get(user.id);
+                if (participant != null) {
+                    groupSearch.remove(participant);
+                    groupSearchMap.remove(user.id);
+                }
             } else if (obj instanceof TLRPC.Chat) {
                 TLRPC.Chat chat = (TLRPC.Chat) obj;
                 TLRPC.Chat c = (TLRPC.Chat) globalSearchMap.get(-chat.id);
@@ -307,6 +309,24 @@ public class SearchAdapterHelper {
                     localServerSearch.remove(c);
                     globalSearchMap.remove(-c.id);
                 }
+            }
+        }
+    }
+
+    public void mergeExcludeResults() {
+        if (delegate == null) {
+            return;
+        }
+        SparseArray<TLRPC.User> ignoreUsers = delegate.getExcludeUsers();
+        if (ignoreUsers == null) {
+            return;
+        }
+        for (int a = 0, size = ignoreUsers.size(); a < size; a++) {
+            TLRPC.User u = (TLRPC.User) globalSearchMap.get(ignoreUsers.keyAt(a));
+            if (u != null) {
+                globalSearch.remove(u);
+                localServerSearch.remove(u);
+                globalSearchMap.remove(u.id);
             }
         }
     }
@@ -351,33 +371,33 @@ public class SearchAdapterHelper {
     }
 
     private void putRecentHashtags(final ArrayList<HashtagObject> arrayList) {
-///*        MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
-//            try {
-//                MessagesStorage.getInstance(currentAccount).getDatabase().beginTransaction();
-//                SQLitePreparedStatement state = MessagesStorage.getInstance(currentAccount).getDatabase().executeFast("REPLACE INTO hashtag_recent_v2 VALUES(?, ?)");
-//                for (int a = 0; a < arrayList.size(); a++) {
-//                    if (a == 100) {
-//                        break;
-//                    }
-//                    HashtagObject hashtagObject = arrayList.get(a);
-//                    state.requery();
-//                    state.bindString(1, hashtagObject.hashtag);
-//                    state.bindInteger(2, hashtagObject.date);
-//                    state.step();
-//                }
-//                state.dispose();
-//                MessagesStorage.getInstance(currentAccount).getDatabase().commitTransaction();
-//                if (arrayList.size() >= 100) {
-//                    MessagesStorage.getInstance(currentAccount).getDatabase().beginTransaction();
-//                    for (int a = 100; a < arrayList.size(); a++) {
-//                        MessagesStorage.getInstance(currentAccount).getDatabase().executeFast("DELETE FROM hashtag_recent_v2 WHERE id = '" + arrayList.get(a).hashtag + "'").stepThis().dispose();
-//                    }
-//                    MessagesStorage.getInstance(currentAccount).getDatabase().commitTransaction();
-//                }
-//            } catch (Exception e) {
-//                FileLog.e(e);
-//            }
-//        });*/
+        MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
+            try {
+                MessagesStorage.getInstance(currentAccount).getDatabase().beginTransaction();
+                SQLitePreparedStatement state = MessagesStorage.getInstance(currentAccount).getDatabase().executeFast("REPLACE INTO hashtag_recent_v2 VALUES(?, ?)");
+                for (int a = 0; a < arrayList.size(); a++) {
+                    if (a == 100) {
+                        break;
+                    }
+                    HashtagObject hashtagObject = arrayList.get(a);
+                    state.requery();
+                    state.bindString(1, hashtagObject.hashtag);
+                    state.bindInteger(2, hashtagObject.date);
+                    state.step();
+                }
+                state.dispose();
+                MessagesStorage.getInstance(currentAccount).getDatabase().commitTransaction();
+                if (arrayList.size() >= 100) {
+                    MessagesStorage.getInstance(currentAccount).getDatabase().beginTransaction();
+                    for (int a = 100; a < arrayList.size(); a++) {
+                        MessagesStorage.getInstance(currentAccount).getDatabase().executeFast("DELETE FROM hashtag_recent_v2 WHERE id = '" + arrayList.get(a).hashtag + "'").stepThis().dispose();
+                    }
+                    MessagesStorage.getInstance(currentAccount).getDatabase().commitTransaction();
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
     }
 
     public ArrayList<TLObject> getGlobalSearch() {
@@ -388,12 +408,8 @@ public class SearchAdapterHelper {
         return localServerSearch;
     }
 
-    public ArrayList<TLRPC.ChannelParticipant> getGroupSearch() {
+    public ArrayList<TLObject> getGroupSearch() {
         return groupSearch;
-    }
-
-    public ArrayList<TLRPC.ChannelParticipant> getGroupSearch2() {
-        return groupSearch2;
     }
 
     public ArrayList<HashtagObject> getHashtags() {
@@ -408,20 +424,16 @@ public class SearchAdapterHelper {
         return lastFoundChannel;
     }
 
-    public String getLastFoundChannel2() {
-        return lastFoundChannel2;
-    }
-
     public void clearRecentHashtags() {
         hashtags = new ArrayList<>();
         hashtagsByText = new HashMap<>();
-///*        MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
-//            try {
-//                MessagesStorage.getInstance(currentAccount).getDatabase().executeFast("DELETE FROM hashtag_recent_v2 WHERE 1").stepThis().dispose();
-//            } catch (Exception e) {
-//                FileLog.e(e);
-//            }
-//        });*/
+        MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
+            try {
+                MessagesStorage.getInstance(currentAccount).getDatabase().executeFast("DELETE FROM hashtag_recent_v2 WHERE 1").stepThis().dispose();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
     }
 
     public void setHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {

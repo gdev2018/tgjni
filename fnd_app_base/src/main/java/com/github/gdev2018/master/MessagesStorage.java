@@ -1337,7 +1337,7 @@ public class MessagesStorage {
                     }
                 }
                 Collections.reverse(messages);
-                AndroidUtilities.runOnUIThread(() -> NotificationsController.getInstance(currentAccount).processLoadedUnreadMessages(pushDialogs, messages, pushMessages, users, chats, encryptedChats));
+//                /*AndroidUtilities.runOnUIThread(() -> NotificationsController.getInstance(currentAccount).processLoadedUnreadMessages(pushDialogs, messages, pushMessages, users, chats, encryptedChats));*/
             } catch (Exception e) {
                 FileLog.e(e);
             }

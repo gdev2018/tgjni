@@ -4393,7 +4393,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
         MessagesStorage.getInstance(currentAccount).getUnsentMessages(1000);
     }
 
-    protected void processUnsentMessages(final ArrayList<TLRPC.Message> messages, final ArrayList<TLRPC.User> users, final ArrayList<TLRPC.Chat> chats, final ArrayList<TLRPC.EncryptedChat> encryptedChats) {
+    public void processUnsentMessages(final ArrayList<TLRPC.Message> messages, final ArrayList<TLRPC.User> users, final ArrayList<TLRPC.Chat> chats, final ArrayList<TLRPC.EncryptedChat> encryptedChats) {
         AndroidUtilities.runOnUIThread(() -> {
             MessagesController.getInstance(currentAccount).putUsers(users, true);
             MessagesController.getInstance(currentAccount).putChats(chats, true);

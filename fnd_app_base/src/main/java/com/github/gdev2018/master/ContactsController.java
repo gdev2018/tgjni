@@ -782,7 +782,7 @@ public class ContactsController {
         return ret;
     }
 
-    protected void migratePhoneBookToV7(final SparseArray<Contact> contactHashMap) {
+    public void migratePhoneBookToV7(final SparseArray<Contact> contactHashMap) {
         Utilities.globalQueue.postRunnable(() -> {
             if (migratingContacts) {
                 return;
@@ -816,7 +816,7 @@ public class ContactsController {
         });
     }
 
-    protected void performSyncPhoneBook(final HashMap<String, Contact> contactHashMap, final boolean request, final boolean first, final boolean schedule, final boolean force, final boolean checkCount, final boolean canceled) {
+    public void performSyncPhoneBook(final HashMap<String, Contact> contactHashMap, final boolean request, final boolean first, final boolean schedule, final boolean force, final boolean checkCount, final boolean canceled) {
         if (!first && !contactsBookLoaded) {
             return;
         }

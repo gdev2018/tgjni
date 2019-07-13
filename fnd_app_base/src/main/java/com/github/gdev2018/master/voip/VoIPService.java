@@ -63,7 +63,8 @@ import java.util.List;
 public class VoIPService extends VoIPBaseService{
 
 	public static final int CALL_MIN_LAYER = 65;
-	public static final int CALL_MAX_LAYER = VoIPController.getConnectionMaxLayer();
+///*	public static final int CALL_MAX_LAYER = VoIPController.getConnectionMaxLayer();*/
+	public static final int CALL_MAX_LAYER = 65;
 
 	public static final int STATE_HANGING_UP = 10;
 	public static final int STATE_EXCHANGING_KEYS = 12;

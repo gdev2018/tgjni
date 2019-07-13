@@ -698,7 +698,7 @@ public class DownloadController implements NotificationCenter.NotificationCenter
         });
     }
 
-    protected void processDownloadObjects(int type, ArrayList<DownloadObject> objects) {
+    public void processDownloadObjects(int type, ArrayList<DownloadObject> objects) {
         if (objects.isEmpty()) {
             return;
         }
@@ -741,7 +741,7 @@ public class DownloadController implements NotificationCenter.NotificationCenter
         }
     }
 
-    protected void newDownloadObjectsAvailable(int downloadMask) {
+    public void newDownloadObjectsAvailable(int downloadMask) {
         int mask = getCurrentDownloadMask();
         if ((mask & AUTODOWNLOAD_TYPE_PHOTO) != 0 && (downloadMask & AUTODOWNLOAD_TYPE_PHOTO) != 0 && photoDownloadQueue.isEmpty()) {
             MessagesStorage.getInstance(currentAccount).getDownloadQueue(AUTODOWNLOAD_TYPE_PHOTO);

@@ -282,7 +282,7 @@ public class LocationController implements NotificationCenter.NotificationCenter
         stop(false);
     }
 
-    protected void update() {
+    public void update() {
         if (sharingLocations.isEmpty()) {
             return;
         }

@@ -63,7 +63,7 @@ public class DialogCell extends BaseCell {
     private long currentDialogId;
     private int currentEditDate;
     private boolean isDialogCell;
-    private int lastMessageDate;
+    private int lastMessageDate;    // TODO: 2019-07-26 Ошибка в телеге! Для дат нужно long. Лучше long, т.к. int - предел 2 млрд.сек - это 60+ лет.
     private int unreadCount;
     private boolean markUnread;
     private int mentionCount;

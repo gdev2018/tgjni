@@ -368,4 +368,22 @@ public class Utilities {
         }
         return new byte[0];
     }
+
+    public static long getLongMD5(final String str) {
+        try {
+            System.out.println(MD5(str));
+            final byte[] digest = MD5(str).getBytes();
+            return (getLongOffset(digest, 0) ^ getLongOffset(digest, 8));
+        } catch (Exception var2) {
+            return -1;
+        }
+    }
+
+    private static long getLongOffset(final byte[] array, final int offset) {
+        long value = 0;
+        for (int i = 0; i < 8; i++) {
+            value = ((value << 8) | (array[offset+i] & 0xFF));
+        }
+        return value;
+    }
 }

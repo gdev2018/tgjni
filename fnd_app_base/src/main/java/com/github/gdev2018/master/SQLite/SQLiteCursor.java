@@ -1,4 +1,10 @@
-/*  * This is the source code of Telegram for Android v. 5.x.x.  * It is licensed under GNU GPL v. 2 or later.  * You should have received a copy of the license in this archive (see LICENSE).  *  * Copyright Nikolai Kudashov, 2013-2018.  */
+/*
+ * This is the source code of Telegram for Android v. 5.x.x.
+ * It is licensed under GNU GPL v. 2 or later.
+ * You should have received a copy of the license in this archive (see LICENSE).
+ *
+ * Copyright Nikolai Kudashov, 2013-2018.
+ */
 
 package com.github.gdev2018.master.SQLite;
 
@@ -24,6 +30,10 @@ public class SQLiteCursor {
 	public boolean isNull(int columnIndex) throws SQLiteException {
 		checkRow();
 		return columnIsNull(preparedStatement.getStatementHandle(), columnIndex) == 1;
+	}
+
+	public SQLitePreparedStatement getPreparedStatement() {
+		return preparedStatement;
 	}
 
 	public int intValue(int columnIndex) throws SQLiteException {
@@ -95,6 +105,10 @@ public class SQLiteCursor {
 		return preparedStatement.getStatementHandle();
 	}
 
+	public int getColumnCount() {
+		return columnCount(preparedStatement.getStatementHandle());
+	}
+
 	public void dispose() {
 		preparedStatement.dispose();
 	}
@@ -106,6 +120,7 @@ public class SQLiteCursor {
 	}
 
 	native int columnType(long statementHandle, int columnIndex);
+	native int columnCount(long statementHandle);
 	native int columnIsNull(long statementHandle, int columnIndex);
 	native int columnIntValue(long statementHandle, int columnIndex);
 	native long columnLongValue(long statementHandle, int columnIndex);

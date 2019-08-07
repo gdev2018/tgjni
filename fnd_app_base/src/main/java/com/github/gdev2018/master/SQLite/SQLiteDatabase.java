@@ -1,4 +1,10 @@
-/*  * This is the source code of Telegram for Android v. 5.x.x.  * It is licensed under GNU GPL v. 2 or later.  * You should have received a copy of the license in this archive (see LICENSE).  *  * Copyright Nikolai Kudashov, 2013-2018.  */
+/*
+ * This is the source code of Telegram for Android v. 5.x.x.
+ * It is licensed under GNU GPL v. 2 or later.
+ * You should have received a copy of the license in this archive (see LICENSE).
+ *
+ * Copyright Nikolai Kudashov, 2013-2018.
+ */
 
 package com.github.gdev2018.master.SQLite;
 
@@ -43,6 +49,20 @@ public class SQLiteDatabase {
 		} finally {
 			cursor.dispose();
 		}
+	}
+
+	public void explainQuery(String sql, Object... args) throws SQLiteException {
+		checkOpened();
+		SQLiteCursor cursor = new SQLitePreparedStatement(this, "EXPLAIN QUERY PLAN " + sql, true).query(args);
+		while (cursor.next()) {
+			int count = cursor.getColumnCount();
+			StringBuilder builder = new StringBuilder();
+			for (int a = 0; a < count; a++) {
+				builder.append(cursor.stringValue(a)).append(", ");
+			}
+			FileLog.d("EXPLAIN QUERY PLAN " + builder.toString());
+		}
+		cursor.dispose();
 	}
 
 	public SQLiteCursor queryFinalized(String sql, Object... args) throws SQLiteException {
@@ -91,9 +111,9 @@ public class SQLiteDatabase {
         commitTransaction(sqliteHandle);
     }
 
-	static {
-            System.loadLibrary("tmessages.29");
-	}
+//	static {
+//            System.loadLibrary("tmessages.29");
+//	}
 
 	native long opendb(String fileName, String tempDir) throws SQLiteException;
 	native void closedb(long sqliteHandle) throws SQLiteException;

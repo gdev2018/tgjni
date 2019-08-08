@@ -26,7 +26,7 @@ public class FileLog {
     private File networkFile = null;
     private boolean initied;
 
-    private final static String tag = "tmessages";
+    private final static String tag = "plabmsg";
 
     private static volatile FileLog Instance = null;
     public static FileLog getInstance() {
@@ -112,7 +112,7 @@ public class FileLog {
                 @Override
                 public void run() {
                     try {
-                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + message + "\n");
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/plabmsg: " + message + "\n");
                         getInstance().streamWriter.write(exception.toString());
                         getInstance().streamWriter.flush();
                     } catch (Exception e) {
@@ -134,7 +134,7 @@ public class FileLog {
                 @Override
                 public void run() {
                     try {
-                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + message + "\n");
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/plabmsg: " + message + "\n");
                         getInstance().streamWriter.flush();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -155,10 +155,10 @@ public class FileLog {
                 @Override
                 public void run() {
                     try {
-                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + e + "\n");
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/plabmsg: " + e + "\n");
                         StackTraceElement[] stack = e.getStackTrace();
                         for (int a = 0; a < stack.length; a++) {
-                            getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + stack[a] + "\n");
+                            getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/plabmsg: " + stack[a] + "\n");
                         }
                         getInstance().streamWriter.flush();
                     } catch (Exception e) {
@@ -182,7 +182,7 @@ public class FileLog {
                 @Override
                 public void run() {
                     try {
-                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " D/tmessages: " + message + "\n");
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " D/plabmsg: " + message + "\n");
                         getInstance().streamWriter.flush();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -203,7 +203,7 @@ public class FileLog {
                 @Override
                 public void run() {
                     try {
-                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " W/tmessages: " + message + "\n");
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " W/plabmsg: " + message + "\n");
                         getInstance().streamWriter.flush();
                     } catch (Exception e) {
                         e.printStackTrace();

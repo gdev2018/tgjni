@@ -67,6 +67,7 @@ import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.support.widget.GridLayoutManager;
 import com.github.gdev2018.master.support.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
@@ -1410,7 +1411,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
             return false;
         });
-        currentPage = MessagesController.getGlobalEmojiSettings().getInt("selected_page", 0);
+        currentPage = BaseApplication.getGlobalEmojiSettings().getInt("selected_page", 0);
         Emoji.loadRecentEmoji();
         adapters.get(0).notifyDataSetChanged();
     }
@@ -1576,7 +1577,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
         if (currentPage != newPage) {
             currentPage = newPage;
-            MessagesController.getGlobalEmojiSettings().edit().putInt("selected_page", newPage).commit();
+            BaseApplication.getGlobalEmojiSettings().edit().putInt("selected_page", newPage).commit();
         }
     }
 

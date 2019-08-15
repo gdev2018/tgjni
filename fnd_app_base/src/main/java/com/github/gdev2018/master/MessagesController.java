@@ -369,65 +369,65 @@ public class MessagesController implements NotificationCenter.NotificationCenter
 
     public MessagesController(int num) {
         currentAccount = num;
-        ImageLoader.getInstance();
-        MessagesStorage.getInstance(currentAccount);
-        LocationController.getInstance(currentAccount);
-        AndroidUtilities.runOnUIThread(() -> {
-            MessagesController messagesController = getInstance(currentAccount);
-            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.FileDidUpload);
-            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.FileDidFailUpload);
-            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.fileDidLoad);
-            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.fileDidFailedLoad);
-            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.messageReceivedByServer);
-            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.updateMessageMedia);
-        });
-        addSupportUser();
-        if (currentAccount == 0) {
-            notificationsPreferences = BaseApplication.mApplicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
-            mainPreferences = BaseApplication.mApplicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
-            emojiPreferences = BaseApplication.mApplicationContext.getSharedPreferences("emoji", Activity.MODE_PRIVATE);
-        } else {
-            notificationsPreferences = BaseApplication.mApplicationContext.getSharedPreferences("Notifications" + currentAccount, Activity.MODE_PRIVATE);
-            mainPreferences = BaseApplication.mApplicationContext.getSharedPreferences("mainconfig" + currentAccount, Activity.MODE_PRIVATE);
-            emojiPreferences = BaseApplication.mApplicationContext.getSharedPreferences("emoji" + currentAccount, Activity.MODE_PRIVATE);
-        }
-
-        enableJoined = notificationsPreferences.getBoolean("EnableContactJoined", true);
-        secretWebpagePreview = mainPreferences.getInt("secretWebpage2", 2);
-        maxGroupCount = mainPreferences.getInt("maxGroupCount", 200);
-        maxMegagroupCount = mainPreferences.getInt("maxMegagroupCount", 10000);
-        maxRecentGifsCount = mainPreferences.getInt("maxRecentGifsCount", 200);
-        maxRecentStickersCount = mainPreferences.getInt("maxRecentStickersCount", 30);
-        maxFaveStickersCount = mainPreferences.getInt("maxFaveStickersCount", 5);
-        maxEditTime = mainPreferences.getInt("maxEditTime", 3600);
-        ratingDecay = mainPreferences.getInt("ratingDecay", 2419200);
-        linkPrefix = mainPreferences.getString("linkPrefix", "t.me");
-        callReceiveTimeout = mainPreferences.getInt("callReceiveTimeout", 20000);
-        callRingTimeout = mainPreferences.getInt("callRingTimeout", 90000);
-        callConnectTimeout = mainPreferences.getInt("callConnectTimeout", 30000);
-        callPacketTimeout = mainPreferences.getInt("callPacketTimeout", 10000);
-        maxPinnedDialogsCount = mainPreferences.getInt("maxPinnedDialogsCount", 5);
-        maxMessageLength = mainPreferences.getInt("maxMessageLength", 4096);
-        maxCaptionLength = mainPreferences.getInt("maxCaptionLength", 1024);
-        mapProvider = mainPreferences.getInt("mapProvider", 0);
-        availableMapProviders = mainPreferences.getInt("availableMapProviders", 3);
-        mapKey = mainPreferences.getString("pk", null);
-        installReferer = mainPreferences.getString("installReferer", null);
-        defaultP2pContacts = mainPreferences.getBoolean("defaultP2pContacts", false);
-        revokeTimeLimit = mainPreferences.getInt("revokeTimeLimit", revokeTimeLimit);
-        revokeTimePmLimit = mainPreferences.getInt("revokeTimePmLimit", revokeTimePmLimit);
-        canRevokePmInbox = mainPreferences.getBoolean("canRevokePmInbox", canRevokePmInbox);
-        preloadFeaturedStickers = mainPreferences.getBoolean("preloadFeaturedStickers", false);
-        proxyDialogId = mainPreferences.getLong("proxy_dialog", 0);
-        proxyDialogAddress = mainPreferences.getString("proxyDialogAddress", null);
-        nextTosCheckTime = notificationsPreferences.getInt("nextTosCheckTime", 0);
-        venueSearchBot = mainPreferences.getString("venueSearchBot", "foursquare");
-        gifSearchBot = mainPreferences.getString("gifSearchBot", "gif");
-        imageSearchBot = mainPreferences.getString("imageSearchBot", "pic");
-        blockedCountry = mainPreferences.getBoolean("blockedCountry", false);
-        dcDomainName = mainPreferences.getString("dcDomainName", ConnectionsManager.native_isTestBackend(currentAccount) != 0 ? "tapv2.stel.com" : "apv2.stel.com");
-        webFileDatacenterId = mainPreferences.getInt("webFileDatacenterId", ConnectionsManager.native_isTestBackend(currentAccount) != 0 ? 2 : 4);
-        suggestedLangCode = mainPreferences.getString("suggestedLangCode", "en");
+///*        ImageLoader.getInstance();
+//        MessagesStorage.getInstance(currentAccount);
+//        LocationController.getInstance(currentAccount);
+//        AndroidUtilities.runOnUIThread(() -> {
+//            MessagesController messagesController = getInstance(currentAccount);
+//            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.FileDidUpload);
+//            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.FileDidFailUpload);
+//            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.fileDidLoad);
+//            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.fileDidFailedLoad);
+//            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.messageReceivedByServer);
+//            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.updateMessageMedia);
+//        });
+//        addSupportUser();
+//        if (currentAccount == 0) {
+//            notificationsPreferences = BaseApplication.mApplicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
+//            mainPreferences = BaseApplication.mApplicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+//            emojiPreferences = BaseApplication.mApplicationContext.getSharedPreferences("emoji", Activity.MODE_PRIVATE);
+//        } else {
+//            notificationsPreferences = BaseApplication.mApplicationContext.getSharedPreferences("Notifications" + currentAccount, Activity.MODE_PRIVATE);
+//            mainPreferences = BaseApplication.mApplicationContext.getSharedPreferences("mainconfig" + currentAccount, Activity.MODE_PRIVATE);
+//            emojiPreferences = BaseApplication.mApplicationContext.getSharedPreferences("emoji" + currentAccount, Activity.MODE_PRIVATE);
+//        }
+//
+//        enableJoined = notificationsPreferences.getBoolean("EnableContactJoined", true);
+//        secretWebpagePreview = mainPreferences.getInt("secretWebpage2", 2);
+//        maxGroupCount = mainPreferences.getInt("maxGroupCount", 200);
+//        maxMegagroupCount = mainPreferences.getInt("maxMegagroupCount", 10000);
+//        maxRecentGifsCount = mainPreferences.getInt("maxRecentGifsCount", 200);
+//        maxRecentStickersCount = mainPreferences.getInt("maxRecentStickersCount", 30);
+//        maxFaveStickersCount = mainPreferences.getInt("maxFaveStickersCount", 5);
+//        maxEditTime = mainPreferences.getInt("maxEditTime", 3600);
+//        ratingDecay = mainPreferences.getInt("ratingDecay", 2419200);
+//        linkPrefix = mainPreferences.getString("linkPrefix", "t.me");
+//        callReceiveTimeout = mainPreferences.getInt("callReceiveTimeout", 20000);
+//        callRingTimeout = mainPreferences.getInt("callRingTimeout", 90000);
+//        callConnectTimeout = mainPreferences.getInt("callConnectTimeout", 30000);
+//        callPacketTimeout = mainPreferences.getInt("callPacketTimeout", 10000);
+//        maxPinnedDialogsCount = mainPreferences.getInt("maxPinnedDialogsCount", 5);
+//        maxMessageLength = mainPreferences.getInt("maxMessageLength", 4096);
+//        maxCaptionLength = mainPreferences.getInt("maxCaptionLength", 1024);
+//        mapProvider = mainPreferences.getInt("mapProvider", 0);
+//        availableMapProviders = mainPreferences.getInt("availableMapProviders", 3);
+//        mapKey = mainPreferences.getString("pk", null);
+//        installReferer = mainPreferences.getString("installReferer", null);
+//        defaultP2pContacts = mainPreferences.getBoolean("defaultP2pContacts", false);
+//        revokeTimeLimit = mainPreferences.getInt("revokeTimeLimit", revokeTimeLimit);
+//        revokeTimePmLimit = mainPreferences.getInt("revokeTimePmLimit", revokeTimePmLimit);
+//        canRevokePmInbox = mainPreferences.getBoolean("canRevokePmInbox", canRevokePmInbox);
+//        preloadFeaturedStickers = mainPreferences.getBoolean("preloadFeaturedStickers", false);
+//        proxyDialogId = mainPreferences.getLong("proxy_dialog", 0);
+//        proxyDialogAddress = mainPreferences.getString("proxyDialogAddress", null);
+//        nextTosCheckTime = notificationsPreferences.getInt("nextTosCheckTime", 0);
+//        venueSearchBot = mainPreferences.getString("venueSearchBot", "foursquare");
+//        gifSearchBot = mainPreferences.getString("gifSearchBot", "gif");
+//        imageSearchBot = mainPreferences.getString("imageSearchBot", "pic");
+//        blockedCountry = mainPreferences.getBoolean("blockedCountry", false);
+//        dcDomainName = mainPreferences.getString("dcDomainName", ConnectionsManager.native_isTestBackend(currentAccount) != 0 ? "tapv2.stel.com" : "apv2.stel.com");
+//        webFileDatacenterId = mainPreferences.getInt("webFileDatacenterId", ConnectionsManager.native_isTestBackend(currentAccount) != 0 ? 2 : 4);
+//        suggestedLangCode = mainPreferences.getString("suggestedLangCode", "en");*/
     }
 
     public void updateConfig(final TLRPC.TL_config config) {

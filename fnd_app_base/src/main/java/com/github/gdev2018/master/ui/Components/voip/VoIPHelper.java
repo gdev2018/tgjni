@@ -446,7 +446,7 @@ public class VoIPHelper{
 	}
 
 	public static void showCallDebugSettings(final Context context){
-		final SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+		final SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
 		LinearLayout ll=new LinearLayout(context);
 		ll.setOrientation(LinearLayout.VERTICAL);
 

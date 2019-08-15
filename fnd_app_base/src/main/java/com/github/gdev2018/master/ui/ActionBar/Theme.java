@@ -1789,7 +1789,7 @@ public class Theme {
 
         ThemeInfo applyingTheme = null;
         try {
-            preferences = MessagesController.getGlobalMainSettings();
+            preferences = BaseApplication.getGlobalMainSettings();
             String theme = preferences.getString("theme", null);
             if (theme != null) {
                 applyingTheme = themesDict.get(theme);
@@ -1838,7 +1838,7 @@ public class Theme {
     private static Field BitmapDrawable_mColorFilter;
 
     public static void saveAutoNightThemeConfig() {
-        SharedPreferences.Editor editor = MessagesController.getGlobalMainSettings().edit();
+        SharedPreferences.Editor editor = BaseApplication.getGlobalMainSettings().edit();
         editor.putInt("selectedAutoNightType", selectedAutoNightType);
         editor.putBoolean("autoNightScheduleByLocation", autoNightScheduleByLocation);
         editor.putFloat("autoNightBrighnessThreshold", autoNightBrighnessThreshold);
@@ -2322,7 +2322,7 @@ public class Theme {
         try {
             if (themeInfo.pathToFile != null || themeInfo.assetName != null) {
                 if (!nightTheme && save) {
-                    SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                    SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("theme", themeInfo.name);
                     if (removeWallpaperOverride) {
@@ -2337,7 +2337,7 @@ public class Theme {
                 }
             } else {
                 if (!nightTheme && save) {
-                    SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                    SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.remove("theme");
                     if (removeWallpaperOverride) {
@@ -2652,7 +2652,7 @@ public class Theme {
             if (currentTheme != currentNightTheme) {
                 currentDayTheme = currentTheme;
             }
-            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("theme", currentDayTheme.name);
             editor.commit();
@@ -3594,7 +3594,7 @@ public class Theme {
 
     public static void setThemeWallpaper(String themeName, Bitmap bitmap, File path) {
         currentColors.remove(key_chat_wallpaper);
-        MessagesController.getGlobalMainSettings().edit().remove("overrideThemeWallpaper").commit();
+        BaseApplication.getGlobalMainSettings().edit().remove("overrideThemeWallpaper").commit();
         if (bitmap != null) {
             themedWallpaper = new BitmapDrawable(bitmap);
             saveCurrentTheme(themeName, false);
@@ -3737,7 +3737,7 @@ public class Theme {
         }
         Utilities.searchQueue.postRunnable(() -> {
             synchronized (wallpaperSync) {
-                SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
                 boolean overrideTheme = preferences.getBoolean("overrideThemeWallpaper", false);
                 isWallpaperMotion = preferences.getBoolean("selectedBackgroundMotion", false);
                 isPatternWallpaper = preferences.getLong("selectedPattern", 0) != 0;
@@ -3872,7 +3872,7 @@ public class Theme {
     public static final long DEFAULT_BACKGROUND_ID = 1000001;
     public static final long THEME_BACKGROUND_ID = -2;
     public static long getSelectedBackgroundId() {
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         int background = preferences.getInt("selectedBackground", (int) DEFAULT_BACKGROUND_ID);
         if (background != DEFAULT_BACKGROUND_ID) {
             preferences.edit().putLong("selectedBackground2", background).remove("selectedBackground").commit();

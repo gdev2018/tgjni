@@ -190,7 +190,7 @@ public class VoIPController{
 
 			}
 		}
-		SharedPreferences preferences=MessagesController.getGlobalMainSettings();
+		SharedPreferences preferences=BaseApplication.getGlobalMainSettings();
 		boolean dump=preferences.getBoolean("dbg_dump_call_stats", false);
 		nativeSetConfig(nativeInst, recvTimeout, initTimeout, dataSavingOption,
 				!(sysAecAvailable && VoIPServerConfig.getBoolean("use_system_aec", true)),

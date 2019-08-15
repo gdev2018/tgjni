@@ -6123,7 +6123,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
             videoEditedInfo.rotationValue = 0;
         }
 
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         int selectedCompression = preferences.getInt("compress_video2", 1);
         int compressionsCount;
         if (videoEditedInfo.originalWidth > 1280 || videoEditedInfo.originalHeight > 1280) {

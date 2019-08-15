@@ -2574,7 +2574,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         compressItem.setTag(1);
         compressItem.setScaleType(ImageView.ScaleType.CENTER);
         compressItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         selectedCompression = preferences.getInt("compress_video2", 1);
         if (selectedCompression <= 0) {
             compressItem.setImageResource(R.drawable.video_240);
@@ -2693,7 +2693,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 currentTTL = 0;
             }
             if (currentTTL == 0) {
-                SharedPreferences preferences1 = MessagesController.getGlobalMainSettings();
+                SharedPreferences preferences1 = BaseApplication.getGlobalMainSettings();
                 numberPicker.setValue(preferences1.getInt("self_destruct", 7));
             } else {
                 if (currentTTL >= 0 && currentTTL < 21) {
@@ -2754,7 +2754,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             buttonsLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 36, Gravity.TOP | Gravity.RIGHT));
             textView.setOnClickListener(v1 -> {
                 int value = numberPicker.getValue();
-                SharedPreferences preferences1 = MessagesController.getGlobalMainSettings();
+                SharedPreferences preferences1 = BaseApplication.getGlobalMainSettings();
                 SharedPreferences.Editor editor = preferences1.edit();
                 editor.putInt("self_destruct", value);
                 editor.commit();
@@ -8293,7 +8293,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     private void didChangedCompressionLevel(boolean request) {
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("compress_video2", selectedCompression);
         editor.commit();
@@ -8724,7 +8724,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
                         videoDuration *= 1000;
 
-                        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
                         selectedCompression = preferences.getInt("compress_video2", 1);
                         if (originalWidth > 1280 || originalHeight > 1280) {
                             compressionsCount = 5;

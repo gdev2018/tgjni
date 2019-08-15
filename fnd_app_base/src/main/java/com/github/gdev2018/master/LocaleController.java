@@ -375,8 +375,8 @@ public class LocaleController {
         boolean override = false;
 
         try {
-//            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
             SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
+//            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
             String lang = preferences.getString("language", null);
             if (lang != null) {
                 currentInfo = getLanguageFromDict(lang);
@@ -872,7 +872,7 @@ public class LocaleController {
             if (override) {
                 languageOverride = localeInfo.shortName;
 
-//                SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+//                SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
                 SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("language", localeInfo.getKey());
@@ -1572,9 +1572,9 @@ public class LocaleController {
             }
         }
         if (user != null && user.status != null && user.status.expires <= 0) {
-            if (MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(user.id)) {
-                return getString("Online", R.string.Online);
-            }
+///*            if (MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(user.id)) {
+//                return getString("Online", R.string.Online);
+//            }*/
         }
         if (user == null || user.status == null || user.status.expires == 0 || UserObject.isDeleted(user) || user instanceof TLRPC.TL_userEmpty) {
             return getString("ALongTimeAgo", R.string.ALongTimeAgo);
@@ -1704,7 +1704,7 @@ public class LocaleController {
                         if (newLocale != null) {
                             languageOverride = localeInfo.shortName;
 
-//                            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+//                            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
                             SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("language", localeInfo.getKey());

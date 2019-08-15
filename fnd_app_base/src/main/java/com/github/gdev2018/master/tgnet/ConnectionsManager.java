@@ -140,7 +140,7 @@ public class ConnectionsManager {
             config.mkdirs();
         }
         String configPath = config.toString();
-        SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
+        SharedPreferences preferences = BaseApplication.getGlobalBroadcastingsSettings();
         boolean enablePushConnection = preferences.getBoolean("pushConnection", true);
         try {
             systemLangCode = LocaleController.getSystemLocaleStringIso639().toLowerCase();
@@ -322,7 +322,7 @@ public class ConnectionsManager {
     }
 
     public void switchBackend() {
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         preferences.edit().remove("language_showed2").commit();
         native_switchBackend(currentAccount);
     }

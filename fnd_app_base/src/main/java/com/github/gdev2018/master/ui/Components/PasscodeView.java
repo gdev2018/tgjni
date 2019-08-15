@@ -1034,7 +1034,7 @@ public class PasscodeView extends FrameLayout {
             backgroundDrawable = Theme.getCachedWallpaper();
             backgroundFrameLayout.setBackgroundColor(0xbf000000);
         } else {
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
 //            int selectedBackground = preferences.getInt("selectedBackground", 1000001);
 //            if (selectedBackground == 1000001) {
 //                backgroundFrameLayout.setBackgroundColor(0xff517c9e);

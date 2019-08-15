@@ -1034,7 +1034,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 				.setContentIntent(PendingIntent.getActivity(this, 0, intent, 0));
 		Uri soundProviderUri=Uri.parse("content://"+BuildConfig.APPLICATION_ID+".call_sound_provider/start_ringing");
 		if (Build.VERSION.SDK_INT >= 26) {
-			SharedPreferences nprefs=MessagesController.getGlobalNotificationsSettings();
+			SharedPreferences nprefs=BaseApplication.getGlobalBroadcastingsSettings();
 			int chanIndex=nprefs.getInt("calls_notification_channel", 0);
 			NotificationManager nm=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 			NotificationChannel oldChannel=nm.getNotificationChannel("incoming_calls"+chanIndex);
@@ -1427,7 +1427,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 				|| "taimen".equals(Build.PRODUCT)		// Pixel 2 XL
 				|| "blueline".equals(Build.PRODUCT)		// Pixel 3
 				|| "crosshatch".equals(Build.PRODUCT)	// Pixel 3 XL
-				|| MessagesController.getGlobalMainSettings().getBoolean("dbg_force_connection_service", false)
+				|| BaseApplication.getGlobalMainSettings().getBoolean("dbg_force_connection_service", false)
 				;
 	}
 

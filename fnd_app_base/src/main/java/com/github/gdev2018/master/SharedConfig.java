@@ -345,7 +345,7 @@ public class SharedConfig {
 
     public static void setSuggestStickers(int type) {
         suggestStickers = type;
-        ///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+        ///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("suggestStickers", suggestStickers);
@@ -359,7 +359,7 @@ public class SharedConfig {
             playOrderReversed = !playOrderReversed;
         }
 ///*        MediaController.getInstance().checkIsNextMediaFileDownloaded();*/
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("shuffleMusic", shuffleMusic);
@@ -372,7 +372,7 @@ public class SharedConfig {
         if (repeatMode > 2) {
             repeatMode = 0;
         }
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("repeatMode", repeatMode);
@@ -381,7 +381,7 @@ public class SharedConfig {
 
     public static void toggleSaveToGallery() {
         saveToGallery = !saveToGallery;
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("save_gallery", saveToGallery);
@@ -391,7 +391,7 @@ public class SharedConfig {
 
     public static void toggleAutoplayGifs() {
         autoplayGifs = !autoplayGifs;
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("autoplay_gif", autoplayGifs);
@@ -399,7 +399,7 @@ public class SharedConfig {
     }
 
     public static boolean isSecretMapPreviewSet() {
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         return preferences.contains("mapPreviewType");
 ///*        return false;*/
@@ -407,7 +407,7 @@ public class SharedConfig {
 
     public static void setSecretMapPreviewType(int value) {
         mapPreviewType = value;
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("mapPreviewType", mapPreviewType);
@@ -416,7 +416,7 @@ public class SharedConfig {
 
     public static void toogleRaiseToSpeak() {
         raiseToSpeak = !raiseToSpeak;
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("raise_to_speak", raiseToSpeak);
@@ -425,7 +425,7 @@ public class SharedConfig {
 
     public static void toggleCustomTabs() {
         customTabs = !customTabs;
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("custom_tabs", customTabs);
@@ -434,7 +434,7 @@ public class SharedConfig {
 
     public static void toggleDirectShare() {
         directShare = !directShare;
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("direct_share", directShare);
@@ -443,7 +443,7 @@ public class SharedConfig {
 
     public static void toggleStreamMedia() {
         streamMedia = !streamMedia;
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("streamMedia", streamMedia);
@@ -452,7 +452,7 @@ public class SharedConfig {
 
     public static void toggleStreamAllVideo() {
         streamAllVideo = !streamAllVideo;
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("streamAllVideo", streamAllVideo);
@@ -461,7 +461,7 @@ public class SharedConfig {
 
     public static void toggleSaveStreamMedia() {
         saveStreamMedia = !saveStreamMedia;
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("saveStreamMedia", saveStreamMedia);
@@ -470,7 +470,7 @@ public class SharedConfig {
 
     public static void toggleInappCamera() {
         inappCamera = !inappCamera;
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("inappCamera", inappCamera);
@@ -479,7 +479,7 @@ public class SharedConfig {
 
     public static void toggleRoundCamera16to9() {
         roundCamera16to9 = !roundCamera16to9;
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("roundCamera16to9", roundCamera16to9);
@@ -488,7 +488,7 @@ public class SharedConfig {
 
     public static void toggleGroupPhotosEnabled() {
         groupPhotosEnabled = !groupPhotosEnabled;
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("groupPhotosEnabled", groupPhotosEnabled);
@@ -570,7 +570,7 @@ public class SharedConfig {
     public static void deleteProxy(ProxyInfo proxyInfo) {
         if (currentProxy == proxyInfo) {
             currentProxy = null;
-///*            SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+///*            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
             SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
             boolean enabled = preferences.getBoolean("proxy_enabled", false);
             SharedPreferences.Editor editor = preferences.edit();

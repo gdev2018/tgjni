@@ -707,7 +707,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         });
         Utilities.globalQueue.postRunnable(() -> {
             try {
-                currentPlaybackSpeed = MessagesController.getGlobalMainSettings().getFloat("playbackSpeed", 1.0f);
+                currentPlaybackSpeed = BaseApplication.getGlobalMainSettings().getFloat("playbackSpeed", 1.0f);
                 sensorManager = (SensorManager) BaseApplication.mApplicationContext.getSystemService(Context.SENSOR_SERVICE);
                 linearSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
                 gravitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
@@ -2076,7 +2076,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         } else if (videoPlayer != null) {
             videoPlayer.setPlaybackSpeed(currentPlaybackSpeed);
         }
-        MessagesController.getGlobalMainSettings().edit().putFloat("playbackSpeed", speed).commit();
+        BaseApplication.getGlobalMainSettings().edit().putFloat("playbackSpeed", speed).commit();
     }
 
     public float getPlaybackSpeed() {

@@ -2594,7 +2594,7 @@ public static void lockOrientation(Activity activity) {
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(View.GONE);
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", R.string.ConnectingConnectProxy).toUpperCase());
         pickerBottomLayout.doneButton.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = MessagesController.getGlobalMainSettings().edit();
+            SharedPreferences.Editor editor = BaseApplication.getGlobalMainSettings().edit();
             editor.putBoolean("proxy_enabled", true);
             editor.putString("proxy_ip", address);
             int p = Utilities.parseInt(port);

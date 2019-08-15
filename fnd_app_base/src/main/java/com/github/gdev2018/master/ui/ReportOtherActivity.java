@@ -142,7 +142,7 @@ public class ReportOtherActivity extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-///*        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+///*        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
 //        boolean animations = preferences.getBoolean("view_animations", true);
 //        if (!animations) {
 //            firstNameField.requestFocus();

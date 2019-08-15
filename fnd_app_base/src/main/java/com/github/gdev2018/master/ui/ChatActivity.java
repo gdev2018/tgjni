@@ -3180,7 +3180,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                        }
 //                        if (allowStickersPanel && (!mentionsAdapter.isBotContext() || (allowContextBotPanel || allowContextBotPanelSecond))) {
 //                            if (currentEncryptedChat != null && mentionsAdapter.isBotContext()) {
-//                                SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+//                                SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
 //                                if (!preferences.getBoolean("secretbot", false)) {
 //                                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
 //                                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
@@ -4835,7 +4835,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //    }
 //
 //    private void showGifHint() {
-//        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+//        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
 //        if (preferences.getBoolean("gifhint", false)) {
 //            return;
 //        }
@@ -5401,7 +5401,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
 //                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> {
 //                        messagesController.secretWebpagePreview = 1;
-//                        MessagesController.getGlobalMainSettings().edit().putInt("secretWebpage2", MessagesController.getInstance(currentAccount).secretWebpagePreview).commit();
+//                        BaseApplication.getGlobalMainSettings().edit().putInt("secretWebpage2", MessagesController.getInstance(currentAccount).secretWebpagePreview).commit();
 //                        foundUrls = null;
 //                        searchLinks(charSequence, force);
 //                    });
@@ -5410,7 +5410,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                    showDialog(builder.create());
 //
 //                    messagesController.secretWebpagePreview = 0;
-//                    MessagesController.getGlobalMainSettings().edit().putInt("secretWebpage2", messagesController.secretWebpagePreview).commit();
+//                    BaseApplication.getGlobalMainSettings().edit().putInt("secretWebpage2", messagesController.secretWebpagePreview).commit();
 //                });
 //                return;
 //            }
@@ -9777,7 +9777,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                if (currentChat != null) {
 //                    isChannel = ChatObject.isChannel(currentChat) && !currentChat.megagroup;
 //                }
-//                SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+//                SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
 //                String key = isChannel ? "needShowRoundHintChannel" : "needShowRoundHint";
 //                if (preferences.getBoolean(key, true)) {
 //                    if (Utilities.random.nextFloat() < 0.2f) {
@@ -10453,7 +10453,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //
 //        if (firstOpen) {
 //            if (MessagesController.getInstance(currentAccount).isProxyDialog(dialog_id)) {
-//                SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
+//                SharedPreferences preferences = BaseApplication.getGlobalBroadcastingsSettings();
 //                if (preferences.getLong("proxychannel", 0) != dialog_id) {
 //                    preferences.edit().putLong("proxychannel", dialog_id).commit();
 //                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());

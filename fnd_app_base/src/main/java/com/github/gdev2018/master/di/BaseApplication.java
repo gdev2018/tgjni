@@ -46,7 +46,10 @@ public class BaseApplication extends Application {
     public static volatile NetworkInfo currentNetworkInfo;
     public static volatile boolean unableGetCurrentNetwork;
     public static volatile Handler mApplicationHandler;
-    public static SharedPreferences mMainPreferences;
+    public static SharedPreferences mGlobalMainSettings;
+    public static volatile SharedPreferences mGlobalBroadcastingsPreferences;
+    public static volatile SharedPreferences mGlobalMainPreferences;
+    public static volatile SharedPreferences mGlobalEmojiPreferences;
 
     protected static volatile boolean mApplicationInited = false;
     public static volatile boolean isScreenOn = false;
@@ -106,7 +109,9 @@ public class BaseApplication extends Application {
 
 //        AndroidUtilities.runOnUIThread(BaseApplication::startPushService);
 
-        mMainPreferences = mApplicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+        mGlobalBroadcastingsPreferences = mApplicationContext.getSharedPreferences("globalBroadcastings", Activity.MODE_PRIVATE);
+        mGlobalMainPreferences = mApplicationContext.getSharedPreferences("globalmainconfig", Activity.MODE_PRIVATE);
+        mGlobalEmojiPreferences = mApplicationContext.getSharedPreferences("globalemoji", Activity.MODE_PRIVATE);
 
         // If Debug mode then show additional metrics
         if (BuildConfig.DEBUG) {
@@ -121,10 +126,14 @@ public class BaseApplication extends Application {
 
     }
 
-
-
+    public static SharedPreferences getGlobalBroadcastingsSettings() {
+        return mGlobalBroadcastingsPreferences;
+    }
     public static SharedPreferences getGlobalMainSettings() {
-        return mMainPreferences;
+        return mGlobalMainPreferences;
+    }
+    public static SharedPreferences getGlobalEmojiSettings() {
+        return mGlobalEmojiPreferences;
     }
 
     public static BaseApplication get(Context context) {

@@ -105,7 +105,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             public void run() {
                 try {
                     if (cameraInfos == null) {
-                        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
                         String cache = preferences.getString("cameraCache", null);
                         Comparator<Size> comparator = new Comparator<Size>() {
                             @Override

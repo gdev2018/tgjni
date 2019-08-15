@@ -1038,7 +1038,7 @@ public class AlertsCreator {
 //    public static Dialog createFreeSpaceDialog(final LaunchActivity parentActivity) {
 //        final int selected[] = new int[1];
 //
-/////*        SharedPreferences preferences = MessagesController.getGlobalMainSettings();*/
+/////*        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();*/
 //        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
 //        int keepMedia = preferences.getInt("keep_media", 2);
 //        if (keepMedia == 2) {
@@ -1100,7 +1100,7 @@ public class AlertsCreator {
 //        builder.setTitle(LocaleController.getString("LowDiskSpaceTitle", R.string.LowDiskSpaceTitle));
 //        builder.setMessage(LocaleController.getString("LowDiskSpaceMessage", R.string.LowDiskSpaceMessage));
 //        builder.setView(linearLayout);
-/////*        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> MessagesController.getGlobalMainSettings().edit().putInt("keep_media", selected[0]).commit());
+/////*        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> BaseApplication.getGlobalMainSettings().edit().putInt("keep_media", selected[0]).commit());
 ////        builder.setNeutralButton(LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache), (dialog, which) -> parentActivity.presentFragment(new CacheControlActivity()));*/
 //        return builder.create();
 //    }

@@ -616,7 +616,7 @@ public class Emoji {
     }
 
     public static void saveRecentEmoji() {
-        SharedPreferences preferences = MessagesController.getGlobalEmojiSettings();
+        SharedPreferences preferences = BaseApplication.getGlobalEmojiSettings();
         StringBuilder stringBuilder = new StringBuilder();
         for (HashMap.Entry<String, Integer> entry : emojiUseHistory.entrySet()) {
             if (stringBuilder.length() != 0) {
@@ -630,7 +630,7 @@ public class Emoji {
     }
 
     public static void clearRecentEmoji() {
-        SharedPreferences preferences = MessagesController.getGlobalEmojiSettings();
+        SharedPreferences preferences = BaseApplication.getGlobalEmojiSettings();
         preferences.edit().putBoolean("filled_default", true).commit();
         emojiUseHistory.clear();
         recentEmoji.clear();
@@ -642,7 +642,7 @@ public class Emoji {
             return;
         }
         recentEmojiLoaded = true;
-        SharedPreferences preferences = MessagesController.getGlobalEmojiSettings();
+        SharedPreferences preferences = BaseApplication.getGlobalEmojiSettings();
 
         String str;
         try {
@@ -717,7 +717,7 @@ public class Emoji {
     }
 
     public static void saveEmojiColors() {
-        SharedPreferences preferences = MessagesController.getGlobalEmojiSettings();
+        SharedPreferences preferences = BaseApplication.getGlobalEmojiSettings();
         StringBuilder stringBuilder = new StringBuilder();
         for (HashMap.Entry<String, String> entry : emojiColor.entrySet()) {
             if (stringBuilder.length() != 0) {

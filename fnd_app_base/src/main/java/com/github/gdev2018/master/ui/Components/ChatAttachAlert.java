@@ -68,6 +68,7 @@ import com.github.gdev2018.master.SharedConfig;
 import com.github.gdev2018.master.UserConfig;
 import com.github.gdev2018.master.VideoEditedInfo;
 import com.github.gdev2018.master.camera.*;
+import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.support.widget.LinearLayoutManager;
 import com.github.gdev2018.master.support.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.TLRPC;
@@ -811,7 +812,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     if (layoutManager.findLastVisibleItemPosition() > 1) {
                         hideHint();
                         hintShowed = false;
-                        MessagesController.getGlobalMainSettings().edit().putBoolean("bothint", true).commit();
+                        BaseApplication.getGlobalMainSettings().edit().putBoolean("bothint", true).commit();
                     }
                 }
                 updateLayout();
@@ -2240,7 +2241,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         if (editingMessageObject != null || !(baseFragment instanceof ChatActivity) || DataQuery.getInstance(currentAccount).inlineBots.isEmpty()) {
             return;
         }
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         if (preferences.getBoolean("bothint", false)) {
             return;
         }

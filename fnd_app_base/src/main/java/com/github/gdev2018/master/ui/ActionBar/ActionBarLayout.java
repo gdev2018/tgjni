@@ -43,6 +43,7 @@ import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.R;
+import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.ui.Components.CubicBezierInterpolator;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
@@ -739,7 +740,7 @@ public class ActionBarLayout extends FrameLayout {
         if (parentActivity.getCurrentFocus() != null) {
             AndroidUtilities.hideKeyboard(parentActivity.getCurrentFocus());
         }
-        boolean needAnimation = preview || !forceWithoutAnimation && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true);
+        boolean needAnimation = preview || !forceWithoutAnimation && BaseApplication.getGlobalMainSettings().getBoolean("view_animations", true);
 
         final BaseFragment currentFragment = !fragmentsStack.isEmpty() ? fragmentsStack.get(fragmentsStack.size() - 1) : null;
 
@@ -1027,7 +1028,7 @@ public class ActionBarLayout extends FrameLayout {
             AndroidUtilities.hideKeyboard(parentActivity.getCurrentFocus());
         }
         setInnerTranslationX(0);
-        boolean needAnimation = inPreviewMode || transitionAnimationPreviewMode || animated && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true);
+        boolean needAnimation = inPreviewMode || transitionAnimationPreviewMode || animated && BaseApplication.getGlobalMainSettings().getBoolean("view_animations", true);
         final BaseFragment currentFragment = fragmentsStack.get(fragmentsStack.size() - 1);
         BaseFragment previousFragment = null;
         if (fragmentsStack.size() > 1) {

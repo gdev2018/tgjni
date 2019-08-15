@@ -33,7 +33,7 @@ public class NotificationsService extends Service {
     }
 
     public void onDestroy() {
-///*        SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
+///*        SharedPreferences preferences = BaseApplication.getGlobalBroadcastingsSettings();
 //        if (preferences.getBoolean("pushService", true)) {
 //            Intent intent = new Intent("com.github.gdev2018.fnd.start");
 //            sendBroadcast(intent);

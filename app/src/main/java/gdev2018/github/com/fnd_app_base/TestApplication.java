@@ -118,8 +118,8 @@ public class TestApplication extends BaseApplication {
 //
 //
 //    public static void startPushService() {
-/////*        SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();*/
-//       SharedPreferences preferences = mMainPreferences;
+/////*        SharedPreferences preferences = BaseApplication.getGlobalBroadcastingsSettings();*/
+//       SharedPreferences preferences = mGlobalPreferences;
 //
 //        if (preferences.getBoolean("pushService", true)) {
 //            try {

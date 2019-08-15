@@ -723,7 +723,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         parentFragment = fragment;
         sizeNotifierLayout = parent;
         sizeNotifierLayout.setDelegate(this);
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         sendByEnter = preferences.getBoolean("send_by_enter", false);
 
         textFieldContainer = new LinearLayout(context);
@@ -1426,7 +1426,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         doneButtonProgress.setVisibility(View.INVISIBLE);
         doneButtonContainer.addView(doneButtonProgress, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        SharedPreferences sharedPreferences = MessagesController.getGlobalEmojiSettings();
+        SharedPreferences sharedPreferences = BaseApplication.getGlobalEmojiSettings();
         keyboardHeight = sharedPreferences.getInt("kbd_height", AndroidUtilities.dp(200));
         keyboardHeightLand = sharedPreferences.getInt("kbd_height_land3", AndroidUtilities.dp(200));
 
@@ -1476,7 +1476,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             audioVideoButtonAnimation = null;
         }
         if (animated) {
-            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
             boolean isChannel = false;
             if ((int) dialog_id < 0) {
                 TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-(int) dialog_id);
@@ -1960,7 +1960,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (SharedConfig.hasCameraCache) {
                 CameraController.getInstance().initCamera(null);
             }
-            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+            SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
             boolean currentModeVideo = preferences.getBoolean(isChannel ? "currentModeVideoChannel" : "currentModeVideo", isChannel);
             setRecordVideoButtonVisible(currentModeVideo, false);
         } else {
@@ -3347,10 +3347,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             currentPopupContentType = contentType;
 
             if (keyboardHeight <= 0) {
-                keyboardHeight = MessagesController.getGlobalEmojiSettings().getInt("kbd_height", AndroidUtilities.dp(200));
+                keyboardHeight = BaseApplication.getGlobalEmojiSettings().getInt("kbd_height", AndroidUtilities.dp(200));
             }
             if (keyboardHeightLand <= 0) {
-                keyboardHeightLand = MessagesController.getGlobalEmojiSettings().getInt("kbd_height_land3", AndroidUtilities.dp(200));
+                keyboardHeightLand = BaseApplication.getGlobalEmojiSettings().getInt("kbd_height_land3", AndroidUtilities.dp(200));
             }
             int currentHeight = AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y ? keyboardHeightLand : keyboardHeight;
             if (contentType == 1) {
@@ -3409,7 +3409,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private void setEmojiButtonImage() {
         int currentPage;
         if (emojiView == null) {
-            currentPage = MessagesController.getGlobalEmojiSettings().getInt("selected_page", 0);
+            currentPage = BaseApplication.getGlobalEmojiSettings().getInt("selected_page", 0);
         } else {
             currentPage = emojiView.getCurrentPage();
         }
@@ -3531,10 +3531,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         if (height > AndroidUtilities.dp(50) && keyboardVisible && !AndroidUtilities.isInMultiwindow) {
             if (isWidthGreater) {
                 keyboardHeightLand = height;
-                MessagesController.getGlobalEmojiSettings().edit().putInt("kbd_height_land3", keyboardHeightLand).commit();
+                BaseApplication.getGlobalEmojiSettings().edit().putInt("kbd_height_land3", keyboardHeightLand).commit();
             } else {
                 keyboardHeight = height;
-                MessagesController.getGlobalEmojiSettings().edit().putInt("kbd_height", keyboardHeight).commit();
+                BaseApplication.getGlobalEmojiSettings().edit().putInt("kbd_height", keyboardHeight).commit();
             }
         }
 

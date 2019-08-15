@@ -41,6 +41,7 @@ import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 
@@ -606,10 +607,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             emojiView.setVisibility(VISIBLE);
 
             if (keyboardHeight <= 0) {
-                keyboardHeight = MessagesController.getGlobalEmojiSettings().getInt("kbd_height", AndroidUtilities.dp(200));
+                keyboardHeight = BaseApplication.getGlobalEmojiSettings().getInt("kbd_height", AndroidUtilities.dp(200));
             }
             if (keyboardHeightLand <= 0) {
-                keyboardHeightLand = MessagesController.getGlobalEmojiSettings().getInt("kbd_height_land3", AndroidUtilities.dp(200));
+                keyboardHeightLand = BaseApplication.getGlobalEmojiSettings().getInt("kbd_height_land3", AndroidUtilities.dp(200));
             }
             int currentHeight = AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y ? keyboardHeightLand : keyboardHeight;
 
@@ -693,10 +694,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         if (height > AndroidUtilities.dp(50) && keyboardVisible && !AndroidUtilities.isInMultiwindow && !forceFloatingEmoji) {
             if (isWidthGreater) {
                 keyboardHeightLand = height;
-                MessagesController.getGlobalEmojiSettings().edit().putInt("kbd_height_land3", keyboardHeightLand).commit();
+                BaseApplication.getGlobalEmojiSettings().edit().putInt("kbd_height_land3", keyboardHeightLand).commit();
             } else {
                 keyboardHeight = height;
-                MessagesController.getGlobalEmojiSettings().edit().putInt("kbd_height", keyboardHeight).commit();
+                BaseApplication.getGlobalEmojiSettings().edit().putInt("kbd_height", keyboardHeight).commit();
             }
         }
 

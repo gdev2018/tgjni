@@ -344,27 +344,33 @@ public class MessagesController implements NotificationCenter.NotificationCenter
     }
 
     public static SharedPreferences getNotificationsSettings(int account) {
-        return getInstance(account).notificationsPreferences;
+///*        return getInstance(account).notificationsPreferences;*/
+        return BaseApplication.getGlobalBroadcastingsSettings();
     }
 
     public static SharedPreferences getGlobalNotificationsSettings() {
-        return getInstance(0).notificationsPreferences;
+///*        return getInstance(0).notificationsPreferences;*/
+        return BaseApplication.getGlobalBroadcastingsSettings();
     }
 
     public static SharedPreferences getMainSettings(int account) {
-        return getInstance(account).mainPreferences;
+///*        return getInstance(account).mainPreferences;*/
+        return BaseApplication.getGlobalMainSettings();
     }
 
     public static SharedPreferences getGlobalMainSettings() {
-        return getInstance(0).mainPreferences;
+///*        return getInstance(0).mainPreferences;*/
+        return BaseApplication.getGlobalMainSettings();
     }
 
     public static SharedPreferences getEmojiSettings(int account) {
-        return getInstance(account).emojiPreferences;
+///*        return getInstance(account).emojiPreferences;*/
+        return BaseApplication.getGlobalEmojiSettings();
     }
 
     public static SharedPreferences getGlobalEmojiSettings() {
-        return getInstance(0).emojiPreferences;
+///*        return getInstance(0).emojiPreferences;*/
+        return BaseApplication.getGlobalEmojiSettings();
     }
 
     public MessagesController(int num) {

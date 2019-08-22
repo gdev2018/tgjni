@@ -44,12 +44,14 @@ select hex(md5file('/tmp/agent_callbuilder.tcl'));
 #include <stdio.h>
 #include <string.h>
 
-#ifndef SQLITE_CORE
-  #include "sqlite3ext.h"
-  SQLITE_EXTENSION_INIT1
-#else
-  #include "sqlite3.h"
-#endif
+#include "sqlite3.h"
+
+//#ifndef SQLITE_CORE
+//  #include "sqlite3ext.h"
+//  SQLITE_EXTENSION_INIT1
+//#else
+//  #include "sqlite3.h"
+//#endif
 
 /*
  * If compiled on a machine that doesn't have a 32-bit integer,
@@ -421,7 +423,7 @@ int sqlite3_extension_init(
   char **pzErrMsg,
   const sqlite3_api_routines *pApi
 ){
-  SQLITE_EXTENSION_INIT2(pApi)
+  SQLITE_EXTENSION_INIT2(pApi);
   return sqlite3Md5Init(db);
 }
 #endif

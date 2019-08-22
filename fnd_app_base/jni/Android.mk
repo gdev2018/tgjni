@@ -140,7 +140,9 @@ LOCAL_CFLAGS 	:= -w -std=c11 -Os -DNULL=0 -DSOCKLEN_T=socklen_t -DLOCALE_NOT_USE
 LOCAL_CFLAGS 	+= -DANDROID_NDK -DDISABLE_IMPORTGL -fno-strict-aliasing -fprefetch-loop-arrays -DAVOID_TABLES -DANDROID_TILE_BASED_DECODE -DANDROID_ARMV6_IDCT -DHAVE_STRCHRNUL=0
 
 LOCAL_SRC_FILES     := \
-./sqlite/sqlite3.c
+./sqlite/sqlite3.c \
+./sqlite/md5.c
+
 
 include $(BUILD_STATIC_LIBRARY)
 

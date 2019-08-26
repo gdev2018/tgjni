@@ -26,17 +26,21 @@ public class TestActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-
         seconds = secondsToString(123);
 
         seconds = Long.toString(getCurrentTimeMillis2());
+        ((TextView)findViewById(R.id.seconds_textView)).setText(seconds);
 
         // needs this alone row to previous create db
         LocalSQLiteOpenHelper.getInstance(0);
 
+        LocalSQLiteOpenHelper.getInstance(0).getStorageQueue().postRunnable(() -> testSelect());
+    }
 
+    public void testSelect() {
         SQLiteCursor cursor = null;
         try {
+
             String sql = "SELECT s_Step, rot13(s_Step) FROM t_Steps";
 //            String sql = "SELECT s_Step, rot13(s_Step), md5(s_Step) FROM t_Steps";
 //                cursor = database.queryFinalized(String.format(Locale.US, sql, offset, count));
@@ -46,7 +50,7 @@ public class TestActivity extends Activity {
                 String rot13 = cursor.stringValue(1);
                 String md5 = cursor.stringValue(1);
 
-                ((TextView)findViewById(R.id.seconds_textView)).setText(seconds + s_Step + rot13 + md5);
+                ((TextView)findViewById(R.id.seconds_textView)).setText(s_Step + rot13 + md5);
             }
             cursor.dispose();
 
@@ -58,7 +62,6 @@ public class TestActivity extends Activity {
                 cursor.dispose();
             }
         }
-
     }
 
     public long getCurrentTimeMillis2() {

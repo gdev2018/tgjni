@@ -94,12 +94,15 @@ public class LocalSQLiteOpenHelper {
             database.enableloadextension(1);
 //            database.executeFast("SELECT sqlite3_enable_load_extension()").stepThis().dispose();
             // 1/done - sqlite3_enable_load_extension
-            // 2 - sqlitemd5
+            // 2/done - sqlitemd5
 			// 3 - 5. Persistent Loadable Extensions
 			// 4 - 6. Statically Linking A Run-Time Loadable Extension
             // 5 - v_Steps
             // 6 - libsqlitemd5 in libtmessages.29.so
             // 7 - Java_com_github_gdev2018_master_SQLite_SQLiteDatabase_enableloadextension in myWrapper.cpp
+            // 10 - do it on SQLite ODBC
+            // 11 - SQLite ODBC: тестировать, н-р, rtrim, вроде там уже есть extension-functions.c https://www.sqlite.org/contrib
+            // 12 - SQLite ODBC: пробовать положить libsqlitemd5.so в корневую папку и вызвать SELECT load_extension ('libsqlitemd5', 'sqlite3_sqlitemd_init')"
 
             database.executeFast("SELECT load_extension ('librot13', 'sqlite3_rot_init')").stepThis().dispose();
             database.executeFast("SELECT load_extension ('libsqlitemd5', 'sqlite3_sqlitemd_init')").stepThis().dispose();

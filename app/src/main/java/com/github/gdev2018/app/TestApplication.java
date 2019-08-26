@@ -1,26 +1,8 @@
-package gdev2018.github.com.fnd_app_base;
+package com.github.gdev2018.app;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.os.PowerManager;
-import android.text.TextUtils;
 
-import com.github.gdev2018.master.FileLog;
-import com.github.gdev2018.master.LocaleController;
-import com.github.gdev2018.master.MessagesController;
-import com.github.gdev2018.master.NotificationsService;
-import com.github.gdev2018.master.ScreenReceiver;
-import com.github.gdev2018.master.SharedConfig;
-import com.github.gdev2018.master.UserConfig;
-import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.di.BaseApplication;
-import com.github.gdev2018.master.tgnet.TLRPC;
 
 //import org.liveseyinc.plabor.BuildVars;
 //import org.liveseyinc.plabor.LocalAndroidUtilities;
@@ -42,9 +24,19 @@ import com.github.gdev2018.master.tgnet.TLRPC;
 
 public class TestApplication extends BaseApplication {
 
+    public static volatile Context mApplicationContext;
+
     @Override
     public void onCreate() {
+        try {
+            mApplicationContext = this.getApplicationContext();
+        } catch (Throwable var2) {
+        }
+
         super.onCreate();
+        if (mApplicationContext == null) {
+            mApplicationContext = this.getApplicationContext();
+        }
     }
 
 //

@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "gdev2018.github.com.fnd_app_base"
+        applicationId "com.github.gdev2018.app"
 //        minSdkVersion 'o at least 1'
         minSdkVersion 24
         targetSdkVersion 28

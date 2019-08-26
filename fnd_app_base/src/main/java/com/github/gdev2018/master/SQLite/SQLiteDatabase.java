@@ -111,6 +111,10 @@ public class SQLiteDatabase {
         commitTransaction(sqliteHandle);
     }
 
+	public void enableloadextension(int onoff) {
+		enableloadextension(sqliteHandle, onoff);
+	}
+
 //	static {
 //            System.loadLibrary("tmessages.29");
 //	}
@@ -119,4 +123,6 @@ public class SQLiteDatabase {
 	native void closedb(long sqliteHandle) throws SQLiteException;
     native void beginTransaction(long sqliteHandle);
     native void commitTransaction(long sqliteHandle);
+
+	native void enableloadextension(long sqliteHandle, int onoff);
 }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="gdev2018.github.com.fnd_app_base">
+    package="com.github.gdev2018.app">
 
     <application
         android:allowBackup="true"
-        android:name=".TestApplication"
+        android:name="com.github.gdev2018.app.TestApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup,android:icon,android:roundIcon,android:supportsRtl">
         <activity
-            android:name=".TestActivity"
+            android:name="com.github.gdev2018.app.TestActivity"
             android:label="@string/title_activity_test">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

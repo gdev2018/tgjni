@@ -43,13 +43,12 @@ select hex(md5file('/tmp/agent_callbuilder.tcl'));
 
 #include <stdio.h>
 #include <string.h>
-//#include "sqlite3.h"
 
 #ifndef SQLITE_CORE
-#include "sqlite3ext.h"
-SQLITE_EXTENSION_INIT1
+  #include "sqlite3ext.h"
+  SQLITE_EXTENSION_INIT1
 #else
-#include "sqlite3.h"
+  #include "sqlite3.h"
 #endif
 
 /*
@@ -415,9 +414,9 @@ int sqlite3Md5Init(sqlite3 *db){
 #ifdef _WIN32
 __declspec(dllexport)
 #endif
-
 #if !SQLITE_CORE
-int sqlite3_extension_init(
+// sqlitemd, not sqlitemd5
+int sqlite3_sqlitemd_init(
         sqlite3 *db,
         char **pzErrMsg,
         const sqlite3_api_routines *pApi
@@ -426,6 +425,7 @@ int sqlite3_extension_init(
     return sqlite3Md5Init(db);
 }
 #endif
+
 
 #endif
 

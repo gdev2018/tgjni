@@ -97,6 +97,7 @@ static int rot13CollFunc(
 #ifdef _WIN32
 __declspec(dllexport)
 #endif
+// rot, not rot13
 int sqlite3_rot_init(
         sqlite3 *db,
         char **pzErrMsg,

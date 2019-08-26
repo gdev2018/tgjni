@@ -41,14 +41,13 @@ public class TestActivity extends Activity {
         SQLiteCursor cursor = null;
         try {
 
-            String sql = "SELECT s_Step, rot13(s_Step) FROM t_Steps";
-//            String sql = "SELECT s_Step, rot13(s_Step), md5(s_Step) FROM t_Steps";
+            String sql = "SELECT s_Step, rot13(s_Step), hex(md5(s_Step)) FROM t_Steps";
 //                cursor = database.queryFinalized(String.format(Locale.US, sql, offset, count));
             cursor = LocalSQLiteOpenHelper.getInstance(0).getDatabase().queryFinalized(String.format(Locale.US, sql, 0, 10));
             while (cursor.next()) {
                 String s_Step = cursor.stringValue(0);
                 String rot13 = cursor.stringValue(1);
-                String md5 = cursor.stringValue(1);
+                String md5 = cursor.stringValue(2);
 
                 ((TextView)findViewById(R.id.seconds_textView)).setText(s_Step + rot13 + md5);
             }

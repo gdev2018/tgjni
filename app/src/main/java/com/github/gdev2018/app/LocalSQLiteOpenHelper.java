@@ -102,7 +102,7 @@ public class LocalSQLiteOpenHelper {
             // 7 - Java_com_github_gdev2018_master_SQLite_SQLiteDatabase_enableloadextension in myWrapper.cpp
 
             database.executeFast("SELECT load_extension ('librot13', 'sqlite3_rot_init')").stepThis().dispose();
-//            database.executeFast("SELECT load_extension ('libsqlitemd5')").stepThis().dispose();
+            database.executeFast("SELECT load_extension ('libsqlitemd5', 'sqlite3_sqlitemd_init')").stepThis().dispose();
 //            database.executeFast(".load libsqlitemd5.so").stepThis().dispose();
 
 

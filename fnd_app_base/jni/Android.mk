@@ -142,6 +142,35 @@ LOCAL_SRC_FILES     := \
 ./sqlite/sqlite3.c
 include $(BUILD_STATIC_LIBRARY)
 
+
+include $(CLEAR_VARS)
+LOCAL_PRELINK_MODULE := false
+
+LOCAL_MODULE 	:= tmessages.29
+LOCAL_CFLAGS 	:= -w -std=c11 -Os -DNULL=0 -DSOCKLEN_T=socklen_t -DLOCALE_NOT_USED -D_LARGEFILE_SOURCE=1
+LOCAL_CFLAGS 	+= -Drestrict='' -D__EMX__ -DOPUS_BUILD -DFIXED_POINT -DUSE_ALLOCA -DHAVE_LRINT -DHAVE_LRINTF -fno-math-errno
+LOCAL_CFLAGS 	+= -DANDROID_NDK -DDISABLE_IMPORTGL -fno-strict-aliasing -fprefetch-loop-arrays -DAVOID_TABLES -DANDROID_TILE_BASED_DECODE -DANDROID_ARMV6_IDCT -ffast-math -D__STDC_CONSTANT_MACROS
+LOCAL_CPPFLAGS 	:= -DBSD=1 -ffast-math -Os -funroll-loops -std=c++11
+LOCAL_LDLIBS 	:= -ljnigraphics -llog -lz -latomic -lOpenSLES -lEGL -lGLESv2 -landroid
+LOCAL_STATIC_LIBRARIES := webp sqlite tgnet crypto
+
+LOCAL_C_INCLUDES    := \
+./jni/boringssl/include \
+./jni/intro
+
+LOCAL_SRC_FILES     += \
+./jni.c \
+./image.c \
+./intro/IntroRenderer.c \
+./SqliteWrapper.cpp \
+./SqliteWrapperExtension.cpp \
+./TgNetWrapper.cpp \
+./NativeLoader.cpp
+
+include $(BUILD_SHARED_LIBRARY)
+
+
+
 include $(CLEAR_VARS)
 LOCAL_ARM_MODE  := arm
 LOCAL_CFLAGS 	:= -w -std=c11 -Os -DNULL=0 -DSOCKLEN_T=socklen_t -DLOCALE_NOT_USED -D_LARGEFILE_SOURCE=1
@@ -155,36 +184,9 @@ include $(CLEAR_VARS)
 LOCAL_ARM_MODE  := arm
 LOCAL_CFLAGS 	:= -w -std=c11 -Os -DNULL=0 -DSOCKLEN_T=socklen_t -DLOCALE_NOT_USED -D_LARGEFILE_SOURCE=1
 LOCAL_CFLAGS 	+= -DANDROID_NDK -DDISABLE_IMPORTGL -fno-strict-aliasing -fprefetch-loop-arrays -DAVOID_TABLES -DANDROID_TILE_BASED_DECODE -DANDROID_ARMV6_IDCT -DHAVE_STRCHRNUL=0
-LOCAL_MODULE := rot13
+LOCAL_MODULE := sqliterot13
 LOCAL_SRC_FILES     := \
 ./sqlite/rot13.c
-include $(BUILD_SHARED_LIBRARY)
-
-
-
-include $(CLEAR_VARS)
-LOCAL_PRELINK_MODULE := false
-
-LOCAL_MODULE 	:= tmessages.29
-LOCAL_CFLAGS 	:= -w -std=c11 -Os -DNULL=0 -DSOCKLEN_T=socklen_t -DLOCALE_NOT_USED -D_LARGEFILE_SOURCE=1
-LOCAL_CFLAGS 	+= -Drestrict='' -D__EMX__ -DOPUS_BUILD -DFIXED_POINT -DUSE_ALLOCA -DHAVE_LRINT -DHAVE_LRINTF -fno-math-errno
-LOCAL_CFLAGS 	+= -DANDROID_NDK -DDISABLE_IMPORTGL -fno-strict-aliasing -fprefetch-loop-arrays -DAVOID_TABLES -DANDROID_TILE_BASED_DECODE -DANDROID_ARMV6_IDCT -ffast-math -D__STDC_CONSTANT_MACROS
-LOCAL_CPPFLAGS 	:= -DBSD=1 -ffast-math -Os -funroll-loops -std=c++11
-LOCAL_LDLIBS 	:= -ljnigraphics -llog -lz -latomic -lOpenSLES -lEGL -lGLESv2 -landroid
-LOCAL_STATIC_LIBRARIES := webp sqlite libsqlitemd5 tgnet crypto
-
-LOCAL_C_INCLUDES    := \
-./jni/boringssl/include \
-./jni/intro
-
-LOCAL_SRC_FILES     += \
-./jni.c \
-./image.c \
-./intro/IntroRenderer.c \
-./SqliteWrapper.cpp \
-./TgNetWrapper.cpp \
-./NativeLoader.cpp
-
 include $(BUILD_SHARED_LIBRARY)
 
 

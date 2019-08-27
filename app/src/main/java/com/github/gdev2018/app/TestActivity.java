@@ -41,7 +41,7 @@ public class TestActivity extends Activity {
         SQLiteCursor cursor = null;
         try {
 
-            String sql = "SELECT s_Step, rot13(s_Step), hex(md5(s_Step)) FROM t_Steps";
+            String sql = "SELECT s_Step, rot13(s_Step), hex(md5(s_Step)) FROM v_Steps";
 //                cursor = database.queryFinalized(String.format(Locale.US, sql, offset, count));
             cursor = LocalSQLiteOpenHelper.getInstance(0).getDatabase().queryFinalized(String.format(Locale.US, sql, 0, 10));
             while (cursor.next()) {

@@ -97,15 +97,18 @@ public class LocalSQLiteOpenHelper {
             // 2/done - sqlitemd5
 			// 3 - 5. Persistent Loadable Extensions
 			// 4 - 6. Statically Linking A Run-Time Loadable Extension
-            // 5 - v_Steps
+            // 5/done - v_Steps
+            // 13/done - md5+rot13.so - error with entry point
             // 6 - libsqlitemd5 in libtmessages.29.so
-            // 7 - Java_com_github_gdev2018_master_SQLite_SQLiteDatabase_enableloadextension in myWrapper.cpp
+            // 7/done - Java_com_github_gdev2018_master_SQLite_SQLiteDatabase_enableloadextension in myWrapper.cpp
             // 10 - do it on SQLite ODBC
             // 11 - SQLite ODBC: тестировать, н-р, rtrim, вроде там уже есть extension-functions.c https://www.sqlite.org/contrib
             // 12 - SQLite ODBC: пробовать положить libsqlitemd5.so в корневую папку и вызвать SELECT load_extension ('libsqlitemd5', 'sqlite3_sqlitemd_init')"
 
-            database.executeFast("SELECT load_extension ('librot13', 'sqlite3_rot_init')").stepThis().dispose();
+            database.executeFast("SELECT load_extension ('libsqliterot13', 'sqlite3_sqliterot_init')").stepThis().dispose();
             database.executeFast("SELECT load_extension ('libsqlitemd5', 'sqlite3_sqlitemd_init')").stepThis().dispose();
+//            database.executeFast("SELECT load_extension ('libsqliteextension')").stepThis().dispose(); // SQLiteException: undefined symbol: sqlite3_sqliteextension_init
+//            database.executeFast("SELECT load_extension ('libsqliteextension', 'sqlite3_sqlitemd_init')").stepThis().dispose(); // SQLiteException: undefined symbol: sqlite3_sqlitemd_init
 //            database.executeFast(".load libsqlitemd5.so").stepThis().dispose();
 
 

@@ -397,6 +397,79 @@ static void md5file(sqlite3_context *context, int argc, sqlite3_value **argv){
     sqlite3_result_blob(context, digest, sizeof(digest), SQLITE_TRANSIENT);
 }
 
+
+
+
+static void md5long(sqlite3_context *context, int argc, sqlite3_value **argv){
+    MD5Context ctx;
+    unsigned char digest[16];
+    int i;
+
+    if( argc<1 ) return;
+    if( sqlite3_value_type(argv[0]) == SQLITE_NULL ){
+        sqlite3_result_null(context);
+        return;
+    }
+    MD5Init(&ctx);
+//  MD5Update(&ctx, (unsigned char*)sqlite3_value_blob(argv[0]), sqlite3_value_bytes(argv[0]));
+    for(i=0; i<argc; i++){
+        const char *zData = (char*)sqlite3_value_blob(argv[i]);
+        if( zData ){
+            MD5Update(&ctx, (unsigned char*)zData, sqlite3_value_bytes(argv[i]));
+        }
+    }
+    MD5Final(digest,&ctx);
+    sqlite3_result_blob(context, digest, sizeof(digest), SQLITE_TRANSIENT);
+}
+
+
+//
+////.h file code:
+//
+//#include <string>
+//#include <vector>
+//#include <stdexcept>
+//
+//public:
+//    static long long getLongMD5(const std::wstring &str);
+//
+//private:
+//    static long long getLongOffset(std::vector<char> &array, int const offset);
+//
+////.cpp file code:
+//
+//#include "snippet.h"
+//
+//long long <missing_class_definition>::getLongMD5(const std::wstring &str)
+//{
+//    try
+//    {
+//        //            System.out.println(MD5(str));
+//        const std::vector<char> digest = MD5(str).getBytes();
+//        return (getLongOffset(digest, 0) ^ getLongOffset(digest, 8));
+//    }
+//    catch (const std::runtime_error &var2)
+//    {
+//        return -1;
+//    }
+//}
+//
+//
+//
+//long long <missing_class_definition>::getLongOffset(std::vector<char> &array, int const offset)
+//{
+//    long long value = 0;
+//    for (int i = 0; i < 8; i++)
+//    {
+//        value = ((value << 8) | (array[offset + i] & 0xFF));
+//    }
+//    return value;
+//}
+
+
+
+
+
 /* SQLite invokes this routine once when it loads the extension.
 ** Create new functions, collating sequences, and virtual table
 ** modules here.  This is usually the only exported symbol in
@@ -408,6 +481,8 @@ int sqlite3Md5Init(sqlite3 *db){
     sqlite3_create_function(db, "md5",      -1, SQLITE_UTF8,  0, md5,     0, 0);
     sqlite3_create_function(db, "md5_utf16", -1, SQLITE_UTF16, 0, md5_utf16, 0, 0);
     sqlite3_create_function(db, "md5file",   1, SQLITE_UTF8,  0, md5file, 0, 0);
+
+    sqlite3_create_function(db, "md5long",  -1, SQLITE_UTF8,  0, md5,     0, 0);
     return 0;
 }
 

@@ -63,7 +63,9 @@ static void rot13func(
             return;
         }
     }
-    for(i=0; i<nIn; i++) zOut[i] = rot13(zIn[i]);
+    for(i=0; i<nIn; i++){
+        zOut[i] = rot13(zIn[i]);
+    }
     zOut[i] = 0;
     sqlite3_result_text(context, (char*)zOut, i, SQLITE_TRANSIENT);
     sqlite3_free(zToFree);

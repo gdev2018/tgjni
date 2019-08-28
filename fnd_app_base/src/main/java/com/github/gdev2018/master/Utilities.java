@@ -371,7 +371,7 @@ public class Utilities {
 
     public static long getLongMD5(final String str) {
         try {
-            System.out.println(MD5(str));
+//            System.out.println(MD5(str));
             final byte[] digest = MD5(str).getBytes();
             return (getLongOffset(digest, 0) ^ getLongOffset(digest, 8));
         } catch (Exception var2) {

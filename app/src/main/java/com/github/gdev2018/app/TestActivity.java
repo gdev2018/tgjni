@@ -6,12 +6,14 @@ import android.app.Activity;
 import android.widget.TextView;
 
 
+import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.SQLite.SQLiteCursor;
 
 import java.util.Locale;
 
 import com.github.gdev2018.app.R;
+import com.github.gdev2018.master.Utilities;
 
 import static com.github.gdev2018.master.AndroidUtilities.secondsToString;
 import static com.github.gdev2018.master.tgnet.ConnectionsManager.native_getCurrentTimeMillis2;
@@ -20,6 +22,15 @@ import static com.github.gdev2018.master.tgnet.ConnectionsManager.native_getCurr
 public class TestActivity extends Activity {
 
     private String seconds;
+    private String newText;
+
+
+    private Runnable setTextViewRunnable = new Runnable() {
+        @Override
+        public void run() {
+            ((TextView)findViewById(R.id.seconds_textView)).setText(newText);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +52,8 @@ public class TestActivity extends Activity {
         SQLiteCursor cursor = null;
         try {
 
-            String sql = "SELECT s_Step, rot13(s_Step), hex(md5(s_Step)) FROM v_Steps";
+//            String sql = "SELECT s_Step, rot13(s_Step), hex(md5(s_Step)) FROM v_Steps";
+            String sql = "SELECT s_Step, rot13(s_Step) FROM v_Steps";
 //                cursor = database.queryFinalized(String.format(Locale.US, sql, offset, count));
             cursor = LocalSQLiteOpenHelper.getInstance(0).getDatabase().queryFinalized(String.format(Locale.US, sql, 0, 10));
             while (cursor.next()) {
@@ -49,7 +61,43 @@ public class TestActivity extends Activity {
                 String rot13 = cursor.stringValue(1);
                 String md5 = cursor.stringValue(2);
 
-                ((TextView)findViewById(R.id.seconds_textView)).setText(s_Step + rot13 + md5);
+//                ((TextView)findViewById(R.id.seconds_textView)).setText();
+                newText = s_Step + rot13 + md5 + Utilities.random.nextInt(1000);
+
+                // works!
+                Thread.sleep(1000); // = LocalSQLiteOpenHelper.getInstance(0).getStorageQueue().sleep(1000);
+                AndroidUtilities.runOnUIThread(setTextViewRunnable);
+                
+                // // TODO: 2019-08-28 next. test delay > sleep
+                
+
+                // Thread experiments
+                // https://stackoverflow.com/questions/29731163/refresh-textview-in-android
+                // https://ru.stackoverflow.com/questions/338436/%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%B0-sleep
+
+//                // delay 500 = hide step 1
+//                Thread.sleep(1000);
+//                AndroidUtilities.runOnUIThread(setTextViewRunnable, 500);
+
+//                // delay - is not working for sleep
+//                AndroidUtilities.runOnUIThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // update TextView here!
+//                        ((TextView)findViewById(R.id.seconds_textView)).setText(newText);
+//                    }
+//                }, 1000);
+
+//                // works!
+//                Thread.sleep(1000);
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // update TextView here!
+//                        ((TextView)findViewById(R.id.seconds_textView)).setText(newText);
+//                    }
+//                });
+
             }
             cursor.dispose();
 

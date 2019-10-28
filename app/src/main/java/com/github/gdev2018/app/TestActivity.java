@@ -53,7 +53,7 @@ public class TestActivity extends Activity {
         try {
 
 //            String sql = "SELECT s_Step, rot13(s_Step), hex(md5(s_Step)) FROM v_Steps";
-            String sql = "SELECT s_Step, rot13(s_Step) FROM v_Steps";
+            String sql = "SELECT s_Step, rot13(s_Step), md5long('dxsdsd') FROM v_Steps";
 //                cursor = database.queryFinalized(String.format(Locale.US, sql, offset, count));
             cursor = LocalSQLiteOpenHelper.getInstance(0).getDatabase().queryFinalized(String.format(Locale.US, sql, 0, 10));
             while (cursor.next()) {
@@ -62,7 +62,7 @@ public class TestActivity extends Activity {
                 String md5 = cursor.stringValue(2);
 
 //                ((TextView)findViewById(R.id.seconds_textView)).setText();
-                newText = s_Step + rot13 + md5 + Utilities.random.nextInt(1000);
+                newText = s_Step + " / " + rot13 + " / " + md5 + " / " + Utilities.random.nextInt(1000);
 
                 // works!
                 Thread.sleep(1000); // = LocalSQLiteOpenHelper.getInstance(0).getStorageQueue().sleep(1000);

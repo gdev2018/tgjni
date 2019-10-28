@@ -106,7 +106,10 @@ public class LocalSQLiteOpenHelper {
             // 12 - SQLite ODBC: пробовать положить libsqlitemd5.so в корневую папку и вызвать SELECT load_extension ('libsqlitemd5', 'sqlite3_sqlitemd_init')"
 
             database.executeFast("SELECT load_extension ('libsqliterot13', 'sqlite3_sqliterot_init')").stepThis().dispose();
-            database.executeFast("SELECT load_extension ('libsqlitemd5', 'sqlite3_sqlitemd_init')").stepThis().dispose();
+//            database.executeFast("SELECT load_extension ('libsqlitemd5', 'sqlite3_sqlitemd_init')").stepThis().dispose();
+            database.executeFast("SELECT load_extension ('libsqlitemd5', 'sqlite3_extension_init')").stepThis().dispose();
+
+
 //            database.executeFast("SELECT load_extension ('libsqliteextension')").stepThis().dispose(); // SQLiteException: undefined symbol: sqlite3_sqliteextension_init
 //            database.executeFast("SELECT load_extension ('libsqliteextension', 'sqlite3_sqlitemd_init')").stepThis().dispose(); // SQLiteException: undefined symbol: sqlite3_sqlitemd_init
 //            database.executeFast(".load libsqlitemd5.so").stepThis().dispose();

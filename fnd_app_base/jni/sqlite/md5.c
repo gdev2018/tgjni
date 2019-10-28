@@ -43,6 +43,8 @@ select hex(md5file('/tmp/agent_callbuilder.tcl'));
 
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
+#include <stdlib.h>
 
 #ifndef SQLITE_CORE
   #include "sqlite3ext.h"
@@ -200,8 +202,7 @@ static void MD5Init(MD5Context *pCtx){
  * Update context to reflect the concatenation of another buffer full
  * of bytes.
  */
-static
-void MD5Update(MD5Context *pCtx, const unsigned char *buf, unsigned int len){
+static void MD5Update(MD5Context *pCtx, const unsigned char *buf, unsigned int len){
     struct Context2 *ctx = (struct Context2 *)pCtx;
     uint32 t;
 
@@ -342,6 +343,149 @@ static void md5(sqlite3_context *context, int argc, sqlite3_value **argv){
     sqlite3_result_blob(context, digest, sizeof(digest), SQLITE_TRANSIENT);
 }
 
+
+
+//long long getLongOffset(unsigned char array[], int offset) {
+long long getLongOffset(const unsigned char *hex, int offset) {
+    long long value = 0;
+    for (int i = 0; i < 8; i++) {
+        value = ((value << 8) | (hex[offset+i] & 0xFF));
+    }
+    return value;
+}
+
+// John, thanks a lot! https://nachtimwald.com/2017/09/24/hex-encode-and-decode-in-c/
+char *bin2hex(const unsigned char *bin, size_t len, int lower)
+{
+    char   *out;
+    size_t  i;
+
+    if (bin == NULL || len == 0)
+        return NULL;
+
+    out = malloc(len*2+1);
+    for (i=0; i<len; i++) {
+        if (lower == 0) {
+            out[i*2]   = "0123456789ABCDEF"[bin[i] >> 4];
+            out[i*2+1] = "0123456789ABCDEF"[bin[i] & 0x0F];
+        }else {
+            out[i*2]   = "0123456789abcdef"[bin[i] >> 4];
+            out[i*2+1] = "0123456789abcdef"[bin[i] & 0x0F];
+        }
+    }
+    out[len*2] = '\0';
+
+    return out;
+}
+
+int hexchr2bin(const char hex, char *out)
+{
+    if (out == NULL)
+        return 0;
+
+    if (hex >= '0' && hex <= '9') {
+        *out = hex - '0';
+    } else if (hex >= 'A' && hex <= 'F') {
+        *out = hex - 'A' + 10;
+    } else if (hex >= 'a' && hex <= 'f') {
+        *out = hex - 'a' + 10;
+    } else {
+        return 0;
+    }
+
+    return 1;
+}
+
+size_t hexs2bin(const char *hex, unsigned char **out)
+{
+    size_t len;
+    char   b1;
+    char   b2;
+    size_t i;
+
+    if (hex == NULL || *hex == '\0' || out == NULL)
+        return 0;
+
+    len = strlen(hex);
+    if (len % 2 != 0)
+        return 0;
+    len /= 2;
+
+    *out = malloc(len);
+    memset(*out, 'A', len);
+    for (i=0; i<len; i++) {
+        if (!hexchr2bin(hex[i*2], &b1) || !hexchr2bin(hex[i*2+1], &b2)) {
+            return 0;
+        }
+        (*out)[i] = (b1 << 4) | b2;
+    }
+    return len;
+}
+
+static void hex2long(sqlite3_context *context, int argc, sqlite3_value **argv){
+    unsigned char digest[16];
+    for (int i = 0; i < 16; i++) {
+        digest[i] = 0;
+    }
+
+    assert( argc==1 );
+    if( sqlite3_value_type(argv[0])==SQLITE_NULL ) return;
+
+    const unsigned char *zIn;
+    zIn = (const unsigned char*)sqlite3_value_text(argv[0]);
+
+//    int nIn = sqlite3_value_bytes(argv[0]);
+////    assert( nIn<16 );
+//    strcpy(digest, zIn);    // prevent for control size input string <16
+//                            // error if strlen(zIn) > 16
+
+    size_t strlen_zIn = strlen(zIn);
+    if( strlen_zIn > 16 ) strlen_zIn = 16;
+    for (int i = 0; i < strlen_zIn; i++) {
+        digest[i] = zIn[i];
+    }
+
+    long long md5long;
+    md5long = (getLongOffset(digest, 0) ^ getLongOffset(digest, 8));
+
+    sqlite3_result_int64(context, md5long);
+}
+
+static void md5long(sqlite3_context *context, int argc, sqlite3_value **argv){
+    MD5Context ctx;
+    unsigned char digest[16];
+    int i;
+
+    if( argc<1 ) return;
+    if( sqlite3_value_type(argv[0]) == SQLITE_NULL ){
+        sqlite3_result_null(context);
+        return;
+    }
+    MD5Init(&ctx);
+
+    for(i=0; i<argc; i++){
+        const char *zData = (char*)sqlite3_value_blob(argv[i]);
+        if( zData ){
+            MD5Update(&ctx, (unsigned char*)zData, sqlite3_value_bytes(argv[i]));
+        }
+    }
+    MD5Final(digest,&ctx);
+
+    const char *hex;
+    hex = bin2hex(digest, strlen(digest), 1);
+
+    long long md5long;
+    md5long = (getLongOffset((unsigned char *)hex, 0) ^ getLongOffset((unsigned char *)hex, 8));
+
+    sqlite3_result_int64(context, md5long);
+}
+
+
+
+
+
+
+
 // Returns the md5 hash of an UTF-16 representation of a string
 static void md5_utf16(sqlite3_context *context, int argc, sqlite3_value **argv) {
     MD5Context ctx;
@@ -397,79 +541,6 @@ static void md5file(sqlite3_context *context, int argc, sqlite3_value **argv){
     sqlite3_result_blob(context, digest, sizeof(digest), SQLITE_TRANSIENT);
 }
 
-
-
-
-static void md5long(sqlite3_context *context, int argc, sqlite3_value **argv){
-    MD5Context ctx;
-    unsigned char digest[16];
-    int i;
-
-    if( argc<1 ) return;
-    if( sqlite3_value_type(argv[0]) == SQLITE_NULL ){
-        sqlite3_result_null(context);
-        return;
-    }
-    MD5Init(&ctx);
-//  MD5Update(&ctx, (unsigned char*)sqlite3_value_blob(argv[0]), sqlite3_value_bytes(argv[0]));
-    for(i=0; i<argc; i++){
-        const char *zData = (char*)sqlite3_value_blob(argv[i]);
-        if( zData ){
-            MD5Update(&ctx, (unsigned char*)zData, sqlite3_value_bytes(argv[i]));
-        }
-    }
-    MD5Final(digest,&ctx);
-    sqlite3_result_blob(context, digest, sizeof(digest), SQLITE_TRANSIENT);
-}
-
-
-//
-////.h file code:
-//
-//#include <string>
-//#include <vector>
-//#include <stdexcept>
-//
-//public:
-//    static long long getLongMD5(const std::wstring &str);
-//
-//private:
-//    static long long getLongOffset(std::vector<char> &array, int const offset);
-//
-////.cpp file code:
-//
-//#include "snippet.h"
-//
-//long long <missing_class_definition>::getLongMD5(const std::wstring &str)
-//{
-//    try
-//    {
-//        //            System.out.println(MD5(str));
-//        const std::vector<char> digest = MD5(str).getBytes();
-//        return (getLongOffset(digest, 0) ^ getLongOffset(digest, 8));
-//    }
-//    catch (const std::runtime_error &var2)
-//    {
-//        return -1;
-//    }
-//}
-//
-//
-//
-//long long <missing_class_definition>::getLongOffset(std::vector<char> &array, int const offset)
-//{
-//    long long value = 0;
-//    for (int i = 0; i < 8; i++)
-//    {
-//        value = ((value << 8) | (array[offset + i] & 0xFF));
-//    }
-//    return value;
-//}
-
-
-
-
-
 /* SQLite invokes this routine once when it loads the extension.
 ** Create new functions, collating sequences, and virtual table
 ** modules here.  This is usually the only exported symbol in
@@ -479,10 +550,10 @@ static void md5long(sqlite3_context *context, int argc, sqlite3_value **argv){
 int sqlite3Md5Init(sqlite3 *db){
     sqlite3_create_function(db, "group_md5", -1, SQLITE_UTF8, 0, 0, md5step, md5finalize);
     sqlite3_create_function(db, "md5",      -1, SQLITE_UTF8,  0, md5,     0, 0);
+    sqlite3_create_function(db, "md5long",      -1, SQLITE_UTF8,  0, md5long,     0, 0);
+    sqlite3_create_function(db, "hex2long",      -1, SQLITE_UTF8,  0, hex2long,     0, 0);
     sqlite3_create_function(db, "md5_utf16", -1, SQLITE_UTF16, 0, md5_utf16, 0, 0);
     sqlite3_create_function(db, "md5file",   1, SQLITE_UTF8,  0, md5file, 0, 0);
-
-    sqlite3_create_function(db, "md5long",  -1, SQLITE_UTF8,  0, md5,     0, 0);
     return 0;
 }
 
@@ -491,7 +562,7 @@ __declspec(dllexport)
 #endif
 #if !SQLITE_CORE
 // sqlitemd, not sqlitemd5
-int sqlite3_sqlitemd_init(
+int sqlite3_extension_init(
         sqlite3 *db,
         char **pzErrMsg,
         const sqlite3_api_routines *pApi
@@ -503,4 +574,3 @@ int sqlite3_sqlitemd_init(
 
 
 #endif
-

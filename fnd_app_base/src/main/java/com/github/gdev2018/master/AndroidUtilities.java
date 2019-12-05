@@ -133,6 +133,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -241,6 +242,16 @@ public class AndroidUtilities {
             e.printStackTrace();
         }
         return convertedDate;
+    }
+
+    public static Date stringToDate(String stringOrNull) {
+        //DateFormat sdf = new SimpleDateFormat("2007-03-01 11:00:28.", Locale.US);
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+        try {
+            return (stringOrNull == null ? null : sdf.parse(stringOrNull));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     // TODO: 2018-03-10 add regional
@@ -378,6 +389,14 @@ public class AndroidUtilities {
         }
         return reference;
     }
+
+    public static <T> String ifNull(T reference) {
+        if (reference == null) {
+            return "";
+        }
+        return reference.toString();
+    }
+
 
     public static Map<String, Object> getImmutableMap(Map<String, Object> realMap) {
         if (realMap == null) {

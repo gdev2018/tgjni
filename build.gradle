@@ -12,15 +12,16 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'  //for AS_3.2
-//        classpath 'com.android.tools.build:gradle:3.5.0'  //for AS_3.4
+//        classpath 'com.android.tools.build:gradle:3.2.1'  //for AS_3.2
+        classpath 'com.android.tools.build:gradle:3.5.2'  //for AS_3.4
 
         classpath 'com.google.gms:google-services:4.0.2'
 
 //        classpath 'com.frogermcs.androiddevmetrics:androiddevmetrics-plugin:0.6'
 //        classpath 'org.jacoco:org.jacoco.core:0.8.1'
 
-        classpath 'com.novoda:bintray-release:0.9'    // 4public custom module in maven/jcenter
+//        classpath 'com.novoda:bintray-release:0.9'    // 4public custom module in maven/jcenter
+        classpath 'com.novoda:bintray-release:0.9.1'
     }
 }
 

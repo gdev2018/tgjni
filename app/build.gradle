@@ -90,5 +90,5 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
     // for testing
-    implementation project(path: ':fnd_app_base')
+    //implementation project(path: ':fnd_app_base')
 }

@@ -3804,7 +3804,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                     return;
                 }
                 req.offset_id = UserConfig.getInstance(currentAccount).dialogsLoadOffsetId;
-                req.offset_date = UserConfig.getInstance(currentAccount).dialogsLoadOffsetDate;
+                req.offset_date = (int)UserConfig.getInstance(currentAccount).dialogsLoadOffsetDate;
                 if (req.offset_id == 0) {
                     req.offset_peer = new TLRPC.TL_inputPeerEmpty();
                 } else {

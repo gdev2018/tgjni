@@ -51,7 +51,7 @@ public class UserConfig {
     public long migrateOffsetAccess = -1;
     public int totalDialogsLoadCount = 0;
     public int dialogsLoadOffsetId = 0;
-    public int dialogsLoadOffsetDate = 0;
+    public long dialogsLoadOffsetDate = 0;
     public int dialogsLoadOffsetUserId = 0;
     public int dialogsLoadOffsetChatId = 0;
     public int dialogsLoadOffsetChannelId = 0;
@@ -191,7 +191,7 @@ public class UserConfig {
 
                 editor.putInt("2totalDialogsLoadCount", totalDialogsLoadCount);
                 editor.putInt("2dialogsLoadOffsetId", dialogsLoadOffsetId);
-                editor.putInt("2dialogsLoadOffsetDate", dialogsLoadOffsetDate);
+                editor.putLong("2dialogsLoadOffsetDate", dialogsLoadOffsetDate);
                 editor.putInt("2dialogsLoadOffsetUserId", dialogsLoadOffsetUserId);
                 editor.putInt("2dialogsLoadOffsetChatId", dialogsLoadOffsetChatId);
                 editor.putInt("2dialogsLoadOffsetChannelId", dialogsLoadOffsetChannelId);
@@ -355,7 +355,7 @@ public class UserConfig {
 
             dialogsLoadOffsetId = preferences.getInt("2dialogsLoadOffsetId", -1);
             totalDialogsLoadCount = preferences.getInt("2totalDialogsLoadCount", 0);
-            dialogsLoadOffsetDate = preferences.getInt("2dialogsLoadOffsetDate", -1);
+            dialogsLoadOffsetDate = preferences.getLong("2dialogsLoadOffsetDate", -1);
             dialogsLoadOffsetUserId = preferences.getInt("2dialogsLoadOffsetUserId", -1);
             dialogsLoadOffsetChatId = preferences.getInt("2dialogsLoadOffsetChatId", -1);
             dialogsLoadOffsetChannelId = preferences.getInt("2dialogsLoadOffsetChannelId", -1);

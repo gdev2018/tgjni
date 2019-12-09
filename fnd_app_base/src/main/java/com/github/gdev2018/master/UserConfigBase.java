@@ -120,9 +120,9 @@ public class UserConfigBase {
             try {
                 SharedPreferences preferences;
                 if (currentAccount == 0) {
-                    preferences = BaseApplication.mApplicationContext.getSharedPreferences("userconfing_base", Context.MODE_PRIVATE);
+                    preferences = BaseApplication.mApplicationContext.getSharedPreferences("userconfing", Context.MODE_PRIVATE);
                 } else {
-                    preferences = BaseApplication.mApplicationContext.getSharedPreferences("userconfig_base" + currentAccount, Context.MODE_PRIVATE);
+                    preferences = BaseApplication.mApplicationContext.getSharedPreferences("userconfig" + currentAccount, Context.MODE_PRIVATE);
                 }
                 SharedPreferences.Editor editor = preferences.edit();
                 if (currentAccount == 0) {
@@ -269,10 +269,10 @@ public class UserConfigBase {
             }
             SharedPreferences preferences;
             if (currentAccount == 0) {
-                preferences = BaseApplication.mApplicationContext.getSharedPreferences("userconfig_base", Context.MODE_PRIVATE);
+                preferences = BaseApplication.mApplicationContext.getSharedPreferences("userconfing", Context.MODE_PRIVATE);
                 selectedAccount = preferences.getInt("selectedAccount", 0);
             } else {
-                preferences = BaseApplication.mApplicationContext.getSharedPreferences("userconfig_base" + currentAccount, Context.MODE_PRIVATE);
+                preferences = BaseApplication.mApplicationContext.getSharedPreferences("userconfig" + currentAccount, Context.MODE_PRIVATE);
             }
 ///*            registeredForPush = preferences.getBoolean("registeredForPush", false);
 //            lastSendMessageId = preferences.getInt("lastSendMessageId", -210000);

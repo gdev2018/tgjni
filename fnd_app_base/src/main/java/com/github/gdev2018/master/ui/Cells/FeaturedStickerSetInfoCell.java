@@ -26,7 +26,7 @@ import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.DataQuery;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.ColorSpanUnderline;
@@ -51,7 +51,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     private boolean hasOnClick;
     private boolean isUnread;
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public FeaturedStickerSetInfoCell(Context context, int left) {

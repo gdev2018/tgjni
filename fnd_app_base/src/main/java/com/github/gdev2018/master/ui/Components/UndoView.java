@@ -26,7 +26,7 @@ import com.github.gdev2018.master.ChatObject;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 
@@ -37,7 +37,7 @@ public class UndoView extends FrameLayout {
     private TextView undoTextView;
     private ImageView undoImageView;
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
 
     private TextPaint textPaint;
     private Paint progressPaint;

@@ -20,7 +20,7 @@ import com.github.gdev2018.master.ContactsController;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
@@ -36,7 +36,7 @@ public class ShareDialogCell extends FrameLayout {
     private CheckBox checkBox;
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
 
     public ShareDialogCell(Context context) {
         super(context);

@@ -28,7 +28,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.annotation.Keep;
 import android.support.v13.view.inputmethod.EditorInfoCompat;
@@ -72,11 +71,11 @@ import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.SharedConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.VideoEditedInfo;
 import com.github.gdev2018.master.camera.CameraController;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.UserConfig;
 import com.github.gdev2018.master.ui.ActionBar.ActionBar;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.ui.ActionBar.AlertDialog;
@@ -114,7 +113,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         void onStickersExpandedChange();
     }
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
 
     private SeekBarWaveform seekBarWaveform;
 
@@ -928,7 +927,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     if ((int) dialog_id > 0) {
                         currentUser = MessagesController.getInstance(currentAccount).getUser((int) dialog_id);
                     }
-                    if (currentUser != null && (currentUser.id == UserConfig.getInstance(currentAccount).getClientUserId() || currentUser.status != null && currentUser.status.expires < currentTime && !MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(currentUser.id))) {
+                    if (currentUser != null && (currentUser.id == UserConfigBase.getInstance(currentAccount).getClientUserId() || currentUser.status != null && currentUser.status.expires < currentTime && !MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(currentUser.id))) {
                         return;
                     }
                     lastTypingTimeSend = System.currentTimeMillis();
@@ -3696,7 +3695,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     message.out = true;
                     message.id = 0;
                     message.to_id = new TLRPC.TL_peerUser();
-                    message.to_id.user_id = message.from_id = UserConfig.getInstance(currentAccount).getClientUserId();
+                    message.to_id.user_id = message.from_id = UserConfigBase.getInstance(currentAccount).getClientUserId();
                     message.date = (int) (System.currentTimeMillis() / 1000);
                     message.message = "";
                     message.attachPath = audioToSendPath;
@@ -3704,7 +3703,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     message.media.flags |= 3;
                     message.media.document = audioToSend;
                     message.flags |= TLRPC.MESSAGE_FLAG_HAS_MEDIA | TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
-                    audioToSendMessageObject = new MessageObject(UserConfig.selectedAccount, message, false);
+                    audioToSendMessageObject = new MessageObject(UserConfigBase.selectedAccount, message, false);
 
                     recordedAudioPanel.setAlpha(1.0f);
                     recordedAudioPanel.setVisibility(VISIBLE);

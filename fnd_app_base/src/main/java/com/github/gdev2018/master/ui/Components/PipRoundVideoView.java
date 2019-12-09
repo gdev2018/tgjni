@@ -41,7 +41,7 @@ import com.github.gdev2018.master.FileLog;
 ///*import com.github.gdev2018.master.MediaController;
 //import com.github.gdev2018.master.MessageObject;*/
 import com.github.gdev2018.master.NotificationCenter;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.ui.ActionBar.ActionBar;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 
@@ -277,7 +277,7 @@ public class PipRoundVideoView implements NotificationCenter.NotificationCenterD
             return;
         }
         parentActivity = activity;
-        currentAccount = UserConfig.selectedAccount;
+        currentAccount = UserConfigBase.selectedAccount;
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
         runShowHideAnimation(true);
     }

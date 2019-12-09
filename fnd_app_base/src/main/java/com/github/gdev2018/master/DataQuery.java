@@ -98,7 +98,7 @@ public class DataQuery {
                 SerializedData serializedData = new SerializedData(bytes);
                 if (key.startsWith("r_")) {
                     TLRPC.Message message = TLRPC.Message.TLdeserialize(serializedData, serializedData.readInt32(true), true);
-                    message.readAttachPath(serializedData, UserConfig.getInstance(currentAccount).clientUserId);
+                    message.readAttachPath(serializedData, UserConfigBase.getInstance(currentAccount).clientUserId);
                     if (message != null) {
                         draftMessages.put(did, message);
                     }
@@ -2080,7 +2080,7 @@ public class DataQuery {
                     NativeByteBuffer data = cursor.byteBufferValue(0);
                     if (data != null) {
                         TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                        message.readAttachPath(data, UserConfig.getInstance(currentAccount).clientUserId);
+                        message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
                         data.reuse();
                         message.id = cursor.intValue(1);
                         message.dialog_id = uid;
@@ -2179,7 +2179,7 @@ public class DataQuery {
                     NativeByteBuffer data = cursor.byteBufferValue(0);
                     if (data != null) {
                         TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                        message.readAttachPath(data, UserConfig.getInstance(currentAccount).clientUserId);
+                        message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
                         data.reuse();
                         if (MessageObject.isMusicMessage(message)) {
                             message.id = cursor.intValue(1);
@@ -2377,9 +2377,9 @@ public class DataQuery {
     }
 
     public void loadHints(boolean cache) {
-        if (loading || !UserConfig.getInstance(currentAccount).suggestContacts) {
-            return;
-        }
+///*        if (loading || !UserConfigBase.getInstance(currentAccount).suggestContacts) {
+//            return;
+//        }*/
         if (cache) {
             if (loaded) {
                 return;
@@ -2390,7 +2390,7 @@ public class DataQuery {
                 final ArrayList<TLRPC.TL_topPeer> inlineBotsNew = new ArrayList<>();
                 final ArrayList<TLRPC.User> users = new ArrayList<>();
                 final ArrayList<TLRPC.Chat> chats = new ArrayList<>();
-                int selfUserId = UserConfig.getInstance(currentAccount).getClientUserId();
+                int selfUserId = UserConfigBase.getInstance(currentAccount).getClientUserId();
                 try {
                     ArrayList<Integer> usersToLoad = new ArrayList<>();
                     ArrayList<Integer> chatsToLoad = new ArrayList<>();
@@ -2436,9 +2436,9 @@ public class DataQuery {
                         buildShortcuts();
                         NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.reloadHints);
                         NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.reloadInlineHints);
-                        if (Math.abs(UserConfig.getInstance(currentAccount).lastHintsSyncTime - (int) (System.currentTimeMillis() / 1000)) >= 24 * 60 * 60) {
-                            loadHints(false);
-                        }
+///*                        if (Math.abs(UserConfigBase.getInstance(currentAccount).lastHintsSyncTime - (int) (System.currentTimeMillis() / 1000)) >= 24 * 60 * 60) {
+//                            loadHints(false);
+//                        }*/
                     });
                 } catch (Exception e) {
                     FileLog.e(e);
@@ -2466,10 +2466,10 @@ public class DataQuery {
                             TLRPC.TL_topPeerCategoryPeers category = topPeers.categories.get(a);
                             if (category.category instanceof TLRPC.TL_topPeerCategoryBotsInline) {
                                 inlineBots = category.peers;
-                                UserConfig.getInstance(currentAccount).botRatingLoadTime = (int) (System.currentTimeMillis() / 1000);
+///*                                UserConfigBase.getInstance(currentAccount).botRatingLoadTime = (int) (System.currentTimeMillis() / 1000);*/
                             } else {
                                 hints = category.peers;
-                                int selfUserId = UserConfig.getInstance(currentAccount).getClientUserId();
+                                int selfUserId = UserConfigBase.getInstance(currentAccount).getClientUserId();
                                 for (int b = 0; b < hints.size(); b++) {
                                     TLRPC.TL_topPeer topPeer = hints.get(b);
                                     if (topPeer.peer.user_id == selfUserId) {
@@ -2477,10 +2477,10 @@ public class DataQuery {
                                         break;
                                     }
                                 }
-                                UserConfig.getInstance(currentAccount).ratingLoadTime = (int) (System.currentTimeMillis() / 1000);
+///*                                UserConfigBase.getInstance(currentAccount).ratingLoadTime = (int) (System.currentTimeMillis() / 1000);*/
                             }
                         }
-                        UserConfig.getInstance(currentAccount).saveConfig(false);
+                        UserConfigBase.getInstance(currentAccount).saveConfig(false);
                         buildShortcuts();
                         NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.reloadHints);
                         NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.reloadInlineHints);
@@ -2522,9 +2522,9 @@ public class DataQuery {
 
                                 MessagesStorage.getInstance(currentAccount).getDatabase().commitTransaction();
                                 AndroidUtilities.runOnUIThread(() -> {
-                                    UserConfig.getInstance(currentAccount).suggestContacts = true;
-                                    UserConfig.getInstance(currentAccount).lastHintsSyncTime = (int) (System.currentTimeMillis() / 1000);
-                                    UserConfig.getInstance(currentAccount).saveConfig(false);
+///*                                    UserConfigBase.getInstance(currentAccount).suggestContacts = true;
+//                                    UserConfigBase.getInstance(currentAccount).lastHintsSyncTime = (int) (System.currentTimeMillis() / 1000);*/
+                                    UserConfigBase.getInstance(currentAccount).saveConfig(false);
                                 });
                             } catch (Exception e) {
                                 FileLog.e(e);
@@ -2533,9 +2533,9 @@ public class DataQuery {
                     });
                 } else if (response instanceof TLRPC.TL_contacts_topPeersDisabled) {
                     AndroidUtilities.runOnUIThread(() -> {
-                        UserConfig.getInstance(currentAccount).suggestContacts = false;
-                        UserConfig.getInstance(currentAccount).lastHintsSyncTime = (int) (System.currentTimeMillis() / 1000);
-                        UserConfig.getInstance(currentAccount).saveConfig(false);
+///*                        UserConfigBase.getInstance(currentAccount).suggestContacts = false;
+//                        UserConfigBase.getInstance(currentAccount).lastHintsSyncTime = (int) (System.currentTimeMillis() / 1000);*/
+                        UserConfigBase.getInstance(currentAccount).saveConfig(false);
                         clearTopPeers();
                     });
                 }
@@ -2559,15 +2559,15 @@ public class DataQuery {
     }
 
     public void increaseInlineRaiting(final int uid) {
-        if (!UserConfig.getInstance(currentAccount).suggestContacts) {
-            return;
-        }
+///*        if (!UserConfigBase.getInstance(currentAccount).suggestContacts) {
+//            return;
+//        }*/
         int dt;
-        if (UserConfig.getInstance(currentAccount).botRatingLoadTime != 0) {
-            dt = Math.max(1, ((int) (System.currentTimeMillis() / 1000)) - UserConfig.getInstance(currentAccount).botRatingLoadTime);
-        } else {
+///*        if (UserConfigBase.getInstance(currentAccount).botRatingLoadTime != 0) {
+//            dt = Math.max(1, ((int) (System.currentTimeMillis() / 1000)) - UserConfigBase.getInstance(currentAccount).botRatingLoadTime);
+//        } else {
             dt = 60;
-        }
+//        }*/
 
         TLRPC.TL_topPeer peer = null;
         for (int a = 0; a < inlineBots.size(); a++) {
@@ -2635,9 +2635,9 @@ public class DataQuery {
     }
 
     public void increasePeerRaiting(final long did) {
-        if (!UserConfig.getInstance(currentAccount).suggestContacts) {
-            return;
-        }
+///*        if (!UserConfigBase.getInstance(currentAccount).suggestContacts) {
+//            return;
+//        }*/
         final int lower_id = (int) did;
         if (lower_id <= 0) {
             return;
@@ -2659,9 +2659,9 @@ public class DataQuery {
                     lastTime = cursor.intValue(1);
                 }
                 cursor.dispose();
-                if (lastMid > 0 && UserConfig.getInstance(currentAccount).ratingLoadTime != 0) {
-                    dt = (lastTime - UserConfig.getInstance(currentAccount).ratingLoadTime);
-                }
+///*                if (lastMid > 0 && UserConfigBase.getInstance(currentAccount).ratingLoadTime != 0) {
+//                    dt = (lastTime - UserConfigBase.getInstance(currentAccount).ratingLoadTime);
+//                }*/
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -2999,7 +2999,7 @@ public class DataQuery {
                 NativeByteBuffer data = cursor.byteBufferValue(0);
                 if (data != null) {
                     result = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                    result.readAttachPath(data, UserConfig.getInstance(currentAccount).clientUserId);
+                    result.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
                     data.reuse();
                     if (result.action instanceof TLRPC.TL_messageActionHistoryClear) {
                         result = null;
@@ -3019,7 +3019,7 @@ public class DataQuery {
                     NativeByteBuffer data = cursor.byteBufferValue(0);
                     if (data != null) {
                         result = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                        result.readAttachPath(data, UserConfig.getInstance(currentAccount).clientUserId);
+                        result.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
                         data.reuse();
                         if (result.id != mid || result.action instanceof TLRPC.TL_messageActionHistoryClear) {
                             result = null;
@@ -3188,7 +3188,7 @@ public class DataQuery {
                         NativeByteBuffer data = cursor.byteBufferValue(0);
                         if (data != null) {
                             TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data, UserConfig.getInstance(currentAccount).clientUserId);
+                            message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
                             data.reuse();
                             message.id = cursor.intValue(1);
                             message.date = cursor.intValue(2);
@@ -3271,7 +3271,7 @@ public class DataQuery {
                         NativeByteBuffer data = cursor.byteBufferValue(0);
                         if (data != null) {
                             TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data, UserConfig.getInstance(currentAccount).clientUserId);
+                            message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
                             data.reuse();
                             message.id = cursor.intValue(1);
                             message.date = cursor.intValue(2);
@@ -3661,9 +3661,9 @@ public class DataQuery {
     private boolean loadingDrafts;
 
     public void loadDrafts() {
-        if (UserConfig.getInstance(currentAccount).draftsLoaded || loadingDrafts) {
-            return;
-        }
+///*        if (UserConfigBase.getInstance(currentAccount).draftsLoaded || loadingDrafts) {
+//            return;
+//        }*/
         loadingDrafts = true;
         TLRPC.TL_messages_getAllDrafts req = new TLRPC.TL_messages_getAllDrafts();
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
@@ -3672,9 +3672,9 @@ public class DataQuery {
             }
             MessagesController.getInstance(currentAccount).processUpdates((TLRPC.Updates) response, false);
             AndroidUtilities.runOnUIThread(() -> {
-                UserConfig.getInstance(currentAccount).draftsLoaded = true;
+///*                UserConfigBase.getInstance(currentAccount).draftsLoaded = true;*/
                 loadingDrafts = false;
-                UserConfig.getInstance(currentAccount).saveConfig(false);
+                UserConfigBase.getInstance(currentAccount).saveConfig(false);
             });
         });
     }
@@ -3796,7 +3796,7 @@ public class DataQuery {
                                 NativeByteBuffer data = cursor.byteBufferValue(0);
                                 if (data != null) {
                                     message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                                    message.readAttachPath(data, UserConfig.getInstance(currentAccount).clientUserId);
+                                    message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
                                     data.reuse();
                                 }
                             }

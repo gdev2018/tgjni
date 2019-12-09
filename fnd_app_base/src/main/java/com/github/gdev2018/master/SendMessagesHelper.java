@@ -385,7 +385,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
     }
 
     private int currentAccount;
-    private static volatile SendMessagesHelper[] Instance = new SendMessagesHelper[UserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile SendMessagesHelper[] Instance = new SendMessagesHelper[UserConfigBase.MAX_ACCOUNT_COUNT];
     public static SendMessagesHelper getInstance(int num) {
         SendMessagesHelper localInstance = Instance[num];
         if (localInstance == null) {
@@ -1035,7 +1035,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
     }
 
     public void sendScreenshotMessage(TLRPC.User user, int messageId, TLRPC.Message resendMessage) {
-        if (user == null || messageId == 0 || user.id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+        if (user == null || messageId == 0 || user.id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
             return;
         }
 
@@ -1054,8 +1054,8 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
             message.dialog_id = user.id;
             message.unread = true;
             message.out = true;
-            message.local_id = message.id = UserConfig.getInstance(currentAccount).getNewMessageId();
-            message.from_id = UserConfig.getInstance(currentAccount).getClientUserId();
+///*            message.local_id = message.id = UserConfigBase.getInstance(currentAccount).getNewMessageId();*/
+            message.from_id = UserConfigBase.getInstance(currentAccount).getClientUserId();
             message.flags |= 256;
             message.flags |= 8;
             message.reply_to_msg_id = messageId;
@@ -1063,7 +1063,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
             message.to_id.user_id = user.id;
             message.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
             message.action = new TLRPC.TL_messageActionScreenshotTaken();
-            UserConfig.getInstance(currentAccount).saveConfig(false);
+            UserConfigBase.getInstance(currentAccount).saveConfig(false);
         }
         req.random_id = message.random_id;
 
@@ -1187,7 +1187,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
             LongSparseArray<TLRPC.Message> messagesByRandomIds = new LongSparseArray<>();
             TLRPC.InputPeer inputPeer = MessagesController.getInstance(currentAccount).getInputPeer(lower_id);
             long lastDialogId = 0;
-            int myId = UserConfig.getInstance(currentAccount).getClientUserId();
+            int myId = UserConfigBase.getInstance(currentAccount).getClientUserId();
             final boolean toMyself = peer == myId;
             long lastGroupedId;
             for (int a = 0; a < messages.size(); a++) {
@@ -1218,7 +1218,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
 
                 boolean groupedIdChanged = false;
                 final TLRPC.Message newMsg = new TLRPC.TL_message();
-                boolean forwardFromSaved = msgObj.getDialogId() == myId && msgObj.messageOwner.from_id == UserConfig.getInstance(currentAccount).getClientUserId();
+                boolean forwardFromSaved = msgObj.getDialogId() == myId && msgObj.messageOwner.from_id == UserConfigBase.getInstance(currentAccount).getClientUserId();
                 if (msgObj.isForwarded()) {
                     newMsg.fwd_from = new TLRPC.TL_messageFwdHeader();
                     newMsg.fwd_from.flags = msgObj.messageOwner.fwd_from.flags;
@@ -1286,7 +1286,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                 if (newMsg.attachPath == null) {
                     newMsg.attachPath = "";
                 }
-                newMsg.local_id = newMsg.id = UserConfig.getInstance(currentAccount).getNewMessageId();
+///*                newMsg.local_id = newMsg.id = UserConfigBase.getInstance(currentAccount).getNewMessageId();*/
                 newMsg.out = true;
                 if ((lastGroupedId = msgObj.messageOwner.grouped_id) != 0) {
                     Long gId = groupsMap.get(msgObj.messageOwner.grouped_id);
@@ -1304,10 +1304,10 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                     }
                 }
                 if (to_id.channel_id != 0 && !isMegagroup) {
-                    newMsg.from_id = isSignature ? UserConfig.getInstance(currentAccount).getClientUserId() : -to_id.channel_id;
+                    newMsg.from_id = isSignature ? UserConfigBase.getInstance(currentAccount).getClientUserId() : -to_id.channel_id;
                     newMsg.post = true;
                 } else {
-                    newMsg.from_id = UserConfig.getInstance(currentAccount).getClientUserId();
+                    newMsg.from_id = UserConfigBase.getInstance(currentAccount).getClientUserId();
                     newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
                 }
                 if (newMsg.random_id == 0) {
@@ -1355,7 +1355,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                     MessagesStorage.getInstance(currentAccount).putMessages(new ArrayList<>(arr), false, true, false, 0);
                     MessagesController.getInstance(currentAccount).updateInterfaceWithMessages(peer, objArr);
                     NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload);
-                    UserConfig.getInstance(currentAccount).saveConfig(false);
+                    UserConfigBase.getInstance(currentAccount).saveConfig(false);
 
                     final TLRPC.TL_messages_forwardMessages req = new TLRPC.TL_messages_forwardMessages();
                     req.to_peer = inputPeer;
@@ -2437,15 +2437,15 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                 if (newMsg.attachPath == null) {
                     newMsg.attachPath = "";
                 }
-                newMsg.local_id = newMsg.id = UserConfig.getInstance(currentAccount).getNewMessageId();
+///*                newMsg.local_id = newMsg.id = UserConfigBase.getInstance(currentAccount).getNewMessageId();*/
                 newMsg.out = true;
                 if (isChannel && sendToPeer != null) {
                     newMsg.from_id = -sendToPeer.channel_id;
                 } else {
-                    newMsg.from_id = UserConfig.getInstance(currentAccount).getClientUserId();
+                    newMsg.from_id = UserConfigBase.getInstance(currentAccount).getClientUserId();
                     newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
                 }
-                UserConfig.getInstance(currentAccount).saveConfig(false);
+                UserConfigBase.getInstance(currentAccount).saveConfig(false);
             }
             if (newMsg.random_id == 0) {
                 newMsg.random_id = getNextRandomId();
@@ -2477,7 +2477,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                         } else {
                             newMsg.post = true;
                             if (chat.signatures) {
-                                newMsg.from_id = UserConfig.getInstance(currentAccount).getClientUserId();
+                                newMsg.from_id = UserConfigBase.getInstance(currentAccount).getClientUserId();
                             }
                         }
                     }
@@ -2533,7 +2533,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                 }
             } else {
                 newMsg.to_id = new TLRPC.TL_peerUser();
-                if (encryptedChat.participant_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+                if (encryptedChat.participant_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
                     newMsg.to_id.user_id = encryptedChat.admin_id;
                 } else {
                     newMsg.to_id.user_id = encryptedChat.participant_id;
@@ -4430,7 +4430,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
         if (sizes.isEmpty()) {
             return null;
         } else {
-            UserConfig.getInstance(currentAccount).saveConfig(false);
+            UserConfigBase.getInstance(currentAccount).saveConfig(false);
             if (photo == null) {
                 photo = new TLRPC.TL_photo();
             }
@@ -4703,7 +4703,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
 
     @UiThread
     public static void prepareSendingAudioDocuments(final ArrayList<MessageObject> messageObjects, final long dialog_id, final MessageObject reply_to_msg, final MessageObject editingMessageObject) {
-        final int currentAccount = UserConfig.selectedAccount;
+        final int currentAccount = UserConfigBase.selectedAccount;
         new Thread(() -> {
             int size = messageObjects.size();
             for (int a = 0; a < size; a++) {
@@ -4761,7 +4761,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
         if (paths == null && originalPaths == null && uris == null || paths != null && originalPaths != null && paths.size() != originalPaths.size()) {
             return;
         }
-        final int currentAccount = UserConfig.selectedAccount;
+        final int currentAccount = UserConfigBase.selectedAccount;
         new Thread(() -> {
             boolean error = false;
             if (paths != null) {
@@ -4817,7 +4817,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
         if (result == null) {
             return;
         }
-        final int currentAccount = UserConfig.selectedAccount;
+        final int currentAccount = UserConfigBase.selectedAccount;
         if (result.send_message instanceof TLRPC.TL_botInlineMessageMediaAuto) {
             new Thread(() -> {
                 boolean isEncrypted = (int) dialog_id == 0;
@@ -5113,7 +5113,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
 
     @UiThread
     public static void prepareSendingText(final String text, final long dialog_id) {
-        final int currentAccount = UserConfig.selectedAccount;
+        final int currentAccount = UserConfigBase.selectedAccount;
         MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> Utilities.stageQueue.postRunnable(() -> AndroidUtilities.runOnUIThread(() -> {
             String textFinal = getTrimmedString(text);
             if (textFinal.length() != 0) {
@@ -5186,7 +5186,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
         if (media.isEmpty()) {
             return;
         }
-        final int currentAccount = UserConfig.selectedAccount;
+        final int currentAccount = UserConfigBase.selectedAccount;
         mediaSendQueue.postRunnable(() -> {
             long beginTime = System.currentTimeMillis();
             HashMap<SendingMediaInfo, MediaSendPrepareWorker> workers;
@@ -5505,7 +5505,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                                     document.flags |= 1;
                                 }
                                 document.mime_type = "video/mp4";
-                                UserConfig.getInstance(currentAccount).saveConfig(false);
+                                UserConfigBase.getInstance(currentAccount).saveConfig(false);
                                 TLRPC.TL_documentAttributeVideo attributeVideo;
                                 if (isEncrypted) {
                                     if (enryptedLayer >= 66) {
@@ -6194,7 +6194,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
         if (videoPath == null || videoPath.length() == 0) {
             return;
         }
-        final int currentAccount = UserConfig.selectedAccount;
+        final int currentAccount = UserConfigBase.selectedAccount;
         new Thread(() -> {
 
             final VideoEditedInfo videoEditedInfo = info != null ? info : createCompressionSettings(videoPath);
@@ -6258,7 +6258,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                     }
                     document.file_reference = new byte[0];
                     document.mime_type = "video/mp4";
-                    UserConfig.getInstance(currentAccount).saveConfig(false);
+                    UserConfigBase.getInstance(currentAccount).saveConfig(false);
                     TLRPC.TL_documentAttributeVideo attributeVideo;
                     if (isEncrypted) {
                         int high_id = (int) (dialog_id >> 32);

@@ -8,15 +8,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.BaseBuildVars;
 import com.github.gdev2018.master.LocaleController;
@@ -27,7 +24,6 @@ import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
 ///*import com.github.gdev2018.master.SecretChatHelper;*/
 import com.github.gdev2018.master.SharedConfig;
-import com.github.gdev2018.master.UserConfig;
 
 import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.browser.Browser;
@@ -547,7 +543,7 @@ public class AlertsCreator {
                 LocaleController.getString("MuteDisable", R.string.MuteDisable)
         };
         builder.setItems(items, (dialogInterface, i) -> {
-            int untilTime = ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime();
+            int untilTime = ConnectionsManager.getInstance(UserConfigBase.selectedAccount).getCurrentTime();
             if (i == 0) {
                 untilTime += 60 * 60;
             } else if (i == 1) {
@@ -558,7 +554,7 @@ public class AlertsCreator {
                 untilTime = Integer.MAX_VALUE;
             }
 
-///*            SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
+///*            SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfigBase.selectedAccount);
 //            SharedPreferences.Editor editor = preferences.edit();
 //            long flags;
 //            if (i == 3) {
@@ -569,15 +565,15 @@ public class AlertsCreator {
 //                editor.putInt("notifyuntil_" + dialog_id, untilTime);
 //                flags = ((long) untilTime << 32) | 1;
 //            }
-//            NotificationsController.getInstance(UserConfig.selectedAccount).removeNotificationsForDialog(dialog_id);
-//            MessagesStorage.getInstance(UserConfig.selectedAccount).setDialogFlags(dialog_id, flags);
+//            NotificationsController.getInstance(UserConfigBase.selectedAccount).removeNotificationsForDialog(dialog_id);
+//            MessagesStorage.getInstance(UserConfigBase.selectedAccount).setDialogFlags(dialog_id, flags);
 //            editor.commit();
-//            TLRPC.TL_dialog dialog = MessagesController.getInstance(UserConfig.selectedAccount).dialogs_dict.get(dialog_id);
+//            TLRPC.TL_dialog dialog = MessagesController.getInstance(UserConfigBase.selectedAccount).dialogs_dict.get(dialog_id);
 //            if (dialog != null) {
 //                dialog.notify_settings = new TLRPC.TL_peerNotifySettings();
 //                dialog.notify_settings.mute_until = untilTime;
 //            }
-//            NotificationsController.getInstance(UserConfig.selectedAccount).updateServerNotificationsSettings(dialog_id);*/
+//            NotificationsController.getInstance(UserConfigBase.selectedAccount).updateServerNotificationsSettings(dialog_id);*/
         }
         );
         return builder.create();
@@ -605,7 +601,7 @@ public class AlertsCreator {
                 return;
             }
 ///*            TLObject req;
-//            TLRPC.InputPeer peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) dialog_id);
+//            TLRPC.InputPeer peer = MessagesController.getInstance(UserConfigBase.selectedAccount).getInputPeer((int) dialog_id);
 //            if (messageId != 0) {
 //                TLRPC.TL_messages_report request = new TLRPC.TL_messages_report();
 //                request.peer = peer;
@@ -630,7 +626,7 @@ public class AlertsCreator {
 //                }
 //                req = request;
 //            }
-//            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, (response, error) -> {
+//            ConnectionsManager.getInstance(UserConfigBase.selectedAccount).sendRequest(req, (response, error) -> {
 //
 //            });*/
             Toast.makeText(context, LocaleController.getString("ReportChatSent", R.string.ReportChatSent), Toast.LENGTH_SHORT).show();
@@ -768,7 +764,7 @@ public class AlertsCreator {
 
     public static Dialog createColorSelectDialog(Activity parentActivity, final long dialog_id, final boolean globalGroup, final boolean globalAll, final Runnable onSelect) {
         int currentColor;
-///*        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);*/
+///*        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfigBase.selectedAccount);*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         if (globalGroup) {
             currentColor = preferences.getInt("GroupLed", 0xff0000ff);
@@ -817,7 +813,7 @@ public class AlertsCreator {
         builder.setTitle(LocaleController.getString("LedColor", R.string.LedColor));
         builder.setView(linearLayout);
         builder.setPositiveButton(LocaleController.getString("Set", R.string.Set), (dialogInterface, which) -> {
-///*            final SharedPreferences preferences1 = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);*/
+///*            final SharedPreferences preferences1 = MessagesController.getNotificationsSettings(UserConfigBase.selectedAccount);*/
             final SharedPreferences preferences1 = BaseApplication.getGlobalMainSettings();
             SharedPreferences.Editor editor = preferences1.edit();
             if (globalAll) {
@@ -833,7 +829,7 @@ public class AlertsCreator {
             }
         });
         builder.setNeutralButton(LocaleController.getString("LedDisabled", R.string.LedDisabled), (dialog, which) -> {
-///*            final SharedPreferences preferences12 = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);*/
+///*            final SharedPreferences preferences12 = MessagesController.getNotificationsSettings(UserConfigBase.selectedAccount);*/
             final SharedPreferences preferences12 = BaseApplication.getGlobalMainSettings();
             SharedPreferences.Editor editor = preferences12.edit();
             if (globalAll) {
@@ -850,7 +846,7 @@ public class AlertsCreator {
         });
         if (!globalAll && !globalGroup) {
             builder.setNegativeButton(LocaleController.getString("Default", R.string.Default), (dialog, which) -> {
-///*                final SharedPreferences preferences13 = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);*/
+///*                final SharedPreferences preferences13 = MessagesController.getNotificationsSettings(UserConfigBase.selectedAccount);*/
                 final SharedPreferences preferences13 = BaseApplication.getGlobalMainSettings();
                 SharedPreferences.Editor editor = preferences13.edit();
                 editor.remove("color_" + dialog_id);
@@ -874,7 +870,7 @@ public class AlertsCreator {
     }
 
     public static Dialog createVibrationSelectDialog(Activity parentActivity, final BaseFragment parentFragment, final long dialog_id, final String prefKeyPrefix, final Runnable onSelect) {
-///*        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);*/
+///*        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfigBase.selectedAccount);*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         final int selected[] = new int[1];
         String descriptions[];
@@ -922,7 +918,7 @@ public class AlertsCreator {
             cell.setOnClickListener(v -> {
                 selected[0] = (Integer) v.getTag();
 
-///*                final SharedPreferences preferences1 = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);*/
+///*                final SharedPreferences preferences1 = MessagesController.getNotificationsSettings(UserConfigBase.selectedAccount);*/
                 final SharedPreferences preferences1 = BaseApplication.getGlobalMainSettings();
                 SharedPreferences.Editor editor = preferences1.edit();
                 if (dialog_id != 0) {
@@ -1106,7 +1102,7 @@ public class AlertsCreator {
 //    }
 
     public static Dialog createPrioritySelectDialog(Activity parentActivity, final BaseFragment parentFragment, final long dialog_id, final boolean globalGroup, final boolean globalAll, final Runnable onSelect) {
-///*        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);*/
+///*        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfigBase.selectedAccount);*/
         SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         final int selected[] = new int[1];
         String descriptions[];
@@ -1166,7 +1162,7 @@ public class AlertsCreator {
             cell.setOnClickListener(v -> {
                 selected[0] = (Integer) v.getTag();
 
-///*                final SharedPreferences preferences1 = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);*/
+///*                final SharedPreferences preferences1 = MessagesController.getNotificationsSettings(UserConfigBase.selectedAccount);*/
                 final SharedPreferences preferences1 = BaseApplication.getGlobalMainSettings();
                 SharedPreferences.Editor editor = preferences1.edit();
                 if (dialog_id != 0) {
@@ -1213,7 +1209,7 @@ public class AlertsCreator {
     }
 
     public static Dialog createPopupSelectDialog(Activity parentActivity, final BaseFragment parentFragment, final boolean globalGroup, final boolean globalAll, final Runnable onSelect) {
-///*        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);*/
+///*        SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfigBase.selectedAccount);*/
         final SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
         final int selected[] = new int[1];
         if (globalAll) {
@@ -1241,7 +1237,7 @@ public class AlertsCreator {
             cell.setOnClickListener(v -> {
                 selected[0] = (Integer) v.getTag();
 
-///*                final SharedPreferences preferences1 = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);*/
+///*                final SharedPreferences preferences1 = MessagesController.getNotificationsSettings(UserConfigBase.selectedAccount);*/
                 final SharedPreferences preferences1 = BaseApplication.getGlobalMainSettings();
                 SharedPreferences.Editor editor = preferences1.edit();
                 editor.putInt(globalGroup ? "popupGroup" : "popupAll", selected[0]);
@@ -1345,8 +1341,8 @@ public class AlertsCreator {
                 encryptedChat.ttl = 60 * 60 * 24 * 7;
             }
             if (oldValue != encryptedChat.ttl) {
-///*                SecretChatHelper.getInstance(UserConfig.selectedAccount).sendTTLMessage(encryptedChat, null);
-//                MessagesStorage.getInstance(UserConfig.selectedAccount).updateEncryptedChatTTL(encryptedChat);*/
+///*                SecretChatHelper.getInstance(UserConfigBase.selectedAccount).sendTTLMessage(encryptedChat, null);
+//                MessagesStorage.getInstance(UserConfigBase.selectedAccount).updateEncryptedChatTTL(encryptedChat);*/
             }
         });
         return builder;
@@ -1357,7 +1353,7 @@ public class AlertsCreator {
     }
 
     public static AlertDialog createAccountSelectDialog(Activity parentActivity, final AccountSelectDelegate delegate) {
-        if (UserConfig.getActivatedAccountsCount() < 2) {
+        if (UserConfigBase.getActivatedAccountsCount() < 2) {
             return null;
         }
 
@@ -1367,8 +1363,8 @@ public class AlertsCreator {
 
         final LinearLayout linearLayout = new LinearLayout(parentActivity);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-            TLRPC.User u = UserConfig.getInstance(a).getCurrentUser();
+        for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+            TLRPC.User u = UserConfigBase.getInstance(a).getCurrentUser();
             if (u != null) {
                 AccountSelectCell cell = new AccountSelectCell(parentActivity);
                 cell.setAccount(a, false);

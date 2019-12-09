@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.MessagesController;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
@@ -44,7 +44,7 @@ public class HintDialogCell extends FrameLayout {
     private TLRPC.User currentUser;
 
     private long dialog_id;
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
 
     public HintDialogCell(Context context) {
         super(context);

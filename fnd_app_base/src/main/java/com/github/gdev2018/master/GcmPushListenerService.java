@@ -123,25 +123,25 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                     }
                     int accountUserId;
                     if (userIdObject == null) {
-                        accountUserId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+                        accountUserId = UserConfigBase.getInstance(UserConfigBase.selectedAccount).getClientUserId();
                     } else {
                         if (userIdObject instanceof Integer) {
                             accountUserId = (Integer) userIdObject;
                         } else if (userIdObject instanceof String) {
                             accountUserId = Utilities.parseInt((String) userIdObject);
                         } else {
-                            accountUserId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+                            accountUserId = UserConfigBase.getInstance(UserConfigBase.selectedAccount).getClientUserId();
                         }
                     }
-                    int account = UserConfig.selectedAccount;
-                    for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-                        if (UserConfig.getInstance(a).getClientUserId() == accountUserId) {
+                    int account = UserConfigBase.selectedAccount;
+                    for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+                        if (UserConfigBase.getInstance(a).getClientUserId() == accountUserId) {
                             account = a;
                             break;
                         }
                     }
                     final int accountFinal = currentAccount = account;
-                    if (!UserConfig.getInstance(currentAccount).isClientActivated()) {
+                    if (!UserConfigBase.getInstance(currentAccount).isClientActivated()) {
                         if (BaseBuildVars.LOGS_ENABLED) {
                             FileLog.d("GCM ACCOUNT NOT ACTIVATED");
                         }
@@ -884,8 +884,8 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     }
 
     private void onDecryptError() {
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-            if (UserConfig.getInstance(a).isClientActivated()) {
+        for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+            if (UserConfigBase.getInstance(a).isClientActivated()) {
                 ConnectionsManager.onInternalPushReceived(a);
                 ConnectionsManager.getInstance(a).resumeNetworkMaybe();
             }
@@ -907,11 +907,11 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     public static void sendRegistrationToServer(final String token) {
         Utilities.stageQueue.postRunnable(() -> {
             SharedConfig.pushString = token;
-            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-                UserConfig userConfig = UserConfig.getInstance(a);
-                userConfig.registeredForPush = false;
-                userConfig.saveConfig(false);
-                if (userConfig.getClientUserId() != 0) {
+            for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+                UserConfigBase userConfigBase = UserConfigBase.getInstance(a);
+///*                userConfigBase.registeredForPush = false;*/
+                userConfigBase.saveConfig(false);
+                if (userConfigBase.getClientUserId() != 0) {
                     final int currentAccount = a;
                     AndroidUtilities.runOnUIThread(() -> MessagesController.getInstance(currentAccount).registerForPush(token));
                 }

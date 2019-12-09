@@ -40,7 +40,7 @@ import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.BottomSheet;
 import com.github.gdev2018.master.ui.Cells.ContextLinkCell;
@@ -381,7 +381,7 @@ public class StickerPreviewViewer {
     }
 
     public void setParentActivity(Activity activity) {
-        currentAccount = UserConfig.selectedAccount;
+        currentAccount = UserConfigBase.selectedAccount;
         centerImage.setCurrentAccount(currentAccount);
         if (parentActivity == activity) {
             return;

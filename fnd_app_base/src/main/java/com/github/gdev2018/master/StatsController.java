@@ -105,7 +105,7 @@ public class StatsController {
         }
     };
 
-    private static volatile StatsController Instance[] = new StatsController[UserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile StatsController Instance[] = new StatsController[UserConfigBase.MAX_ACCOUNT_COUNT];
 
     public static StatsController getInstance(int num) {
         StatsController localInstance = Instance[num];

@@ -16,7 +16,7 @@ import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
@@ -38,7 +38,7 @@ public class GroupCreateUserCell extends FrameLayout {
     private CharSequence currentName;
     private CharSequence currentStatus;
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
 
     private String lastName;
     private int lastStatus;
@@ -153,7 +153,7 @@ public class GroupCreateUserCell extends FrameLayout {
                 statusTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
                 statusTextView.setText(LocaleController.getString("Bot", R.string.Bot));
             } else {
-                if (currentUser.id == UserConfig.getInstance(currentAccount).getClientUserId() || currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime() || MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(currentUser.id)) {
+                if (currentUser.id == UserConfigBase.getInstance(currentAccount).getClientUserId() || currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime() || MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(currentUser.id)) {
                     statusTextView.setTag(Theme.key_windowBackgroundWhiteBlueText);
                     statusTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText));
                     statusTextView.setText(LocaleController.getString("Online", R.string.Online));

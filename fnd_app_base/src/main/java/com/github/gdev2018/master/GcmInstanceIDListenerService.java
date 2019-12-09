@@ -11,8 +11,6 @@ package com.github.gdev2018.master;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
-import com.github.gdev2018.master.di.BaseApplication;
-
 public class GcmInstanceIDListenerService extends FirebaseInstanceIdService {
 
     @Override
@@ -34,11 +32,11 @@ public class GcmInstanceIDListenerService extends FirebaseInstanceIdService {
     public static void sendRegistrationToServer(final String token) {
         Utilities.stageQueue.postRunnable(() -> {
             SharedConfig.pushString = token;
-            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-                UserConfig userConfig = UserConfig.getInstance(a);
-                userConfig.registeredForPush = false;
-                userConfig.saveConfig(false);
-                if (userConfig.getClientUserId() != 0) {
+            for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+                UserConfigBase userConfigBase = UserConfigBase.getInstance(a);
+///*                userConfigBase.registeredForPush = false;*/
+                userConfigBase.saveConfig(false);
+                if (userConfigBase.getClientUserId() != 0) {
                     final int currentAccount = a;
 ///*                    AndroidUtilities.runOnUIThread(() -> MessagesController.getInstance(currentAccount).registerForPush(token));*/
                 }

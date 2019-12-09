@@ -130,7 +130,7 @@ public class NotificationsController {
     }
 
     private int currentAccount;
-    private static volatile NotificationsController Instance[] = new NotificationsController[UserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile NotificationsController Instance[] = new NotificationsController[UserConfigBase.MAX_ACCOUNT_COUNT];
 
     public static NotificationsController getInstance(int num) {
         NotificationsController localInstance = Instance[num];
@@ -1022,8 +1022,8 @@ public class NotificationsController {
 
     private int getTotalAllUnreadCount() {
         int count = 0;
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-            if (UserConfig.getInstance(a).isClientActivated()) {
+        for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+            if (UserConfigBase.getInstance(a).isClientActivated()) {
                 NotificationsController controller = getInstance(a);
                 if (controller.showBadgeNumber) {
                     if (controller.showBadgeMessages) {
@@ -1123,7 +1123,7 @@ public class NotificationsController {
             } else {
                 from_id = -chat_id;
             }
-        } else if (from_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+        } else if (from_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
             from_id = messageObject.messageOwner.from_id;
         }
 
@@ -1189,7 +1189,7 @@ public class NotificationsController {
                         return LocaleController.formatString("NotificationContactNewPhoto", R.string.NotificationContactNewPhoto, name);
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionLoginUnknownLocation) {
                         String date = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(((long) messageObject.messageOwner.date) * 1000), LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000));
-                        return LocaleController.formatString("NotificationUnrecognizedDevice", R.string.NotificationUnrecognizedDevice, UserConfig.getInstance(currentAccount).getCurrentUser().first_name, date, messageObject.messageOwner.action.title, messageObject.messageOwner.action.address);
+                        return LocaleController.formatString("NotificationUnrecognizedDevice", R.string.NotificationUnrecognizedDevice, UserConfigBase.getInstance(currentAccount).getCurrentUser().first_name, date, messageObject.messageOwner.action.title, messageObject.messageOwner.action.address);
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionGameScore || messageObject.messageOwner.action instanceof TLRPC.TL_messageActionPaymentSent) {
                         return messageObject.messageText.toString();
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionPhoneCall) {
@@ -1206,7 +1206,7 @@ public class NotificationsController {
                             if (messageObject.messageOwner.to_id.channel_id != 0 && !chat.megagroup) {
                                 return LocaleController.formatString("ChannelAddedByNotification", R.string.ChannelAddedByNotification, name, chat.title);
                             } else {
-                                if (singleUserId == UserConfig.getInstance(currentAccount).getClientUserId()) {
+                                if (singleUserId == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
                                     return LocaleController.formatString("NotificationInvitedToGroup", R.string.NotificationInvitedToGroup, name, chat.title);
                                 } else {
                                     TLRPC.User u2 = MessagesController.getInstance(currentAccount).getUser(singleUserId);
@@ -1249,7 +1249,7 @@ public class NotificationsController {
                             return LocaleController.formatString("NotificationEditedGroupPhoto", R.string.NotificationEditedGroupPhoto, name, chat.title);
                         }
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatDeleteUser) {
-                        if (messageObject.messageOwner.action.user_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+                        if (messageObject.messageOwner.action.user_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
                             return LocaleController.formatString("NotificationGroupKickYou", R.string.NotificationGroupKickYou, name, chat.title);
                         } else if (messageObject.messageOwner.action.user_id == from_id) {
                             return LocaleController.formatString("NotificationGroupLeftMember", R.string.NotificationGroupLeftMember, name, chat.title);
@@ -1518,7 +1518,7 @@ public class NotificationsController {
             } else {
                 from_id = -chat_id;
             }
-        } else if (from_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+        } else if (from_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
             from_id = messageObject.messageOwner.from_id;
         }
 
@@ -1568,7 +1568,7 @@ public class NotificationsController {
                             msg = LocaleController.formatString("NotificationContactNewPhoto", R.string.NotificationContactNewPhoto, name);
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionLoginUnknownLocation) {
                             String date = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(((long) messageObject.messageOwner.date) * 1000), LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000));
-                            msg = LocaleController.formatString("NotificationUnrecognizedDevice", R.string.NotificationUnrecognizedDevice, UserConfig.getInstance(currentAccount).getCurrentUser().first_name, date, messageObject.messageOwner.action.title, messageObject.messageOwner.action.address);
+                            msg = LocaleController.formatString("NotificationUnrecognizedDevice", R.string.NotificationUnrecognizedDevice, UserConfigBase.getInstance(currentAccount).getCurrentUser().first_name, date, messageObject.messageOwner.action.title, messageObject.messageOwner.action.address);
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionGameScore || messageObject.messageOwner.action instanceof TLRPC.TL_messageActionPaymentSent) {
                             msg = messageObject.messageText.toString();
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionPhoneCall) {
@@ -1672,7 +1672,7 @@ public class NotificationsController {
                                 if (messageObject.messageOwner.to_id.channel_id != 0 && !chat.megagroup) {
                                     msg = LocaleController.formatString("ChannelAddedByNotification", R.string.ChannelAddedByNotification, name, chat.title);
                                 } else {
-                                    if (singleUserId == UserConfig.getInstance(currentAccount).getClientUserId()) {
+                                    if (singleUserId == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
                                         msg = LocaleController.formatString("NotificationInvitedToGroup", R.string.NotificationInvitedToGroup, name, chat.title);
                                     } else {
                                         TLRPC.User u2 = MessagesController.getInstance(currentAccount).getUser(singleUserId);
@@ -1715,7 +1715,7 @@ public class NotificationsController {
                                 msg = LocaleController.formatString("NotificationEditedGroupPhoto", R.string.NotificationEditedGroupPhoto, name, chat.title);
                             }
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatDeleteUser) {
-                            if (messageObject.messageOwner.action.user_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+                            if (messageObject.messageOwner.action.user_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
                                 msg = LocaleController.formatString("NotificationGroupKickYou", R.string.NotificationGroupKickYou, name, chat.title);
                             } else if (messageObject.messageOwner.action.user_id == from_id) {
                                 msg = LocaleController.formatString("NotificationGroupLeftMember", R.string.NotificationGroupLeftMember, name, chat.title);
@@ -2053,7 +2053,7 @@ public class NotificationsController {
             if (WearDataLayerListenerService.isWatchConnected()) {
                 try {
                     JSONObject o = new JSONObject();
-                    o.put("id", UserConfig.getInstance(currentAccount).getClientUserId());
+                    o.put("id", UserConfigBase.getInstance(currentAccount).getClientUserId());
                     o.put("cancel_all", true);
                     WearDataLayerListenerService.sendMessageToWatch("/notify", o.toString().getBytes("UTF-8"), "remote_notifications");
                 } catch (JSONException ignore) {
@@ -2299,7 +2299,7 @@ public class NotificationsController {
     }
 
     private void showOrUpdateNotification(boolean notifyAboutLast) {
-        if (!UserConfig.getInstance(currentAccount).isClientActivated() || pushMessages.isEmpty()) {
+        if (!UserConfigBase.getInstance(currentAccount).isClientActivated() || pushMessages.isEmpty()) {
             dismissNotification();
             return;
         }
@@ -2325,7 +2325,7 @@ public class NotificationsController {
             int user_id = lastMessageObject.messageOwner.to_id.user_id;
             if (user_id == 0) {
                 user_id = lastMessageObject.messageOwner.from_id;
-            } else if (user_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+            } else if (user_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
                 user_id = lastMessageObject.messageOwner.from_id;
             }
 
@@ -2567,11 +2567,11 @@ public class NotificationsController {
             }
 
             String detailText;
-            if (UserConfig.getActivatedAccountsCount() > 1) {
+            if (UserConfigBase.getActivatedAccountsCount() > 1) {
                 if (pushDialogs.size() == 1) {
-                    detailText = UserObject.getFirstName(UserConfig.getInstance(currentAccount).getCurrentUser());
+                    detailText = UserObject.getFirstName(UserConfigBase.getInstance(currentAccount).getCurrentUser());
                 } else {
-                    detailText = UserObject.getFirstName(UserConfig.getInstance(currentAccount).getCurrentUser()) + "・";
+                    detailText = UserObject.getFirstName(UserConfigBase.getInstance(currentAccount).getCurrentUser()) + "・";
                 }
             } else {
                 detailText = "";
@@ -3254,7 +3254,7 @@ public class NotificationsController {
                 summaryExtender.setDismissalId("summary_" + dismissalID);
                 notificationBuilder.extend(summaryExtender);
             }
-            wearableExtender.setBridgeTag("tgaccount" + UserConfig.getInstance(currentAccount).getClientUserId());
+            wearableExtender.setBridgeTag("tgaccount" + UserConfigBase.getInstance(currentAccount).getClientUserId());
 
             long date = ((long) messageObjects.get(0).messageOwner.date) * 1000;
 
@@ -3380,7 +3380,7 @@ public class NotificationsController {
         if (serializedNotifications != null) {
             try {
                 JSONObject s = new JSONObject();
-                s.put("id", UserConfig.getInstance(currentAccount).getClientUserId());
+                s.put("id", UserConfigBase.getInstance(currentAccount).getClientUserId());
                 s.put("n", serializedNotifications);
                 WearDataLayerListenerService.sendMessageToWatch("/notify", s.toString().getBytes("UTF-8"), "remote_notifications");
             } catch (Exception ignore) {

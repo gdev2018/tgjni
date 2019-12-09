@@ -185,7 +185,7 @@ public class NotificationCenter {
     }
 
     private int currentAccount;
-    private static volatile NotificationCenter Instance[] = new NotificationCenter[UserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile NotificationCenter Instance[] = new NotificationCenter[UserConfigBase.MAX_ACCOUNT_COUNT];
     private static volatile NotificationCenter globalInstance;
 
     @UiThread

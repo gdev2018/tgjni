@@ -190,7 +190,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     public ImageReceiver(View view) {
         parentView = view;
         roundPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-        currentAccount = UserConfig.selectedAccount;
+        currentAccount = UserConfigBase.selectedAccount;
     }
 
     public void cancelLoadImage() {

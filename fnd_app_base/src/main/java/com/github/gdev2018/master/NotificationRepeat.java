@@ -22,7 +22,7 @@ public class NotificationRepeat extends IntentService {
         if (intent == null) {
             return;
         }
-        final int currentAccount = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
+        final int currentAccount = intent.getIntExtra("currentAccount", UserConfigBase.selectedAccount);
         AndroidUtilities.runOnUIThread(new Runnable() {
             @Override
             public void run() {

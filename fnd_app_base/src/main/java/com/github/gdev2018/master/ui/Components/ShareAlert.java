@@ -41,7 +41,6 @@ import com.github.gdev2018.master.SQLite.SQLiteCursor;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.ChatObject;
-import com.github.gdev2018.master.ContactsController;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessageObject;
@@ -50,7 +49,7 @@ import com.github.gdev2018.master.MessagesStorage;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.SendMessagesHelper;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.support.widget.GridLayoutManager;
 import com.github.gdev2018.master.support.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
@@ -91,7 +90,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
     private Drawable shadowDrawable;
     private LongSparseArray<TLRPC.TL_dialog> selectedDialogs = new LongSparseArray<>();
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
 
     private TLRPC.TL_exportedMessageLink exportedMessageLink;
     private boolean loadingLink;
@@ -563,7 +562,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
         public void fetchDialogs() {
             dialogs.clear();
-            int selfUserId = UserConfig.getInstance(currentAccount).clientUserId;
+            int selfUserId = UserConfigBase.getInstance(currentAccount).clientUserId;
             if (!MessagesController.getInstance(currentAccount).dialogsForward.isEmpty()) {
                 dialogs.add(MessagesController.getInstance(currentAccount).dialogsForward.get(0));
             }

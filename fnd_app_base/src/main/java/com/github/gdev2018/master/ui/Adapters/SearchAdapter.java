@@ -13,13 +13,13 @@ import android.view.ViewGroup;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.R;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.support.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ContactsController;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.MessagesController;
-import com.github.gdev2018.master.UserConfig;
 import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Cells.GraySectionCell;
@@ -120,7 +120,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
             if (allowUsernameSearch) {
                 searchAdapterHelper.queryServerSearch(query, true, allowChats, allowBots, true, channelId, -1);
             }
-            final int currentAccount = UserConfig.selectedAccount;
+            final int currentAccount = UserConfigBase.selectedAccount;
             final ArrayList<TLRPC.TL_contact> contactsCopy = new ArrayList<>(ContactsController.getInstance(currentAccount).contacts);
             Utilities.searchQueue.postRunnable(() -> {
                 String search1 = query.trim().toLowerCase();
@@ -144,7 +144,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                 for (int a = 0; a < contactsCopy.size(); a++) {
                     TLRPC.TL_contact contact = contactsCopy.get(a);
                     TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(contact.user_id);
-                    if (user.id == UserConfig.getInstance(currentAccount).getClientUserId() || onlyMutual && !user.mutual_contact || ignoreUsers != null && ignoreUsers.indexOfKey(contact.user_id) >= 0) {
+                    if (user.id == UserConfigBase.getInstance(currentAccount).getClientUserId() || onlyMutual && !user.mutual_contact || ignoreUsers != null && ignoreUsers.indexOfKey(contact.user_id) >= 0) {
                         continue;
                     }
 

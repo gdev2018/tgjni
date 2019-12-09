@@ -65,8 +65,8 @@ public class ContactsController {
     private class MyContentObserver extends ContentObserver {
 
         private Runnable checkRunnable = () -> {
-            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-                if (UserConfig.getInstance(a).isClientActivated()) {
+            for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+                if (UserConfigBase.getInstance(a).isClientActivated()) {
                     ConnectionsManager.getInstance(a).resumeNetworkMaybe();
                     ContactsController.getInstance(a).checkContacts();
                 }
@@ -161,7 +161,7 @@ public class ContactsController {
     private int completedRequestsCount;
 
     private int currentAccount;
-    private static volatile ContactsController Instance[] = new ContactsController[UserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile ContactsController Instance[] = new ContactsController[UserConfigBase.MAX_ACCOUNT_COUNT];
     public static ContactsController getInstance(int num) {
         ContactsController localInstance = Instance[num];
         if (localInstance == null) {
@@ -300,8 +300,8 @@ public class ContactsController {
             for (int a = 0; a < accounts.length; a++) {
                 Account acc = accounts[a];
                 boolean found = false;
-                for (int b = 0; b < UserConfig.MAX_ACCOUNT_COUNT; b++) {
-                    TLRPC.User user = UserConfig.getInstance(b).getCurrentUser();
+                for (int b = 0; b < UserConfigBase.MAX_ACCOUNT_COUNT; b++) {
+                    TLRPC.User user = UserConfigBase.getInstance(b).getCurrentUser();
                     if (user != null) {
                         if (acc.name.equals("" + user.id)) {
                             if (b == currentAccount) {
@@ -324,11 +324,11 @@ public class ContactsController {
         } catch (Throwable ignore) {
 
         }
-        if (UserConfig.getInstance(currentAccount).isClientActivated()) {
+        if (UserConfigBase.getInstance(currentAccount).isClientActivated()) {
             readContacts();
             if (systemAccount == null) {
                 try {
-                    systemAccount = new Account("" + UserConfig.getInstance(currentAccount).getClientUserId(), "com.github.gdev2018.master");
+                    systemAccount = new Account("" + UserConfigBase.getInstance(currentAccount).getClientUserId(), "com.github.gdev2018.master");
                     am.addAccountExplicitly(systemAccount, "", null);
                 } catch (Exception ignore) {
 
@@ -345,8 +345,8 @@ public class ContactsController {
             for (int a = 0; a < accounts.length; a++) {
                 Account acc = accounts[a];
                 boolean found = false;
-                for (int b = 0; b < UserConfig.MAX_ACCOUNT_COUNT; b++) {
-                    TLRPC.User user = UserConfig.getInstance(b).getCurrentUser();
+                for (int b = 0; b < UserConfigBase.MAX_ACCOUNT_COUNT; b++) {
+                    TLRPC.User user = UserConfigBase.getInstance(b).getCurrentUser();
                     if (user != null) {
                         if (acc.name.equals("" + user.id)) {
                             found = true;
@@ -421,8 +421,8 @@ public class ContactsController {
                         systemAccount = null;
                         for (int a = 0; a < accounts.length; a++) {
                             Account acc = accounts[a];
-                            for (int b = 0; b < UserConfig.MAX_ACCOUNT_COUNT; b++) {
-                                TLRPC.User user = UserConfig.getInstance(b).getCurrentUser();
+                            for (int b = 0; b < UserConfigBase.MAX_ACCOUNT_COUNT; b++) {
+                                TLRPC.User user = UserConfigBase.getInstance(b).getCurrentUser();
                                 if (user != null) {
                                     if (acc.name.equals("" + user.id)) {
                                         am.removeAccount(acc, null, null);
@@ -435,7 +435,7 @@ public class ContactsController {
 
                     }
                     try {
-                        systemAccount = new Account("" + UserConfig.getInstance(currentAccount).getClientUserId(), "com.github.gdev2018.master");
+                        systemAccount = new Account("" + UserConfigBase.getInstance(currentAccount).getClientUserId(), "com.github.gdev2018.master");
                         am.addAccountExplicitly(systemAccount, "", null);
                     } catch (Exception ignore) {
 
@@ -537,12 +537,12 @@ public class ContactsController {
     }
 
     private HashMap<String, Contact> readContactsFromPhoneBook() {
-        if (!UserConfig.getInstance(currentAccount).syncContacts) {
-            if (BaseBuildVars.LOGS_ENABLED) {
-                FileLog.d("contacts sync disabled");
-            }
-            return new HashMap<>();
-        }
+///*        if (!UserConfigBase.getInstance(currentAccount).syncContacts) {
+//            if (BaseBuildVars.LOGS_ENABLED) {
+//                FileLog.d("contacts sync disabled");
+//            }
+//            return new HashMap<>();
+//        }*/
         if (!hasContactsPermission()) {
             if (BaseBuildVars.LOGS_ENABLED) {
                 FileLog.d("app has no contacts permissions");
@@ -829,10 +829,10 @@ public class ContactsController {
                     AccountManager am = AccountManager.get(BaseApplication.mApplicationContext);
                     Account[] accounts = am.getAccountsByType("com.github.gdev2018.master.account");
                     boolean recreateAccount = false;
-                    if (UserConfig.getInstance(currentAccount).isClientActivated()) {
+                    if (UserConfigBase.getInstance(currentAccount).isClientActivated()) {
                         if (accounts.length != 1) {
                             FileLog.e("detected account deletion!");
-                            currentAccount = new Account(UserConfig.getInstance(currentAccount).getCurrentUser().phone, "com.github.gdev2018.master.account");
+                            currentAccount = new Account(UserConfigBase.getInstance(currentAccount).getCurrentUser().phone, "com.github.gdev2018.master.account");
                             am.addAccountExplicitly(currentAccount, "", null);
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 @Override
@@ -1313,7 +1313,7 @@ public class ContactsController {
         int count = contacts.size();
         for (int a = -1; a < count; a++) {
             if (a == -1) {
-                acc = ((acc * 20261) + 0x80000000L + UserConfig.getInstance(currentAccount).contactsSavedCount) % 0x80000000L;
+///*                acc = ((acc * 20261) + 0x80000000L + UserConfigBase.getInstance(currentAccount).contactsSavedCount) % 0x80000000L;*/
             } else {
                 TLRPC.TL_contact set = contacts.get(a);
                 acc = ((acc * 20261) + 0x80000000L + set.user_id) % 0x80000000L;
@@ -1347,8 +1347,8 @@ public class ContactsController {
                             applyContactsUpdates(delayedContactsUpdate, null, null, null);
                             delayedContactsUpdate.clear();
                         }
-                        UserConfig.getInstance(currentAccount).lastContactsSyncTime = (int) (System.currentTimeMillis() / 1000);
-                        UserConfig.getInstance(currentAccount).saveConfig(false);
+///*                        UserConfigBase.getInstance(currentAccount).lastContactsSyncTime = (int) (System.currentTimeMillis() / 1000);*/
+                        UserConfigBase.getInstance(currentAccount).saveConfig(false);
                         AndroidUtilities.runOnUIThread(() -> {
                             synchronized (loadContactsSync) {
                                 loadingContacts = false;
@@ -1360,8 +1360,8 @@ public class ContactsController {
                         }
                         return;
                     } else {
-                        UserConfig.getInstance(currentAccount).contactsSavedCount = res.saved_count;
-                        UserConfig.getInstance(currentAccount).saveConfig(false);
+///*                        UserConfigBase.getInstance(currentAccount).contactsSavedCount = res.saved_count;
+//                        UserConfigBase.getInstance(currentAccount).saveConfig(false);*/
                     }
                     processLoadedContacts(res.contacts, res.users, 0);
                 }
@@ -1403,20 +1403,20 @@ public class ContactsController {
                 if (BaseBuildVars.LOGS_ENABLED) {
                     FileLog.d("done loading contacts");
                 }
-                if (from == 1 && (contactsArr.isEmpty() || Math.abs(System.currentTimeMillis() / 1000 - UserConfig.getInstance(currentAccount).lastContactsSyncTime) >= 24 * 60 * 60)) {
-                    loadContacts(false, getContactsHash(contactsArr));
-                    if (contactsArr.isEmpty()) {
-                        return;
-                    }
-                }
-                if (from == 0) {
-                    UserConfig.getInstance(currentAccount).lastContactsSyncTime = (int) (System.currentTimeMillis() / 1000);
-                    UserConfig.getInstance(currentAccount).saveConfig(false);
-                }
+///*                if (from == 1 && (contactsArr.isEmpty() || Math.abs(System.currentTimeMillis() / 1000 - UserConfigBase.getInstance(currentAccount).lastContactsSyncTime) >= 24 * 60 * 60)) {
+//                    loadContacts(false, getContactsHash(contactsArr));
+//                    if (contactsArr.isEmpty()) {
+//                        return;
+//                    }
+//                }*/
+///*                if (from == 0) {
+//                    UserConfigBase.getInstance(currentAccount).lastContactsSyncTime = (int) (System.currentTimeMillis() / 1000);
+//                    UserConfigBase.getInstance(currentAccount).saveConfig(false);
+//                }*/
 
                 for (int a = 0; a < contactsArr.size(); a++) {
                     TLRPC.TL_contact contact = contactsArr.get(a);
-                    if (usersDict.get(contact.user_id) == null && contact.user_id != UserConfig.getInstance(currentAccount).getClientUserId()) {
+                    if (usersDict.get(contact.user_id) == null && contact.user_id != UserConfigBase.getInstance(currentAccount).getClientUserId()) {
                         loadContacts(false, 0);
                         if (BaseBuildVars.LOGS_ENABLED) {
                             FileLog.d("contacts are broken, load from server");

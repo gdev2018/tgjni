@@ -18,7 +18,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.media.ExifInterface;
 import android.support.v4.content.FileProvider;
@@ -36,7 +35,7 @@ import com.github.gdev2018.master.MediaController;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.SendMessagesHelper;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.VideoEditedInfo;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
@@ -60,7 +59,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     public BaseFragment parentFragment;
     public ImageUpdaterDelegate delegate;
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
     private ImageReceiver imageReceiver;
     public String currentPicturePath;
     private TLRPC.PhotoSize bigPhoto;
@@ -405,7 +404,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         }
         bitmap.recycle();
         if (bigPhoto != null) {
-            UserConfig.getInstance(currentAccount).saveConfig(false);
+            UserConfigBase.getInstance(currentAccount).saveConfig(false);
             uploadingImage = FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE) + "/" + bigPhoto.location.volume_id + "_" + bigPhoto.location.local_id + ".jpg";
             if (uploadAfterSelect) {
                 NotificationCenter.getInstance(currentAccount).addObserver(ImageUpdater.this, NotificationCenter.FileDidUpload);

@@ -62,7 +62,7 @@ import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.SendMessagesHelper;
 import com.github.gdev2018.master.SharedConfig;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.WebFile;
@@ -401,7 +401,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     //
     private int TAG;
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
 
     public boolean isChat;
     private boolean isPressed;
@@ -6691,7 +6691,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private boolean checkNeedDrawShareButton(MessageObject messageObject) {
         if (currentPosition != null && !currentPosition.last) {
             return false;
-        } else if (messageObject.messageOwner.fwd_from != null && !messageObject.isOutOwner() && messageObject.messageOwner.fwd_from.saved_from_peer != null && messageObject.getDialogId() == UserConfig.getInstance(currentAccount).getClientUserId()) {
+        } else if (messageObject.messageOwner.fwd_from != null && !messageObject.isOutOwner() && messageObject.messageOwner.fwd_from.saved_from_peer != null && messageObject.getDialogId() == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
             drwaShareGoIcon = true;
         }
         return messageObject.needDrawShareButton();
@@ -6704,7 +6704,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private void updateCurrentUserAndChat() {
         MessagesController messagesController = MessagesController.getInstance(currentAccount);
         TLRPC.MessageFwdHeader fwd_from = currentMessageObject.messageOwner.fwd_from;
-        int currentUserId = UserConfig.getInstance(currentAccount).getClientUserId();
+        int currentUserId = UserConfigBase.getInstance(currentAccount).getClientUserId();
         if (fwd_from != null && fwd_from.channel_id != 0 && currentMessageObject.getDialogId() == currentUserId) {
             currentChat = MessagesController.getInstance(currentAccount).getChat(fwd_from.channel_id);
         } else if (fwd_from != null && fwd_from.saved_from_peer != null) {

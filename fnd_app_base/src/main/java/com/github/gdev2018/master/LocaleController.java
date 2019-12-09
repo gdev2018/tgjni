@@ -24,7 +24,7 @@ import com.github.gdev2018.master.time.FastDateFormat;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.di.BaseApplication;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.BufferedWriter;
@@ -39,10 +39,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import com.github.gdev2018.master.R;
-
-import net.hockeyapp.android.metrics.model.Base;
 
 
 /**
@@ -331,7 +327,7 @@ public class LocaleController {
 
         loadOtherLanguages();
         if (remoteLanguages.isEmpty()) {
-///*            AndroidUtilities.runOnUIThread(() -> loadRemoteLanguages(UserConfig.selectedAccount));*/
+///*            AndroidUtilities.runOnUIThread(() -> loadRemoteLanguages(UserConfigBase.selectedAccount));*/
         }
 
         for (int a = 0; a < otherLanguages.size(); a++) {
@@ -395,7 +391,7 @@ public class LocaleController {
                 }
             }
 
-            applyLanguage(currentInfo, override, true, UserConfig.selectedAccount);
+            applyLanguage(currentInfo, override, true, UserConfigBase.selectedAccount);
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -1202,7 +1198,7 @@ public class LocaleController {
         if (languageOverride != null) {
             LocaleInfo toSet = currentLocaleInfo;
             currentLocaleInfo = null;
-            applyLanguage(toSet, false, false, UserConfig.selectedAccount);
+            applyLanguage(toSet, false, false, UserConfigBase.selectedAccount);
         } else {
             Locale newLocale = newConfig.locale;
             if (newLocale != null) {
@@ -1333,7 +1329,7 @@ public class LocaleController {
             int dateYear = rightNow.get(Calendar.YEAR);
 
             if (dateDay == day && year == dateYear) {
-                int diff = (int) (ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime() - date / 1000) / 60;
+                int diff = (int) (ConnectionsManager.getInstance(UserConfigBase.selectedAccount).getCurrentTime() - date / 1000) / 60;
                 if (diff < 1) {
                     return LocaleController.getString("LocationUpdatedJustNow", R.string.LocationUpdatedJustNow);
                 } else if (diff < 60) {
@@ -1851,7 +1847,7 @@ public class LocaleController {
                     }
                 }, ConnectionsManager.RequestFlagWithoutLogin);
             } else {
-                for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
                     ConnectionsManager.setLangCode(localeInfo.getLangCode());
                 }
                 TLRPC.TL_langpack_getLangPack req = new TLRPC.TL_langpack_getLangPack();

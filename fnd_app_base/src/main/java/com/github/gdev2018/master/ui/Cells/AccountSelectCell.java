@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.ContactsController;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.AvatarDrawable;
@@ -79,7 +79,7 @@ public class AccountSelectCell extends FrameLayout {
 
     public void setAccount(int account, boolean check) {
         accountNumber = account;
-        TLRPC.User user = UserConfig.getInstance(accountNumber).getCurrentUser();
+        TLRPC.User user = UserConfigBase.getInstance(accountNumber).getCurrentUser();
         avatarDrawable.setInfo(user);
         textView.setText(ContactsController.formatName(user.first_name, user.last_name));
         TLRPC.FileLocation avatar;
@@ -90,7 +90,7 @@ public class AccountSelectCell extends FrameLayout {
         }
         imageView.getImageReceiver().setCurrentAccount(account);
         imageView.setImage(avatar, "50_50", avatarDrawable, user);
-        checkImageView.setVisibility(check && account == UserConfig.selectedAccount ? VISIBLE : INVISIBLE);
+        checkImageView.setVisibility(check && account == UserConfigBase.selectedAccount ? VISIBLE : INVISIBLE);
     }
 
     public int getAccountNumber() {

@@ -8,7 +8,6 @@
 
 package com.github.gdev2018.master.ui;
 
-import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -19,7 +18,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,7 +36,6 @@ import android.media.MediaCodecInfo;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.annotation.Keep;
@@ -88,7 +85,7 @@ import com.coremedia.iso.boxes.SampleSizeBox;
 import com.coremedia.iso.boxes.TimeToSampleBox;
 import com.coremedia.iso.boxes.TrackBox;
 import com.coremedia.iso.boxes.TrackHeaderBox;
-import com.github.gdev2018.master.ContactsController;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -101,7 +98,6 @@ import com.github.gdev2018.master.Bitmaps;
 import com.github.gdev2018.master.BringAppForegroundService;
 import com.github.gdev2018.master.BuildConfig;
 import com.github.gdev2018.master.BaseBuildVars;
-import com.github.gdev2018.master.ChatObject;
 ///*import com.github.gdev2018.master.ContactsController;*/
 import com.github.gdev2018.master.DataQuery;
 import com.github.gdev2018.master.Emoji;
@@ -114,13 +110,10 @@ import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MediaController;
 import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.MessagesController;
-import com.github.gdev2018.master.MessagesStorage;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.SecureDocument;
-import com.github.gdev2018.master.SendMessagesHelper;
 import com.github.gdev2018.master.SharedConfig;
-import com.github.gdev2018.master.UserConfig;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.VideoEditedInfo;
@@ -140,7 +133,6 @@ import com.github.gdev2018.master.ui.ActionBar.BottomSheet;
 import com.github.gdev2018.master.ui.ActionBar.SimpleTextView;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Adapters.MentionsAdapter;
-import com.github.gdev2018.master.ui.Cells.CheckBoxCell;
 import com.github.gdev2018.master.ui.Cells.PhotoPickerPhotoCell;
 import com.github.gdev2018.master.ui.Components.AnimatedFileDrawable;
 import com.github.gdev2018.master.ui.Components.AnimationProperties;
@@ -162,7 +154,6 @@ import com.github.gdev2018.master.ui.Components.RadialProgressView;
 import com.github.gdev2018.master.ui.Components.RecyclerListView;
 import com.github.gdev2018.master.ui.Components.SeekBar;
 import com.github.gdev2018.master.ui.Components.SizeNotifierFrameLayoutPhoto;
-import com.github.gdev2018.master.ui.Components.StickersAlert;
 import com.github.gdev2018.master.ui.Components.URLSpanUserMentionPhotoViewer;
 import com.github.gdev2018.master.ui.Components.VideoForwardDrawable;
 import com.github.gdev2018.master.ui.Components.VideoPlayer;
@@ -1719,7 +1710,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     public void setParentActivity(final Activity activity) {
-        currentAccount = UserConfig.selectedAccount;
+        currentAccount = UserConfigBase.selectedAccount;
         centerImage.setCurrentAccount(currentAccount);
         leftImage.setCurrentAccount(currentAccount);
         rightImage.setCurrentAccount(currentAccount);
@@ -2028,7 +2019,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 //                    final ArrayList<MessageObject> fmessages = new ArrayList<>();
 //                    fmessages.add(currentMessageObject);
 //                    fragment.setDelegate((fragment1, dids, message, param) -> {
-//                        if (dids.size() > 1 || dids.get(0) == UserConfig.getInstance(currentAccount).getClientUserId() || message != null) {
+//                        if (dids.size() > 1 || dids.get(0) == UserConfigBase.getInstance(currentAccount).getClientUserId() || message != null) {
 //                            for (int a = 0; a < dids.size(); a++) {
 //                                long did = dids.get(a);
 //                                if (message != null) {
@@ -2096,7 +2087,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 //                            if (currentUser != null || !ChatObject.isChannel(currentChat)) {
 //                                boolean hasOutgoing = false;
 //                                int currentDate = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
-//                                if (currentUser != null && currentUser.id != UserConfig.getInstance(currentAccount).getClientUserId() || currentChat != null) {
+//                                if (currentUser != null && currentUser.id != UserConfigBase.getInstance(currentAccount).getClientUserId() || currentChat != null) {
 //                                    if ((currentMessageObject.messageOwner.action == null || currentMessageObject.messageOwner.action instanceof TLRPC.TL_messageActionEmpty) && currentMessageObject.isOut() && (currentDate - currentMessageObject.messageOwner.date) <= 2 * 24 * 60 * 60) {
 //                                        FrameLayout frameLayout = new FrameLayout(parentActivity);
 //                                        CheckBoxCell cell = new CheckBoxCell(parentActivity, 1);
@@ -5464,7 +5455,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
             nameTextView.setText("");
             dateTextView.setText("");
-            if (avatarsDialogId == UserConfig.getInstance(currentAccount).getClientUserId() && !avatarsArr.isEmpty()) {
+            if (avatarsDialogId == UserConfigBase.getInstance(currentAccount).getClientUserId() && !avatarsArr.isEmpty()) {
                 menuItem.showSubItem(gallery_menu_delete);
             } else {
                 menuItem.hideSubItem(gallery_menu_delete);
@@ -8387,7 +8378,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     message.message = "";
                     message.media = new TLRPC.TL_messageMediaEmpty();
                     message.action = new TLRPC.TL_messageActionEmpty();
-                    videoPreviewMessageObject = new MessageObject(UserConfig.selectedAccount, message, false);
+                    videoPreviewMessageObject = new MessageObject(UserConfigBase.selectedAccount, message, false);
                     videoPreviewMessageObject.messageOwner.attachPath = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), "video_preview.mp4").getAbsolutePath();
                     videoPreviewMessageObject.videoEditedInfo = new VideoEditedInfo();
                     videoPreviewMessageObject.videoEditedInfo.rotationValue = rotationValue;

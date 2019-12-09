@@ -31,7 +31,6 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.annotation.Keep;
 import android.support.media.ExifInterface;
 import android.text.TextUtils;
@@ -52,7 +51,6 @@ import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.BaseBuildVars;
-import com.github.gdev2018.master.ChatObject;
 import com.github.gdev2018.master.ContactsController;
 import com.github.gdev2018.master.DataQuery;
 import com.github.gdev2018.master.FileLoader;
@@ -65,7 +63,7 @@ import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.SharedConfig;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.VideoEditedInfo;
 import com.github.gdev2018.master.camera.*;
 import com.github.gdev2018.master.di.BaseApplication;
@@ -130,7 +128,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
     private boolean buttonPressed;
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
 
     private CorrectlyMeasuringTextView mediaBanTooltip;
 

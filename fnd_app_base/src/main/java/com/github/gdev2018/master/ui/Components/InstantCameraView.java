@@ -56,6 +56,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.github.gdev2018.master.UserConfigBase;
 import com.google.android.exoplayer2.ExoPlayer;
 
 import com.github.gdev2018.master.AndroidUtilities;
@@ -68,7 +69,6 @@ import com.github.gdev2018.master.MediaController;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.SharedConfig;
-import com.github.gdev2018.master.UserConfig;
 import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.VideoEditedInfo;
 import com.github.gdev2018.master.camera.CameraController;
@@ -104,7 +104,7 @@ import javax.microedition.khronos.opengles.GL;
 @TargetApi(18)
 public class InstantCameraView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
     private FrameLayout cameraContainer;
     private ChatActivity baseFragment;
     private Paint paint;

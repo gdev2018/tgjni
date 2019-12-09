@@ -18,7 +18,7 @@ import com.github.gdev2018.master.Emoji;
 import com.github.gdev2018.master.FileLoader;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.SharedConfig;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.support.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
@@ -33,7 +33,7 @@ import java.util.HashMap;
 
 public class StickersAdapter extends RecyclerListView.SelectionAdapter implements NotificationCenter.NotificationCenterDelegate {
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
     private Context mContext;
     private ArrayList<TLRPC.Document> stickers;
     private ArrayList<Object> stickersParents;

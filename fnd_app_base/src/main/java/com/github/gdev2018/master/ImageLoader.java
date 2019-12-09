@@ -1485,7 +1485,7 @@ public class ImageLoader {
         }
         mediaDirs.put(FileLoader.MEDIA_DIR_CACHE, cachePath);
 
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+        for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
             final int currentAccount = a;
             FileLoader.getInstance(a).setDelegate(new FileLoader.FileLoaderDelegate() {
                 @Override

@@ -32,7 +32,7 @@ import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
@@ -40,7 +40,6 @@ import com.github.gdev2018.master.ui.Components.AvatarDrawable;
 import com.github.gdev2018.master.ui.Components.GroupCreateCheckBox;
 ///*import com.github.gdev2018.master.ui.DialogsActivity;*/
 
-import java.util.ArrayList;
 
 public class DialogCell extends BaseCell {
 
@@ -58,7 +57,7 @@ public class DialogCell extends BaseCell {
         public boolean sent;
     }
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
     private CustomDialog customDialog;
     private long currentDialogId;
     private int currentEditDate;
@@ -462,7 +461,7 @@ public class DialogCell extends BaseCell {
                             } else if (encryptedChat instanceof TLRPC.TL_encryptedChatDiscarded) {
                                 messageString = LocaleController.getString("EncryptionRejected", R.string.EncryptionRejected);
                             } else if (encryptedChat instanceof TLRPC.TL_encryptedChat) {
-                                if (encryptedChat.admin_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+                                if (encryptedChat.admin_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
                                     if (user != null && user.first_name != null) {
                                         messageString = LocaleController.formatString("EncryptedChatStartedOutgoing", R.string.EncryptedChatStartedOutgoing, user.first_name);
                                     } else {

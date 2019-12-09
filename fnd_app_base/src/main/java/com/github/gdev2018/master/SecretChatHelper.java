@@ -73,7 +73,7 @@ public class SecretChatHelper {
     private boolean startingSecretChat = false;
 
     private int currentAccount;
-    private static volatile SecretChatHelper Instance[] = new SecretChatHelper[UserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile SecretChatHelper Instance[] = new SecretChatHelper[UserConfigBase.MAX_ACCOUNT_COUNT];
 
     public static SecretChatHelper getInstance(int num) {
         SecretChatHelper localInstance = Instance[num];
@@ -124,15 +124,15 @@ public class SecretChatHelper {
 
         newMsg.action = new TLRPC.TL_messageEncryptedAction();
         newMsg.action.encryptedAction = decryptedMessage;
-        newMsg.local_id = newMsg.id = UserConfig.getInstance(currentAccount).getNewMessageId();
-        newMsg.from_id = UserConfig.getInstance(currentAccount).getClientUserId();
+///*        newMsg.local_id = newMsg.id = UserConfigBase.getInstance(currentAccount).getNewMessageId();*/
+        newMsg.from_id = UserConfigBase.getInstance(currentAccount).getClientUserId();
         newMsg.unread = true;
         newMsg.out = true;
         newMsg.flags = TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
         newMsg.dialog_id = ((long) encryptedChat.id) << 32;
         newMsg.to_id = new TLRPC.TL_peerUser();
         newMsg.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
-        if (encryptedChat.participant_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+        if (encryptedChat.participant_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
             newMsg.to_id.user_id = encryptedChat.admin_id;
         } else {
             newMsg.to_id.user_id = encryptedChat.participant_id;
@@ -143,7 +143,7 @@ public class SecretChatHelper {
             newMsg.date = 0;
         }
         newMsg.random_id = SendMessagesHelper.getInstance(currentAccount).getNextRandomId();
-        UserConfig.getInstance(currentAccount).saveConfig(false);
+        UserConfigBase.getInstance(currentAccount).saveConfig(false);
 
         ArrayList<TLRPC.Message> arr = new ArrayList<>();
         arr.add(newMsg);
@@ -179,7 +179,7 @@ public class SecretChatHelper {
 
         if (newChat instanceof TLRPC.TL_encryptedChatRequested && existingChat == null) {
             int user_id = newChat.participant_id;
-            if (user_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+            if (user_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
                 user_id = newChat.admin_id;
             }
             TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(user_id);
@@ -558,7 +558,7 @@ public class SecretChatHelper {
                 int mtprotoVersion = AndroidUtilities.getPeerLayerVersion(chat.layer) >= 73 ? 2 : 1;
 
                 if (chat.seq_in == 0 && chat.seq_out == 0) {
-                    if (chat.admin_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+                    if (chat.admin_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
                         chat.seq_out = 1;
                         chat.seq_in = -2;
                     } else {
@@ -615,7 +615,7 @@ public class SecretChatHelper {
 
                 byte[] messageKey = new byte[16];
                 byte[] messageKeyFull;
-                boolean incoming = mtprotoVersion == 2 && chat.admin_id != UserConfig.getInstance(currentAccount).getClientUserId();
+                boolean incoming = mtprotoVersion == 2 && chat.admin_id != UserConfigBase.getInstance(currentAccount).getClientUserId();
                 if (mtprotoVersion == 2) {
                     messageKeyFull = Utilities.computeSHA256(chat.auth_key, 88 + (incoming ? 8 : 0), 32, dataForEncryption.buffer, 0, dataForEncryption.buffer.limit());
                     System.arraycopy(messageKeyFull, 8, messageKey, 0, 16);
@@ -774,7 +774,7 @@ public class SecretChatHelper {
     public TLRPC.Message processDecryptedObject(final TLRPC.EncryptedChat chat, final TLRPC.EncryptedFile file, int date, TLObject object, boolean new_key_used) {
         if (object != null) {
             int from_id = chat.admin_id;
-            if (from_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+            if (from_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
                 from_id = chat.participant_id;
             }
 
@@ -812,12 +812,12 @@ public class SecretChatHelper {
                 }
                 newMessage.message = decryptedMessage.message;
                 newMessage.date = date;
-                newMessage.local_id = newMessage.id = UserConfig.getInstance(currentAccount).getNewMessageId();
-                UserConfig.getInstance(currentAccount).saveConfig(false);
+///*                newMessage.local_id = newMessage.id = UserConfigBase.getInstance(currentAccount).getNewMessageId();*/
+                UserConfigBase.getInstance(currentAccount).saveConfig(false);
                 newMessage.from_id = from_id;
                 newMessage.to_id = new TLRPC.TL_peerUser();
                 newMessage.random_id = decryptedMessage.random_id;
-                newMessage.to_id.user_id = UserConfig.getInstance(currentAccount).getClientUserId();
+                newMessage.to_id.user_id = UserConfigBase.getInstance(currentAccount).getClientUserId();
                 newMessage.unread = true;
                 newMessage.flags = TLRPC.MESSAGE_FLAG_HAS_MEDIA | TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
                 if (decryptedMessage.via_bot_name != null && decryptedMessage.via_bot_name.length() > 0) {
@@ -1063,14 +1063,14 @@ public class SecretChatHelper {
                         newMessage.action = new TLRPC.TL_messageEncryptedAction();
                         newMessage.action.encryptedAction = serviceMessage.action;
                     }
-                    newMessage.local_id = newMessage.id = UserConfig.getInstance(currentAccount).getNewMessageId();
-                    UserConfig.getInstance(currentAccount).saveConfig(false);
+///*                    newMessage.local_id = newMessage.id = UserConfigBase.getInstance(currentAccount).getNewMessageId();*/
+                    UserConfigBase.getInstance(currentAccount).saveConfig(false);
                     newMessage.unread = true;
                     newMessage.flags = TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
                     newMessage.date = date;
                     newMessage.from_id = from_id;
                     newMessage.to_id = new TLRPC.TL_peerUser();
-                    newMessage.to_id.user_id = UserConfig.getInstance(currentAccount).getClientUserId();
+                    newMessage.to_id.user_id = UserConfigBase.getInstance(currentAccount).getClientUserId();
                     newMessage.dialog_id = ((long) chat.id) << 32;
                     return newMessage;
                 } else if (serviceMessage.action instanceof TLRPC.TL_decryptedMessageActionFlushHistory) {
@@ -1278,7 +1278,7 @@ public class SecretChatHelper {
         newMsg.action.encryptedAction = new TLRPC.TL_decryptedMessageActionDeleteMessages();
         newMsg.action.encryptedAction.random_ids.add(random_id);
         newMsg.local_id = newMsg.id = mid;
-        newMsg.from_id = UserConfig.getInstance(currentAccount).getClientUserId();
+        newMsg.from_id = UserConfigBase.getInstance(currentAccount).getClientUserId();
         newMsg.unread = true;
         newMsg.out = true;
         newMsg.flags = TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
@@ -1287,7 +1287,7 @@ public class SecretChatHelper {
         newMsg.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
         newMsg.seq_in = seq_in;
         newMsg.seq_out = seq_out;
-        if (encryptedChat.participant_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+        if (encryptedChat.participant_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
             newMsg.to_id.user_id = encryptedChat.admin_id;
         } else {
             newMsg.to_id.user_id = encryptedChat.participant_id;
@@ -1304,7 +1304,7 @@ public class SecretChatHelper {
         MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
             try {
                 int sSeq = startSeq;
-                if (encryptedChat.admin_id == UserConfig.getInstance(currentAccount).getClientUserId() && sSeq % 2 == 0) {
+                if (encryptedChat.admin_id == UserConfigBase.getInstance(currentAccount).getClientUserId() && sSeq % 2 == 0) {
                     sSeq++;
                 }
 
@@ -1335,7 +1335,7 @@ public class SecretChatHelper {
                     NativeByteBuffer data = cursor.byteBufferValue(0);
                     if (data != null) {
                         message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                        message.readAttachPath(data, UserConfig.getInstance(currentAccount).clientUserId);
+                        message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
                         data.reuse();
                         message.random_id = random_id;
                         message.dialog_id = dialog_id;
@@ -1351,9 +1351,9 @@ public class SecretChatHelper {
                 cursor.dispose();
                 if (messagesToResend.size() != 0) {
                     for (int a = 0; a < messagesToResend.size(); a++) {
-                        messages.add(createDeleteMessage(UserConfig.getInstance(currentAccount).getNewMessageId(), messagesToResend.keyAt(a), 0, Utilities.random.nextLong(), encryptedChat));
+///*                        messages.add(createDeleteMessage(UserConfigBase.getInstance(currentAccount).getNewMessageId(), messagesToResend.keyAt(a), 0, Utilities.random.nextLong(), encryptedChat));*/
                     }
-                    UserConfig.getInstance(currentAccount).saveConfig(false);
+                    UserConfigBase.getInstance(currentAccount).saveConfig(false);
                 }
                 Collections.sort(messages, (lhs, rhs) -> AndroidUtilities.compare(lhs.seq_out, rhs.seq_out));
                 ArrayList<TLRPC.EncryptedChat> encryptedChats = new ArrayList<>();
@@ -1489,7 +1489,7 @@ public class SecretChatHelper {
             if (keyToDecrypt != null) {
                 byte[] messageKey = is.readData(16, false);
 
-                boolean incoming = chat.admin_id == UserConfig.getInstance(currentAccount).getClientUserId();
+                boolean incoming = chat.admin_id == UserConfigBase.getInstance(currentAccount).getClientUserId();
                 boolean tryAnotherDecrypt = true;
                 if (decryptedWithVersion == 2 && chat.mtproto_seq != 0) {
                     tryAnotherDecrypt = false;
@@ -1518,7 +1518,7 @@ public class SecretChatHelper {
                 if (object instanceof TLRPC.TL_decryptedMessageLayer) {
                     final TLRPC.TL_decryptedMessageLayer layer = (TLRPC.TL_decryptedMessageLayer) object;
                     if (chat.seq_in == 0 && chat.seq_out == 0) {
-                        if (chat.admin_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+                        if (chat.admin_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
                             chat.seq_out = 1;
                             chat.seq_in = -2;
                         } else {

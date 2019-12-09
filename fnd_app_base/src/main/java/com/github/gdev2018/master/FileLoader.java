@@ -71,7 +71,7 @@ public class FileLoader {
     private ConcurrentHashMap<Integer, Object> parentObjectReferences = new ConcurrentHashMap<>();
 
     private int currentAccount;
-    private static volatile FileLoader Instance[] = new FileLoader[UserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile FileLoader Instance[] = new FileLoader[UserConfigBase.MAX_ACCOUNT_COUNT];
     public static FileLoader getInstance(int num) {
         FileLoader localInstance = Instance[num];
         if (localInstance == null) {

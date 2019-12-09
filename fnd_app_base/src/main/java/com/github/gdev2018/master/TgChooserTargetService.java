@@ -22,20 +22,15 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Icon;
 import android.os.Build;
-import android.os.Bundle;
 import android.service.chooser.ChooserTarget;
 import android.service.chooser.ChooserTargetService;
-import android.text.TextUtils;
 
 
-import com.github.gdev2018.master.SQLite.SQLiteCursor;
-import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.di.BaseApplication;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 
 @TargetApi(Build.VERSION_CODES.M)
@@ -46,10 +41,10 @@ public class TgChooserTargetService extends ChooserTargetService {
 
     @Override
     public List<ChooserTarget> onGetChooserTargets(ComponentName targetActivityName, IntentFilter matchedFilter) {
-        final int currentAccount = UserConfig.selectedAccount;
+        final int currentAccount = UserConfigBase.selectedAccount;
 
         final List<ChooserTarget> targets = new ArrayList<>();
-        if (!UserConfig.getInstance(currentAccount).isClientActivated()) {
+        if (!UserConfigBase.getInstance(currentAccount).isClientActivated()) {
             return targets;
         }
 //        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
@@ -69,7 +64,7 @@ public class TgChooserTargetService extends ChooserTargetService {
 //                ArrayList<TLRPC.User> users = new ArrayList<>();
 //                try {
 //                    ArrayList<Integer> usersToLoad = new ArrayList<>();
-//                    usersToLoad.add(UserConfig.getInstance(currentAccount).getClientUserId());
+//                    usersToLoad.add(UserConfigBase.getInstance(currentAccount).getClientUserId());
 //                    ArrayList<Integer> chatsToLoad = new ArrayList<>();
 //                    SQLiteCursor cursor = MessagesStorage.getInstance(currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT did FROM dialogs ORDER BY date DESC LIMIT %d,%d", 0, 30));
 //                    while (cursor.next()) {

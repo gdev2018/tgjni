@@ -24,7 +24,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
-import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -40,9 +39,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.PowerManager;
-import android.provider.CallLog;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -75,35 +72,20 @@ import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.EdgeEffect;
-import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.content.res.Configuration;
 
 import com.android.internal.telephony.ITelephony;
 
-import net.hockeyapp.android.CrashManager;
-import net.hockeyapp.android.CrashManagerListener;
 import net.hockeyapp.android.UpdateManager;
 
 import com.github.gdev2018.master.PhoneFormat.PhoneFormat;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
-import com.github.gdev2018.master.BuildConfig;
-import com.github.gdev2018.master.BaseBuildVars;
-import com.github.gdev2018.master.CallReceiver;
-import com.github.gdev2018.master.FileLoader;
 
-import com.github.gdev2018.master.Bitmaps;
-import com.github.gdev2018.master.FileLog;
-
-import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.SharedConfig;
-import com.github.gdev2018.master.UserConfig;
-import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
@@ -1782,7 +1764,7 @@ public static void lockOrientation(Activity activity) {
         }
         return SharedConfig.passcodeHash.length() > 0 && wasInBackground &&
                 (SharedConfig.appLocked || SharedConfig.autoLockIn != 0 && SharedConfig.lastPauseTime != 0 && !SharedConfig.appLocked &&
-                        (SharedConfig.lastPauseTime + SharedConfig.autoLockIn) <= ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime() || ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime() + 5 < SharedConfig.lastPauseTime);
+                        (SharedConfig.lastPauseTime + SharedConfig.autoLockIn) <= ConnectionsManager.getInstance(UserConfigBase.selectedAccount).getCurrentTime() || ConnectionsManager.getInstance(UserConfigBase.selectedAccount).getCurrentTime() + 5 < SharedConfig.lastPauseTime);
     }
 
     public static void shakeView(final View view, final float x, final int num) {

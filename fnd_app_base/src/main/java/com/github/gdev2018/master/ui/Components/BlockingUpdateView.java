@@ -34,7 +34,7 @@ import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.browser.Browser;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.AlertDialog;
@@ -77,8 +77,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
             pressCount++;
             if (pressCount >= 10) {
                 setVisibility(GONE);
-                UserConfig.getInstance(0).pendingAppUpdate = null;
-                UserConfig.getInstance(0).saveConfig(false);
+///*                UserConfigBase.getInstance(0).pendingAppUpdate = null;*/
+                UserConfigBase.getInstance(0).saveConfig(false);
             }
         });
 

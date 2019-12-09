@@ -66,7 +66,7 @@ import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.support.widget.GridLayoutManager;
 import com.github.gdev2018.master.support.widget.RecyclerView;
@@ -590,7 +590,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
     private int searchFieldHeight;
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
     private ArrayList<EmojiGridAdapter> adapters = new ArrayList<>();
     private ArrayList<TLRPC.TL_messages_stickerSet> stickerSets = new ArrayList<>();
     private int groupStickerPackNum;

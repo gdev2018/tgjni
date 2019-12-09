@@ -30,7 +30,7 @@ import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MediaController;
 import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.MessagesController;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.WebFile;
 import com.github.gdev2018.master.tgnet.TLRPC;
@@ -63,7 +63,7 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
     private ImageReceiver linkImageView;
     private boolean drawLinkImageView;
     private LetterDrawable letterDrawable;
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
     private Object parentObject;
 
     private boolean needDivider;
@@ -352,7 +352,7 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
             message.out = true;
             message.id = -Utilities.random.nextInt();
             message.to_id = new TLRPC.TL_peerUser();
-            message.to_id.user_id = message.from_id = UserConfig.getInstance(currentAccount).getClientUserId();
+            message.to_id.user_id = message.from_id = UserConfigBase.getInstance(currentAccount).getClientUserId();
             message.date = (int) (System.currentTimeMillis() / 1000);
             message.message = "";
             message.media = new TLRPC.TL_messageMediaDocument();

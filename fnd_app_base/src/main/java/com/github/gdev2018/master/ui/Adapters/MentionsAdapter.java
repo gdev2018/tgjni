@@ -33,7 +33,7 @@ import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.MessagesStorage;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.SendMessagesHelper;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.support.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
@@ -60,7 +60,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
         void onContextClick(TLRPC.BotInlineResult result);
     }
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
     private Context mContext;
     private long dialog_id;
     private TLRPC.ChatFull info;
@@ -175,7 +175,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     public void setChatInfo(TLRPC.ChatFull chatInfo) {
-        currentAccount = UserConfig.selectedAccount;
+        currentAccount = UserConfigBase.selectedAccount;
         info = chatInfo;
         if (!inlineMediaEnabled && foundContextBot != null && parentFragment != null) {
 ///*            TLRPC.Chat chat = parentFragment.getCurrentChat();
@@ -759,7 +759,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
                                     TLRPC.TL_channels_channelParticipants res = (TLRPC.TL_channels_channelParticipants) response;
                                     messagesController.putUsers(res.users, false);
                                     if (!res.participants.isEmpty()) {
-                                        int currentUserId = UserConfig.getInstance(currentAccount).getClientUserId();
+                                        int currentUserId = UserConfigBase.getInstance(currentAccount).getClientUserId();
                                         for (int a = 0; a < res.participants.size(); a++) {
                                             TLRPC.ChannelParticipant participant = res.participants.get(a);
                                             if (searchResultUsernamesMap.indexOfKey(participant.user_id) >= 0 || !isSearchingMentions && participant.user_id == currentUserId) {

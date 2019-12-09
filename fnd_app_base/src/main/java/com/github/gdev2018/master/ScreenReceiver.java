@@ -24,13 +24,13 @@ public class ScreenReceiver extends BroadcastReceiver {
             if (BaseBuildVars.LOGS_ENABLED) {
                 FileLog.d("screen off");
             }
-            ConnectionsManager.getInstance(UserConfig.selectedAccount).setAppPaused(true, true);
+            ConnectionsManager.getInstance(UserConfigBase.selectedAccount).setAppPaused(true, true);
             BaseApplication.isScreenOn = false;
         } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
             if (BaseBuildVars.LOGS_ENABLED) {
                 FileLog.d("screen on");
             }
-            ConnectionsManager.getInstance(UserConfig.selectedAccount).setAppPaused(false, true);
+            ConnectionsManager.getInstance(UserConfigBase.selectedAccount).setAppPaused(false, true);
             BaseApplication.isScreenOn = true;
         }
     }

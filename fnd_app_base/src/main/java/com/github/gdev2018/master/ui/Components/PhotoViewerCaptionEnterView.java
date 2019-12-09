@@ -40,7 +40,7 @@ import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
@@ -407,7 +407,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             delegate.onTextChanged(messageEditText.getText());
         }
         int old = captionMaxLength;
-        captionMaxLength = MessagesController.getInstance(UserConfig.selectedAccount).maxCaptionLength;
+        captionMaxLength = MessagesController.getInstance(UserConfigBase.selectedAccount).maxCaptionLength;
         if (old != captionMaxLength) {
             InputFilter[] inputFilters = new InputFilter[1];
             inputFilters[0] = new InputFilter.LengthFilter(captionMaxLength);

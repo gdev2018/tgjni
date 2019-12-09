@@ -8,180 +8,8 @@
 
 package com.github.gdev2018.master.ui;
 
-import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.ClipData;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Outline;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.media.ThumbnailUtils;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.TextUtils;
-import android.text.style.CharacterStyle;
-import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.URLSpan;
-import android.util.LongSparseArray;
-import android.util.Property;
-import android.util.SparseArray;
-import android.util.SparseBooleanArray;
-import android.util.SparseIntArray;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.HapticFeedbackConstants;
-import android.view.Menu;
-import android.view.MotionEvent;
-import android.view.TextureView;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
-import android.view.ViewTreeObserver;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-
-import com.github.gdev2018.master.PhoneFormat.PhoneFormat;
-import com.github.gdev2018.master.AndroidUtilities;
-import com.github.gdev2018.master.di.BaseApplication;
-import com.github.gdev2018.master.BuildConfig;
-import com.github.gdev2018.master.BaseBuildVars;
-import com.github.gdev2018.master.ChatObject;
-import com.github.gdev2018.master.ContactsController;
-import com.github.gdev2018.master.DataQuery;
-import com.github.gdev2018.master.DownloadController;
-import com.github.gdev2018.master.Emoji;
-import com.github.gdev2018.master.EmojiSuggestion;
-import com.github.gdev2018.master.FileLoader;
-import com.github.gdev2018.master.FileLog;
-import com.github.gdev2018.master.ImageReceiver;
-import com.github.gdev2018.master.LocaleController;
-import com.github.gdev2018.master.MediaController;
-import com.github.gdev2018.master.MessageObject;
-import com.github.gdev2018.master.MessagesController;
-import com.github.gdev2018.master.MessagesStorage;
 import com.github.gdev2018.master.NotificationCenter;
-import com.github.gdev2018.master.NotificationsController;
-import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.SecretChatHelper;
-import com.github.gdev2018.master.SendMessagesHelper;
-import com.github.gdev2018.master.SharedConfig;
-import com.github.gdev2018.master.UserConfig;
-import com.github.gdev2018.master.UserObject;
-import com.github.gdev2018.master.Utilities;
-import com.github.gdev2018.master.VideoEditedInfo;
-import com.github.gdev2018.master.browser.Browser;
-import com.github.gdev2018.master.support.SparseLongArray;
-import com.github.gdev2018.master.support.widget.GridLayoutManager;
-import com.github.gdev2018.master.support.widget.GridLayoutManagerFixed;
-import com.github.gdev2018.master.support.widget.LinearLayoutManager;
-import com.github.gdev2018.master.support.widget.LinearSmoothScrollerMiddle;
-import com.github.gdev2018.master.support.widget.RecyclerView;
-import com.github.gdev2018.master.tgnet.ConnectionsManager;
-import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.ui.ActionBar.ActionBar;
-import com.github.gdev2018.master.ui.ActionBar.ActionBarLayout;
-import com.github.gdev2018.master.ui.ActionBar.ActionBarMenu;
-import com.github.gdev2018.master.ui.ActionBar.ActionBarMenuItem;
-import com.github.gdev2018.master.ui.ActionBar.AlertDialog;
-import com.github.gdev2018.master.ui.ActionBar.BackDrawable;
 import com.github.gdev2018.master.ui.ActionBar.BaseFragment;
-import com.github.gdev2018.master.ui.ActionBar.BottomSheet;
-import com.github.gdev2018.master.ui.ActionBar.SimpleTextView;
-import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.ActionBar.ThemeDescription;
-import com.github.gdev2018.master.ui.Adapters.MentionsAdapter;
-import com.github.gdev2018.master.ui.Adapters.StickersAdapter;
-import com.github.gdev2018.master.ui.Cells.BotHelpCell;
-import com.github.gdev2018.master.ui.Cells.BotSwitchCell;
-import com.github.gdev2018.master.ui.Cells.ChatActionCell;
-import com.github.gdev2018.master.ui.Cells.ChatLoadingCell;
-import com.github.gdev2018.master.ui.Cells.ChatMessageCell;
-import com.github.gdev2018.master.ui.Cells.ChatUnreadCell;
-import com.github.gdev2018.master.ui.Cells.CheckBoxCell;
-import com.github.gdev2018.master.ui.Cells.ContextLinkCell;
-import com.github.gdev2018.master.ui.Cells.MentionCell;
-import com.github.gdev2018.master.ui.Cells.StickerCell;
-import com.github.gdev2018.master.ui.Components.AlertsCreator;
-import com.github.gdev2018.master.ui.Components.AnimatedFileDrawable;
-import com.github.gdev2018.master.ui.Components.AnimationProperties;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
-import com.github.gdev2018.master.ui.Components.ChatActivityEnterView;
-import com.github.gdev2018.master.ui.Components.ChatAttachAlert;
-import com.github.gdev2018.master.ui.Components.ChatAvatarContainer;
-import com.github.gdev2018.master.ui.Components.ChatBigEmptyView;
-import com.github.gdev2018.master.ui.Components.CombinedDrawable;
-import com.github.gdev2018.master.ui.Components.CorrectlyMeasuringTextView;
-import com.github.gdev2018.master.ui.Components.EmbedBottomSheet;
-import com.github.gdev2018.master.ui.Components.EmojiView;
-import com.github.gdev2018.master.ui.Components.ExtendedGridLayoutManager;
-import com.github.gdev2018.master.ui.Components.FragmentContextView;
-import com.github.gdev2018.master.ui.Components.InstantCameraView;
-import com.github.gdev2018.master.ui.Components.LayoutHelper;
-import com.github.gdev2018.master.ui.Components.NoSoundHintView;
-import com.github.gdev2018.master.ui.Components.NumberTextView;
-import com.github.gdev2018.master.ui.Components.PipRoundVideoView;
-import com.github.gdev2018.master.ui.Components.RadialProgressView;
-import com.github.gdev2018.master.ui.Components.RecyclerListView;
-import com.github.gdev2018.master.ui.Components.ShareAlert;
-import com.github.gdev2018.master.ui.Components.Size;
-import com.github.gdev2018.master.ui.Components.SizeNotifierFrameLayout;
-import com.github.gdev2018.master.ui.Components.StickersAlert;
-import com.github.gdev2018.master.ui.Components.TypefaceSpan;
-import com.github.gdev2018.master.ui.Components.URLSpanBotCommand;
-import com.github.gdev2018.master.ui.Components.URLSpanMono;
-import com.github.gdev2018.master.ui.Components.URLSpanNoUnderline;
-import com.github.gdev2018.master.ui.Components.URLSpanReplacement;
-import com.github.gdev2018.master.ui.Components.URLSpanUserMention;
-import com.github.gdev2018.master.ui.Components.UndoView;
-import com.github.gdev2018.master.ui.Components.voip.VoIPHelper;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.regex.Matcher;
 
 @SuppressWarnings("unchecked")
 ///*public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate {*/
@@ -1128,7 +956,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                                            if (ChatObject.isNotInChat(currentChat)) {
 //                                                MessagesController.getInstance(currentAccount).deleteDialog(dialog_id, 0);
 //                                            } else {
-//                                                MessagesController.getInstance(currentAccount).deleteUserFromChat((int) -dialog_id, MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId()), null);
+//                                                MessagesController.getInstance(currentAccount).deleteUserFromChat((int) -dialog_id, MessagesController.getInstance(currentAccount).getUser(UserConfigBase.getInstance(currentAccount).getClientUserId()), null);
 //                                            }
 //                                        } else {
 //                                            MessagesController.getInstance(currentAccount).deleteDialog(dialog_id, 0);
@@ -1850,7 +1678,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //            }
 //        } else {
 //            bigEmptyView = new ChatBigEmptyView(context, ChatBigEmptyView.EMPTY_VIEW_TYPE_SECRET);
-//            if (currentEncryptedChat.admin_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+//            if (currentEncryptedChat.admin_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
 //                bigEmptyView.setStatusText(LocaleController.formatString("EncryptedPlaceholderTitleOutgoing", R.string.EncryptedPlaceholderTitleOutgoing, UserObject.getFirstName(currentUser)));
 //            } else {
 //                bigEmptyView.setStatusText(LocaleController.formatString("EncryptedPlaceholderTitleIncoming", R.string.EncryptedPlaceholderTitleIncoming, UserObject.getFirstName(currentUser)));
@@ -2785,7 +2613,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                    if (ChatObject.isNotInChat(currentChat)) {
 //                        MessagesController.getInstance(currentAccount).deleteDialog(dialog_id, 0);
 //                    } else {
-//                        MessagesController.getInstance(currentAccount).deleteUserFromChat((int) -dialog_id, MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId()), null);
+//                        MessagesController.getInstance(currentAccount).deleteUserFromChat((int) -dialog_id, MessagesController.getInstance(currentAccount).getUser(UserConfigBase.getInstance(currentAccount).getClientUserId()), null);
 //                    }
 //                } else {
 //                    MessagesController.getInstance(currentAccount).deleteDialog(dialog_id, 0);
@@ -4053,7 +3881,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                if (ChatObject.isChannel(currentChat) && !(currentChat instanceof TLRPC.TL_channelForbidden)) {
 //                    if (ChatObject.isNotInChat(currentChat)) {
 //                        showBottomOverlayProgress(true, true);
-//                        MessagesController.getInstance(currentAccount).addUserToChat(currentChat.id, UserConfig.getInstance(currentAccount).getCurrentUser(), null, 0, null, ChatActivity.this, null);
+//                        MessagesController.getInstance(currentAccount).addUserToChat(currentChat.id, UserConfigBase.getInstance(currentAccount).getCurrentUser(), null, 0, null, ChatActivity.this, null);
 //                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeSearchByActiveAction);
 //                    } else {
 //                        toggleMute(true);
@@ -4612,13 +4440,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //            if (currentUser.bot) {
 //                builder.setMessage(LocaleController.getString("AreYouSureShareMyContactInfoBot", R.string.AreYouSureShareMyContactInfoBot));
 //            } else {
-//                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureShareMyContactInfoUser", R.string.AreYouSureShareMyContactInfoUser, PhoneFormat.getInstance().format("+" + UserConfig.getInstance(currentAccount).getCurrentUser().phone), ContactsController.formatName(currentUser.first_name, currentUser.last_name))));
+//                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureShareMyContactInfoUser", R.string.AreYouSureShareMyContactInfoUser, PhoneFormat.getInstance().format("+" + UserConfigBase.getInstance(currentAccount).getCurrentUser().phone), ContactsController.formatName(currentUser.first_name, currentUser.last_name))));
 //            }
 //        } else {
 //            builder.setMessage(LocaleController.getString("AreYouSureShareMyContactInfo", R.string.AreYouSureShareMyContactInfo));
 //        }
 //        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
-//            SendMessagesHelper.getInstance(currentAccount).sendMessage(UserConfig.getInstance(currentAccount).getCurrentUser(), dialog_id, messageObject, null, null);
+//            SendMessagesHelper.getInstance(currentAccount).sendMessage(UserConfigBase.getInstance(currentAccount).getCurrentUser(), dialog_id, messageObject, null, null);
 //            moveScrollToLastMessage();
 //            hideFieldPanel();
 //        });
@@ -7207,7 +7035,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                }
 //                int queryLoadIndex = (Integer) args[11];
 //                int index = waitingForLoad.indexOf(queryLoadIndex);
-//                int currentUserId = UserConfig.getInstance(currentAccount).getClientUserId();
+//                int currentUserId = UserConfigBase.getInstance(currentAccount).getClientUserId();
 //                if (index == -1) {
 //                    return;
 //                } else {
@@ -7900,7 +7728,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //        } else if (id == NotificationCenter.didReceiveNewMessages) {
 //            long did = (Long) args[0];
 //            if (did == dialog_id) {
-//                int currentUserId = UserConfig.getInstance(currentAccount).getClientUserId();
+//                int currentUserId = UserConfigBase.getInstance(currentAccount).getClientUserId();
 //                boolean updateChat = false;
 //                boolean hasFromMe = false;
 //                ArrayList<MessageObject> arr = (ArrayList<MessageObject>) args[1];
@@ -10198,7 +10026,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //        SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
 //        boolean show;
 //        if (currentEncryptedChat != null) {
-//            show = !(currentEncryptedChat.admin_id == UserConfig.getInstance(currentAccount).getClientUserId() || ContactsController.getInstance(currentAccount).isLoadingContacts()) && ContactsController.getInstance(currentAccount).contactsDict.get(currentUser.id) == null;
+//            show = !(currentEncryptedChat.admin_id == UserConfigBase.getInstance(currentAccount).getClientUserId() || ContactsController.getInstance(currentAccount).isLoadingContacts()) && ContactsController.getInstance(currentAccount).contactsDict.get(currentUser.id) == null;
 //            if (show && preferences.getInt("spam3_" + dialog_id, 0) == 1) {
 //                show = false;
 //            }
@@ -10986,7 +10814,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                    user = MessagesController.getInstance(currentAccount).getUser(from_id);
 //                }
 //            }
-//            if (user != null && user.id != UserConfig.getInstance(currentAccount).getClientUserId() && loadParticipant != 2) {
+//            if (user != null && user.id != UserConfigBase.getInstance(currentAccount).getClientUserId() && loadParticipant != 2) {
 //                if (loadParticipant == 1 && !currentChat.creator) {
 //                    final AlertDialog progressDialog[] = new AlertDialog[] {new AlertDialog(getParentActivity(), 3)};
 //
@@ -11071,7 +10899,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //        } else if (!ChatObject.isChannel(currentChat) && currentEncryptedChat == null) {
 //            boolean hasOutgoing = false;
 //            int currentDate = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
-//            if (currentUser != null && currentUser.id != UserConfig.getInstance(currentAccount).getClientUserId() && !currentUser.bot || currentChat != null) {
+//            if (currentUser != null && currentUser.id != UserConfigBase.getInstance(currentAccount).getClientUserId() && !currentUser.bot || currentChat != null) {
 //                if (finalSelectedObject != null) {
 //                    hasOutgoing = !finalSelectedObject.isSendError() && (finalSelectedObject.messageOwner.action == null || finalSelectedObject.messageOwner.action instanceof TLRPC.TL_messageActionEmpty) && (finalSelectedObject.isOut() || canRevokeInbox || ChatObject.hasAdminRights(currentChat)) && (currentDate - finalSelectedObject.messageOwner.date) <= revokeTimeLimit;
 //                } else {
@@ -11436,7 +11264,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                            }
 //                        } else if (type == 8) {
 //                            TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(selectedObject.messageOwner.media.user_id);
-//                            if (user != null && user.id != UserConfig.getInstance(currentAccount).getClientUserId() && ContactsController.getInstance(currentAccount).contactsDict.get(user.id) == null) {
+//                            if (user != null && user.id != UserConfigBase.getInstance(currentAccount).getClientUserId() && ContactsController.getInstance(currentAccount).contactsDict.get(user.id) == null) {
 //                                items.add(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
 //                                options.add(15);
 //                            }
@@ -11518,7 +11346,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                            options.add(9);
 //                        } else if (type == 8) {
 //                            TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(selectedObject.messageOwner.media.user_id);
-//                            if (user != null && user.id != UserConfig.getInstance(currentAccount).getClientUserId() && ContactsController.getInstance(currentAccount).contactsDict.get(user.id) == null) {
+//                            if (user != null && user.id != UserConfigBase.getInstance(currentAccount).getClientUserId() && ContactsController.getInstance(currentAccount).contactsDict.get(user.id) == null) {
 //                                items.add(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
 //                                options.add(15);
 //                            }
@@ -12127,7 +11955,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //            updatePinnedMessageView(true);
 //        }
 //
-//        if (dids.size() > 1 || dids.get(0) == UserConfig.getInstance(currentAccount).getClientUserId() || message != null) {
+//        if (dids.size() > 1 || dids.get(0) == UserConfigBase.getInstance(currentAccount).getClientUserId() || message != null) {
 //            for (int a = 0; a < dids.size(); a++) {
 //                long did = dids.get(a);
 //                if (message != null) {
@@ -12701,7 +12529,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                            processRowSelect(cell, true);
 //                            return;
 //                        }
-//                        if (user != null && user.id != UserConfig.getInstance(currentAccount).getClientUserId()) {
+//                        if (user != null && user.id != UserConfigBase.getInstance(currentAccount).getClientUserId()) {
 //                            Bundle args = new Bundle();
 //                            args.putInt("user_id", user.id);
 //                            ProfileActivity fragment = new ProfileActivity(args);
@@ -13059,7 +12887,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                            if (MessagesController.getInstance(currentAccount).checkCanOpenChat(args, ChatActivity.this)) {
 //                                presentFragment(new ChatActivity(args));
 //                            }
-//                        } else if (uid != UserConfig.getInstance(currentAccount).getClientUserId()) {
+//                        } else if (uid != UserConfigBase.getInstance(currentAccount).getClientUserId()) {
 //                            Bundle args = new Bundle();
 //                            args.putInt("user_id", uid);
 //                            if (currentEncryptedChat != null && uid == currentUser.id) {

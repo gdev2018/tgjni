@@ -10,7 +10,7 @@ import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.MessagesStorage;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
@@ -50,7 +50,7 @@ public class SearchAdapterHelper {
     private SparseArray<TLObject> groupSearchMap = new SparseArray<>();
     private ArrayList<TLObject> localSearchResults;
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
 
     private int channelReqId = 0;
     private int channelLastReqId;

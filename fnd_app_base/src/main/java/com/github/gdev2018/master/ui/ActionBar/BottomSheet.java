@@ -47,14 +47,14 @@ import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
 
 public class BottomSheet extends Dialog {
 
-    protected int currentAccount = UserConfig.selectedAccount;
+    protected int currentAccount = UserConfigBase.selectedAccount;
     protected ViewGroup containerView;
     protected ContainerView container;
     private WindowInsets lastInsets;

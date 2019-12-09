@@ -27,7 +27,7 @@ import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.ui.Components.AvatarDrawable;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 
@@ -51,7 +51,7 @@ public class ProfileSearchCell extends BaseCell {
 
     public boolean useSeparator;
 
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
 
     private int nameLeft;
     private int nameTop;
@@ -292,7 +292,7 @@ public class ProfileSearchCell extends BaseCell {
                     onlineString = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
                 } else {
                     onlineString = LocaleController.formatUserStatus(currentAccount, user);
-                    if (user != null && (user.id == UserConfig.getInstance(currentAccount).getClientUserId() || user.status != null && user.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime())) {
+                    if (user != null && (user.id == UserConfigBase.getInstance(currentAccount).getClientUserId() || user.status != null && user.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime())) {
                         currentOnlinePaint = Theme.dialogs_onlinePaint;
                         onlineString = LocaleController.getString("Online", R.string.Online);
                     }

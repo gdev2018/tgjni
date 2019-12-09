@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
 
 public class WearDataLayerListenerService extends WearableListenerService {
 
-	private int currentAccount = UserConfig.selectedAccount;
+	private int currentAccount = UserConfigBase.selectedAccount;
 	private static boolean watchConnected;
 
 	@Override
@@ -72,8 +72,8 @@ public class WearDataLayerListenerService extends WearableListenerService {
 		try {
 			if ("/getCurrentUser".equals(path)) {
 				DataOutputStream out = new DataOutputStream(new BufferedOutputStream(ch.getOutputStream(apiClient).await().getOutputStream()));
-				if (UserConfig.getInstance(currentAccount).isClientActivated()) {
-					final TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
+				if (UserConfigBase.getInstance(currentAccount).isClientActivated()) {
+					final TLRPC.User user = UserConfigBase.getInstance(currentAccount).getCurrentUser();
 					out.writeInt(user.id);
 					out.writeUTF(user.first_name);
 					out.writeUTF(user.last_name);
@@ -198,8 +198,8 @@ public class WearDataLayerListenerService extends WearableListenerService {
 					int chatID=req.getInt("chat_id");
 					int accountID=req.getInt("account_id");
 					int currentAccount=-1;
-					for(int i=0;i<UserConfig.getActivatedAccountsCount();i++){
-						if(UserConfig.getInstance(i).getClientUserId()==accountID){
+					for(int i = 0; i< UserConfigBase.getActivatedAccountsCount(); i++){
+						if(UserConfigBase.getInstance(i).getClientUserId()==accountID){
 							currentAccount=i;
 							break;
 						}
@@ -274,8 +274,8 @@ public class WearDataLayerListenerService extends WearableListenerService {
 						int max_id = r.getInt("max_id");
 						int currentAccount = -1;
 						int accountID=r.getInt("account_id");
-						for(int i=0;i<UserConfig.getActivatedAccountsCount();i++){
-							if(UserConfig.getInstance(i).getClientUserId()==accountID){
+						for(int i = 0; i< UserConfigBase.getActivatedAccountsCount(); i++){
+							if(UserConfigBase.getInstance(i).getClientUserId()==accountID){
 								currentAccount=i;
 								break;
 							}

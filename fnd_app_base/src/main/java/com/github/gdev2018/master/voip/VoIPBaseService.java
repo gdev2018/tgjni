@@ -28,7 +28,6 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Icon;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -50,7 +49,6 @@ import android.os.Vibrator;
 import android.telecom.CallAudioState;
 import android.telecom.Connection;
 import android.telecom.DisconnectCause;
-import android.telecom.PhoneAccount;
 import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
@@ -62,6 +60,7 @@ import android.view.ViewGroup;
 import android.widget.RemoteViews;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.BuildConfig;
 import com.github.gdev2018.master.BaseBuildVars;
@@ -75,7 +74,6 @@ import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.NotificationsController;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.StatsController;
-import com.github.gdev2018.master.UserConfig;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
@@ -1130,15 +1128,15 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 			if(TextUtils.isEmpty(subText)){
 				customView.setViewVisibility(R.id.subtitle, View.GONE);
 				subtitleVisible=false;
-				if(UserConfig.getActivatedAccountsCount()>1){
-					TLRPC.User self=UserConfig.getInstance(currentAccount).getCurrentUser();
+				if(UserConfigBase.getActivatedAccountsCount()>1){
+					TLRPC.User self= UserConfigBase.getInstance(currentAccount).getCurrentUser();
 //					/*customView.setTextViewText(R.id.title, LocaleController.formatString("VoipInCallBrandingWithName", R.string.VoipInCallBrandingWithName, ContactsController.formatName(self.first_name, self.last_name)));*/
 				}else{
 					customView.setTextViewText(R.id.title, LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding));
 				}
 			}else{
-				if(UserConfig.getActivatedAccountsCount()>1){
-					TLRPC.User self=UserConfig.getInstance(currentAccount).getCurrentUser();
+				if(UserConfigBase.getActivatedAccountsCount()>1){
+					TLRPC.User self= UserConfigBase.getInstance(currentAccount).getCurrentUser();
 ///*					customView.setTextViewText(R.id.subtitle, LocaleController.formatString("VoipAnsweringAsAccount", R.string.VoipAnsweringAsAccount, ContactsController.formatName(self.first_name, self.last_name)));*/
 				}else{
 					customView.setViewVisibility(R.id.subtitle, View.GONE);
@@ -1402,7 +1400,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 	@TargetApi(Build.VERSION_CODES.O)
 	protected PhoneAccountHandle addAccountToTelecomManager(){
 		TelecomManager tm=(TelecomManager) getSystemService(TELECOM_SERVICE);
-		TLRPC.User self=UserConfig.getInstance(currentAccount).getCurrentUser();
+		TLRPC.User self= UserConfigBase.getInstance(currentAccount).getCurrentUser();
 		PhoneAccountHandle handle=new PhoneAccountHandle(new ComponentName(this, TelegramConnectionService.class), ""+self.id);
 ///*		PhoneAccount account=new PhoneAccount.Builder(handle, ContactsController.formatName(self.first_name, self.last_name))
 //				.setCapabilities(PhoneAccount.CAPABILITY_SELF_MANAGED)

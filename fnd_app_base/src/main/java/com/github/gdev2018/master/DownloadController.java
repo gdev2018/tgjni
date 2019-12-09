@@ -197,7 +197,7 @@ public class DownloadController implements NotificationCenter.NotificationCenter
     public int currentRoamingPreset;
 
     private int currentAccount;
-    private static volatile DownloadController Instance[] = new DownloadController[UserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile DownloadController Instance[] = new DownloadController[UserConfigBase.MAX_ACCOUNT_COUNT];
 
     public static DownloadController getInstance(int num) {
         DownloadController localInstance = Instance[num];
@@ -219,7 +219,7 @@ public class DownloadController implements NotificationCenter.NotificationCenter
         mediumPreset = new Preset(preferences.getString("preset1", "13_13_13_13_1048576_10485760_1048576_524288_1_1_1_0"));
         highPreset = new Preset(preferences.getString("preset2", "13_13_13_13_1048576_15728640_3145728_524288_1_1_1_0"));
         boolean newConfig;
-        if (newConfig = preferences.contains("newConfig") || !UserConfig.getInstance(currentAccount).isClientActivated()) {
+        if (newConfig = preferences.contains("newConfig") || !UserConfigBase.getInstance(currentAccount).isClientActivated()) {
             mobilePreset = new Preset(preferences.getString("mobilePreset", mediumPreset.toString()));
             wifiPreset = new Preset(preferences.getString("wifiPreset", highPreset.toString()));
             roamingPreset = new Preset(preferences.getString("roamingPreset", lowPreset.toString()));
@@ -292,21 +292,21 @@ public class DownloadController implements NotificationCenter.NotificationCenter
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         BaseApplication.mApplicationContext.registerReceiver(networkStateReceiver, filter);
 
-        if (UserConfig.getInstance(currentAccount).isClientActivated()) {
+        if (UserConfigBase.getInstance(currentAccount).isClientActivated()) {
             checkAutodownloadSettings();
         }
     }
 
     public void loadAutoDownloadConfig(boolean force) {
-        if (loadingAutoDownloadConfig || !force && Math.abs(System.currentTimeMillis() - UserConfig.getInstance(currentAccount).autoDownloadConfigLoadTime) < 24 * 60 * 60 * 1000) {
+        if (loadingAutoDownloadConfig || !force && Math.abs(System.currentTimeMillis() - UserConfigBase.getInstance(currentAccount).autoDownloadConfigLoadTime) < 24 * 60 * 60 * 1000) {
             return;
         }
         loadingAutoDownloadConfig = true;
         TLRPC.TL_account_getAutoDownloadSettings req = new TLRPC.TL_account_getAutoDownloadSettings();
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
             loadingAutoDownloadConfig = false;
-            UserConfig.getInstance(currentAccount).autoDownloadConfigLoadTime = System.currentTimeMillis();
-            UserConfig.getInstance(currentAccount).saveConfig(false);
+            UserConfigBase.getInstance(currentAccount).autoDownloadConfigLoadTime = System.currentTimeMillis();
+            UserConfigBase.getInstance(currentAccount).saveConfig(false);
             if (response != null) {
                 TLRPC.TL_account_autoDownloadSettings res = (TLRPC.TL_account_autoDownloadSettings) response;
                 lowPreset.set(res.low);

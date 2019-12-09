@@ -26,7 +26,7 @@ import com.github.gdev2018.master.ImageReceiver;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.browser.Browser;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
@@ -53,7 +53,7 @@ public class ChatActionCell extends BaseCell {
     }
 
     private URLSpan pressedLink;
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount = UserConfigBase.selectedAccount;
     private ImageReceiver imageReceiver;
     private AvatarDrawable avatarDrawable;
     private StaticLayout textLayout;
@@ -118,7 +118,7 @@ public class ChatActionCell extends BaseCell {
                     id = messageObject.messageOwner.to_id.channel_id;
                 } else {
                     id = messageObject.messageOwner.to_id.user_id;
-                    if (id == UserConfig.getInstance(currentAccount).getClientUserId()) {
+                    if (id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
                         id = messageObject.messageOwner.from_id;
                     }
                 }

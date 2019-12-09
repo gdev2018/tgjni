@@ -20,7 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.gdev2018.master.FileLog;
-import com.github.gdev2018.master.UserConfig;
+import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 
 public class BaseFragment {
@@ -28,7 +28,7 @@ public class BaseFragment {
     private boolean isFinished;
     private boolean finishing;
     protected Dialog visibleDialog;
-    protected int currentAccount = UserConfig.selectedAccount;
+    protected int currentAccount = UserConfigBase.selectedAccount;
 
     protected View fragmentView;
     protected ActionBarLayout parentLayout;

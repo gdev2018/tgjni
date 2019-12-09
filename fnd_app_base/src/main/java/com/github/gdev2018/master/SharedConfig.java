@@ -131,7 +131,7 @@ public class SharedConfig {
     public static void saveConfig() {
         synchronized (sync) {
             try {
-                SharedPreferences preferences = BaseApplication.mApplicationContext.getSharedPreferences("userconfing", Context.MODE_PRIVATE);
+                SharedPreferences preferences = BaseApplication.mApplicationContext.getSharedPreferences("userconfing_base", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("saveIncomingPhotos", saveIncomingPhotos);
                 editor.putString("passcodeHash1", passcodeHash);
@@ -173,7 +173,7 @@ public class SharedConfig {
                 return;
             }
 
-            SharedPreferences preferences = BaseApplication.mApplicationContext.getSharedPreferences("userconfing", Context.MODE_PRIVATE);
+            SharedPreferences preferences = BaseApplication.mApplicationContext.getSharedPreferences("userconfing_base", Context.MODE_PRIVATE);
             saveIncomingPhotos = preferences.getBoolean("saveIncomingPhotos", false);
             passcodeHash = preferences.getString("passcodeHash1", "");
             appLocked = preferences.getBoolean("appLocked", false);

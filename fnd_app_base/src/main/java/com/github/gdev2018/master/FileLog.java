@@ -149,6 +149,7 @@ public class FileLog {
             return;
         }
         ensureInitied();
+//        Log.e(tag, e.getMessage());   // this is reason for error - jni absent on client apt
         e.printStackTrace();
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(new Runnable() {

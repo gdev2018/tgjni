@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply from: 'config_signing.gradle'
+//apply from: 'config_signing.gradle'
 
 android {
     compileSdkVersion 28
@@ -18,6 +18,23 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    signingConfigs {
+        debug {
+            // config_signing_debug.values()
+            storeFile file('S:/Android/ks/ks12')
+            keyPassword 'Ukfdgjxnfvgks_12'
+            keyAlias 'ks12'
+            storePassword 'Ukfdgjxnfvgks_12'
+        }
+
+        release {
+            // config_signing_release.values()
+            storeFile file('S:/Android/ks/ks12')
+            keyPassword 'Ukfdgjxnfvgks_12'
+            keyAlias 'ks12'
+            storePassword 'Ukfdgjxnfvgks_12'
+        }
+    }
 
     buildTypes {
 

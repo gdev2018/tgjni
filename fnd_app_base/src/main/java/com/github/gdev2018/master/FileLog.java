@@ -149,7 +149,6 @@ public class FileLog {
             return;
         }
         ensureInitied();
-        Log.e(tag, e.getMessage());
         e.printStackTrace();
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(new Runnable() {

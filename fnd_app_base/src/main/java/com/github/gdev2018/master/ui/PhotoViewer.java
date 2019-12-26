@@ -2913,12 +2913,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         containerView.addView(selectedPhotosListView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 88, Gravity.LEFT | Gravity.TOP));
         selectedPhotosListView.setOnItemClickListener((view, position) -> {
             if (position == 0 && placeProvider.allowGroupPhotos()) {
-                boolean enabled = SharedConfig.groupPhotosEnabled;
-                SharedConfig.toggleGroupPhotosEnabled();
+///*                boolean enabled = SharedConfig.groupPhotosEnabled;
+//                SharedConfig.toggleGroupPhotosEnabled();*/
                 placeProvider.toggleGroupPhotosEnabled();
                 ImageView imageView = (ImageView) view;
-                imageView.setColorFilter(!enabled ? new PorterDuffColorFilter(0xff66bffa, PorterDuff.Mode.MULTIPLY) : null);
-                showHint(false, !enabled);
+///*                imageView.setColorFilter(!enabled ? new PorterDuffColorFilter(0xff66bffa, PorterDuff.Mode.MULTIPLY) : null);
+//                showHint(false, !enabled);*/
             } else {
                 ignoreDidSetImage = true;
                 int idx = imagesArrLocals.indexOf(view.getTag());
@@ -8931,7 +8931,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
                 case 1: {
                     ImageView imageView = (ImageView) holder.itemView;
-                    imageView.setColorFilter(SharedConfig.groupPhotosEnabled ? new PorterDuffColorFilter(0xff66bffa, PorterDuff.Mode.MULTIPLY) : null);
+///*                    imageView.setColorFilter(SharedConfig.groupPhotosEnabled ? new PorterDuffColorFilter(0xff66bffa, PorterDuff.Mode.MULTIPLY) : null);*/
                     break;
                 }
             }

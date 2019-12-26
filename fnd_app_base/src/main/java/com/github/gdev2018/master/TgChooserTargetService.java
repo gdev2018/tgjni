@@ -41,10 +41,10 @@ public class TgChooserTargetService extends ChooserTargetService {
 
     @Override
     public List<ChooserTarget> onGetChooserTargets(ComponentName targetActivityName, IntentFilter matchedFilter) {
-        final int currentAccount = UserConfigBase.selectedAccount;
+        final int currentAccount = BaseUserConfig.selectedAccount;
 
         final List<ChooserTarget> targets = new ArrayList<>();
-        if (!UserConfigBase.getInstance(currentAccount).isClientActivated()) {
+        if (!BaseUserConfig.getInstance(currentAccount).isClientActivated()) {
             return targets;
         }
 //        SharedPreferences preferences = BaseApplication.getGlobalMainSettings();
@@ -64,7 +64,7 @@ public class TgChooserTargetService extends ChooserTargetService {
 //                ArrayList<TLRPC.User> users = new ArrayList<>();
 //                try {
 //                    ArrayList<Integer> usersToLoad = new ArrayList<>();
-//                    usersToLoad.add(UserConfigBase.getInstance(currentAccount).getClientUserId());
+//                    usersToLoad.add(BaseUserConfig.getInstance(currentAccount).getClientUserId());
 //                    ArrayList<Integer> chatsToLoad = new ArrayList<>();
 //                    SQLiteCursor cursor = MessagesStorage.getInstance(currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT did FROM dialogs ORDER BY date DESC LIMIT %d,%d", 0, 30));
 //                    while (cursor.next()) {

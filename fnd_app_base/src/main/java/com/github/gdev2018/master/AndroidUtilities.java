@@ -66,6 +66,8 @@ import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
@@ -1026,7 +1028,7 @@ public static void lockOrientation(Activity activity) {
                 if (idx >= 0) {
                     args = new String[]{
                             line.substring(0, idx),
-                            line.substring(idx + 1, line.length()).trim()
+                            line.substring(idx + 1).trim()
                     };
                 } else {
                     args = new String[]{line.trim()};
@@ -1080,17 +1082,21 @@ public static void lockOrientation(Activity activity) {
                     for (int b = 0; b < vcardData.phones.size(); b++) {
                         String phone = vcardData.phones.get(b);
                         String sphone = phone.substring(Math.max(0, phone.length() - 7));
-///*                        if (ContactsController.getInstance(currentAccount).contactsByShortPhone.get(sphone) != null) {
-//                            phoneToUse = phone;
-//                            break;
-//                        }*/
+                        if (ContactsController.getInstance(currentAccount).contactsByShortPhone.get(sphone) != null) {
+                            phoneToUse = phone;
+                            break;
+                        }
                     }
                     TLRPC.User user = new TLRPC.TL_userContact_old2();
                     user.phone = phoneToUse;
                     user.first_name = vcardData.name;
                     user.last_name = "";
                     user.id = 0;
-                    user.restriction_reason = vcardData.vcard.toString();
+                    TLRPC.TL_restrictionReason reason = new TLRPC.TL_restrictionReason();
+                    reason.text = vcardData.vcard.toString();
+                    reason.platform = "";
+                    reason.reason = "";
+                    user.restriction_reason.add(reason);
                     result.add(user);
                 }
             }
@@ -1153,6 +1159,16 @@ public static void lockOrientation(Activity activity) {
             } catch (Throwable e) {
                 FileLog.e(e);
             }
+        }
+    }
+
+    public static int getShadowHeight() {
+        if (density >= 4.0f) {
+            return 3;
+        } else if (density >= 2.0f) {
+            return 2;
+        } else {
+            return 1;
         }
     }
 
@@ -1764,7 +1780,7 @@ public static void lockOrientation(Activity activity) {
         }
         return SharedConfig.passcodeHash.length() > 0 && wasInBackground &&
                 (SharedConfig.appLocked || SharedConfig.autoLockIn != 0 && SharedConfig.lastPauseTime != 0 && !SharedConfig.appLocked &&
-                        (SharedConfig.lastPauseTime + SharedConfig.autoLockIn) <= ConnectionsManager.getInstance(UserConfigBase.selectedAccount).getCurrentTime() || ConnectionsManager.getInstance(UserConfigBase.selectedAccount).getCurrentTime() + 5 < SharedConfig.lastPauseTime);
+                        (SharedConfig.lastPauseTime + SharedConfig.autoLockIn) <= ConnectionsManager.getInstance(BaseUserConfig.selectedAccount).getCurrentTime() || ConnectionsManager.getInstance(BaseUserConfig.selectedAccount).getCurrentTime() + 5 < SharedConfig.lastPauseTime);
     }
 
     public static void shakeView(final View view, final float x, final int num) {
@@ -2214,9 +2230,9 @@ public static void lockOrientation(Activity activity) {
         }
         if (f != null && f.exists()) {
             if (parentFragment != null && f.getName().toLowerCase().endsWith("attheme")) {
-                Theme.ThemeInfo themeInfo = Theme.applyThemeFile(f, message.getDocumentName(), true);
+                Theme.ThemeInfo themeInfo = Theme.applyThemeFile(f, message.getDocumentName(), null, true);
                 if (themeInfo != null) {
-///*                    parentFragment.presentFragment(new ThemePreviewActivity(f, themeInfo));*/
+///*                    parentFragment.presentFragment(new ThemePreviewActivity(themeInfo));*/
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
@@ -2826,5 +2842,55 @@ public static void lockOrientation(Activity activity) {
         f -= 0.5F;
         f *= 0.47123894F;
         return (float) Math.sin((double) f);
+    }
+
+    public static void makeAccessibilityAnnouncement(CharSequence what) {
+        AccessibilityManager am = (AccessibilityManager) BaseApplication.mApplicationContext.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        if (am.isEnabled()) {
+            AccessibilityEvent ev = AccessibilityEvent.obtain();
+            ev.setEventType(AccessibilityEvent.TYPE_ANNOUNCEMENT);
+            ev.getText().add(what);
+            am.sendAccessibilityEvent(ev);
+        }
+    }
+
+    public static int getOffsetColor(int color1, int color2, float offset, float alpha) {
+        int rF = Color.red(color2);
+        int gF = Color.green(color2);
+        int bF = Color.blue(color2);
+        int aF = Color.alpha(color2);
+        int rS = Color.red(color1);
+        int gS = Color.green(color1);
+        int bS = Color.blue(color1);
+        int aS = Color.alpha(color1);
+        return Color.argb((int) ((aS + (aF - aS) * offset) * alpha), (int) (rS + (rF - rS) * offset), (int) (gS + (gF - gS) * offset), (int) (bS + (bF - bS) * offset));
+    }
+
+    public static int indexOfIgnoreCase(final String origin, final String searchStr) {
+        if (searchStr.isEmpty() || origin.isEmpty()) {
+            return origin.indexOf(searchStr);
+        }
+
+        for (int i = 0; i < origin.length(); i++) {
+            if (i + searchStr.length() > origin.length()) {
+                return -1;
+            }
+            int j = 0;
+            int ii = i;
+            while (ii < origin.length() && j < searchStr.length()) {
+                char c = Character.toLowerCase(origin.charAt(ii));
+                char c2 = Character.toLowerCase(searchStr.charAt(j));
+                if (c != c2) {
+                    break;
+                }
+                j++;
+                ii++;
+            }
+            if (j == searchStr.length()) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }

@@ -60,7 +60,7 @@ import android.view.ViewGroup;
 import android.widget.RemoteViews;
 
 import com.github.gdev2018.master.AndroidUtilities;
-import com.github.gdev2018.master.UserConfigBase;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.BuildConfig;
 import com.github.gdev2018.master.BaseBuildVars;
@@ -1128,15 +1128,15 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 			if(TextUtils.isEmpty(subText)){
 				customView.setViewVisibility(R.id.subtitle, View.GONE);
 				subtitleVisible=false;
-				if(UserConfigBase.getActivatedAccountsCount()>1){
-					TLRPC.User self= UserConfigBase.getInstance(currentAccount).getCurrentUser();
+				if(BaseUserConfig.getActivatedAccountsCount()>1){
+					TLRPC.User self= BaseUserConfig.getInstance(currentAccount).getCurrentUser();
 //					/*customView.setTextViewText(R.id.title, LocaleController.formatString("VoipInCallBrandingWithName", R.string.VoipInCallBrandingWithName, ContactsController.formatName(self.first_name, self.last_name)));*/
 				}else{
 					customView.setTextViewText(R.id.title, LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding));
 				}
 			}else{
-				if(UserConfigBase.getActivatedAccountsCount()>1){
-					TLRPC.User self= UserConfigBase.getInstance(currentAccount).getCurrentUser();
+				if(BaseUserConfig.getActivatedAccountsCount()>1){
+					TLRPC.User self= BaseUserConfig.getInstance(currentAccount).getCurrentUser();
 ///*					customView.setTextViewText(R.id.subtitle, LocaleController.formatString("VoipAnsweringAsAccount", R.string.VoipAnsweringAsAccount, ContactsController.formatName(self.first_name, self.last_name)));*/
 				}else{
 					customView.setViewVisibility(R.id.subtitle, View.GONE);
@@ -1400,7 +1400,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 	@TargetApi(Build.VERSION_CODES.O)
 	protected PhoneAccountHandle addAccountToTelecomManager(){
 		TelecomManager tm=(TelecomManager) getSystemService(TELECOM_SERVICE);
-		TLRPC.User self= UserConfigBase.getInstance(currentAccount).getCurrentUser();
+		TLRPC.User self= BaseUserConfig.getInstance(currentAccount).getCurrentUser();
 		PhoneAccountHandle handle=new PhoneAccountHandle(new ComponentName(this, TelegramConnectionService.class), ""+self.id);
 ///*		PhoneAccount account=new PhoneAccount.Builder(handle, ContactsController.formatName(self.first_name, self.last_name))
 //				.setCapabilities(PhoneAccount.CAPABILITY_SELF_MANAGED)

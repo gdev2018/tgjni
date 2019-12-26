@@ -77,13 +77,13 @@ public class TestApplication extends BaseApplication {
 //        }
 //
 //        SharedConfig.loadConfig();
-//        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-//            UserConfig.getInstance(a).loadConfig();
+//        for (int a = 0; a < BaseUserConfig.MAX_ACCOUNT_COUNT; a++) {
+//            BaseUserConfig.getInstance(a).loadConfig();
 //
 //            // TODO: 2019-05-11 uncomment this
 //            ////MessagesController.getInstance(a);
 //            ////ConnectionsManager.getInstance(a);
-//            TLRPC.User user = UserConfig.getInstance(a).getCurrentUser();
+//            TLRPC.User user = BaseUserConfig.getInstance(a).getCurrentUser();
 //            if (user != null) {
 //                MessagesController.getInstance(a).putUser(user, true);
 //                MessagesController.getInstance(a).getBlockedUsers(true);
@@ -98,7 +98,7 @@ public class TestApplication extends BaseApplication {
 //        }
 //
 /////*        MediaController.getInstance();
-////        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+////        for (int a = 0; a < BaseUserConfig.MAX_ACCOUNT_COUNT; a++) {
 ////            ContactsController.getInstance(a).checkAppAccount();
 ////            DownloadController.getInstance(a);
 ////        }

@@ -63,7 +63,7 @@ public class MessagesStorage {
     private CountDownLatch openSync = new CountDownLatch(1);
 
     private int currentAccount;
-    private static volatile MessagesStorage Instance[] = new MessagesStorage[UserConfigBase.MAX_ACCOUNT_COUNT];
+    private static volatile MessagesStorage Instance[] = new MessagesStorage[BaseUserConfig.MAX_ACCOUNT_COUNT];
     private final static int LAST_DB_VERSION = 56;
 
     public static MessagesStorage getInstance(int num) {
@@ -353,14 +353,14 @@ public class MessagesStorage {
 //            FileLog.e(e);
 //            if (first && e.getMessage().contains("malformed")) {
 //                cleanupInternal();
-//                UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetId = 0;
-//                UserConfigBase.getInstance(currentAccount).totalDialogsLoadCount = 0;
-//                UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetDate = 0;
-//                UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetUserId = 0;
-//                UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetChatId = 0;
-//                UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetChannelId = 0;
-//                UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetAccess = 0;
-//                UserConfigBase.getInstance(currentAccount).saveConfig(false);
+//                BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetId = 0;
+//                BaseUserConfig.getInstance(currentAccount).totalDialogsLoadCount = 0;
+//                BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetDate = 0;
+//                BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetUserId = 0;
+//                BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetChatId = 0;
+//                BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetChannelId = 0;
+//                BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetAccess = 0;
+//                BaseUserConfig.getInstance(currentAccount).saveConfig(false);
 //                openDatabase(false);
 //            }
 //        }
@@ -1193,7 +1193,7 @@ public class MessagesStorage {
                         NativeByteBuffer data = cursor.byteBufferValue(1);
                         if (data != null) {
                             TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                            message.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                             data.reuse();
                             MessageObject.setUnreadFlags(message, cursor.intValue(0));
                             message.id = cursor.intValue(3);
@@ -1221,7 +1221,7 @@ public class MessagesStorage {
                                         data = cursor.byteBufferValue(6);
                                         if (data != null) {
                                             message.replyMessage = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                                            message.replyMessage.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                                            message.replyMessage.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                                             data.reuse();
                                             if (message.replyMessage != null) {
                                                 if (MessageObject.isMegagroup(message)) {
@@ -1282,7 +1282,7 @@ public class MessagesStorage {
                             NativeByteBuffer data = cursor.byteBufferValue(0);
                             if (data != null) {
                                 TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                                message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                                message.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                                 data.reuse();
                                 message.id = cursor.intValue(1);
                                 message.date = cursor.intValue(2);
@@ -1619,7 +1619,7 @@ public class MessagesStorage {
                         NativeByteBuffer data = cursor.byteBufferValue(0);
                         if (data != null) {
                             TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                            message.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                             data.reuse();
                             if (message != null && message.from_id == uid && message.id != 1) {
                                 mids.add(message.id);
@@ -1686,7 +1686,7 @@ public class MessagesStorage {
                             NativeByteBuffer data = cursor.byteBufferValue(0);
                             if (data != null) {
                                 TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                                message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                                message.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                                 data.reuse();
                                 if (message != null && message.media != null) {
                                     if (message.media instanceof TLRPC.TL_messageMediaPhoto) {
@@ -1750,7 +1750,7 @@ public class MessagesStorage {
                                 NativeByteBuffer data = cursor2.byteBufferValue(0);
                                 if (data != null) {
                                     TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                                    message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                                    message.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                                     data.reuse();
                                     if (message != null) {
                                         messageId = message.id;
@@ -1860,7 +1860,8 @@ public class MessagesStorage {
                 ArrayList<Long> orderArrayList = new ArrayList<>();
 
                 for (int a = dialogsCount; a < dialogsRes.dialogs.size(); a++) {
-                    TLRPC.TL_dialog dialog = dialogsRes.dialogs.get(a);
+///*                    TLRPC.TL_dialog dialog = dialogsRes.dialogs.get(a);*/
+                    TLRPC.Dialog dialog = dialogsRes.dialogs.get(a);
                     orderArrayList.add(dialog.id);
                 }
 
@@ -1905,7 +1906,8 @@ public class MessagesStorage {
                 database.commitTransaction();
 
                 for (int a = 0; a < totalPinnedCount; a++) {
-                    TLRPC.TL_dialog dialog = dialogsRes.dialogs.get(dialogsCount + a);
+///*                    TLRPC.TL_dialog dialog = dialogsRes.dialogs.get(dialogsCount + a);*/
+                    TLRPC.Dialog dialog = dialogsRes.dialogs.get(dialogsCount + a);
                     int oldIdx = oldPinnedOrder.indexOf(dialog.id);
                     int newIdx = orderArrayList.indexOf(dialog.id);
                     if (oldIdx != -1 && newIdx != -1) {
@@ -1930,48 +1932,48 @@ public class MessagesStorage {
                 putDialogsInternal(dialogsRes, 0);
                 saveDiffParamsInternal(seq, newPts, date, qts);
 
-//                /*if (lastMessage != null && lastMessage.id != UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetId) {
-//                    UserConfigBase.getInstance(currentAccount).totalDialogsLoadCount = dialogsRes.dialogs.size();
-//                    UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetId = lastMessage.id;
-//                    UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetDate = lastMessage.date;
+//                /*if (lastMessage != null && lastMessage.id != BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetId) {
+//                    BaseUserConfig.getInstance(currentAccount).totalDialogsLoadCount = dialogsRes.dialogs.size();
+//                    BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetId = lastMessage.id;
+//                    BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetDate = lastMessage.date;
 //                    if (lastMessage.to_id.channel_id != 0) {
-//                        UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetChannelId = lastMessage.to_id.channel_id;
-//                        UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetChatId = 0;
-//                        UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetUserId = 0;
+//                        BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetChannelId = lastMessage.to_id.channel_id;
+//                        BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetChatId = 0;
+//                        BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetUserId = 0;
 //                        for (int a = 0; a < dialogsRes.chats.size(); a++) {
 //                            TLRPC.Chat chat = dialogsRes.chats.get(a);
-//                            if (chat.id == UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetChannelId) {
-//                                UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetAccess = chat.access_hash;
+//                            if (chat.id == BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetChannelId) {
+//                                BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetAccess = chat.access_hash;
 //                                break;
 //                            }
 //                        }
 //                    } else if (lastMessage.to_id.chat_id != 0) {
-//                        UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetChatId = lastMessage.to_id.chat_id;
-//                        UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetChannelId = 0;
-//                        UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetUserId = 0;
+//                        BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetChatId = lastMessage.to_id.chat_id;
+//                        BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetChannelId = 0;
+//                        BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetUserId = 0;
 //                        for (int a = 0; a < dialogsRes.chats.size(); a++) {
 //                            TLRPC.Chat chat = dialogsRes.chats.get(a);
-//                            if (chat.id == UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetChatId) {
-//                                UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetAccess = chat.access_hash;
+//                            if (chat.id == BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetChatId) {
+//                                BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetAccess = chat.access_hash;
 //                                break;
 //                            }
 //                        }
 //                    } else if (lastMessage.to_id.user_id != 0) {
-//                        UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetUserId = lastMessage.to_id.user_id;
-//                        UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetChatId = 0;
-//                        UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetChannelId = 0;
+//                        BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetUserId = lastMessage.to_id.user_id;
+//                        BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetChatId = 0;
+//                        BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetChannelId = 0;
 //                        for (int a = 0; a < dialogsRes.users.size(); a++) {
 //                            TLRPC.User user = dialogsRes.users.get(a);
-//                            if (user.id == UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetUserId) {
-//                                UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetAccess = user.access_hash;
+//                            if (user.id == BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetUserId) {
+//                                BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetAccess = user.access_hash;
 //                                break;
 //                            }
 //                        }
 //                    }
 //                } else {
-//                    UserConfigBase.getInstance(currentAccount).dialogsLoadOffsetId = Integer.MAX_VALUE;
+//                    BaseUserConfig.getInstance(currentAccount).dialogsLoadOffsetId = Integer.MAX_VALUE;
 //                }*/
-                UserConfigBase.getInstance(currentAccount).saveConfig(false);
+                BaseUserConfig.getInstance(currentAccount).saveConfig(false);
                 MessagesController.getInstance(currentAccount).completeDialogsReset(dialogsRes, messagesCount, seq, newPts, date, qts, new_dialogs_dict, new_dialogMessage, lastMessage);
             } catch (Exception e) {
                 FileLog.e(e);
@@ -2018,7 +2020,7 @@ public class MessagesStorage {
                     NativeByteBuffer data = cursor.byteBufferValue(0);
                     if (data != null) {
                         TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                        message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                        message.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                         data.reuse();
                         if (message.media != null) {
                             if (message.media.document != null) {
@@ -2118,7 +2120,7 @@ public class MessagesStorage {
                             NativeByteBuffer data = cursor.byteBufferValue(0);
                             if (data != null) {
                                 TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                                message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                                message.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                                 data.reuse();
                                 if (message.media instanceof TLRPC.TL_messageMediaPoll) {
                                     TLRPC.TL_messageMediaPoll media = (TLRPC.TL_messageMediaPoll) message.media;
@@ -2688,7 +2690,7 @@ public class MessagesStorage {
                 if (cursor.next()) {
                     NativeByteBuffer data = cursor.byteBufferValue(0);
                     if (data != null) {
-                        info = TLRPC.TL_userFull.TLdeserialize(data, data.readInt32(false), false);
+///*                        info = TLRPC.TL_userFull.TLdeserialize(data, data.readInt32(false), false);*/
                         data.reuse();
                         info.pinned_msg_id = cursor.intValue(1);
                     }
@@ -2809,7 +2811,7 @@ public class MessagesStorage {
                 if (cursor.next()) {
                     NativeByteBuffer data = cursor.byteBufferValue(0);
                     if (data != null) {
-                        info = TLRPC.TL_userFull.TLdeserialize(data, data.readInt32(false), false);
+///*                        info = TLRPC.TL_userFull.TLdeserialize(data, data.readInt32(false), false);*/
                         data.reuse();
                         info.pinned_msg_id = cursor.intValue(1);
                     }
@@ -3508,7 +3510,7 @@ public class MessagesStorage {
                     if (data != null) {
                         TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
                         message.send_state = cursor.intValue(2);
-                        message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                        message.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                         data.reuse();
                         if (messageHashMap.indexOfKey(message.id) < 0) {
                             MessageObject.setUnreadFlags(message, cursor.intValue(0));
@@ -3671,7 +3673,7 @@ public class MessagesStorage {
 
     public void getMessages(final long dialog_id, final int count, final int max_id, final int offset_date, final int minDate, final int classGuid, final int load_type, final boolean isChannel, final int loadIndex) {
         storageQueue.postRunnable(() -> {
-            int currentUserId = UserConfigBase.getInstance(currentAccount).clientUserId;
+            int currentUserId = BaseUserConfig.getInstance(currentAccount).clientUserId;
             TLRPC.TL_messages_messages res = new TLRPC.TL_messages_messages();
             int count_unread = 0;
             int mentions_unread = 0;
@@ -5078,7 +5080,7 @@ public class MessagesStorage {
                         NativeByteBuffer data = cursor.byteBufferValue(1);
                         if (data != null) {
                             TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                            message.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                             data.reuse();
                             if (message.media instanceof TLRPC.TL_messageMediaWebPage) {
                                 message.id = mid;
@@ -5169,11 +5171,11 @@ public class MessagesStorage {
                 dialog.flags = 1;
                 dialog.peer = new TLRPC.TL_peerChannel();
                 dialog.peer.channel_id = channel_id;
-                dialog.top_message = difference.top_message;
-                dialog.read_inbox_max_id = difference.read_inbox_max_id;
-                dialog.read_outbox_max_id = difference.read_outbox_max_id;
-                dialog.unread_count = difference.unread_count;
-                dialog.unread_mentions_count = difference.unread_mentions_count;
+///*                dialog.top_message = difference.top_message;
+//                dialog.read_inbox_max_id = difference.read_inbox_max_id;
+//                dialog.read_outbox_max_id = difference.read_outbox_max_id;
+//                dialog.unread_count = difference.unread_count;
+//                dialog.unread_mentions_count = difference.unread_mentions_count;*/
                 dialog.notify_settings = null;
                 dialog.pinned = pinned != 0;
                 dialog.pinnedNum = pinned;
@@ -6124,7 +6126,7 @@ public class MessagesStorage {
                 ids = TextUtils.join(",", messages);
             }
             ArrayList<File> filesToDelete = new ArrayList<>();
-            int currentUser = UserConfigBase.getInstance(currentAccount).getClientUserId();
+            int currentUser = BaseUserConfig.getInstance(currentAccount).getClientUserId();
             SQLiteCursor cursor = database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state, out, mention, mid FROM messages WHERE mid IN(%s)", ids));
 
             try {
@@ -6155,7 +6157,7 @@ public class MessagesStorage {
                     NativeByteBuffer data = cursor.byteBufferValue(1);
                     if (data != null) {
                         TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                        message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                        message.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                         data.reuse();
                         if (message != null) {
                             if (message.media instanceof TLRPC.TL_messageMediaPhoto) {
@@ -6358,7 +6360,7 @@ public class MessagesStorage {
                 NativeByteBuffer data = cursor.byteBufferValue(4);
                 if (data != null) {
                     TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                    message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                    message.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                     data.reuse();
                     MessageObject.setUnreadFlags(message, cursor.intValue(5));
                     message.id = cursor.intValue(6);
@@ -6451,7 +6453,7 @@ public class MessagesStorage {
             maxMessageId |= ((long) channelId) << 32;
 
             ArrayList<File> filesToDelete = new ArrayList<>();
-            int currentUser = UserConfigBase.getInstance(currentAccount).getClientUserId();
+            int currentUser = BaseUserConfig.getInstance(currentAccount).getClientUserId();
 
             SQLiteCursor cursor = database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state, out, mention FROM messages WHERE uid = %d AND mid <= %d", -channelId, maxMessageId));
 
@@ -6481,7 +6483,7 @@ public class MessagesStorage {
                     NativeByteBuffer data = cursor.byteBufferValue(1);
                     if (data != null) {
                         TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                        message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                        message.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                         data.reuse();
                         if (message != null) {
                             if (message.media instanceof TLRPC.TL_messageMediaPhoto) {
@@ -6911,7 +6913,7 @@ public class MessagesStorage {
                             NativeByteBuffer data = cursor.byteBufferValue(1);
                             if (data != null) {
                                 TLRPC.Message oldMessage = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                                oldMessage.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                                oldMessage.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                                 data.reuse();
                                 int send_state = cursor.intValue(5);
                                 if (oldMessage != null && send_state != 3) {
@@ -7154,7 +7156,7 @@ public class MessagesStorage {
             ArrayList<TLRPC.EncryptedChat> encryptedChats = new ArrayList<>();
             try {
                 ArrayList<Integer> usersToLoad = new ArrayList<>();
-                usersToLoad.add(UserConfigBase.getInstance(currentAccount).getClientUserId());
+                usersToLoad.add(BaseUserConfig.getInstance(currentAccount).getClientUserId());
                 ArrayList<Integer> chatsToLoad = new ArrayList<>();
                 ArrayList<Integer> encryptedToLoad = new ArrayList<>();
                 ArrayList<Long> replyMessages = new ArrayList<>();
@@ -7189,7 +7191,7 @@ public class MessagesStorage {
                     NativeByteBuffer data = cursor.byteBufferValue(4);
                     if (data != null) {
                         TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                        message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                        message.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                         data.reuse();
                         if (message != null) {
                             MessageObject.setUnreadFlags(message, cursor.intValue(5));
@@ -7213,7 +7215,7 @@ public class MessagesStorage {
                                         data = cursor.byteBufferValue(13);
                                         if (data != null) {
                                             message.replyMessage = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                                            message.replyMessage.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                                            message.replyMessage.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                                             data.reuse();
                                             if (message.replyMessage != null) {
                                                 if (MessageObject.isMegagroup(message)) {
@@ -7272,7 +7274,7 @@ public class MessagesStorage {
                         NativeByteBuffer data = cursor.byteBufferValue(0);
                         if (data != null) {
                             TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data, UserConfigBase.getInstance(currentAccount).clientUserId);
+                            message.readAttachPath(data, BaseUserConfig.getInstance(currentAccount).clientUserId);
                             data.reuse();
                             message.id = cursor.intValue(1);
                             message.date = cursor.intValue(2);
@@ -7350,7 +7352,8 @@ public class MessagesStorage {
                 SQLitePreparedStatement state_polls = null;
 
                 for (int a = 0; a < dialogs.dialogs.size(); a++) {
-                    TLRPC.TL_dialog dialog = dialogs.dialogs.get(a);
+///*                    TLRPC.TL_dialog dialog = dialogs.dialogs.get(a);*/
+                    TLRPC.Dialog dialog = dialogs.dialogs.get(a);
 
                     if (dialog.id == 0) {
                         if (dialog.peer.user_id != 0) {

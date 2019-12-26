@@ -20,13 +20,13 @@ import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.FileLoader;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.ImageReceiver;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.browser.Browser;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
@@ -53,7 +53,7 @@ public class ChatActionCell extends BaseCell {
     }
 
     private URLSpan pressedLink;
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
     private ImageReceiver imageReceiver;
     private AvatarDrawable avatarDrawable;
     private StaticLayout textLayout;
@@ -118,18 +118,18 @@ public class ChatActionCell extends BaseCell {
                     id = messageObject.messageOwner.to_id.channel_id;
                 } else {
                     id = messageObject.messageOwner.to_id.user_id;
-                    if (id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
+                    if (id == BaseUserConfig.getInstance(currentAccount).getClientUserId()) {
                         id = messageObject.messageOwner.from_id;
                     }
                 }
             }
             avatarDrawable.setInfo(id, null, null, false);
             if (currentMessageObject.messageOwner.action instanceof TLRPC.TL_messageActionUserUpdatedPhoto) {
-                imageReceiver.setImage(currentMessageObject.messageOwner.action.newUserPhoto.photo_small, "50_50", avatarDrawable, null, currentMessageObject, 0);
+///*                imageReceiver.setImage(currentMessageObject.messageOwner.action.newUserPhoto.photo_small, "50_50", avatarDrawable, null, currentMessageObject, 0);*/
             } else {
                 TLRPC.PhotoSize photo = FileLoader.getClosestPhotoSizeWithSize(currentMessageObject.photoThumbs, AndroidUtilities.dp(64));
                 if (photo != null) {
-                    imageReceiver.setImage(photo, "50_50", avatarDrawable, null, currentMessageObject, 0);
+///*                    imageReceiver.setImage(photo, "50_50", avatarDrawable, null, currentMessageObject, 0);*/
                 } else {
                     imageReceiver.setImageBitmap(avatarDrawable);
                 }

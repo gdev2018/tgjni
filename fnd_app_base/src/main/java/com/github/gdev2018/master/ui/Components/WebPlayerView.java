@@ -2203,7 +2203,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         if (thumb != null) {
             TLRPC.PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(thumb.sizes, 80, true);
             if (photoSize != null) {
-                controlsView.imageReceiver.setImage(null, null, thumb, "80_80_b", 0, null, parentObject, 1);
+///*                controlsView.imageReceiver.setImage(null, null, thumb, "80_80_b", 0, null, parentObject, 1);*/
                 drawImage = true;
             }
         } else {

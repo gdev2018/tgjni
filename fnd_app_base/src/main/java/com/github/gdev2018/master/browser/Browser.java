@@ -15,6 +15,7 @@ import android.text.TextUtils;
 
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.BaseBuildVars;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.CustomTabsCopyReceiver;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.LocaleController;
@@ -22,7 +23,6 @@ import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.ShareBroadcastReceiver;
 import com.github.gdev2018.master.SharedConfig;
-import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.support.customtabs.CustomTabsCallback;
 import com.github.gdev2018.master.support.customtabs.CustomTabsClient;
 import com.github.gdev2018.master.support.customtabs.CustomTabsIntent;
@@ -166,7 +166,7 @@ public class Browser {
         if (context == null || uri == null) {
             return;
         }
-        final int currentAccount = UserConfigBase.selectedAccount;
+        final int currentAccount = BaseUserConfig.selectedAccount;
         boolean forceBrowser[] = new boolean[] {false};
         boolean internalUri = isInternalUri(uri, forceBrowser);
         if (tryTelegraph) {
@@ -177,7 +177,7 @@ public class Browser {
 
                     TLRPC.TL_messages_getWebPagePreview req = new TLRPC.TL_messages_getWebPagePreview();
                     req.message = uri.toString();
-                    final int reqId = ConnectionsManager.getInstance(UserConfigBase.selectedAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                    final int reqId = ConnectionsManager.getInstance(BaseUserConfig.selectedAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
                         try {
                             progressDialog[0].dismiss();
                         } catch (Throwable ignore) {
@@ -206,7 +206,7 @@ public class Browser {
                             progressDialog[0].setCanceledOnTouchOutside(false);
                             progressDialog[0].setCancelable(false);
                             progressDialog[0].setButton(DialogInterface.BUTTON_NEGATIVE, LocaleController.getString("Cancel", R.string.Cancel), (dialog, which) -> {
-                                ConnectionsManager.getInstance(UserConfigBase.selectedAccount).cancelRequest(reqId, true);
+                                ConnectionsManager.getInstance(BaseUserConfig.selectedAccount).cancelRequest(reqId, true);
                                 try {
                                     dialog.dismiss();
                                 } catch (Exception e) {

@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessagesController;
-import com.github.gdev2018.master.UserConfigBase;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
@@ -60,7 +60,7 @@ public class UserCell extends FrameLayout {
     private int lastStatus;
     private TLRPC.FileLocation lastAvatar;
 
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
 
     private int statusColor;
     private int statusOnlineColor;
@@ -395,7 +395,7 @@ public class UserCell extends FrameLayout {
                     statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
                 }
             } else {
-                if (currentUser.id == UserConfigBase.getInstance(currentAccount).getClientUserId() || currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime() || MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(currentUser.id)) {
+                if (currentUser.id == BaseUserConfig.getInstance(currentAccount).getClientUserId() || currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime() || MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(currentUser.id)) {
                     statusTextView.setTextColor(statusOnlineColor);
                     statusTextView.setText(LocaleController.getString("Online", R.string.Online));
                 } else {

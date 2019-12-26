@@ -31,7 +31,7 @@ public class FileLoader {
         void fileDidUploaded(String location, TLRPC.InputFile inputFile, TLRPC.InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv, long totalFileSize);
         void fileDidFailedUpload(String location, boolean isEncrypted);
         void fileDidLoaded(String location, File finalFile, int type);
-        void fileDidFailedLoad(String location, int state);
+        void httpFileDidFailedLoad(String location, int state);
         void fileLoadProgressChanged(String location, float progress);
     }
 
@@ -71,7 +71,7 @@ public class FileLoader {
     private ConcurrentHashMap<Integer, Object> parentObjectReferences = new ConcurrentHashMap<>();
 
     private int currentAccount;
-    private static volatile FileLoader Instance[] = new FileLoader[UserConfigBase.MAX_ACCOUNT_COUNT];
+    private static volatile FileLoader Instance[] = new FileLoader[BaseUserConfig.MAX_ACCOUNT_COUNT];
     public static FileLoader getInstance(int num) {
         FileLoader localInstance = Instance[num];
         if (localInstance == null) {
@@ -559,25 +559,25 @@ public class FileLoader {
                     if (index >= 0) {
                         downloadQueue.remove(index);
                         if (stream != null) {
-                            if (downloadQueue == audioLoadOperationQueue) {
-                                if (operation.start(stream, streamOffset)) {
-                                    currentAudioLoadOperationsCount.put(datacenterId, currentAudioLoadOperationsCount.get(datacenterId) + 1);
-                                }
-                            } else if (downloadQueue == photoLoadOperationQueue) {
-                                if (operation.start(stream, streamOffset)) {
-                                    currentPhotoLoadOperationsCount.put(datacenterId, currentPhotoLoadOperationsCount.get(datacenterId) + 1);
-                                }
-                            } else {
-                                if (operation.start(stream, streamOffset)) {
-                                    currentLoadOperationsCount.put(datacenterId, currentLoadOperationsCount.get(datacenterId) + 1);
-                                }
-                                if (operation.wasStarted() && !activeFileLoadOperation.contains(operation)) {
-                                    if (stream != null) {
-                                        pauseCurrentFileLoadOperations(operation);
-                                    }
-                                    activeFileLoadOperation.add(operation);
-                                }
-                            }
+///*                            if (downloadQueue == audioLoadOperationQueue) {
+//                                if (operation.start(stream, streamOffset)) {
+//                                    currentAudioLoadOperationsCount.put(datacenterId, currentAudioLoadOperationsCount.get(datacenterId) + 1);
+//                                }
+//                            } else if (downloadQueue == photoLoadOperationQueue) {
+//                                if (operation.start(stream, streamOffset)) {
+//                                    currentPhotoLoadOperationsCount.put(datacenterId, currentPhotoLoadOperationsCount.get(datacenterId) + 1);
+//                                }
+//                            } else {
+//                                if (operation.start(stream, streamOffset)) {
+//                                    currentLoadOperationsCount.put(datacenterId, currentLoadOperationsCount.get(datacenterId) + 1);
+//                                }
+//                                if (operation.wasStarted() && !activeFileLoadOperation.contains(operation)) {
+//                                    if (stream != null) {
+//                                        pauseCurrentFileLoadOperations(operation);
+//                                    }
+//                                    activeFileLoadOperation.add(operation);
+//                                }
+//                            }*/
                         } else {
                             downloadQueue.add(0, operation);
                         }
@@ -585,7 +585,7 @@ public class FileLoader {
                         if (stream != null) {
                             pauseCurrentFileLoadOperations(operation);
                         }
-                        operation.start(stream, streamOffset);
+///*                        operation.start(stream, streamOffset);*/
                         if (downloadQueue == loadOperationQueue && !activeFileLoadOperation.contains(operation)) {
                             activeFileLoadOperation.add(operation);
                         }
@@ -603,7 +603,7 @@ public class FileLoader {
             operation = new FileLoadOperation(secureDocument);
             type = MEDIA_DIR_DOCUMENT;
         } else if (location != null) {
-            operation = new FileLoadOperation(location, parentObject, locationExt, locationSize);
+///*            operation = new FileLoadOperation(location, parentObject, locationExt, locationSize);*/
             type = MEDIA_DIR_IMAGE;
         } else if (document != null) {
             operation = new FileLoadOperation(document, parentObject);
@@ -658,7 +658,7 @@ public class FileLoader {
                 loadOperationPathsUI.remove(finalFileName);
                 checkDownloadQueue(operation.getDatacenterId(), document, webDocument, location, finalFileName);
                 if (delegate != null) {
-                    delegate.fileDidFailedLoad(finalFileName, reason);
+                    delegate.httpFileDidFailedLoad(finalFileName, reason);
                 }
             }
 
@@ -683,9 +683,9 @@ public class FileLoader {
             int maxCount = priority > 0 ? 3 : 1;
             int count = currentAudioLoadOperationsCount.get(datacenterId);
             if (stream != null || count < maxCount) {
-                if (operation.start(stream, streamOffset)) {
-                    currentAudioLoadOperationsCount.put(datacenterId, count + 1);
-                }
+///*                if (operation.start(stream, streamOffset)) {
+//                    currentAudioLoadOperationsCount.put(datacenterId, count + 1);
+//                }*/
             } else {
                 addOperationToQueue(operation, audioLoadOperationQueue);
             }
@@ -693,9 +693,9 @@ public class FileLoader {
             int maxCount = priority > 0 ? 6 : 2;
             int count = currentPhotoLoadOperationsCount.get(datacenterId);
             if (stream != null || count < maxCount) {
-                if (operation.start(stream, streamOffset)) {
-                    currentPhotoLoadOperationsCount.put(datacenterId, count + 1);
-                }
+///*                if (operation.start(stream, streamOffset)) {
+//                    currentPhotoLoadOperationsCount.put(datacenterId, count + 1);
+//                }*/
             } else {
                 addOperationToQueue(operation, photoLoadOperationQueue);
             }
@@ -703,10 +703,10 @@ public class FileLoader {
             int maxCount = priority > 0 ? 3 : 1;
             int count = currentLoadOperationsCount.get(datacenterId);
             if (stream != null || count < maxCount) {
-                if (operation.start(stream, streamOffset)) {
-                    currentLoadOperationsCount.put(datacenterId, count + 1);
-                    activeFileLoadOperation.add(operation);
-                }
+///*                if (operation.start(stream, streamOffset)) {
+//                    currentLoadOperationsCount.put(datacenterId, count + 1);
+//                    activeFileLoadOperation.add(operation);
+//                }*/
                 if (operation.wasStarted() && stream != null) {
                     pauseCurrentFileLoadOperations(operation);
                 }

@@ -32,11 +32,11 @@ public class GcmInstanceIDListenerService extends FirebaseInstanceIdService {
     public static void sendRegistrationToServer(final String token) {
         Utilities.stageQueue.postRunnable(() -> {
             SharedConfig.pushString = token;
-            for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
-                UserConfigBase userConfigBase = UserConfigBase.getInstance(a);
-///*                userConfigBase.registeredForPush = false;*/
-                userConfigBase.saveConfig(false);
-                if (userConfigBase.getClientUserId() != 0) {
+            for (int a = 0; a < BaseUserConfig.MAX_ACCOUNT_COUNT; a++) {
+                BaseUserConfig baseUserConfig = BaseUserConfig.getInstance(a);
+///*                baseUserConfig.registeredForPush = false;*/
+                baseUserConfig.saveConfig(false);
+                if (baseUserConfig.getClientUserId() != 0) {
                     final int currentAccount = a;
 ///*                    AndroidUtilities.runOnUIThread(() -> MessagesController.getInstance(currentAccount).registerForPush(token));*/
                 }

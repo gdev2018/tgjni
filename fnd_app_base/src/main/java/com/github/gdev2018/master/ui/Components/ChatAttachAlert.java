@@ -51,6 +51,7 @@ import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.BaseBuildVars;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.ContactsController;
 import com.github.gdev2018.master.DataQuery;
 import com.github.gdev2018.master.FileLoader;
@@ -63,7 +64,6 @@ import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.SharedConfig;
-import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.VideoEditedInfo;
 import com.github.gdev2018.master.camera.*;
 import com.github.gdev2018.master.di.BaseApplication;
@@ -128,7 +128,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
     private boolean buttonPressed;
 
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
 
     private CorrectlyMeasuringTextView mediaBanTooltip;
 
@@ -640,7 +640,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     public ChatAttachAlert(Context context, final BaseFragment parentFragment) {
-        super(context, false);
+        super(context, false, 0);
         baseFragment = parentFragment;
         ciclePaint.setColor(Theme.getColor(Theme.key_dialogBackground));
         setDelegate(this);

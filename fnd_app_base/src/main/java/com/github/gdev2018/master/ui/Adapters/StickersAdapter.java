@@ -13,12 +13,12 @@ import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.DataQuery;
 import com.github.gdev2018.master.Emoji;
 import com.github.gdev2018.master.FileLoader;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.SharedConfig;
-import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.support.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
@@ -33,7 +33,7 @@ import java.util.HashMap;
 
 public class StickersAdapter extends RecyclerListView.SelectionAdapter implements NotificationCenter.NotificationCenterDelegate {
 
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
     private Context mContext;
     private ArrayList<TLRPC.Document> stickers;
     private ArrayList<Object> stickersParents;
@@ -55,17 +55,17 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         DataQuery.getInstance(currentAccount).checkStickers(DataQuery.TYPE_IMAGE);
         DataQuery.getInstance(currentAccount).checkStickers(DataQuery.TYPE_MASK);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.fileDidFailedLoad);
+///*        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.httpFileDidFailedLoad);*/
     }
 
     public void onDestroy() {
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.fileDidFailedLoad);
+///*        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.httpFileDidFailedLoad);*/
     }
 
     @Override
     public void didReceivedNotification(int id, int account, final Object... args) {
-        if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.fileDidFailedLoad) {
+        if (id == NotificationCenter.fileDidLoad /*|| id == NotificationCenter.httpFileDidFailedLoad*/) {
             if (stickers != null && !stickers.isEmpty() && !stickersToLoad.isEmpty() && visible) {
                 String fileName = (String) args[0];
                 stickersToLoad.remove(fileName);

@@ -86,7 +86,7 @@ public class RadialProgress2 {
     }
 
     public void setImageOverlay(TLObject image, Object parentObject) {
-        overlayImageView.setImage(image, image != null ? String.format(Locale.US, "%d_%d", circleRadius * 2, circleRadius * 2) : null, null, null, parentObject, 1);
+///*        overlayImageView.setImage(image, image != null ? String.format(Locale.US, "%d_%d", circleRadius * 2, circleRadius * 2) : null, null, null, parentObject, 1);*/
     }
 
     public void setImageOverlay(String url) {

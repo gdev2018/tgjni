@@ -22,11 +22,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.ChatObject;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 
@@ -37,7 +37,7 @@ public class UndoView extends FrameLayout {
     private TextView undoTextView;
     private ImageView undoImageView;
 
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
 
     private TextPaint textPaint;
     private Paint progressPaint;
@@ -54,6 +54,22 @@ public class UndoView extends FrameLayout {
     private Runnable currentCancelRunnable;
 
     private long lastUpdateTime;
+
+    private float additionalTranslationY;
+
+    private boolean isShowed;
+
+    public final static int ACTION_CLEAR = 0;
+    public final static int ACTION_DELETE = 1;
+    public final static int ACTION_ARCHIVE = 2;
+    public final static int ACTION_ARCHIVE_HINT = 3;
+    public final static int ACTION_ARCHIVE_FEW = 4;
+    public final static int ACTION_ARCHIVE_FEW_HINT = 5;
+    public final static int ACTION_ARCHIVE_HIDDEN = 6;
+    public final static int ACTION_ARCHIVE_PINNED = 7;
+    public final static int ACTION_CONTACT_ADDED = 8;
+    public final static int ACTION_OWNER_TRANSFERED_CHANNEL = 9;
+    public final static int ACTION_OWNER_TRANSFERED_GROUP = 10;
 
     public UndoView(Context context) {
         super(context);

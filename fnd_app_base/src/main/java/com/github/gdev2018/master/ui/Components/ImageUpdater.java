@@ -35,7 +35,7 @@ import com.github.gdev2018.master.MediaController;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.SendMessagesHelper;
-import com.github.gdev2018.master.UserConfigBase;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.VideoEditedInfo;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
@@ -59,7 +59,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     public BaseFragment parentFragment;
     public ImageUpdaterDelegate delegate;
 
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
     private ImageReceiver imageReceiver;
     public String currentPicturePath;
     private TLRPC.PhotoSize bigPhoto;
@@ -223,9 +223,9 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                             bitmap = ImageLoader.loadBitmap(path.getAbsolutePath(), null, 800, 800, true);
                         } else {
                             NotificationCenter.getInstance(currentAccount).addObserver(ImageUpdater.this, NotificationCenter.fileDidLoad);
-                            NotificationCenter.getInstance(currentAccount).addObserver(ImageUpdater.this, NotificationCenter.fileDidFailedLoad);
+///*                            NotificationCenter.getInstance(currentAccount).addObserver(ImageUpdater.this, NotificationCenter.httpFileDidFailedLoad);*/
                             uploadingImage = FileLoader.getAttachFileName(photoSize.location);
-                            imageReceiver.setImage(photoSize, null, null, "jpg", null, 1);
+///*                            imageReceiver.setImage(photoSize, null, null, "jpg", null, 1);*/
                         }
                     }
                 } else if (info.searchImage.imageUrl != null) {
@@ -404,7 +404,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         }
         bitmap.recycle();
         if (bigPhoto != null) {
-            UserConfigBase.getInstance(currentAccount).saveConfig(false);
+            BaseUserConfig.getInstance(currentAccount).saveConfig(false);
             uploadingImage = FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE) + "/" + bigPhoto.location.volume_id + "_" + bigPhoto.location.local_id + ".jpg";
             if (uploadAfterSelect) {
                 NotificationCenter.getInstance(currentAccount).addObserver(ImageUpdater.this, NotificationCenter.FileDidUpload);
@@ -451,11 +451,11 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     delegate = null;
                 }
             }
-        } else if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.fileDidFailedLoad || id == NotificationCenter.httpFileDidLoad || id == NotificationCenter.httpFileDidFailedLoad) {
+        } else if (id == NotificationCenter.fileDidLoad/* || id == NotificationCenter.httpFileDidFailedLoad*/ || id == NotificationCenter.httpFileDidLoad || id == NotificationCenter.httpFileDidFailedLoad) {
             String path = (String) args[0];
             if (uploadingImage != null && path.equals(uploadingImage)) {
                 NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.fileDidLoad);
-                NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.fileDidFailedLoad);
+///*                NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.httpFileDidFailedLoad);*/
                 NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.httpFileDidLoad);
                 NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.httpFileDidFailedLoad);
 

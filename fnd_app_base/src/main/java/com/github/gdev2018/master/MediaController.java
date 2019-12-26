@@ -766,7 +766,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         fileBuffer = ByteBuffer.allocateDirect(1920);
 
         AndroidUtilities.runOnUIThread(() -> {
-            for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+            for (int a = 0; a < BaseUserConfig.MAX_ACCOUNT_COUNT; a++) {
                 NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.fileDidLoad);
                 NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.httpFileDidLoad);
                 NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.didReceiveNewMessages);
@@ -938,7 +938,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         cleanupPlayer(false, true);
         audioInfo = null;
         playMusicAgain = false;
-        for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+        for (int a = 0; a < BaseUserConfig.MAX_ACCOUNT_COUNT; a++) {
             DownloadController.getInstance(a).cleanup();
         }
         videoConvertQueue.clear();
@@ -2648,7 +2648,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             recordingAudio.file_reference = new byte[0];
             recordingAudio.dc_id = Integer.MIN_VALUE;
             recordingAudio.id = SharedConfig.getLastLocalId();
-            recordingAudio.user_id = UserConfigBase.getInstance(currentAccount).getClientUserId();
+            recordingAudio.user_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
             recordingAudio.mime_type = "audio/ogg";
             recordingAudio.file_reference = new byte[0];
             SharedConfig.saveConfig();
@@ -3274,7 +3274,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             allPhotosAlbumEntry = allPhotosAlbumFinal;
             allMediaAlbumEntry = allMediaAlbumFinal;
             allVideosAlbumEntry = allVideosAlbumFinal;
-            for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+            for (int a = 0; a < BaseUserConfig.MAX_ACCOUNT_COUNT; a++) {
                 NotificationCenter.getInstance(a).postNotificationName(NotificationCenter.albumsDidLoad, guid, mediaAlbumsSorted, photoAlbumsSorted, cameraAlbumIdFinal);
             }
         }, delay);

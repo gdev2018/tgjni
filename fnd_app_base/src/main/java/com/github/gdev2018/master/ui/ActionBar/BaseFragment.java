@@ -13,14 +13,29 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityManager;
 
+import com.github.gdev2018.master.BaseUserConfig;
+import com.github.gdev2018.master.ContactsController;
+import com.github.gdev2018.master.DownloadController;
+import com.github.gdev2018.master.FileLoader;
 import com.github.gdev2018.master.FileLog;
-import com.github.gdev2018.master.UserConfigBase;
+import com.github.gdev2018.master.LocationController;
+import com.github.gdev2018.master.MediaController;
+import com.github.gdev2018.master.MessagesController;
+import com.github.gdev2018.master.MessagesStorage;
+import com.github.gdev2018.master.NotificationCenter;
+import com.github.gdev2018.master.NotificationsController;
+import com.github.gdev2018.master.SecretChatHelper;
+import com.github.gdev2018.master.SendMessagesHelper;
+import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 
 public class BaseFragment {
@@ -28,7 +43,7 @@ public class BaseFragment {
     private boolean isFinished;
     private boolean finishing;
     protected Dialog visibleDialog;
-    protected int currentAccount = UserConfigBase.selectedAccount;
+    protected int currentAccount = BaseUserConfig.selectedAccount;
 
     protected View fragmentView;
     protected ActionBarLayout parentLayout;
@@ -38,6 +53,7 @@ public class BaseFragment {
     protected Bundle arguments;
     protected boolean swipeBackEnabled = true;
     protected boolean hasOwnBackground = false;
+    protected boolean isPaused = true;
 
     public BaseFragment() {
         classGuid = ConnectionsManager.generateClassGuid();
@@ -73,6 +89,10 @@ public class BaseFragment {
 
     public int getCurrentAccount() {
         return currentAccount;
+    }
+
+    public int getClassGuid() {
+        return classGuid;
     }
 
     protected void setInPreviewMode(boolean value) {
@@ -115,6 +135,11 @@ public class BaseFragment {
 
     protected void onRemoveFromParent() {
 
+    }
+
+    public void setParentFragment(BaseFragment fragment) {
+        setParentLayout(fragment.parentLayout);
+        fragmentView = createView(parentLayout.getContext());
     }
 
     protected void setParentLayout(ActionBarLayout layout) {
@@ -218,13 +243,14 @@ public class BaseFragment {
     }
 
     public void onResume() {
-
+        isPaused = false;
     }
 
     public void onPause() {
         if (actionBar != null) {
             actionBar.onPause();
         }
+        isPaused = true;
         try {
             if (visibleDialog != null && visibleDialog.isShowing() && dismissDialogOnPause(visibleDialog)) {
                 visibleDialog.dismiss();
@@ -289,6 +315,13 @@ public class BaseFragment {
         return null;
     }
 
+    protected void setParentActivityTitle(CharSequence title) {
+        Activity activity = getParentActivity();
+        if (activity != null) {
+            activity.setTitle(title);
+        }
+    }
+
     public void startActivityForResult(final Intent intent, final int requestCode) {
         if (parentLayout != null) {
             parentLayout.startActivityForResult(intent, requestCode);
@@ -308,6 +341,10 @@ public class BaseFragment {
     }
 
     public boolean dismissDialogOnPause(Dialog dialog) {
+        return true;
+    }
+
+    public boolean canBeginSlide() {
         return true;
     }
 
@@ -334,7 +371,16 @@ public class BaseFragment {
     }
 
     protected void onBecomeFullyVisible() {
-
+        AccessibilityManager mgr = (AccessibilityManager) BaseApplication.mApplicationContext.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        if (mgr.isEnabled()) {
+            ActionBar actionBar = getActionBar();
+            if (actionBar != null) {
+                String title = actionBar.getTitle();
+                if (!TextUtils.isEmpty(title)) {
+                    setParentActivityTitle(title);
+                }
+            }
+        }
     }
 
     protected void onBecomeFullyHidden() {
@@ -406,4 +452,68 @@ public class BaseFragment {
     public ThemeDescription[] getThemeDescriptions() {
         return new ThemeDescription[0];
     }
+///*
+//    public AccountInstance getAccountInstance() {
+//        return AccountInstance.getInstance(currentAccount);
+//    }
+//
+//    protected MessagesController getMessagesController() {
+//        return getAccountInstance().getMessagesController();
+//    }
+//
+//    protected ContactsController getContactsController() {
+//        return getAccountInstance().getContactsController();
+//    }
+//
+//    protected MediaDataController getMediaDataController() {
+//        return getAccountInstance().getMediaDataController();
+//    }
+//
+//    protected ConnectionsManager getConnectionsManager() {
+//        return getAccountInstance().getConnectionsManager();
+//    }
+//
+//    protected LocationController getLocationController() {
+//        return getAccountInstance().getLocationController();
+//    }
+//
+//    protected NotificationsController getNotificationsController() {
+//        return getAccountInstance().getNotificationsController();
+//    }
+//
+//    protected MessagesStorage getMessagesStorage() {
+//        return getAccountInstance().getMessagesStorage();
+//    }
+//
+//    protected SendMessagesHelper getSendMessagesHelper() {
+//        return getAccountInstance().getSendMessagesHelper();
+//    }
+//
+//    protected FileLoader getFileLoader() {
+//        return getAccountInstance().getFileLoader();
+//    }
+//
+//    protected SecretChatHelper getSecretChatHelper() {
+//        return getAccountInstance().getSecretChatHelper();
+//    }
+//
+//    protected DownloadController getDownloadController() {
+//        return getAccountInstance().getDownloadController();
+//    }
+//
+//    protected SharedPreferences getNotificationsSettings() {
+//        return getAccountInstance().getNotificationsSettings();
+//    }
+//
+//    public NotificationCenter getNotificationCenter() {
+//        return getAccountInstance().getNotificationCenter();
+//    }
+//
+//    public MediaController getMediaController() {
+//        return MediaController.getInstance();
+//    }
+//
+//    public BaseUserConfig getUserConfig() {
+//        return getAccountInstance().getUserConfig();
+//    }*/
 }

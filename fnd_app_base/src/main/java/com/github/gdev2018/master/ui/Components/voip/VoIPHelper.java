@@ -23,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.gdev2018.master.AndroidUtilities;
-import com.github.gdev2018.master.UserConfigBase;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.BaseBuildVars;
 import com.github.gdev2018.master.ContactsController;
@@ -69,7 +69,7 @@ public class VoIPHelper{
 					.show();
 			return;
 		}
-		if (ConnectionsManager.getInstance(UserConfigBase.selectedAccount).getConnectionState() != ConnectionsManager.ConnectionStateConnected) {
+		if (ConnectionsManager.getInstance(BaseUserConfig.selectedAccount).getConnectionState() != ConnectionsManager.ConnectionStateConnected) {
 			boolean isAirplaneMode = Settings.System.getInt(activity.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
 			AlertDialog.Builder bldr = new AlertDialog.Builder(activity)
 					.setTitle(isAirplaneMode ? LocaleController.getString("VoipOfflineAirplaneTitle", R.string.VoipOfflineAirplaneTitle) : LocaleController.getString("VoipOfflineTitle", R.string.VoipOfflineTitle))
@@ -144,7 +144,7 @@ public class VoIPHelper{
 		intent.putExtra("user_id", user.id);
 		intent.putExtra("is_outgoing", true);
 		intent.putExtra("start_incall_activity", true);
-		intent.putExtra("account", UserConfigBase.selectedAccount);
+		intent.putExtra("account", BaseUserConfig.selectedAccount);
 		try {
 			activity.startService(intent);
 		} catch (Throwable e) {
@@ -189,7 +189,7 @@ public class VoIPHelper{
 
 	public static boolean canRateCall(TLRPC.TL_messageActionPhoneCall call){
 		if(!(call.reason instanceof TLRPC.TL_phoneCallDiscardReasonBusy) && !(call.reason instanceof TLRPC.TL_phoneCallDiscardReasonMissed)){
-			SharedPreferences prefs=MessagesController.getNotificationsSettings(UserConfigBase.selectedAccount); // always called from chat UI
+			SharedPreferences prefs=MessagesController.getNotificationsSettings(BaseUserConfig.selectedAccount); // always called from chat UI
 			Set<String> hashes=prefs.getStringSet("calls_access_hashes", (Set<String>)Collections.EMPTY_SET);
 			for(String hash:hashes){
 				String[] d=hash.split(" ");
@@ -204,7 +204,7 @@ public class VoIPHelper{
 	}
 
 	public static void showRateAlert(Context context, TLRPC.TL_messageActionPhoneCall call){
-		SharedPreferences prefs=MessagesController.getNotificationsSettings(UserConfigBase.selectedAccount); // always called from chat UI
+		SharedPreferences prefs=MessagesController.getNotificationsSettings(BaseUserConfig.selectedAccount); // always called from chat UI
 		Set<String> hashes=prefs.getStringSet("calls_access_hashes", (Set<String>)Collections.EMPTY_SET);
 		for(String hash:hashes){
 			String[] d=hash.split(" ");
@@ -213,7 +213,7 @@ public class VoIPHelper{
 			if(d[0].equals(call.call_id+"")){
 				try{
 					long accessHash=Long.parseLong(d[1]);
-					showRateAlert(context, null, call.call_id, accessHash, UserConfigBase.selectedAccount);
+					showRateAlert(context, null, call.call_id, accessHash, BaseUserConfig.selectedAccount);
 				}catch(Exception x){}
 				return;
 			}
@@ -378,7 +378,7 @@ public class VoIPHelper{
 			public void onClick(View v){
 				int rating=bar.getRating();
 				if(rating>=4 || page[0]==1){
-					final int currentAccount= UserConfigBase.selectedAccount;
+					final int currentAccount= BaseUserConfig.selectedAccount;
 					final TLRPC.TL_phone_setCallRating req=new TLRPC.TL_phone_setCallRating();
 					req.rating=bar.getRating();
 					ArrayList<String> problemTags=new ArrayList<>();

@@ -30,11 +30,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.DataQuery;
 import com.github.gdev2018.master.FileLoader;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
@@ -55,7 +55,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
 
     private boolean isInstalled;
 
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
 
     private boolean drawProgress;
     private float progressAlpha;

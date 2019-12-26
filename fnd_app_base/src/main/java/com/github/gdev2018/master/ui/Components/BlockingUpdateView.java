@@ -26,6 +26,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.BuildConfig;
 import com.github.gdev2018.master.FileLoader;
@@ -34,7 +35,6 @@ import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.browser.Browser;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.AlertDialog;
@@ -77,8 +77,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
             pressCount++;
             if (pressCount >= 10) {
                 setVisibility(GONE);
-///*                UserConfigBase.getInstance(0).pendingAppUpdate = null;*/
-                UserConfigBase.getInstance(0).saveConfig(false);
+///*                BaseUserConfig.getInstance(0).pendingAppUpdate = null;*/
+                BaseUserConfig.getInstance(0).saveConfig(false);
             }
         });
 
@@ -171,7 +171,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         super.setVisibility(visibility);
         if (visibility == GONE) {
             NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.fileDidLoad);
-            NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.fileDidFailedLoad);
+///*            NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.httpFileDidFailedLoad);*/
             NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
         }
     }
@@ -184,11 +184,11 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
                 showProgress(false);
                 openApkInstall((Activity) getContext(), appUpdate.document);
             }
-        } else if (id == NotificationCenter.fileDidFailedLoad) {
-            String location = (String) args[0];
-            if (fileName != null && fileName.equals(location)) {
-                showProgress(false);
-            }
+///*        } else if (id == NotificationCenter.httpFileDidFailedLoad) {
+//            String location = (String) args[0];
+//            if (fileName != null && fileName.equals(location)) {
+//                showProgress(false);
+//            }*/
         } else if (id == NotificationCenter.FileLoadProgressChanged) {
             String location = (String) args[0];
             if (fileName != null && fileName.equals(location)) {
@@ -312,7 +312,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
             acceptTextView.setText(LocaleController.getString("Update", R.string.Update).toUpperCase());
         }
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileDidFailedLoad);
+///*        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.httpFileDidFailedLoad);*/
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.FileLoadProgressChanged);
     }
 }

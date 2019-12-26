@@ -4,13 +4,13 @@ package com.github.gdev2018.master.ui.Adapters;
 
 import android.util.SparseArray;
 
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.SQLite.SQLiteCursor;
 import com.github.gdev2018.master.SQLite.SQLitePreparedStatement;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.MessagesStorage;
-import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
@@ -50,7 +50,7 @@ public class SearchAdapterHelper {
     private SparseArray<TLObject> groupSearchMap = new SparseArray<>();
     private ArrayList<TLObject> localSearchResults;
 
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
 
     private int channelReqId = 0;
     private int channelLastReqId;

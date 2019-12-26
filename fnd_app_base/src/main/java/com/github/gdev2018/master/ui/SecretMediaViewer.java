@@ -40,7 +40,7 @@ import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
-import com.github.gdev2018.master.UserConfigBase;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
@@ -592,7 +592,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
     }
 
     public void setParentActivity(Activity activity) {
-        currentAccount = UserConfigBase.selectedAccount;
+        currentAccount = BaseUserConfig.selectedAccount;
         centerImage.setCurrentAccount(currentAccount);
         if (parentActivity == activity) {
             return;
@@ -769,30 +769,30 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         disableShowCheck = true;
         centerImage.setManualAlphaAnimator(false);
 
-        final Rect drawRegion = object.imageReceiver.getDrawRegion();
-
-        float width = (drawRegion.right - drawRegion.left);
-        float height = (drawRegion.bottom - drawRegion.top);
-        int viewWidth = AndroidUtilities.displaySize.x;
-        int viewHeight = AndroidUtilities.displaySize.y + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
-        scale = Math.max(width / viewWidth, height / viewHeight);
-
-        translationX = object.viewX + drawRegion.left + width / 2 -  viewWidth / 2;
-        translationY = object.viewY + drawRegion.top + height / 2 - viewHeight / 2;
-        clipHorizontal = Math.abs(drawRegion.left - object.imageReceiver.getImageX());
-        int clipVertical = Math.abs(drawRegion.top - object.imageReceiver.getImageY());
-        int coords2[] = new int[2];
-        object.parentView.getLocationInWindow(coords2);
-        clipTop = coords2[1] - (Build.VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight) - (object.viewY + drawRegion.top) + object.clipTopAddition;
-        if (clipTop < 0) {
-            clipTop = 0;
-        }
-        clipBottom = (object.viewY + drawRegion.top + (int) height) - (coords2[1] + object.parentView.getHeight() - (Build.VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight)) + object.clipBottomAddition;
-        if (clipBottom < 0) {
-            clipBottom = 0;
-        }
-        clipTop = Math.max(clipTop, clipVertical);
-        clipBottom = Math.max(clipBottom, clipVertical);
+///*        final Rect drawRegion = object.imageReceiver.getDrawRegion();
+//
+//        float width = (drawRegion.right - drawRegion.left);
+//        float height = (drawRegion.bottom - drawRegion.top);
+//        int viewWidth = AndroidUtilities.displaySize.x;
+//        int viewHeight = AndroidUtilities.displaySize.y + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+//        scale = Math.max(width / viewWidth, height / viewHeight);
+//
+//        translationX = object.viewX + drawRegion.left + width / 2 -  viewWidth / 2;
+//        translationY = object.viewY + drawRegion.top + height / 2 - viewHeight / 2;
+//        clipHorizontal = Math.abs(drawRegion.left - object.imageReceiver.getImageX());
+//        int clipVertical = Math.abs(drawRegion.top - object.imageReceiver.getImageY());
+//        int coords2[] = new int[2];
+//        object.parentView.getLocationInWindow(coords2);
+//        clipTop = coords2[1] - (Build.VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight) - (object.viewY + drawRegion.top) + object.clipTopAddition;
+//        if (clipTop < 0) {
+//            clipTop = 0;
+//        }
+//        clipBottom = (object.viewY + drawRegion.top + (int) height) - (coords2[1] + object.parentView.getHeight() - (Build.VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight)) + object.clipBottomAddition;
+//        if (clipBottom < 0) {
+//            clipBottom = 0;
+//        }*/
+///*        clipTop = Math.max(clipTop, clipVertical);
+//        clipBottom = Math.max(clipBottom, clipVertical);*/
 
 
         animationStartTime = System.currentTimeMillis();
@@ -817,43 +817,43 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             currentThumb = null;
         }
         currentThumb = object.imageReceiver.getThumbBitmapSafe();
-        if (document != null) {
-            if (MessageObject.isGifDocument(document)) {
-                actionBar.setTitle(LocaleController.getString("DisappearingGif", R.string.DisappearingGif));
-                centerImage.setImage(document, null, currentThumb != null ? new BitmapDrawable(currentThumb.bitmap) : null, -1, null, messageObject, 1);
-                secretDeleteTimer.setDestroyTime((long) messageObject.messageOwner.destroyTime * 1000, messageObject.messageOwner.ttl, false);
-            } else {
-                playerRetryPlayCount = 1;
-                actionBar.setTitle(LocaleController.getString("DisappearingVideo", R.string.DisappearingVideo));
-                File f = new File(messageObject.messageOwner.attachPath);
-                if (f.exists()) {
-                    preparePlayer(f);
-                } else {
-                    File file = FileLoader.getPathToMessage(messageObject.messageOwner);
-                    File encryptedFile = new File(file.getAbsolutePath() + ".enc");
-                    if (encryptedFile.exists()) {
-                        file = encryptedFile;
-                    }
-                    preparePlayer(file);
-                }
-                isVideo = true;
-                centerImage.setImage(null, null, currentThumb != null ? new BitmapDrawable(currentThumb.bitmap) : null, -1, null, messageObject, 2);
-                long destroyTime = (long) messageObject.messageOwner.destroyTime * 1000;
-                long currentTime = System.currentTimeMillis() + ConnectionsManager.getInstance(currentAccount).getTimeDifference() * 1000;
-                long timeToDestroy = destroyTime - currentTime;
-                long duration = messageObject.getDuration() * 1000;
-                if (duration > timeToDestroy) {
-                    secretDeleteTimer.setDestroyTime(-1, -1, true);
-                } else {
-                    secretDeleteTimer.setDestroyTime((long) messageObject.messageOwner.destroyTime * 1000, messageObject.messageOwner.ttl, false);
-                }
-            }
-        } else {
-            actionBar.setTitle(LocaleController.getString("DisappearingPhoto", R.string.DisappearingPhoto));
-            TLRPC.PhotoSize sizeFull = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
-            centerImage.setImage(sizeFull, null, currentThumb != null ? new BitmapDrawable(currentThumb.bitmap) : null, -1, null, messageObject, 2);
-            secretDeleteTimer.setDestroyTime((long) messageObject.messageOwner.destroyTime * 1000, messageObject.messageOwner.ttl, false);
-        }
+///*        if (document != null) {
+//            if (MessageObject.isGifDocument(document)) {
+//                actionBar.setTitle(LocaleController.getString("DisappearingGif", R.string.DisappearingGif));
+//                centerImage.setImage(document, null, currentThumb != null ? new BitmapDrawable(currentThumb.bitmap) : null, -1, null, messageObject, 1);
+//                secretDeleteTimer.setDestroyTime((long) messageObject.messageOwner.destroyTime * 1000, messageObject.messageOwner.ttl, false);
+//            } else {
+//                playerRetryPlayCount = 1;
+//                actionBar.setTitle(LocaleController.getString("DisappearingVideo", R.string.DisappearingVideo));
+//                File f = new File(messageObject.messageOwner.attachPath);
+//                if (f.exists()) {
+//                    preparePlayer(f);
+//                } else {
+//                    File file = FileLoader.getPathToMessage(messageObject.messageOwner);
+//                    File encryptedFile = new File(file.getAbsolutePath() + ".enc");
+//                    if (encryptedFile.exists()) {
+//                        file = encryptedFile;
+//                    }
+//                    preparePlayer(file);
+//                }
+//                isVideo = true;
+//                centerImage.setImage(null, null, currentThumb != null ? new BitmapDrawable(currentThumb.bitmap) : null, -1, null, messageObject, 2);
+//                long destroyTime = (long) messageObject.messageOwner.destroyTime * 1000;
+//                long currentTime = System.currentTimeMillis() + ConnectionsManager.getInstance(currentAccount).getTimeDifference() * 1000;
+//                long timeToDestroy = destroyTime - currentTime;
+//                long duration = messageObject.getDuration() * 1000;
+//                if (duration > timeToDestroy) {
+//                    secretDeleteTimer.setDestroyTime(-1, -1, true);
+//                } else {
+//                    secretDeleteTimer.setDestroyTime((long) messageObject.messageOwner.destroyTime * 1000, messageObject.messageOwner.ttl, false);
+//                }
+//            }
+//        } else {
+//            actionBar.setTitle(LocaleController.getString("DisappearingPhoto", R.string.DisappearingPhoto));
+//            TLRPC.PhotoSize sizeFull = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
+//            centerImage.setImage(sizeFull, null, currentThumb != null ? new BitmapDrawable(currentThumb.bitmap) : null, -1, null, messageObject, 2);
+//            secretDeleteTimer.setDestroyTime((long) messageObject.messageOwner.destroyTime * 1000, messageObject.messageOwner.ttl, false);
+//        }*/
         try {
             if (windowView.getParent() != null) {
                 WindowManager wm = (WindowManager) parentActivity.getSystemService(Context.WINDOW_SERVICE);
@@ -1200,30 +1200,30 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             if (object != null && object.imageReceiver.getThumbBitmap() != null && !byDelete) {
                 object.imageReceiver.setVisible(false, true);
 
-                final Rect drawRegion = object.imageReceiver.getDrawRegion();
+///*                final Rect drawRegion = object.imageReceiver.getDrawRegion();*/
 
-                float width = (drawRegion.right - drawRegion.left);
-                float height = (drawRegion.bottom - drawRegion.top);
-                int viewWidth = AndroidUtilities.displaySize.x;
-                int viewHeight = AndroidUtilities.displaySize.y + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
-                animateToScale = Math.max(width / viewWidth, height / viewHeight);
-                animateToX = object.viewX + drawRegion.left + width / 2 -  viewWidth / 2;
-                animateToY = object.viewY + drawRegion.top + height / 2 - viewHeight / 2;
-                animateToClipHorizontal = Math.abs(drawRegion.left - object.imageReceiver.getImageX());
-                int clipVertical = Math.abs(drawRegion.top - object.imageReceiver.getImageY());
-                int coords2[] = new int[2];
-                object.parentView.getLocationInWindow(coords2);
-                animateToClipTop = coords2[1] - (Build.VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight) - (object.viewY + drawRegion.top) + object.clipTopAddition;
-                if (animateToClipTop < 0) {
-                    animateToClipTop = 0;
-                }
-                animateToClipBottom = (object.viewY + drawRegion.top + (int) height) - (coords2[1] + object.parentView.getHeight() - (Build.VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight)) + object.clipBottomAddition;
-                if (animateToClipBottom < 0) {
-                    animateToClipBottom = 0;
-                }
+///*                float width = (drawRegion.right - drawRegion.left);
+//                float height = (drawRegion.bottom - drawRegion.top);
+//                int viewWidth = AndroidUtilities.displaySize.x;
+//                int viewHeight = AndroidUtilities.displaySize.y + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+//                animateToScale = Math.max(width / viewWidth, height / viewHeight);
+//                animateToX = object.viewX + drawRegion.left + width / 2 -  viewWidth / 2;
+//                animateToY = object.viewY + drawRegion.top + height / 2 - viewHeight / 2;
+//                animateToClipHorizontal = Math.abs(drawRegion.left - object.imageReceiver.getImageX());
+//                int clipVertical = Math.abs(drawRegion.top - object.imageReceiver.getImageY());
+//                int coords2[] = new int[2];
+//                object.parentView.getLocationInWindow(coords2);
+//                animateToClipTop = coords2[1] - (Build.VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight) - (object.viewY + drawRegion.top) + object.clipTopAddition;
+//                if (animateToClipTop < 0) {
+//                    animateToClipTop = 0;
+//                }
+//                animateToClipBottom = (object.viewY + drawRegion.top + (int) height) - (coords2[1] + object.parentView.getHeight() - (Build.VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight)) + object.clipBottomAddition;
+//                if (animateToClipBottom < 0) {
+//                    animateToClipBottom = 0;
+//                }*/
                 animationStartTime = System.currentTimeMillis();
-                animateToClipBottom = Math.max(animateToClipBottom, clipVertical);
-                animateToClipTop = Math.max(animateToClipTop, clipVertical);
+///*                animateToClipBottom = Math.max(animateToClipBottom, clipVertical);
+//                animateToClipTop = Math.max(animateToClipTop, clipVertical);*/
                 zoomAnimation = true;
             } else {
                 int h = (AndroidUtilities.displaySize.y + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));

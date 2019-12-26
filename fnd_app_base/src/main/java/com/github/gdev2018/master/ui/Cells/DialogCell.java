@@ -20,6 +20,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.PhoneFormat.PhoneFormat;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.ChatObject;
@@ -32,7 +33,6 @@ import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
@@ -57,7 +57,7 @@ public class DialogCell extends BaseCell {
         public boolean sent;
     }
 
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
     private CustomDialog customDialog;
     private long currentDialogId;
     private int currentEditDate;
@@ -461,7 +461,7 @@ public class DialogCell extends BaseCell {
                             } else if (encryptedChat instanceof TLRPC.TL_encryptedChatDiscarded) {
                                 messageString = LocaleController.getString("EncryptionRejected", R.string.EncryptionRejected);
                             } else if (encryptedChat instanceof TLRPC.TL_encryptedChat) {
-                                if (encryptedChat.admin_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
+                                if (encryptedChat.admin_id == BaseUserConfig.getInstance(currentAccount).getClientUserId()) {
                                     if (user != null && user.first_name != null) {
                                         messageString = LocaleController.formatString("EncryptedChatStartedOutgoing", R.string.EncryptedChatStartedOutgoing, user.first_name);
                                     } else {
@@ -1069,7 +1069,7 @@ public class DialogCell extends BaseCell {
                 avatarDrawable.setInfo(chat);
                 parentObject = chat;
             }
-            avatarImage.setImage(photo, "50_50", avatarDrawable, null, parentObject, 0);
+///*            avatarImage.setImage(photo, "50_50", avatarDrawable, null, parentObject, 0);*/
         }
         if (getMeasuredWidth() != 0 || getMeasuredHeight() != 0) {
             buildLayout();

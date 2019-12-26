@@ -327,7 +327,7 @@ public class LocaleController {
 
         loadOtherLanguages();
         if (remoteLanguages.isEmpty()) {
-///*            AndroidUtilities.runOnUIThread(() -> loadRemoteLanguages(UserConfigBase.selectedAccount));*/
+///*            AndroidUtilities.runOnUIThread(() -> loadRemoteLanguages(BaseUserConfig.selectedAccount));*/
         }
 
         for (int a = 0; a < otherLanguages.size(); a++) {
@@ -391,7 +391,7 @@ public class LocaleController {
                 }
             }
 
-            applyLanguage(currentInfo, override, true, UserConfigBase.selectedAccount);
+            applyLanguage(currentInfo, override, true, BaseUserConfig.selectedAccount);
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -1198,7 +1198,7 @@ public class LocaleController {
         if (languageOverride != null) {
             LocaleInfo toSet = currentLocaleInfo;
             currentLocaleInfo = null;
-            applyLanguage(toSet, false, false, UserConfigBase.selectedAccount);
+            applyLanguage(toSet, false, false, BaseUserConfig.selectedAccount);
         } else {
             Locale newLocale = newConfig.locale;
             if (newLocale != null) {
@@ -1329,7 +1329,7 @@ public class LocaleController {
             int dateYear = rightNow.get(Calendar.YEAR);
 
             if (dateDay == day && year == dateYear) {
-                int diff = (int) (ConnectionsManager.getInstance(UserConfigBase.selectedAccount).getCurrentTime() - date / 1000) / 60;
+                int diff = (int) (ConnectionsManager.getInstance(BaseUserConfig.selectedAccount).getCurrentTime() - date / 1000) / 60;
                 if (diff < 1) {
                     return LocaleController.getString("LocationUpdatedJustNow", R.string.LocationUpdatedJustNow);
                 } else if (diff < 60) {
@@ -1437,7 +1437,7 @@ public class LocaleController {
         chatDate = createFormatter(locale, getStringInternal("chatDate", R.string.chatDate), "d MMMM");
         chatFullDate = createFormatter(locale, getStringInternal("chatFullDate", R.string.chatFullDate), "d MMMM yyyy");
         formatterWeek = createFormatter(locale, getStringInternal("formatterWeek", R.string.formatterWeek), "EEE");
-        formatterScheduleDay = createFormatter(locale, getStringInternal("formatDateScheduleDay", R.string.formatDateScheduleDay), "EEE MMM d");
+///*        formatterScheduleDay = createFormatter(locale, getStringInternal("formatDateScheduleDay", R.string.formatDateScheduleDay), "EEE MMM d");*/
         formatterDay = createFormatter(lang.toLowerCase().equals("ar") || lang.toLowerCase().equals("ko") ? locale : Locale.US, is24HourFormat ? getStringInternal("formatterDay24H", R.string.formatterDay24H) : getStringInternal("formatterDay12H", R.string.formatterDay12H), is24HourFormat ? "HH:mm" : "h:mm a");
         formatterStats = createFormatter(locale, is24HourFormat ? getStringInternal("formatterStats24H", R.string.formatterStats24H) : getStringInternal("formatterStats12H", R.string.formatterStats12H), is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
         formatterBannedUntil = createFormatter(locale, is24HourFormat ? getStringInternal("formatterBannedUntil24H", R.string.formatterBannedUntil24H) : getStringInternal("formatterBannedUntil12H", R.string.formatterBannedUntil12H), is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
@@ -1847,7 +1847,7 @@ public class LocaleController {
                     }
                 }, ConnectionsManager.RequestFlagWithoutLogin);
             } else {
-                for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+                for (int a = 0; a < BaseUserConfig.MAX_ACCOUNT_COUNT; a++) {
                     ConnectionsManager.setLangCode(localeInfo.getLangCode());
                 }
                 TLRPC.TL_langpack_getLangPack req = new TLRPC.TL_langpack_getLangPack();

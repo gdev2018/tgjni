@@ -66,7 +66,7 @@ import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfigBase;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.support.widget.GridLayoutManager;
 import com.github.gdev2018.master.support.widget.RecyclerView;
@@ -590,7 +590,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
     private int searchFieldHeight;
 
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
     private ArrayList<EmojiGridAdapter> adapters = new ArrayList<>();
     private ArrayList<TLRPC.TL_messages_stickerSet> stickerSets = new ArrayList<>();
     private int groupStickerPackNum;
@@ -1323,7 +1323,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         pagerSlidingTabStrip.setShouldExpand(true);
         pagerSlidingTabStrip.setIndicatorHeight(AndroidUtilities.dp(2));
         pagerSlidingTabStrip.setUnderlineHeight(AndroidUtilities.dp(1));
-        pagerSlidingTabStrip.setIndicatorColor(Theme.getColor(Theme.key_chat_emojiPanelIconSelector));
+///*        pagerSlidingTabStrip.setIndicatorColor(Theme.getColor(Theme.key_chat_emojiPanelIconSelector));*/
         pagerSlidingTabStrip.setUnderlineColor(Theme.getColor(Theme.key_chat_emojiPanelShadowLine));
         emojiTab.addView(pagerSlidingTabStrip, LayoutHelper.createLinear(0, 48, 1.0f));
         pagerSlidingTabStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -1906,7 +1906,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             stickersTab.setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
         }
         if (pagerSlidingTabStrip != null) {
-            pagerSlidingTabStrip.setIndicatorColor(Theme.getColor(Theme.key_chat_emojiPanelIconSelector));
+///*            pagerSlidingTabStrip.setIndicatorColor(Theme.getColor(Theme.key_chat_emojiPanelIconSelector));*/
             pagerSlidingTabStrip.setUnderlineColor(Theme.getColor(Theme.key_chat_emojiPanelShadowLine));
         }
         if (backspaceButton != null) {

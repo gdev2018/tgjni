@@ -149,7 +149,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     };
 
     public StickersAlert(Context context, Object parentObject, TLRPC.Photo photo) {
-        super(context, false);
+        super(context, false, 0);
         parentActivity = (Activity) context;
         final TLRPC.TL_messages_getAttachedStickers req = new TLRPC.TL_messages_getAttachedStickers();
         TLRPC.TL_inputStickeredMediaPhoto inputStickeredMediaPhoto = new TLRPC.TL_inputStickeredMediaPhoto();
@@ -199,7 +199,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     }
 
     public StickersAlert(Context context, BaseFragment baseFragment, TLRPC.InputStickerSet set, TLRPC.TL_messages_stickerSet loadedSet, StickersAlertDelegate stickersAlertDelegate) {
-        super(context, false);
+        super(context, false, 0);
         delegate = stickersAlertDelegate;
         inputStickerSet = set;
         stickerSet = loadedSet;
@@ -421,7 +421,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 }
 
                 TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(selectedSticker.thumbs, 90);
-                stickerImageView.getImageReceiver().setImage(selectedSticker, null, thumb, null, "webp", stickerSet, 1);
+///*                stickerImageView.getImageReceiver().setImage(selectedSticker, null, thumb, null, "webp", stickerSet, 1);*/
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) stickerPreviewLayout.getLayoutParams();
                 layoutParams.topMargin = scrollOffsetY;
                 stickerPreviewLayout.setLayoutParams(layoutParams);

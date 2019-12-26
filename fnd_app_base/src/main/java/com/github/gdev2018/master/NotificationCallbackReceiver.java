@@ -22,7 +22,7 @@ public class NotificationCallbackReceiver extends BroadcastReceiver {
             return;
         }
         BaseApplication.postInitApplication();
-        int currentAccount = intent.getIntExtra("currentAccount", UserConfigBase.selectedAccount);
+        int currentAccount = intent.getIntExtra("currentAccount", BaseUserConfig.selectedAccount);
         long did = intent.getLongExtra("did", 777000);
         byte[] data = intent.getByteArrayExtra("data");
         int mid = intent.getIntExtra("mid", 0);

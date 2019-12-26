@@ -988,14 +988,14 @@ public class VoIPService extends VoIPBaseService{
 			controller.setConfig(MessagesController.getInstance(currentAccount).callPacketTimeout / 1000.0, MessagesController.getInstance(currentAccount).callConnectTimeout / 1000.0,
 					convertDataSavingMode(preferences.getInt("VoipDataSaving", VoIPHelper.getDataSavingDefault())), call.id);
 			controller.setEncryptionKey(authKey, isOutgoing);
-			TLRPC.TL_phoneConnection[] endpoints = new TLRPC.TL_phoneConnection[1 + call.alternative_connections.size()];
-			endpoints[0] = call.connection;
-			for (int i = 0; i < call.alternative_connections.size(); i++)
-				endpoints[i + 1] = call.alternative_connections.get(i);
+///*			TLRPC.TL_phoneConnection[] endpoints = new TLRPC.TL_phoneConnection[1 + call.alternative_connections.size()];
+//			endpoints[0] = call.connection;
+//			for (int i = 0; i < call.alternative_connections.size(); i++)
+//				endpoints[i + 1] = call.alternative_connections.get(i);*/
 
 			SharedPreferences prefs=BaseApplication.getGlobalMainSettings();
 
-			controller.setRemoteEndpoints(endpoints, call.p2p_allowed, prefs.getBoolean("dbg_force_tcp_in_calls", false), call.protocol.max_layer);
+///*			controller.setRemoteEndpoints(endpoints, call.p2p_allowed, prefs.getBoolean("dbg_force_tcp_in_calls", false), call.protocol.max_layer);*/
 			if(prefs.getBoolean("dbg_force_tcp_in_calls", false)){
 				AndroidUtilities.runOnUIThread(new Runnable(){
 					@Override

@@ -16,7 +16,7 @@ public class StopLiveLocationReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+        for (int a = 0; a < BaseUserConfig.MAX_ACCOUNT_COUNT; a++) {
             LocationController.getInstance(a).removeAllLocationSharings();
         }
     }

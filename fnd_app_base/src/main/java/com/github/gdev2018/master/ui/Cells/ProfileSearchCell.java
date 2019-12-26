@@ -16,6 +16,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.PhoneFormat.PhoneFormat;
 import com.github.gdev2018.master.AndroidUtilities;
 ///*import com.github.gdev2018.master.ChatObject;
@@ -27,7 +28,6 @@ import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.ui.Components.AvatarDrawable;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 
@@ -51,7 +51,7 @@ public class ProfileSearchCell extends BaseCell {
 
     public boolean useSeparator;
 
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
 
     private int nameLeft;
     private int nameTop;
@@ -292,7 +292,7 @@ public class ProfileSearchCell extends BaseCell {
                     onlineString = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
                 } else {
                     onlineString = LocaleController.formatUserStatus(currentAccount, user);
-                    if (user != null && (user.id == UserConfigBase.getInstance(currentAccount).getClientUserId() || user.status != null && user.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime())) {
+                    if (user != null && (user.id == BaseUserConfig.getInstance(currentAccount).getClientUserId() || user.status != null && user.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime())) {
                         currentOnlinePaint = Theme.dialogs_onlinePaint;
                         onlineString = LocaleController.getString("Online", R.string.Online);
                     }

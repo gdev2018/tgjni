@@ -34,7 +34,7 @@ public class FileRefController {
     private long lastCleanupTime = SystemClock.uptimeMillis();
 
     private int currentAccount;
-    private static volatile FileRefController Instance[] = new FileRefController[UserConfigBase.MAX_ACCOUNT_COUNT];
+    private static volatile FileRefController Instance[] = new FileRefController[BaseUserConfig.MAX_ACCOUNT_COUNT];
 
     public static FileRefController getInstance(int num) {
         FileRefController localInstance = Instance[num];

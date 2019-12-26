@@ -19,7 +19,7 @@ public class NotificationDismissReceiver extends BroadcastReceiver {
         if (intent == null) {
             return;
         }
-        int currentAccount = intent.getIntExtra("currentAccount", UserConfigBase.selectedAccount);
+        int currentAccount = intent.getIntExtra("currentAccount", BaseUserConfig.selectedAccount);
 ///*MessagesController.getNotificationsSettings(currentAccount).edit().putInt("dismissDate", intent.getIntExtra("messageDate", 0)).commit();*/
     }
 }

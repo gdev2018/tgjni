@@ -21,7 +21,7 @@ import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.LocaleController;
 ///*import com.github.gdev2018.master.MessagesController;*/
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfigBase;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
@@ -41,7 +41,7 @@ public class SessionCell extends FrameLayout {
     private AvatarDrawable avatarDrawable;
     private boolean needDivider;
 
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
 
     public SessionCell(Context context, int type) {
         super(context);

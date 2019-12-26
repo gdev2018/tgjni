@@ -54,7 +54,7 @@ public class LocationController implements NotificationCenter.NotificationCenter
     private final static double eps = 0.0001;
 
     private int currentAccount;
-    private static volatile LocationController Instance[] = new LocationController[UserConfigBase.MAX_ACCOUNT_COUNT];
+    private static volatile LocationController Instance[] = new LocationController[BaseUserConfig.MAX_ACCOUNT_COUNT];
 
     public static LocationController getInstance(int num) {
         LocationController localInstance = Instance[num];
@@ -651,7 +651,7 @@ public class LocationController implements NotificationCenter.NotificationCenter
 
     public static int getLocationsCount() {
         int count = 0;
-        for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+        for (int a = 0; a < BaseUserConfig.MAX_ACCOUNT_COUNT; a++) {
             count += LocationController.getInstance(a).sharingLocationsUI.size();
         }
         return count;

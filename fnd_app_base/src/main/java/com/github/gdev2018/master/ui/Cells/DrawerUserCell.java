@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.ContactsController;
 import com.github.gdev2018.master.NotificationsController;
-import com.github.gdev2018.master.UserConfigBase;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.AvatarDrawable;
@@ -82,7 +82,7 @@ public class DrawerUserCell extends FrameLayout {
 
     public void setAccount(int account) {
         accountNumber = account;
-        TLRPC.User user = UserConfigBase.getInstance(accountNumber).getCurrentUser();
+        TLRPC.User user = BaseUserConfig.getInstance(accountNumber).getCurrentUser();
         if (user == null) {
             return;
         }
@@ -96,7 +96,7 @@ public class DrawerUserCell extends FrameLayout {
         }
         imageView.getImageReceiver().setCurrentAccount(account);
         imageView.setImage(avatar, "50_50", avatarDrawable, user);
-        checkBox.setVisibility(account == UserConfigBase.selectedAccount ? VISIBLE : INVISIBLE);
+        checkBox.setVisibility(account == BaseUserConfig.selectedAccount ? VISIBLE : INVISIBLE);
     }
 
     public int getAccountNumber() {
@@ -105,7 +105,7 @@ public class DrawerUserCell extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (UserConfigBase.getActivatedAccountsCount() <= 1 || !NotificationsController.getInstance(accountNumber).showBadgeNumber) {
+        if (BaseUserConfig.getActivatedAccountsCount() <= 1 || !NotificationsController.getInstance(accountNumber).showBadgeNumber) {
             return;
         }
         int counter = NotificationsController.getInstance(accountNumber).getTotalUnreadCount();

@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.DownloadController;
 import com.github.gdev2018.master.Emoji;
 import com.github.gdev2018.master.FileLoader;
@@ -30,7 +31,6 @@ import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MediaController;
 import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.MessagesController;
-import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.WebFile;
 import com.github.gdev2018.master.tgnet.TLRPC;
@@ -63,7 +63,7 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
     private ImageReceiver linkImageView;
     private boolean drawLinkImageView;
     private LetterDrawable letterDrawable;
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
     private Object parentObject;
 
     private boolean needDivider;
@@ -272,19 +272,19 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
             }
             linkImageView.setAspectFit(documentAttachType == DOCUMENT_ATTACH_TYPE_STICKER);
 
-            if (documentAttachType == DOCUMENT_ATTACH_TYPE_GIF) {
-                if (documentAttach != null) {
-                    linkImageView.setImage(documentAttach, null, currentPhotoObject, currentPhotoFilter, documentAttach.size, ext, parentObject, 0);
-                } else {
-                    linkImageView.setImage(webFile != null ? webFile : urlLocation, null, null, currentPhotoObject, currentPhotoFilter, -1, ext, parentObject, 1);
-                }
-            } else {
-                if (currentPhotoObject != null) {
-                    linkImageView.setImage(currentPhotoObject, currentPhotoFilter, currentPhotoObjectThumb, currentPhotoFilterThumb, currentPhotoObject.size, ext, parentObject, 0);
-                } else {
-                    linkImageView.setImage(webFile != null ? webFile : urlLocation, currentPhotoFilter, null, currentPhotoObjectThumb, currentPhotoFilterThumb, -1, ext, parentObject, 1);
-                }
-            }
+///*            if (documentAttachType == DOCUMENT_ATTACH_TYPE_GIF) {
+//                if (documentAttach != null) {
+//                    linkImageView.setImage(documentAttach, null, currentPhotoObject, currentPhotoFilter, documentAttach.size, ext, parentObject, 0);
+//                } else {
+//                    linkImageView.setImage(webFile != null ? webFile : urlLocation, null, null, currentPhotoObject, currentPhotoFilter, -1, ext, parentObject, 1);
+//                }
+//            } else {
+//                if (currentPhotoObject != null) {
+//                    linkImageView.setImage(currentPhotoObject, currentPhotoFilter, currentPhotoObjectThumb, currentPhotoFilterThumb, currentPhotoObject.size, ext, parentObject, 0);
+//                } else {
+//                    linkImageView.setImage(webFile != null ? webFile : urlLocation, currentPhotoFilter, null, currentPhotoObjectThumb, currentPhotoFilterThumb, -1, ext, parentObject, 1);
+//                }
+//            }*/
             drawLinkImageView = true;
         }
 
@@ -352,7 +352,7 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
             message.out = true;
             message.id = -Utilities.random.nextInt();
             message.to_id = new TLRPC.TL_peerUser();
-            message.to_id.user_id = message.from_id = UserConfigBase.getInstance(currentAccount).getClientUserId();
+            message.to_id.user_id = message.from_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
             message.date = (int) (System.currentTimeMillis() / 1000);
             message.message = "";
             message.media = new TLRPC.TL_messageMediaDocument();

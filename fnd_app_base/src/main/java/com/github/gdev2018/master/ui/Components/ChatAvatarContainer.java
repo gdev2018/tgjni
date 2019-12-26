@@ -19,7 +19,7 @@ import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfigBase;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
@@ -40,7 +40,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private ChatActivity parentFragment;
     private StatusDrawable[] statusDrawables = new StatusDrawable[5];
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
     private boolean occupyStatusBar = true;
 
     private int onlineCount = -1;
@@ -309,7 +309,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
 //                    user = newUser;
 //                }
 //                String newStatus;
-//                if (user.id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
+//                if (user.id == BaseUserConfig.getInstance(currentAccount).getClientUserId()) {
 //                    newStatus = LocaleController.getString("ChatYourSelf", R.string.ChatYourSelf);
 //                } else if (user.id == 333000 || user.id == 777000 || user.id == 42777) {
 //                    newStatus = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
@@ -402,7 +402,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
 //            for (int a = 0; a < info.participants.participants.size(); a++) {
 //                TLRPC.ChatParticipant participant = info.participants.participants.get(a);
 //                TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(participant.user_id);
-//                if (user != null && user.status != null && (user.status.expires > currentTime || user.id == UserConfigBase.getInstance(currentAccount).getClientUserId()) && user.status.expires > 10000) {
+//                if (user != null && user.status != null && (user.status.expires > currentTime || user.id == BaseUserConfig.getInstance(currentAccount).getClientUserId()) && user.status.expires > 10000) {
 //                    onlineCount++;
 //                }
 //            }

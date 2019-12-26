@@ -18,9 +18,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.Emoji;
 import com.github.gdev2018.master.FileLoader;
-import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
@@ -40,7 +40,7 @@ public class StickerEmojiCell extends FrameLayout {
     private long time;
     private boolean recent;
     private static AccelerateInterpolator interpolator = new AccelerateInterpolator(0.5f);
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
 
     public StickerEmojiCell(Context context) {
         super(context);

@@ -956,7 +956,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                                            if (ChatObject.isNotInChat(currentChat)) {
 //                                                MessagesController.getInstance(currentAccount).deleteDialog(dialog_id, 0);
 //                                            } else {
-//                                                MessagesController.getInstance(currentAccount).deleteUserFromChat((int) -dialog_id, MessagesController.getInstance(currentAccount).getUser(UserConfigBase.getInstance(currentAccount).getClientUserId()), null);
+//                                                MessagesController.getInstance(currentAccount).deleteUserFromChat((int) -dialog_id, MessagesController.getInstance(currentAccount).getUser(BaseUserConfig.getInstance(currentAccount).getClientUserId()), null);
 //                                            }
 //                                        } else {
 //                                            MessagesController.getInstance(currentAccount).deleteDialog(dialog_id, 0);
@@ -1678,7 +1678,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //            }
 //        } else {
 //            bigEmptyView = new ChatBigEmptyView(context, ChatBigEmptyView.EMPTY_VIEW_TYPE_SECRET);
-//            if (currentEncryptedChat.admin_id == UserConfigBase.getInstance(currentAccount).getClientUserId()) {
+//            if (currentEncryptedChat.admin_id == BaseUserConfig.getInstance(currentAccount).getClientUserId()) {
 //                bigEmptyView.setStatusText(LocaleController.formatString("EncryptedPlaceholderTitleOutgoing", R.string.EncryptedPlaceholderTitleOutgoing, UserObject.getFirstName(currentUser)));
 //            } else {
 //                bigEmptyView.setStatusText(LocaleController.formatString("EncryptedPlaceholderTitleIncoming", R.string.EncryptedPlaceholderTitleIncoming, UserObject.getFirstName(currentUser)));
@@ -2613,7 +2613,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                    if (ChatObject.isNotInChat(currentChat)) {
 //                        MessagesController.getInstance(currentAccount).deleteDialog(dialog_id, 0);
 //                    } else {
-//                        MessagesController.getInstance(currentAccount).deleteUserFromChat((int) -dialog_id, MessagesController.getInstance(currentAccount).getUser(UserConfigBase.getInstance(currentAccount).getClientUserId()), null);
+//                        MessagesController.getInstance(currentAccount).deleteUserFromChat((int) -dialog_id, MessagesController.getInstance(currentAccount).getUser(BaseUserConfig.getInstance(currentAccount).getClientUserId()), null);
 //                    }
 //                } else {
 //                    MessagesController.getInstance(currentAccount).deleteDialog(dialog_id, 0);
@@ -3881,7 +3881,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                if (ChatObject.isChannel(currentChat) && !(currentChat instanceof TLRPC.TL_channelForbidden)) {
 //                    if (ChatObject.isNotInChat(currentChat)) {
 //                        showBottomOverlayProgress(true, true);
-//                        MessagesController.getInstance(currentAccount).addUserToChat(currentChat.id, UserConfigBase.getInstance(currentAccount).getCurrentUser(), null, 0, null, ChatActivity.this, null);
+//                        MessagesController.getInstance(currentAccount).addUserToChat(currentChat.id, BaseUserConfig.getInstance(currentAccount).getCurrentUser(), null, 0, null, ChatActivity.this, null);
 //                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeSearchByActiveAction);
 //                    } else {
 //                        toggleMute(true);
@@ -4440,13 +4440,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //            if (currentUser.bot) {
 //                builder.setMessage(LocaleController.getString("AreYouSureShareMyContactInfoBot", R.string.AreYouSureShareMyContactInfoBot));
 //            } else {
-//                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureShareMyContactInfoUser", R.string.AreYouSureShareMyContactInfoUser, PhoneFormat.getInstance().format("+" + UserConfigBase.getInstance(currentAccount).getCurrentUser().phone), ContactsController.formatName(currentUser.first_name, currentUser.last_name))));
+//                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureShareMyContactInfoUser", R.string.AreYouSureShareMyContactInfoUser, PhoneFormat.getInstance().format("+" + BaseUserConfig.getInstance(currentAccount).getCurrentUser().phone), ContactsController.formatName(currentUser.first_name, currentUser.last_name))));
 //            }
 //        } else {
 //            builder.setMessage(LocaleController.getString("AreYouSureShareMyContactInfo", R.string.AreYouSureShareMyContactInfo));
 //        }
 //        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
-//            SendMessagesHelper.getInstance(currentAccount).sendMessage(UserConfigBase.getInstance(currentAccount).getCurrentUser(), dialog_id, messageObject, null, null);
+//            SendMessagesHelper.getInstance(currentAccount).sendMessage(BaseUserConfig.getInstance(currentAccount).getCurrentUser(), dialog_id, messageObject, null, null);
 //            moveScrollToLastMessage();
 //            hideFieldPanel();
 //        });
@@ -7035,7 +7035,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                }
 //                int queryLoadIndex = (Integer) args[11];
 //                int index = waitingForLoad.indexOf(queryLoadIndex);
-//                int currentUserId = UserConfigBase.getInstance(currentAccount).getClientUserId();
+//                int currentUserId = BaseUserConfig.getInstance(currentAccount).getClientUserId();
 //                if (index == -1) {
 //                    return;
 //                } else {
@@ -7728,7 +7728,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //        } else if (id == NotificationCenter.didReceiveNewMessages) {
 //            long did = (Long) args[0];
 //            if (did == dialog_id) {
-//                int currentUserId = UserConfigBase.getInstance(currentAccount).getClientUserId();
+//                int currentUserId = BaseUserConfig.getInstance(currentAccount).getClientUserId();
 //                boolean updateChat = false;
 //                boolean hasFromMe = false;
 //                ArrayList<MessageObject> arr = (ArrayList<MessageObject>) args[1];
@@ -10026,7 +10026,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //        SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
 //        boolean show;
 //        if (currentEncryptedChat != null) {
-//            show = !(currentEncryptedChat.admin_id == UserConfigBase.getInstance(currentAccount).getClientUserId() || ContactsController.getInstance(currentAccount).isLoadingContacts()) && ContactsController.getInstance(currentAccount).contactsDict.get(currentUser.id) == null;
+//            show = !(currentEncryptedChat.admin_id == BaseUserConfig.getInstance(currentAccount).getClientUserId() || ContactsController.getInstance(currentAccount).isLoadingContacts()) && ContactsController.getInstance(currentAccount).contactsDict.get(currentUser.id) == null;
 //            if (show && preferences.getInt("spam3_" + dialog_id, 0) == 1) {
 //                show = false;
 //            }
@@ -10814,7 +10814,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                    user = MessagesController.getInstance(currentAccount).getUser(from_id);
 //                }
 //            }
-//            if (user != null && user.id != UserConfigBase.getInstance(currentAccount).getClientUserId() && loadParticipant != 2) {
+//            if (user != null && user.id != BaseUserConfig.getInstance(currentAccount).getClientUserId() && loadParticipant != 2) {
 //                if (loadParticipant == 1 && !currentChat.creator) {
 //                    final AlertDialog progressDialog[] = new AlertDialog[] {new AlertDialog(getParentActivity(), 3)};
 //
@@ -10899,7 +10899,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //        } else if (!ChatObject.isChannel(currentChat) && currentEncryptedChat == null) {
 //            boolean hasOutgoing = false;
 //            int currentDate = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
-//            if (currentUser != null && currentUser.id != UserConfigBase.getInstance(currentAccount).getClientUserId() && !currentUser.bot || currentChat != null) {
+//            if (currentUser != null && currentUser.id != BaseUserConfig.getInstance(currentAccount).getClientUserId() && !currentUser.bot || currentChat != null) {
 //                if (finalSelectedObject != null) {
 //                    hasOutgoing = !finalSelectedObject.isSendError() && (finalSelectedObject.messageOwner.action == null || finalSelectedObject.messageOwner.action instanceof TLRPC.TL_messageActionEmpty) && (finalSelectedObject.isOut() || canRevokeInbox || ChatObject.hasAdminRights(currentChat)) && (currentDate - finalSelectedObject.messageOwner.date) <= revokeTimeLimit;
 //                } else {
@@ -11264,7 +11264,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                            }
 //                        } else if (type == 8) {
 //                            TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(selectedObject.messageOwner.media.user_id);
-//                            if (user != null && user.id != UserConfigBase.getInstance(currentAccount).getClientUserId() && ContactsController.getInstance(currentAccount).contactsDict.get(user.id) == null) {
+//                            if (user != null && user.id != BaseUserConfig.getInstance(currentAccount).getClientUserId() && ContactsController.getInstance(currentAccount).contactsDict.get(user.id) == null) {
 //                                items.add(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
 //                                options.add(15);
 //                            }
@@ -11346,7 +11346,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                            options.add(9);
 //                        } else if (type == 8) {
 //                            TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(selectedObject.messageOwner.media.user_id);
-//                            if (user != null && user.id != UserConfigBase.getInstance(currentAccount).getClientUserId() && ContactsController.getInstance(currentAccount).contactsDict.get(user.id) == null) {
+//                            if (user != null && user.id != BaseUserConfig.getInstance(currentAccount).getClientUserId() && ContactsController.getInstance(currentAccount).contactsDict.get(user.id) == null) {
 //                                items.add(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
 //                                options.add(15);
 //                            }
@@ -11955,7 +11955,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //            updatePinnedMessageView(true);
 //        }
 //
-//        if (dids.size() > 1 || dids.get(0) == UserConfigBase.getInstance(currentAccount).getClientUserId() || message != null) {
+//        if (dids.size() > 1 || dids.get(0) == BaseUserConfig.getInstance(currentAccount).getClientUserId() || message != null) {
 //            for (int a = 0; a < dids.size(); a++) {
 //                long did = dids.get(a);
 //                if (message != null) {
@@ -12529,7 +12529,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                            processRowSelect(cell, true);
 //                            return;
 //                        }
-//                        if (user != null && user.id != UserConfigBase.getInstance(currentAccount).getClientUserId()) {
+//                        if (user != null && user.id != BaseUserConfig.getInstance(currentAccount).getClientUserId()) {
 //                            Bundle args = new Bundle();
 //                            args.putInt("user_id", user.id);
 //                            ProfileActivity fragment = new ProfileActivity(args);
@@ -12887,7 +12887,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                            if (MessagesController.getInstance(currentAccount).checkCanOpenChat(args, ChatActivity.this)) {
 //                                presentFragment(new ChatActivity(args));
 //                            }
-//                        } else if (uid != UserConfigBase.getInstance(currentAccount).getClientUserId()) {
+//                        } else if (uid != BaseUserConfig.getInstance(currentAccount).getClientUserId()) {
 //                            Bundle args = new Bundle();
 //                            args.putInt("user_id", uid);
 //                            if (currentEncryptedChat != null && uid == currentUser.id) {
@@ -13060,7 +13060,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                                    public void onAnimationEnd(Animator animation) {
 //                                        messageCell.setAlpha(1.0f);
 //
-//                                        Property<ChatMessageCell, Float> ALPHA = new AnimationProperties.FloatProperty<ChatMessageCell>("alpha") {
+//                                        Property<ChatMessageCell, Float> ALPHA = new BaseAnimationProperties.FloatProperty<ChatMessageCell>("alpha") {
 //                                            @Override
 //                                            public void setValue(ChatMessageCell object, float value) {
 //                                                object.setTimeAlpha(value);

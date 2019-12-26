@@ -10,7 +10,7 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
 
-import com.github.gdev2018.master.UserConfigBase;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
@@ -112,7 +112,7 @@ public class ConnectionsManager {
     private static int lastClassGuid = 1;
 
     private int currentAccount;
-    private static volatile ConnectionsManager[] Instance = new ConnectionsManager[UserConfigBase.MAX_ACCOUNT_COUNT];
+    private static volatile ConnectionsManager[] Instance = new ConnectionsManager[BaseUserConfig.MAX_ACCOUNT_COUNT];
     public static ConnectionsManager getInstance(int num) {
         ConnectionsManager localInstance = Instance[num];
         if (localInstance == null) {
@@ -168,8 +168,8 @@ public class ConnectionsManager {
         if (systemVersion.trim().length() == 0) {
             systemVersion = "SDK Unknown";
         }
-        UserConfigBase.getInstance(currentAccount).loadConfig();
-        init(BaseBuildVars.BUILD_VERSION, TLRPC.LAYER, BaseBuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), UserConfigBase.getInstance(currentAccount).getClientUserId(), enablePushConnection);
+        BaseUserConfig.getInstance(currentAccount).loadConfig();
+        init(BaseBuildVars.BUILD_VERSION, TLRPC.LAYER, BaseBuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), BaseUserConfig.getInstance(currentAccount).getClientUserId(), enablePushConnection);
     }
 
     public long getCurrentTimeMillis() {
@@ -309,14 +309,14 @@ public class ConnectionsManager {
 
     public static void setLangCode(String langCode) {
         langCode = langCode.replace('_', '-').toLowerCase();
-        for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+        for (int a = 0; a < BaseUserConfig.MAX_ACCOUNT_COUNT; a++) {
             native_setLangCode(a, langCode);
         }
     }
 
     public static void setSystemLangCode(String langCode) {
         langCode = langCode.replace('_', '-').toLowerCase();
-        for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+        for (int a = 0; a < BaseUserConfig.MAX_ACCOUNT_COUNT; a++) {
             native_setSystemLangCode(a, langCode);
         }
     }
@@ -435,8 +435,8 @@ public class ConnectionsManager {
 
     public static void onLogout(final int currentAccount) {
         AndroidUtilities.runOnUIThread(() -> {
-            if (UserConfigBase.getInstance(currentAccount).getClientUserId() != 0) {
-                UserConfigBase.getInstance(currentAccount).clearConfig();
+            if (BaseUserConfig.getInstance(currentAccount).getClientUserId() != 0) {
+                BaseUserConfig.getInstance(currentAccount).clearConfig();
                 MessagesController.getInstance(currentAccount).performLogout(0);
             }
         });
@@ -596,13 +596,13 @@ public class ConnectionsManager {
         if (secret == null) {
             secret = "";
         }
-        for (int a = 0; a < UserConfigBase.MAX_ACCOUNT_COUNT; a++) {
+        for (int a = 0; a < BaseUserConfig.MAX_ACCOUNT_COUNT; a++) {
             if (enabled && !TextUtils.isEmpty(address)) {
                 native_setProxySettings(a, address, port, username, password, secret);
             } else {
                 native_setProxySettings(a, "", 1080, "", "", "");
             }
-            if (UserConfigBase.getInstance(a).isClientActivated()) {
+            if (BaseUserConfig.getInstance(a).isClientActivated()) {
                 MessagesController.getInstance(a).checkProxyInfo(true);
             }
         }
@@ -839,7 +839,7 @@ public class ConnectionsManager {
             Utilities.stageQueue.postRunnable(() -> {
                 if (result != null) {
                     currentTask = null;
-                    native_applyDnsConfig(currentAccount, result.address, UserConfigBase.getInstance(currentAccount).getClientPhone());
+                    native_applyDnsConfig(currentAccount, result.address, BaseUserConfig.getInstance(currentAccount).getClientPhone());
                 } else {
                     if (BaseBuildVars.LOGS_ENABLED) {
                         FileLog.d("failed to get dns txt result");
@@ -890,7 +890,7 @@ public class ConnectionsManager {
                             try {
                                 NativeByteBuffer buffer = new NativeByteBuffer(bytes.length);
                                 buffer.writeBytes(bytes);
-                                native_applyDnsConfig(currentAccount, buffer.address, UserConfigBase.getInstance(currentAccount).getClientPhone());
+                                native_applyDnsConfig(currentAccount, buffer.address, BaseUserConfig.getInstance(currentAccount).getClientPhone());
                             } catch (Exception e) {
                                 FileLog.e(e);
                             }
@@ -998,7 +998,7 @@ public class ConnectionsManager {
         protected void onPostExecute(final NativeByteBuffer result) {
             Utilities.stageQueue.postRunnable(() -> {
                 if (result != null) {
-                    native_applyDnsConfig(currentAccount, result.address, UserConfigBase.getInstance(currentAccount).getClientPhone());
+                    native_applyDnsConfig(currentAccount, result.address, BaseUserConfig.getInstance(currentAccount).getClientPhone());
                 } else {
                     if (BaseBuildVars.LOGS_ENABLED) {
                         FileLog.d("failed to get azure result");

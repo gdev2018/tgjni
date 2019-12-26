@@ -34,13 +34,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.Emoji;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
@@ -407,7 +407,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             delegate.onTextChanged(messageEditText.getText());
         }
         int old = captionMaxLength;
-        captionMaxLength = MessagesController.getInstance(UserConfigBase.selectedAccount).maxCaptionLength;
+        captionMaxLength = MessagesController.getInstance(BaseUserConfig.selectedAccount).maxCaptionLength;
         if (old != captionMaxLength) {
             InputFilter[] inputFilters = new InputFilter[1];
             inputFilters[0] = new InputFilter.LengthFilter(captionMaxLength);

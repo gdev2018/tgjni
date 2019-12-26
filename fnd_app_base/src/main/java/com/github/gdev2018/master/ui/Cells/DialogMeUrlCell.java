@@ -22,7 +22,7 @@ import com.github.gdev2018.master.ImageReceiver;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfigBase;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
@@ -58,7 +58,7 @@ public class DialogMeUrlCell extends BaseCell {
 
     private boolean isSelected;
 
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
 
     public DialogMeUrlCell(Context context) {
         super(context);
@@ -196,8 +196,8 @@ public class DialogMeUrlCell extends BaseCell {
                 drawVerified = recentMeUrl.chat_invite.chat.verified;
             } else {
                 nameString = recentMeUrl.chat_invite.title;
-                image = recentMeUrl.chat_invite.photo.photo_small;
-                avatarDrawable.setInfo(5, recentMeUrl.chat_invite.title, null, false);
+//                image = recentMeUrl.chat_invite.photo.photo_small;/*
+//*/                avatarDrawable.setInfo(5, recentMeUrl.chat_invite.title, null, false);
                 if (recentMeUrl.chat_invite.broadcast || recentMeUrl.chat_invite.channel) {
                     drawNameBroadcast = true;
                     nameLockTop = AndroidUtilities.dp(16.5f);
@@ -225,7 +225,7 @@ public class DialogMeUrlCell extends BaseCell {
             image = null;
         }
         messageString = MessagesController.getInstance(currentAccount).linkPrefix + "/" + recentMeUrl.url;
-        avatarImage.setImage(image, "50_50", avatarDrawable, null, recentMeUrl, 0);
+///*        avatarImage.setImage(image, "50_50", avatarDrawable, null, recentMeUrl, 0);*/
 
         if (TextUtils.isEmpty(nameString)) {
             nameString = LocaleController.getString("HiddenName", R.string.HiddenName);

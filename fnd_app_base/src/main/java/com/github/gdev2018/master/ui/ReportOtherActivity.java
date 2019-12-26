@@ -63,7 +63,7 @@ public class ReportOtherActivity extends BaseFragment {
                 } else if (id == done_button) {
                     if (firstNameField.getText().length() != 0) {
 ///*                        TLObject req;
-//                        TLRPC.InputPeer peer = MessagesController.getInstance(UserConfigBase.selectedAccount).getInputPeer((int) dialog_id);
+//                        TLRPC.InputPeer peer = MessagesController.getInstance(BaseUserConfig.selectedAccount).getInputPeer((int) dialog_id);
 //                        if (message_id != 0) {
 //                            TLRPC.TL_messages_report request = new TLRPC.TL_messages_report();
 //                            request.peer = peer;

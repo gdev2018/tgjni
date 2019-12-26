@@ -5,10 +5,10 @@ package com.github.gdev2018.master.ui.Adapters;
 import android.location.Location;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.FileLog;
 ///*import com.github.gdev2018.master.MessagesController;
 //import com.github.gdev2018.master.MessagesStorage;*/
-import com.github.gdev2018.master.UserConfigBase;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.Components.RecyclerListView;
@@ -31,7 +31,7 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
     private BaseLocationAdapterDelegate delegate;
     private Timer searchTimer;
     private int currentRequestNum;
-    private int currentAccount = UserConfigBase.selectedAccount;
+    private int currentAccount = BaseUserConfig.selectedAccount;
     private long dialogId;
     private boolean searchingUser;
 

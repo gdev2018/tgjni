@@ -26,7 +26,7 @@ import android.widget.TextView;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AnimationProperties;
+import com.github.gdev2018.master.ui.Components.BaseAnimationProperties;
 import com.github.gdev2018.master.ui.Components.CubicBezierInterpolator;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 import com.github.gdev2018.master.ui.Components.Switch;
@@ -48,7 +48,7 @@ public class TextCheckCell extends FrameLayout {
     private ObjectAnimator animator;
     private boolean drawCheckRipple;
 
-    public static final Property<TextCheckCell, Float> ANIMATION_PROGRESS = new AnimationProperties.FloatProperty<TextCheckCell>("animationProgress") {
+    public static final Property<TextCheckCell, Float> ANIMATION_PROGRESS = new BaseAnimationProperties.FloatProperty<TextCheckCell>("animationProgress") {
         @Override
         public void setValue(TextCheckCell object, float value) {
             object.setAnimationProgress(value);

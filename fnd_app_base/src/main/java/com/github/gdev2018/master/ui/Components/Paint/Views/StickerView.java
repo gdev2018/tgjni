@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.FileLoader;
+import com.github.gdev2018.master.ImageLocation;
 import com.github.gdev2018.master.ImageReceiver;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
@@ -69,7 +70,7 @@ public class StickerView extends EntityView {
         centerImage.setInvalidateAll(true);
         centerImage.setParentView(containerView);
         TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(sticker.thumbs, 90);
-        centerImage.setImage(sticker, null, thumb, null, "webp", parentObject, 1);
+        centerImage.setImage(ImageLocation.getForDocument(sticker), null, ImageLocation.getForDocument(thumb, sticker), null, "webp", parentObject, 1);
 
         updatePosition();
     }

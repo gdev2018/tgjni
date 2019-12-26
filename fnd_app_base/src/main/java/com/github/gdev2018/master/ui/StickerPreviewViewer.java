@@ -40,7 +40,7 @@ import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.UserConfigBase;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.BottomSheet;
 import com.github.gdev2018.master.ui.Cells.ContextLinkCell;
@@ -381,7 +381,7 @@ public class StickerPreviewViewer {
     }
 
     public void setParentActivity(Activity activity) {
-        currentAccount = UserConfigBase.selectedAccount;
+        currentAccount = BaseUserConfig.selectedAccount;
         centerImage.setCurrentAccount(currentAccount);
         if (parentActivity == activity) {
             return;
@@ -458,7 +458,7 @@ public class StickerPreviewViewer {
         }
         currentSet = newSet;
         TLRPC.PhotoSize thumb = sticker != null ? FileLoader.getClosestPhotoSizeWithSize(sticker.thumbs, 90) : null;
-        centerImage.setImage(sticker, null, thumb, null, "webp", currentSet, 1);
+///*        centerImage.setImage(sticker, null, thumb, null, "webp", currentSet, 1);*/
         stickerEmojiLayout = null;
         for (int a = 0; a < sticker.attributes.size(); a++) {
             TLRPC.DocumentAttribute attribute = sticker.attributes.get(a);

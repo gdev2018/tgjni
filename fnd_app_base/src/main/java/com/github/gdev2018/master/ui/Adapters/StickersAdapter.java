@@ -19,7 +19,7 @@ import com.github.gdev2018.master.Emoji;
 import com.github.gdev2018.master.FileLoader;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.SharedConfig;
-import com.github.gdev2018.master.support.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.Cells.StickerCell;

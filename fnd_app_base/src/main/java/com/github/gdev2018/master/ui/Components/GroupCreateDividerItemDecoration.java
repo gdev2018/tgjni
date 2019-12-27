@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.LocaleController;
-import com.github.gdev2018.master.support.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 
 public class GroupCreateDividerItemDecoration extends RecyclerView.ItemDecoration {

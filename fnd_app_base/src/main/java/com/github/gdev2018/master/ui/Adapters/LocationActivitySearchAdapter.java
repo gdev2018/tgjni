@@ -5,7 +5,7 @@ package com.github.gdev2018.master.ui.Adapters;
 import android.content.Context;
 import android.view.ViewGroup;
 
-import com.github.gdev2018.master.support.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.Cells.LocationCell;
 import com.github.gdev2018.master.ui.Components.RecyclerListView;

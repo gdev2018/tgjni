@@ -35,7 +35,7 @@ import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.SendMessagesHelper;
 import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.UserObject;
-import com.github.gdev2018.master.support.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.RequestDelegate;
 import com.github.gdev2018.master.tgnet.TLObject;

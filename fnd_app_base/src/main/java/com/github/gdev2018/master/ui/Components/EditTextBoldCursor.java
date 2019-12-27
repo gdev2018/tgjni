@@ -13,7 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.Rect;
 import android.os.SystemClock;
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;

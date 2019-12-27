@@ -13,7 +13,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 import android.text.TextPaint;
 import android.view.View;
 

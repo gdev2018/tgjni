@@ -2,8 +2,8 @@
 
 package com.github.gdev2018.master.support.util;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -13,7 +13,7 @@ import java.util.Comparator;
 /**
  * A Sorted list implementation that can keep items in order and also notify for changes in the
  * list
- * such that it can be bound to a {@link android.support.v7.widget.RecyclerView.Adapter
+ * such that it can be bound to a {@link androidx.appcompat.widget.RecyclerView.Adapter
  * RecyclerView.Adapter}.
  * <p>
  * It keeps items ordered using the {@link Callback#compare(Object, Object)} method and uses
@@ -862,7 +862,7 @@ public class SortedList<T> {
          * that you can change its behavior depending on your UI.
          * <p>
          * For example, if you are using SortedList with a
-         * {@link android.support.v7.widget.RecyclerView.Adapter RecyclerView.Adapter}, you should
+         * {@link androidx.appcompat.widget.RecyclerView.Adapter RecyclerView.Adapter}, you should
          * return whether the items' visual representations are the same or not.
          *
          * @param oldItem The previous representation of the object.
@@ -890,9 +890,9 @@ public class SortedList<T> {
          * method to get a payload about the change.
          * <p>
          * For example, if you are using {@link Callback} with
-         * {@link android.support.v7.widget.RecyclerView}, you can return the particular field that
+         * {@link androidx.appcompat.widget.RecyclerView}, you can return the particular field that
          * changed in the item and your
-         * {@link android.support.v7.widget.RecyclerView.ItemAnimator ItemAnimator} can use that
+         * {@link androidx.appcompat.widget.RecyclerView.ItemAnimator ItemAnimator} can use that
          * information to run the correct animation.
          * <p>
          * Default implementation returns {@code null}.

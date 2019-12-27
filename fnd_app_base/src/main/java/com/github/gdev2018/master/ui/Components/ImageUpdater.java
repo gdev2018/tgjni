@@ -19,8 +19,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.support.media.ExifInterface;
-import android.support.v4.content.FileProvider;
+import androidx.exifinterface.media.ExifInterface;
+import androidx.core.content.FileProvider;
 import android.util.TypedValue;
 import android.widget.TextView;
 

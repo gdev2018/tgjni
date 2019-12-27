@@ -20,7 +20,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 import android.view.DisplayCutout;
 import android.view.Gravity;
 import android.view.MotionEvent;

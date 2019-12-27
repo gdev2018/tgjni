@@ -14,7 +14,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.os.SystemClock;
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Gravity;

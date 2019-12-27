@@ -33,24 +33,25 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
-import android.support.annotation.CallSuper;
-import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RestrictTo;
-import android.support.annotation.VisibleForTesting;
-import android.support.v4.os.TraceCompat;
-import android.support.v4.view.AbsSavedState;
-import android.support.v4.view.InputDeviceCompat;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v4.view.NestedScrollingChild2;
-import android.support.v4.view.NestedScrollingChildHelper;
-import android.support.v4.view.ScrollingView;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewConfigurationCompat;
-import android.support.v4.view.accessibility.AccessibilityEventCompat;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
-import android.support.v4.widget.EdgeEffectCompat;
+import androidx.annotation.CallSuper;
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
+import androidx.annotation.VisibleForTesting;
+import androidx.core.os.TraceCompat;
+import androidx.customview.view.AbsSavedState;
+import androidx.viewpager.widget.ViewPager;
+import androidx.core.view.InputDeviceCompat;
+import androidx.core.view.MotionEventCompat;
+import androidx.core.view.NestedScrollingChild2;
+import androidx.core.view.NestedScrollingChildHelper;
+import androidx.core.view.ScrollingView;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.ViewConfigurationCompat;
+import androidx.core.view.accessibility.AccessibilityEventCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
+import androidx.core.widget.EdgeEffectCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -82,9 +83,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP;
-import static android.support.v4.view.ViewCompat.TYPE_NON_TOUCH;
-import static android.support.v4.view.ViewCompat.TYPE_TOUCH;
+import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
+import static androidx.core.view.ViewCompat.TYPE_NON_TOUCH;
+import static androidx.core.view.ViewCompat.TYPE_TOUCH;
 
 /**
  * A flexible view for providing a limited window into a large data set.
@@ -1426,7 +1427,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
      * Recycled view pools allow multiple RecyclerViews to share a common pool of scrap views.
      * This can be useful if you have multiple RecyclerViews with adapters that use the same
      * view types, for example if you have several data sets with the same kinds of item views
-     * displayed by a {@link android.support.v4.view.ViewPager ViewPager}.
+     * displayed by a {@link ViewPager ViewPager}.
      *
      * @param pool Pool to set. If this parameter is null a new pool will be created and used.
      */
@@ -1665,9 +1666,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
      * Convenience method to scroll to a certain position.
      *
      * RecyclerView does not implement scrolling logic, rather forwards the call to
-     * {@link android.support.v7.widget.RecyclerView.LayoutManager#scrollToPosition(int)}
+     * {@link androidx.appcompat.widget.RecyclerView.LayoutManager#scrollToPosition(int)}
      * @param position Scroll to this adapter position
-     * @see android.support.v7.widget.RecyclerView.LayoutManager#scrollToPosition(int)
+     * @see androidx.appcompat.widget.RecyclerView.LayoutManager#scrollToPosition(int)
      */
     public void scrollToPosition(int position) {
         if (mLayoutFrozen) {
@@ -1882,7 +1883,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
      * LayoutManager. </p>
      *
      * @return The horizontal offset of the scrollbar's thumb
-     * @see android.support.v7.widget.RecyclerView.LayoutManager#computeHorizontalScrollOffset
+     * @see androidx.appcompat.widget.RecyclerView.LayoutManager#computeHorizontalScrollOffset
      * (RecyclerView.State)
      */
     @Override
@@ -1955,7 +1956,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
      * LayoutManager.</p>
      *
      * @return The vertical offset of the scrollbar's thumb
-     * @see android.support.v7.widget.RecyclerView.LayoutManager#computeVerticalScrollOffset
+     * @see androidx.appcompat.widget.RecyclerView.LayoutManager#computeVerticalScrollOffset
      * (RecyclerView.State)
      */
     @Override
@@ -6900,7 +6901,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
          *
          * <p>The adapter may publish a variety of events describing specific changes.
          * Not all adapters may support all change types and some may fall back to a generic
-         * {@link android.support.v7.widget.RecyclerView.AdapterDataObserver#onChanged()
+         * {@link androidx.appcompat.widget.RecyclerView.AdapterDataObserver#onChanged()
          * "something changed"} event if more specific data is not available.</p>
          *
          * <p>Components registering observers with an adapter are responsible for
@@ -8122,9 +8123,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         /**
          * Returns the resolved layout direction for this RecyclerView.
          *
-         * @return {@link android.support.v4.view.ViewCompat#LAYOUT_DIRECTION_RTL} if the layout
+         * @return {@link androidx.core.view.ViewCompat#LAYOUT_DIRECTION_RTL} if the layout
          * direction is RTL or returns
-         * {@link android.support.v4.view.ViewCompat#LAYOUT_DIRECTION_LTR} if the layout direction
+         * {@link androidx.core.view.ViewCompat#LAYOUT_DIRECTION_LTR} if the layout direction
          * is not RTL.
          */
         public int getLayoutDirection() {
@@ -9977,7 +9978,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
          * be populated.
          * <p>
          * Default implementation adds a {@link
-         * android.support.v4.view.accessibility.AccessibilityNodeInfoCompat.CollectionInfoCompat}.
+         * androidx.core.view.accessibility.AccessibilityNodeInfoCompat.CollectionInfoCompat}.
          * <p>
          * You should override
          * {@link #getRowCountForAccessibility(RecyclerView.Recycler, RecyclerView.State)},

@@ -1,7 +1,7 @@
 package com.github.gdev2018.master.ui.Components;
 
 import android.graphics.drawable.GradientDrawable;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 
 public class BackgroundGradientDrawable extends GradientDrawable {

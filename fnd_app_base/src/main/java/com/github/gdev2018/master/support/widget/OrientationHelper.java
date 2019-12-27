@@ -48,7 +48,7 @@ public abstract class OrientationHelper {
     }
 
     /**
-     * Returns the {@link android.support.v7.widget.RecyclerView.LayoutManager LayoutManager} that
+     * Returns the {@link androidx.appcompat.widget.RecyclerView.LayoutManager LayoutManager} that
      * is associated with this OrientationHelper.
      */
     public RecyclerView.LayoutManager getLayoutManager() {

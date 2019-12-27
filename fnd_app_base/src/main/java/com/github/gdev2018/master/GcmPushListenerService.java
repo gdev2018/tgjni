@@ -949,10 +949,10 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             }
             SharedConfig.pushString = token;
             for (int a = 0; a < BaseUserConfig.MAX_ACCOUNT_COUNT; a++) {
-                BaseUserConfig baseUserConfig = BaseUserConfig.getInstance(a);
-///*                BaseUserConfig.registeredForPush = false;*/
-                baseUserConfig.saveConfig(false);
-                if (baseUserConfig.getClientUserId() != 0) {
+                BaseUserConfig userConfig = BaseUserConfig.getInstance(a);
+///*                userConfig.registeredForPush = false;*/
+                userConfig.saveConfig(false);
+                if (userConfig.getClientUserId() != 0) {
                     final int currentAccount = a;
                     AndroidUtilities.runOnUIThread(() -> MessagesController.getInstance(currentAccount).registerForPush(token));
                 }

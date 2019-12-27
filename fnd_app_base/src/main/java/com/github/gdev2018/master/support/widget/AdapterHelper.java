@@ -16,7 +16,7 @@
 
 package com.github.gdev2018.master.support.widget;
 
-import android.support.v4.util.Pools;
+import androidx.core.util.Pools;
 import android.util.Log;
 
 import java.util.ArrayList;

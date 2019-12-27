@@ -78,7 +78,7 @@ import androidx.core.widget.EdgeEffectCompat;
 import androidx.customview.view.AbsSavedState;
 import androidx.recyclerview.widget.RecyclerView.ItemAnimator.ItemHolderInfo;
 
-import org.telegram.messenger.AndroidUtilities;
+import com.github.gdev2018.master.AndroidUtilities;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

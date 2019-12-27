@@ -8,7 +8,7 @@ package com.github.gdev2018.master.support.util;
  * BatchingListUpdateCallback merges them and calls the wrapped callback only once.
  * <p>
  * This is a general purpose class and is also used by
- * {@link android.support.v7.util.DiffUtil.DiffResult DiffResult} and
+ * {@link androidx.appcompat.util.DiffUtil.DiffResult DiffResult} and
  * {@link SortedList} to minimize the number of updates that are dispatched.
  * <p>
  * If you use this class to batch updates, you must call {@link #dispatchLastEvent()} when the

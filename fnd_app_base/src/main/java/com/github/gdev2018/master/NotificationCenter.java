@@ -8,7 +8,7 @@
 
 package com.github.gdev2018.master;
 
-import android.support.annotation.UiThread;
+import androidx.annotation.UiThread;
 import android.util.SparseArray;
 
 import com.github.gdev2018.master.di.BaseApplication;

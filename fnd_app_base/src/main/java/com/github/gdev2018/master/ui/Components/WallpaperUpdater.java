@@ -9,7 +9,7 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.BuildConfig;

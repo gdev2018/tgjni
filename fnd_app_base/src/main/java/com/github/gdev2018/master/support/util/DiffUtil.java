@@ -2,8 +2,8 @@
 
 package com.github.gdev2018.master.support.util;
 
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 
 import com.github.gdev2018.master.support.widget.RecyclerView;
 
@@ -18,8 +18,8 @@ import java.util.List;
  * list of update operations that converts the first list into the second one.
  * <p>
  * It can be used to calculate updates for a RecyclerView Adapter. See
- * {@link android.support.v7.recyclerview.extensions.ListAdapter} and
- * {@link android.support.v7.recyclerview.extensions.AsyncListDiffer} which can compute diffs using
+ * {@link androidx.appcompat.recyclerview.extensions.ListAdapter} and
+ * {@link androidx.appcompat.recyclerview.extensions.AsyncListDiffer} which can compute diffs using
  * DiffUtil on a background thread.
  * <p>
  * DiffUtil uses Eugene W. Myers's difference algorithm to calculate the minimal number of updates
@@ -53,7 +53,7 @@ import java.util.List;
  * <p>
  * Due to implementation constraints, the max size of the list can be 2^26.
  *
- * @see android.support.v7.recyclerview.extensions.AsyncListDiffer
+ * @see androidx.appcompat.recyclerview.extensions.AsyncListDiffer
  */
 public class DiffUtil {
 
@@ -303,7 +303,7 @@ public class DiffUtil {
          * DiffUtil uses this method to check equality instead of {@link Object#equals(Object)}
          * so that you can change its behavior depending on your UI.
          * For example, if you are using DiffUtil with a
-         * {@link android.support.v7.widget.RecyclerView.Adapter RecyclerView.Adapter}, you should
+         * {@link androidx.appcompat.widget.RecyclerView.Adapter RecyclerView.Adapter}, you should
          * return whether the items' visual representations are the same.
          * <p>
          * This method is called only if {@link #areItemsTheSame(int, int)} returns
@@ -323,7 +323,7 @@ public class DiffUtil {
          * <p>
          * For example, if you are using DiffUtil with {@link RecyclerView}, you can return the
          * particular field that changed in the item and your
-         * {@link android.support.v7.widget.RecyclerView.ItemAnimator ItemAnimator} can use that
+         * {@link androidx.appcompat.widget.RecyclerView.ItemAnimator ItemAnimator} can use that
          * information to run the correct animation.
          * <p>
          * Default implementation returns {@code null}.
@@ -371,7 +371,7 @@ public class DiffUtil {
          * change its behavior depending on your UI.
          * <p>
          * For example, if you are using DiffUtil with a
-         * {@link android.support.v7.widget.RecyclerView.Adapter RecyclerView.Adapter}, you should
+         * {@link androidx.appcompat.widget.RecyclerView.Adapter RecyclerView.Adapter}, you should
          * return whether the items' visual representations are the same.
          * <p>
          * This method is called only if {@link #areItemsTheSame(T, T)} returns {@code true} for
@@ -392,7 +392,7 @@ public class DiffUtil {
          * <p>
          * For example, if you are using DiffUtil with {@link RecyclerView}, you can return the
          * particular field that changed in the item and your
-         * {@link android.support.v7.widget.RecyclerView.ItemAnimator ItemAnimator} can use that
+         * {@link androidx.appcompat.widget.RecyclerView.ItemAnimator ItemAnimator} can use that
          * information to run the correct animation.
          * <p>
          * Default implementation returns {@code null}.
@@ -685,7 +685,7 @@ public class DiffUtil {
         /**
          * Dispatches the update events to the given adapter.
          * <p>
-         * For example, if you have an {@link android.support.v7.widget.RecyclerView.Adapter Adapter}
+         * For example, if you have an {@link androidx.appcompat.widget.RecyclerView.Adapter Adapter}
          * that is backed by a {@link List}, you can swap the list with the new one then call this
          * method to dispatch all updates to the RecyclerView.
          * <pre>
@@ -701,11 +701,11 @@ public class DiffUtil {
          * before RecyclerView tries to read it.
          * <p>
          * On the other hand, if you have another
-         * {@link android.support.v7.widget.RecyclerView.AdapterDataObserver AdapterDataObserver}
+         * {@link androidx.appcompat.widget.RecyclerView.AdapterDataObserver AdapterDataObserver}
          * that tries to process events synchronously, this may confuse that observer because the
          * list is instantly moved to its final state while the adapter updates are dispatched later
          * on, one by one. If you have such an
-         * {@link android.support.v7.widget.RecyclerView.AdapterDataObserver AdapterDataObserver},
+         * {@link androidx.appcompat.widget.RecyclerView.AdapterDataObserver AdapterDataObserver},
          * you can use
          * {@link #dispatchUpdatesTo(ListUpdateCallback)} to handle each modification
          * manually.

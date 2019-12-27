@@ -16,7 +16,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 import android.view.View;
 
 import com.github.gdev2018.master.AndroidUtilities;

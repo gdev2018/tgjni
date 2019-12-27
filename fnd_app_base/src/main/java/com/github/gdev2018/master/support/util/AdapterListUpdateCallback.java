@@ -2,7 +2,7 @@
 
 package com.github.gdev2018.master.support.util;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.github.gdev2018.master.support.widget.RecyclerView;
 

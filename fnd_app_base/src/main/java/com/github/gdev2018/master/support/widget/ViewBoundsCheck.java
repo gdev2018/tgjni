@@ -16,7 +16,7 @@
 
 package com.github.gdev2018.master.support.widget;
 
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 import android.view.View;
 
 import java.lang.annotation.Retention;

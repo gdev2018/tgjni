@@ -5,9 +5,9 @@ package com.github.gdev2018.master.support.fingerprint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.os.CancellationSignal;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.os.CancellationSignal;
 
 import java.security.Signature;
 

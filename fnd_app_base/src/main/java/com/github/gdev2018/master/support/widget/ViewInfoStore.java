@@ -15,12 +15,12 @@
  */
 package com.github.gdev2018.master.support.widget;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
-import android.support.v4.util.ArrayMap;
-import android.support.v4.util.LongSparseArray;
-import android.support.v4.util.Pools;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.collection.ArrayMap;
+import androidx.collection.LongSparseArray;
+import androidx.core.util.Pools;
 
 import static com.github.gdev2018.master.support.widget.RecyclerView.ItemAnimator.ItemHolderInfo;
 import static com.github.gdev2018.master.support.widget.RecyclerView.ViewHolder;

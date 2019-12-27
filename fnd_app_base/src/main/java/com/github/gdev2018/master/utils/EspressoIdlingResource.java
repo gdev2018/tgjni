@@ -2,7 +2,7 @@
 
 package com.github.gdev2018.master.utils;
 
-import android.support.test.espresso.IdlingResource;
+import androidx.test.espresso.IdlingResource;
 
 /**
  * Contains a static reference to {IdlingResource}, only available in the 'mock' build type.

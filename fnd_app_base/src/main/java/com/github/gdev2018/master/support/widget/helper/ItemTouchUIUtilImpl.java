@@ -17,7 +17,7 @@
 package com.github.gdev2018.master.support.widget.helper;
 
 import android.graphics.Canvas;
-import android.support.v4.view.ViewCompat;
+import androidx.core.view.ViewCompat;
 import android.view.View;
 
 import com.github.gdev2018.master.support.widget.RecyclerView;

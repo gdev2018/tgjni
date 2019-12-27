@@ -64,7 +64,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
     private Context mContext;
     private long dialog_id;
     private TLRPC.ChatFull info;
-    private SearchAdapterHelper searchAdapterHelper;
+///*    private SearchAdapterHelper searchAdapterHelper;*/
     private ArrayList<TLRPC.User> searchResultUsernames;
     private SparseArray<TLRPC.User> searchResultUsernamesMap;
     private Runnable searchGlobalRunnable;
@@ -131,20 +131,20 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
         delegate = mentionsAdapterDelegate;
         isDarkTheme = darkTheme;
         dialog_id = did;
-        searchAdapterHelper = new SearchAdapterHelper(true);
-        searchAdapterHelper.setDelegate(new SearchAdapterHelper.SearchAdapterHelperDelegate() {
-            @Override
-            public void onDataSetChanged() {
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onSetHashtags(ArrayList<SearchAdapterHelper.HashtagObject> arrayList, HashMap<String, SearchAdapterHelper.HashtagObject> hashMap) {
-                if (lastText != null) {
-                    searchUsernameOrHashtag(lastText, lastPosition, messages, lastUsernameOnly);
-                }
-            }
-        });
+///*        searchAdapterHelper = new SearchAdapterHelper(true);
+//        searchAdapterHelper.setDelegate(new SearchAdapterHelper.SearchAdapterHelperDelegate() {
+//            @Override
+//            public void onDataSetChanged() {
+//                notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onSetHashtags(ArrayList<SearchAdapterHelper.HashtagObject> arrayList, HashMap<String, SearchAdapterHelper.HashtagObject> hashMap) {
+//                if (lastText != null) {
+//                    searchUsernameOrHashtag(lastText, lastPosition, messages, lastUsernameOnly);
+//                }
+//            }
+//        });*/
     }
 
     public void onDestroy() {
@@ -211,7 +211,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     public void clearRecentHashtags() {
-        searchAdapterHelper.clearRecentHashtags();
+///*        searchAdapterHelper.clearRecentHashtags();*/
         searchResultHashtags.clear();
         notifyDataSetChanged();
         if (delegate != null) {
@@ -626,19 +626,19 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
                             break;
                         }
                     } else if (ch == '#') {
-                        if (searchAdapterHelper.loadRecentHashtags()) {
-                            foundType = 1;
-                            resultStartPosition = a;
-                            resultLength = result.length() + 1;
-                            result.insert(0, ch);
-                            break;
-                        } else {
-                            lastText = text;
-                            lastPosition = position;
-                            messages = messageObjects;
-                            delegate.needChangePanelVisibility(false);
-                            return;
-                        }
+///*                        if (searchAdapterHelper.loadRecentHashtags()) {
+//                            foundType = 1;
+//                            resultStartPosition = a;
+//                            resultLength = result.length() + 1;
+//                            result.insert(0, ch);
+//                            break;
+//                        } else {
+//                            lastText = text;
+//                            lastPosition = position;
+//                            messages = messageObjects;
+//                            delegate.needChangePanelVisibility(false);
+//                            return;
+//                        }*/
                     } else if (a == 0 && botInfo != null && ch == '/') {
                         foundType = 2;
                         resultStartPosition = a;
@@ -805,13 +805,13 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
         } else if (foundType == 1) {
             ArrayList<String> newResult = new ArrayList<>();
             String hashtagString = result.toString().toLowerCase();
-            ArrayList<SearchAdapterHelper.HashtagObject> hashtags = searchAdapterHelper.getHashtags();
-            for (int a = 0; a < hashtags.size(); a++) {
-                SearchAdapterHelper.HashtagObject hashtagObject = hashtags.get(a);
-                if (hashtagObject != null && hashtagObject.hashtag != null && hashtagObject.hashtag.startsWith(hashtagString)) {
-                    newResult.add(hashtagObject.hashtag);
-                }
-            }
+///*            ArrayList<SearchAdapterHelper.HashtagObject> hashtags = searchAdapterHelper.getHashtags();
+//            for (int a = 0; a < hashtags.size(); a++) {
+//                SearchAdapterHelper.HashtagObject hashtagObject = hashtags.get(a);
+//                if (hashtagObject != null && hashtagObject.hashtag != null && hashtagObject.hashtag.startsWith(hashtagString)) {
+//                    newResult.add(hashtagObject.hashtag);
+//                }
+//            }*/
             searchResultHashtags = newResult;
             searchResultUsernames = null;
             searchResultUsernamesMap = null;
@@ -929,7 +929,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     public void addHashtagsFromMessage(CharSequence message) {
-        searchAdapterHelper.addHashtagsFromMessage(message);
+///*        searchAdapterHelper.addHashtagsFromMessage(message);*/
     }
 
     public int getItemPosition(int i) {

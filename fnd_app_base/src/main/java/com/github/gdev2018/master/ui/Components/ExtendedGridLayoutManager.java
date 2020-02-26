@@ -12,7 +12,7 @@ import android.content.Context;
 import android.util.SparseIntArray;
 
 import com.github.gdev2018.master.AndroidUtilities;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx_tgjni.recyclerview.widget.GridLayoutManager;
 
 public class ExtendedGridLayoutManager extends GridLayoutManager {
 

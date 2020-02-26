@@ -35,7 +35,7 @@ import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.SendMessagesHelper;
 import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.UserObject;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx_tgjni.recyclerview.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.RequestDelegate;
 import com.github.gdev2018.master.tgnet.TLObject;
@@ -50,7 +50,6 @@ import com.github.gdev2018.master.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
 

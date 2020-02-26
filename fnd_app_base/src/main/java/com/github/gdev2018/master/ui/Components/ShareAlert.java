@@ -24,7 +24,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -41,11 +40,9 @@ import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.gdev2018.master.ContactsController;
 import com.github.gdev2018.master.SQLite.SQLiteCursor;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.Utilities;
@@ -58,10 +55,9 @@ import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.MessagesStorage;
 import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.SendMessagesHelper;
 import com.github.gdev2018.master.BaseUserConfig;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx_tgjni.recyclerview.widget.GridLayoutManager;
+import androidx_tgjni.recyclerview.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.NativeByteBuffer;
 import com.github.gdev2018.master.tgnet.TLObject;
@@ -75,8 +71,6 @@ import com.github.gdev2018.master.ui.Cells.ShareDialogCell;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ShareAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
 

@@ -14,21 +14,17 @@ import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.FileLoader;
-import com.github.gdev2018.master.ImageLocation;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessagesController;
 import com.github.gdev2018.master.R;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx_tgjni.recyclerview.widget.LinearLayoutManager;
+import androidx_tgjni.recyclerview.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
-import com.github.gdev2018.master.tgnet.RequestDelegate;
-import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.BaseFragment;
 import com.github.gdev2018.master.ui.ActionBar.BottomSheet;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Cells.JoinSheetUserCell;
-import com.github.gdev2018.master.ui.ChatActivity;
 
 public class JoinGroupAlert extends BottomSheet {
 

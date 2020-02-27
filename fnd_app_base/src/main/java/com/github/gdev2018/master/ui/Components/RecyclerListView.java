@@ -31,8 +31,8 @@ import android.view.accessibility.AccessibilityEvent;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.LocaleController;
-import androidx_tgjni.recyclerview.widget.LinearLayoutManager;
-import androidx_tgjni.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 
 import java.lang.reflect.Field;

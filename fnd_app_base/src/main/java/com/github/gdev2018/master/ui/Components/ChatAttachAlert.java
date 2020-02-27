@@ -789,7 +789,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         listView.setAdapter(adapter = new ListAdapter(context));
         listView.setVerticalScrollBarEnabled(false);
         listView.setEnabled(true);
-        listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
+///*        listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));*/
         listView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
@@ -1562,7 +1562,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             hintTextView.setTextColor(Theme.getColor(Theme.key_chat_gifSaveHintText));
         }
         if (listView != null) {
-            listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
+///*            listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));*/
             RecyclerView.ViewHolder holder = listView.findViewHolderForAdapterPosition(1);
             if (holder != null) {
                 holder.itemView.setBackgroundColor(Theme.getColor(Theme.key_dialogBackgroundGray));
@@ -2302,7 +2302,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     @SuppressLint("NewApi")
     private void updateLayout() {
         if (listView.getChildCount() <= 0) {
-            listView.setTopGlowOffset(scrollOffsetY = listView.getPaddingTop());
+///*            listView.setTopGlowOffset(scrollOffsetY = listView.getPaddingTop());*/
             listView.invalidate();
             return;
         }
@@ -2314,7 +2314,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             newOffset = top;
         }
         if (scrollOffsetY != newOffset) {
-            listView.setTopGlowOffset(scrollOffsetY = newOffset);
+///*            listView.setTopGlowOffset(scrollOffsetY = newOffset);*/
             listView.invalidate();
         }
     }

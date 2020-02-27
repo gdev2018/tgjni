@@ -754,7 +754,7 @@ public class ThemeEditorView {
             containerView.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
             listView.setAdapter(listAdapter = new ListAdapter(context, items));
             searchAdapter = new SearchAdapter(context);
-            listView.setGlowColor(0xfff5f6f7);
+///*            listView.setGlowColor(0xfff5f6f7);*/
             listView.setItemAnimator(null);
             listView.setLayoutAnimation(null);
             listView.setOnItemClickListener((view, position) -> {
@@ -1060,7 +1060,7 @@ public class ThemeEditorView {
 
         @Keep
         public void setScrollOffsetY(int value) {
-            listView.setTopGlowOffset(scrollOffsetY = value);
+///*            listView.setTopGlowOffset(scrollOffsetY = value);*/
             frameLayout.setTranslationY(scrollOffsetY);
             colorPicker.setTranslationY(scrollOffsetY);
             searchEmptyView.setTranslationY(scrollOffsetY);

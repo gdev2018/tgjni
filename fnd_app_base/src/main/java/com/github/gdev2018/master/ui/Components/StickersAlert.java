@@ -374,7 +374,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         gridView.setPadding(AndroidUtilities.dp(10), 0, AndroidUtilities.dp(10), 0);
         gridView.setClipToPadding(false);
         gridView.setEnabled(true);
-        gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
+///*        gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));*/
         gridView.setOnTouchListener((v, event) -> StickerPreviewViewer.getInstance().onTouch(event, gridView, 0, stickersOnItemClickListener, previewDelegate));
         gridView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -664,7 +664,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     @SuppressLint("NewApi")
     private void updateLayout() {
         if (gridView.getChildCount() <= 0) {
-            gridView.setTopGlowOffset(scrollOffsetY = gridView.getPaddingTop());
+///*            gridView.setTopGlowOffset(scrollOffsetY = gridView.getPaddingTop());*/
             if (stickerSetCovereds == null) {
                 titleTextView.setTranslationY(scrollOffsetY);
                 shadow[0].setTranslationY(scrollOffsetY);
@@ -683,7 +683,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             runShadowAnimation(0, true);
         }
         if (scrollOffsetY != newOffset) {
-            gridView.setTopGlowOffset(scrollOffsetY = newOffset);
+///*            gridView.setTopGlowOffset(scrollOffsetY = newOffset);*/
             if (stickerSetCovereds == null) {
                 titleTextView.setTranslationY(scrollOffsetY);
                 shadow[0].setTranslationY(scrollOffsetY);
@@ -881,47 +881,47 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
         }
 
-        @Override
-        public void notifyDataSetChanged() {
-            if (stickerSetCovereds != null) {
-                int width = gridView.getMeasuredWidth();
-                if (width == 0) {
-                    width = AndroidUtilities.displaySize.x;
-                }
-                stickersPerRow = width / AndroidUtilities.dp(72);
-                layoutManager.setSpanCount(stickersPerRow);
-                cache.clear();
-                positionsToSets.clear();
-                totalItems = 0;
-                stickersRowCount = 0;
-                for (int a = 0; a < stickerSetCovereds.size(); a++) {
-                    TLRPC.StickerSetCovered pack = stickerSetCovereds.get(a);
-                    if (pack.covers.isEmpty() && pack.cover == null) {
-                        continue;
-                    }
-                    stickersRowCount += Math.ceil(stickerSetCovereds.size() / (float) stickersPerRow);
-                    positionsToSets.put(totalItems, pack);
-                    cache.put(totalItems++, a);
-                    int startRow = totalItems / stickersPerRow;
-                    int count;
-                    if (!pack.covers.isEmpty()) {
-                        count = (int) Math.ceil(pack.covers.size() / (float) stickersPerRow);
-                        for (int b = 0; b < pack.covers.size(); b++) {
-                            cache.put(b + totalItems, pack.covers.get(b));
-                        }
-                    } else {
-                        count = 1;
-                        cache.put(totalItems, pack.cover);
-                    }
-                    for (int b = 0; b < count * stickersPerRow; b++) {
-                        positionsToSets.put(totalItems + b, pack);
-                    }
-                    totalItems += count * stickersPerRow;
-                }
-            } else {
-                totalItems = stickerSet != null ? stickerSet.documents.size() : 0;
-            }
-            super.notifyDataSetChanged();
-        }
+///*        @Override
+//        public void notifyDataSetChanged() {
+//            if (stickerSetCovereds != null) {
+//                int width = gridView.getMeasuredWidth();
+//                if (width == 0) {
+//                    width = AndroidUtilities.displaySize.x;
+//                }
+//                stickersPerRow = width / AndroidUtilities.dp(72);
+//                layoutManager.setSpanCount(stickersPerRow);
+//                cache.clear();
+//                positionsToSets.clear();
+//                totalItems = 0;
+//                stickersRowCount = 0;
+//                for (int a = 0; a < stickerSetCovereds.size(); a++) {
+//                    TLRPC.StickerSetCovered pack = stickerSetCovereds.get(a);
+//                    if (pack.covers.isEmpty() && pack.cover == null) {
+//                        continue;
+//                    }
+//                    stickersRowCount += Math.ceil(stickerSetCovereds.size() / (float) stickersPerRow);
+//                    positionsToSets.put(totalItems, pack);
+//                    cache.put(totalItems++, a);
+//                    int startRow = totalItems / stickersPerRow;
+//                    int count;
+//                    if (!pack.covers.isEmpty()) {
+//                        count = (int) Math.ceil(pack.covers.size() / (float) stickersPerRow);
+//                        for (int b = 0; b < pack.covers.size(); b++) {
+//                            cache.put(b + totalItems, pack.covers.get(b));
+//                        }
+//                    } else {
+//                        count = 1;
+//                        cache.put(totalItems, pack.cover);
+//                    }
+//                    for (int b = 0; b < count * stickersPerRow; b++) {
+//                        positionsToSets.put(totalItems + b, pack);
+//                    }
+//                    totalItems += count * stickersPerRow;
+//                }
+//            } else {
+//                totalItems = stickerSet != null ? stickerSet.documents.size() : 0;
+//            }
+//            super.notifyDataSetChanged();
+//        }*/
     }
 }

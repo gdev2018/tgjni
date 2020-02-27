@@ -108,7 +108,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
             MessagesController.getInstance(currentAccount).saveRecentSticker(parent, document, true);
         };
         stickersGridView.setOnItemClickListener(stickersOnItemClickListener);
-        stickersGridView.setGlowColor(0xfff5f6f7);
+///*        stickersGridView.setGlowColor(0xfff5f6f7);*/
         addView(stickersGridView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 48, 0, 0));
 
         stickersEmptyView = new TextView(context);
@@ -437,45 +437,45 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
             }
         }
 
-        @Override
-        public void notifyDataSetChanged() {
-            int width = getMeasuredWidth();
-            if (width == 0) {
-                width = AndroidUtilities.displaySize.x;
-            }
-            stickersPerRow = width / AndroidUtilities.dp(72);
-            stickersLayoutManager.setSpanCount(stickersPerRow);
-            rowStartPack.clear();
-            packStartRow.clear();
-            cache.clear();
-            positionsToSets.clear();
-            totalItems = 0;
-            ArrayList<TLRPC.TL_messages_stickerSet> packs = stickerSets[currentType];
-            for (int a = -1; a < packs.size(); a++) {
-                ArrayList<TLRPC.Document> documents;
-                TLRPC.TL_messages_stickerSet pack = null;
-                int startRow = totalItems / stickersPerRow;
-                if (a == -1) {
-                    documents = recentStickers[currentType];
-                } else {
-                    pack = packs.get(a);
-                    documents = pack.documents;
-                    packStartRow.put(pack, startRow);
-                }
-                if (documents.isEmpty()) {
-                    continue;
-                }
-                int count = (int) Math.ceil(documents.size() / (float) stickersPerRow);
-                for (int b = 0; b < documents.size(); b++) {
-                    cache.put(b + totalItems, documents.get(b));
-                    positionsToSets.put(b + totalItems, pack);
-                }
-                totalItems += count * stickersPerRow;
-                for (int b = 0; b < count; b++) {
-                    rowStartPack.put(startRow + b, pack);
-                }
-            }
-            super.notifyDataSetChanged();
-        }
+///*        @Override
+//        public void notifyDataSetChanged() {
+//            int width = getMeasuredWidth();
+//            if (width == 0) {
+//                width = AndroidUtilities.displaySize.x;
+//            }
+//            stickersPerRow = width / AndroidUtilities.dp(72);
+//            stickersLayoutManager.setSpanCount(stickersPerRow);
+//            rowStartPack.clear();
+//            packStartRow.clear();
+//            cache.clear();
+//            positionsToSets.clear();
+//            totalItems = 0;
+//            ArrayList<TLRPC.TL_messages_stickerSet> packs = stickerSets[currentType];
+//            for (int a = -1; a < packs.size(); a++) {
+//                ArrayList<TLRPC.Document> documents;
+//                TLRPC.TL_messages_stickerSet pack = null;
+//                int startRow = totalItems / stickersPerRow;
+//                if (a == -1) {
+//                    documents = recentStickers[currentType];
+//                } else {
+//                    pack = packs.get(a);
+//                    documents = pack.documents;
+//                    packStartRow.put(pack, startRow);
+//                }
+//                if (documents.isEmpty()) {
+//                    continue;
+//                }
+//                int count = (int) Math.ceil(documents.size() / (float) stickersPerRow);
+//                for (int b = 0; b < documents.size(); b++) {
+//                    cache.put(b + totalItems, documents.get(b));
+//                    positionsToSets.put(b + totalItems, pack);
+//                }
+//                totalItems += count * stickersPerRow;
+//                for (int b = 0; b < count; b++) {
+//                    rowStartPack.put(startRow + b, pack);
+//                }
+//            }
+//            super.notifyDataSetChanged();
+//        }*/
     }
 }

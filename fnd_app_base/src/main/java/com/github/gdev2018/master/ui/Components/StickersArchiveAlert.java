@@ -75,7 +75,7 @@ public class StickersArchiveAlert extends AlertDialog.Builder {
         listView.setAdapter(new ListAdapter(context));
         listView.setVerticalScrollBarEnabled(false);
         listView.setPadding(AndroidUtilities.dp(10), 0, AndroidUtilities.dp(10), 0);
-        listView.setGlowColor(0xfff5f6f7);
+///*        listView.setGlowColor(0xfff5f6f7);*/
         container.addView(listView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 10, 0, 0));
 
         setNegativeButton(LocaleController.getString("Close", R.string.Close), new DialogInterface.OnClickListener() {

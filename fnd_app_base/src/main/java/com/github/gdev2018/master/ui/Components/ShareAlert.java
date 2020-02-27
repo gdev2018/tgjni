@@ -541,7 +541,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         });
         containerView.addView(gridView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT, 0, 0, 0, 0));
         gridView.setAdapter(listAdapter = new ShareDialogsAdapter(context));
-        gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
+///*        gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));*/
         gridView.setOnItemClickListener((view, position) -> {
             if (position < 0) {
                 return;
@@ -809,7 +809,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             runShadowAnimation(0, true);
         }
         if (scrollOffsetY != newOffset) {
-            gridView.setTopGlowOffset(scrollOffsetY = newOffset);
+///*            gridView.setTopGlowOffset(scrollOffsetY = newOffset);*/
             frameLayout.setTranslationY(scrollOffsetY);
             searchEmptyView.setTranslationY(scrollOffsetY);
             containerView.invalidate();

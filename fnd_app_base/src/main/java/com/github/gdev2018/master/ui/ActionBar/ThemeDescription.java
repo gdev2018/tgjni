@@ -426,7 +426,7 @@ public class ThemeDescription {
                 recyclerListView.updateFastScrollColors();
             }
             if ((changeFlags & FLAG_LISTGLOWCOLOR) != 0) {
-                recyclerListView.setGlowColor(color);
+///*                recyclerListView.setGlowColor(color);*/
             }
             if ((changeFlags & FLAG_SECTIONS) != 0) {
                 ArrayList<View> headers = recyclerListView.getHeaders();
@@ -457,18 +457,18 @@ public class ThemeDescription {
             if (viewToInvalidate instanceof RecyclerListView) {
                 RecyclerListView recyclerListView = (RecyclerListView) viewToInvalidate;
                 recyclerListView.getRecycledViewPool().clear();
-                int count = recyclerListView.getHiddenChildCount();
-                for (int a = 0; a < count; a++) {
-                    processViewColor(recyclerListView.getHiddenChildAt(a), color);
-                }
-                count = recyclerListView.getCachedChildCount();
-                for (int a = 0; a < count; a++) {
-                    processViewColor(recyclerListView.getCachedChildAt(a), color);
-                }
-                count = recyclerListView.getAttachedScrapChildCount();
-                for (int a = 0; a < count; a++) {
-                    processViewColor(recyclerListView.getAttachedScrapChildAt(a), color);
-                }
+///*                int count = recyclerListView.getHiddenChildCount();
+//                for (int a = 0; a < count; a++) {
+//                    processViewColor(recyclerListView.getHiddenChildAt(a), color);
+//                }
+//                count = recyclerListView.getCachedChildCount();
+//                for (int a = 0; a < count; a++) {
+//                    processViewColor(recyclerListView.getCachedChildAt(a), color);
+//                }
+//                count = recyclerListView.getAttachedScrapChildCount();
+//                for (int a = 0; a < count; a++) {
+//                    processViewColor(recyclerListView.getAttachedScrapChildAt(a), color);
+//                }*/
             }
             if (viewToInvalidate instanceof ViewGroup) {
                 ViewGroup viewGroup = (ViewGroup) viewToInvalidate;

@@ -96,7 +96,7 @@ public class JoinGroupAlert extends BottomSheet {
             listView.setHorizontalScrollBarEnabled(false);
             listView.setVerticalScrollBarEnabled(false);
             listView.setAdapter(new UsersAdapter(context));
-            listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
+///*            listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));*/
             linearLayout.addView(listView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, 90, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0, 0, 0));
         }
 

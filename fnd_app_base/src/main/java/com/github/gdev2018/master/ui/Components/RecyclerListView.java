@@ -169,11 +169,11 @@ public class RecyclerListView extends RecyclerView {
             cleanupCache();
         }
 
-        @Override
-        public void notifyDataSetChanged() {
-            cleanupCache();
-            super.notifyDataSetChanged();
-        }
+///*        @Override
+//        public void notifyDataSetChanged() {
+//            cleanupCache();
+//            super.notifyDataSetChanged();
+//        }*/
 
         @Override
         public boolean isEnabled(ViewHolder holder) {
@@ -823,7 +823,7 @@ public class RecyclerListView extends RecyclerView {
     public RecyclerListView(Context context) {
         super(context);
 
-        setGlowColor(Theme.getColor(Theme.key_actionBarDefault));
+///*        setGlowColor(Theme.getColor(Theme.key_actionBarDefault));*/
         selectorDrawable = Theme.getSelectorDrawable(false);
         selectorDrawable.setCallback(this);
 

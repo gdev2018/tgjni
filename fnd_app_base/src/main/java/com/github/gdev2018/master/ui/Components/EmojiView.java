@@ -829,7 +829,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 listener.onStickerSelected(cell.getSticker(), cell.getParentObject());
             };
             stickersGridView.setOnItemClickListener(stickersOnItemClickListener);
-            stickersGridView.setGlowColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+///*            stickersGridView.setGlowColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));*/
             stickersWrap.addView(stickersGridView);
 
             searchEditTextContainer = new FrameLayout(context);
@@ -981,7 +981,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 }
             });
             trendingGridAdapter.notifyDataSetChanged();
-            trendingGridView.setGlowColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+///*            trendingGridView.setGlowColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));*/
             trendingGridView.setVisibility(GONE);
             stickersWrap.addView(trendingGridView);
 
@@ -1892,10 +1892,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             dotPaint.setColor(Theme.getColor(Theme.key_chat_emojiPanelNewTrending));
         }
         if (stickersGridView != null) {
-            stickersGridView.setGlowColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+///*            stickersGridView.setGlowColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));*/
         }
         if (trendingGridView != null) {
-            trendingGridView.setGlowColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+///*            trendingGridView.setGlowColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));*/
         }
         if (stickersEmptyView != null) {
             stickersEmptyView.setTextColor(Theme.getColor(Theme.key_chat_emojiPanelEmptyText));
@@ -2464,67 +2464,67 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
         }
 
-        @Override
-        public void notifyDataSetChanged() {
-            int width = getMeasuredWidth();
-            if (width == 0) {
-                if (AndroidUtilities.isTablet()) {
-                    int smallSide = AndroidUtilities.displaySize.x;
-                    int leftSide = smallSide * 35 / 100;
-                    if (leftSide < AndroidUtilities.dp(320)) {
-                        leftSide = AndroidUtilities.dp(320);
-                    }
-                    width  = smallSide - leftSide;
-                } else {
-                    width = AndroidUtilities.displaySize.x;
-                }
-                if (width == 0) {
-                    width = 1080;
-                }
-            }
-            stickersPerRow = Math.max(1, width / AndroidUtilities.dp(72));
-            trendingLayoutManager.setSpanCount(stickersPerRow);
-            if (trendingLoaded) {
-                return;
-            }
-            cache.clear();
-            positionsToSets.clear();
-            sets.clear();
-            totalItems = 0;
-            int num = 0;
-
-            ArrayList<TLRPC.StickerSetCovered> packs = DataQuery.getInstance(currentAccount).getFeaturedStickerSets();
-
-            for (int a = 0; a < packs.size(); a++) {
-                TLRPC.StickerSetCovered pack = packs.get(a);
-                if (DataQuery.getInstance(currentAccount).isStickerPackInstalled(pack.set.id) || pack.covers.isEmpty() && pack.cover == null) {
-                    continue;
-                }
-                sets.add(pack);
-                positionsToSets.put(totalItems, pack);
-                cache.put(totalItems++, num++);
-                int startRow = totalItems / stickersPerRow;
-                int count;
-                if (!pack.covers.isEmpty()) {
-                    count = (int) Math.ceil(pack.covers.size() / (float) stickersPerRow);
-                    for (int b = 0; b < pack.covers.size(); b++) {
-                        cache.put(b + totalItems, pack.covers.get(b));
-                    }
-                } else {
-                    count = 1;
-                    cache.put(totalItems, pack.cover);
-                }
-                for (int b = 0; b < count * stickersPerRow; b++) {
-                    positionsToSets.put(totalItems + b, pack);
-                }
-                totalItems += count * stickersPerRow;
-            }
-            if (totalItems != 0) {
-                trendingLoaded = true;
-                featuredStickersHash = DataQuery.getInstance(currentAccount).getFeaturesStickersHashWithoutUnread();
-            }
-            super.notifyDataSetChanged();
-        }
+///*        @Override
+//        public void notifyDataSetChanged() {
+//            int width = getMeasuredWidth();
+//            if (width == 0) {
+//                if (AndroidUtilities.isTablet()) {
+//                    int smallSide = AndroidUtilities.displaySize.x;
+//                    int leftSide = smallSide * 35 / 100;
+//                    if (leftSide < AndroidUtilities.dp(320)) {
+//                        leftSide = AndroidUtilities.dp(320);
+//                    }
+//                    width  = smallSide - leftSide;
+//                } else {
+//                    width = AndroidUtilities.displaySize.x;
+//                }
+//                if (width == 0) {
+//                    width = 1080;
+//                }
+//            }
+//            stickersPerRow = Math.max(1, width / AndroidUtilities.dp(72));
+//            trendingLayoutManager.setSpanCount(stickersPerRow);
+//            if (trendingLoaded) {
+//                return;
+//            }
+//            cache.clear();
+//            positionsToSets.clear();
+//            sets.clear();
+//            totalItems = 0;
+//            int num = 0;
+//
+//            ArrayList<TLRPC.StickerSetCovered> packs = DataQuery.getInstance(currentAccount).getFeaturedStickerSets();
+//
+//            for (int a = 0; a < packs.size(); a++) {
+//                TLRPC.StickerSetCovered pack = packs.get(a);
+//                if (DataQuery.getInstance(currentAccount).isStickerPackInstalled(pack.set.id) || pack.covers.isEmpty() && pack.cover == null) {
+//                    continue;
+//                }
+//                sets.add(pack);
+//                positionsToSets.put(totalItems, pack);
+//                cache.put(totalItems++, num++);
+//                int startRow = totalItems / stickersPerRow;
+//                int count;
+//                if (!pack.covers.isEmpty()) {
+//                    count = (int) Math.ceil(pack.covers.size() / (float) stickersPerRow);
+//                    for (int b = 0; b < pack.covers.size(); b++) {
+//                        cache.put(b + totalItems, pack.covers.get(b));
+//                    }
+//                } else {
+//                    count = 1;
+//                    cache.put(totalItems, pack.cover);
+//                }
+//                for (int b = 0; b < count * stickersPerRow; b++) {
+//                    positionsToSets.put(totalItems + b, pack);
+//                }
+//                totalItems += count * stickersPerRow;
+//            }
+//            if (totalItems != 0) {
+//                trendingLoaded = true;
+//                featuredStickersHash = DataQuery.getInstance(currentAccount).getFeaturesStickersHashWithoutUnread();
+//            }
+//            super.notifyDataSetChanged();
+//        }*/
     }
 
     private class StickersGridAdapter extends RecyclerListView.SelectionAdapter {
@@ -2739,85 +2739,85 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
         }
 
-        @Override
-        public void notifyDataSetChanged() {
-            int width = getMeasuredWidth();
-            if (width == 0) {
-                width = AndroidUtilities.displaySize.x;
-            }
-            stickersPerRow = width / AndroidUtilities.dp(72);
-            stickersLayoutManager.setSpanCount(stickersPerRow);
-            rowStartPack.clear();
-            packStartPosition.clear();
-            positionToRow.clear();
-            cache.clear();
-            totalItems = 0;
-            ArrayList<TLRPC.TL_messages_stickerSet> packs = stickerSets;
-            int startRow = 0;
-            for (int a = -3; a < packs.size(); a++) {
-                ArrayList<TLRPC.Document> documents;
-                TLRPC.TL_messages_stickerSet pack = null;
-                String key;
-                if (a == -3) {
-                    cache.put(totalItems++, "search");
-                    startRow++;
-                    continue;
-                } else if (a == -2) {
-                    documents = favouriteStickers;
-                    packStartPosition.put(key = "fav", totalItems);
-                } else if (a == -1) {
-                    documents = recentStickers;
-                    packStartPosition.put(key = "recent", totalItems);
-                } else {
-                    key = null;
-                    pack = packs.get(a);
-                    documents = pack.documents;
-                    packStartPosition.put(pack, totalItems);
-                }
-                if (a == groupStickerPackNum) {
-                    groupStickerPackPosition = totalItems;
-                    if (documents.isEmpty()) {
-                        rowStartPack.put(startRow, pack);
-                        positionToRow.put(totalItems, startRow++);
-                        rowStartPack.put(startRow, pack);
-                        positionToRow.put(totalItems + 1, startRow++);
-                        cache.put(totalItems++, pack);
-                        cache.put(totalItems++, "group");
-                        continue;
-                    }
-                }
-                if (documents.isEmpty()) {
-                    continue;
-                }
-                int count = (int) Math.ceil(documents.size() / (float) stickersPerRow);
-                if (pack != null) {
-                    cache.put(totalItems, pack);
-                } else {
-                    cache.put(totalItems, documents);
-                }
-                positionToRow.put(totalItems, startRow);
-                for (int b = 0; b < documents.size(); b++) {
-                    int num = 1 + b + totalItems;
-                    cache.put(num, documents.get(b));
-                    if (pack != null) {
-                        cacheParents.put(num, pack);
-                    } else {
-                        cacheParents.put(num, key);
-                    }
-                    positionToRow.put(1 + b + totalItems, startRow + 1 + b / stickersPerRow);
-                }
-                for (int b = 0; b < count + 1; b++) {
-                    if (pack != null) {
-                        rowStartPack.put(startRow + b, pack);
-                    } else {
-                        rowStartPack.put(startRow + b, a == -1 ? "recent" : "fav");
-                    }
-                }
-                totalItems += count * stickersPerRow + 1;
-                startRow += count + 1;
-            }
-            super.notifyDataSetChanged();
-        }
+///*        @Override
+//        public void notifyDataSetChanged() {
+//            int width = getMeasuredWidth();
+//            if (width == 0) {
+//                width = AndroidUtilities.displaySize.x;
+//            }
+//            stickersPerRow = width / AndroidUtilities.dp(72);
+//            stickersLayoutManager.setSpanCount(stickersPerRow);
+//            rowStartPack.clear();
+//            packStartPosition.clear();
+//            positionToRow.clear();
+//            cache.clear();
+//            totalItems = 0;
+//            ArrayList<TLRPC.TL_messages_stickerSet> packs = stickerSets;
+//            int startRow = 0;
+//            for (int a = -3; a < packs.size(); a++) {
+//                ArrayList<TLRPC.Document> documents;
+//                TLRPC.TL_messages_stickerSet pack = null;
+//                String key;
+//                if (a == -3) {
+//                    cache.put(totalItems++, "search");
+//                    startRow++;
+//                    continue;
+//                } else if (a == -2) {
+//                    documents = favouriteStickers;
+//                    packStartPosition.put(key = "fav", totalItems);
+//                } else if (a == -1) {
+//                    documents = recentStickers;
+//                    packStartPosition.put(key = "recent", totalItems);
+//                } else {
+//                    key = null;
+//                    pack = packs.get(a);
+//                    documents = pack.documents;
+//                    packStartPosition.put(pack, totalItems);
+//                }
+//                if (a == groupStickerPackNum) {
+//                    groupStickerPackPosition = totalItems;
+//                    if (documents.isEmpty()) {
+//                        rowStartPack.put(startRow, pack);
+//                        positionToRow.put(totalItems, startRow++);
+//                        rowStartPack.put(startRow, pack);
+//                        positionToRow.put(totalItems + 1, startRow++);
+//                        cache.put(totalItems++, pack);
+//                        cache.put(totalItems++, "group");
+//                        continue;
+//                    }
+//                }
+//                if (documents.isEmpty()) {
+//                    continue;
+//                }
+//                int count = (int) Math.ceil(documents.size() / (float) stickersPerRow);
+//                if (pack != null) {
+//                    cache.put(totalItems, pack);
+//                } else {
+//                    cache.put(totalItems, documents);
+//                }
+//                positionToRow.put(totalItems, startRow);
+//                for (int b = 0; b < documents.size(); b++) {
+//                    int num = 1 + b + totalItems;
+//                    cache.put(num, documents.get(b));
+//                    if (pack != null) {
+//                        cacheParents.put(num, pack);
+//                    } else {
+//                        cacheParents.put(num, key);
+//                    }
+//                    positionToRow.put(1 + b + totalItems, startRow + 1 + b / stickersPerRow);
+//                }
+//                for (int b = 0; b < count + 1; b++) {
+//                    if (pack != null) {
+//                        rowStartPack.put(startRow + b, pack);
+//                    } else {
+//                        rowStartPack.put(startRow + b, a == -1 ? "recent" : "fav");
+//                    }
+//                }
+//                totalItems += count * stickersPerRow + 1;
+//                startRow += count + 1;
+//            }
+//            super.notifyDataSetChanged();
+//        }*/
     }
 
     private class EmojiGridAdapter extends BaseAdapter {
@@ -3388,75 +3388,75 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
         }
 
-        @Override
-        public void notifyDataSetChanged() {
-            rowStartPack.clear();
-            positionToRow.clear();
-            cache.clear();
-            positionsToSets.clear();
-            totalItems = 0;
-            int startRow = 0;
-            for (int a = -1, serverSize = serverPacks.size(), localSize = localPacks.size(), emojiSize = emojiArrays.size(); a < serverSize + localSize + emojiSize; a++) {
-                ArrayList<TLRPC.Document> documents;
-                Object pack = null;
-                String key;
-                if (a == -1) {
-                    cache.put(totalItems++, "search");
-                    startRow++;
-                    continue;
-                } else {
-                    int idx = a;
-                    if (idx < localSize) {
-                        TLRPC.TL_messages_stickerSet set = localPacks.get(idx);
-                        documents = set.documents;
-                        pack = set;
-                    } else {
-                        idx -= localSize;
-                        if (idx < emojiSize) {
-                            documents = emojiArrays.get(idx);
-                        } else {
-                            idx -= emojiSize;
-                            TLRPC.StickerSetCovered set = serverPacks.get(idx);
-                            documents = set.covers;
-                            pack = set;
-                        }
-                    }
-                }
-                if (documents.isEmpty()) {
-                    continue;
-                }
-                int count = (int) Math.ceil(documents.size() / (float) stickersGridAdapter.stickersPerRow);
-                if (pack != null) {
-                    cache.put(totalItems, pack);
-                } else {
-                    cache.put(totalItems, documents);
-                }
-                if (a >= localSize && pack instanceof TLRPC.StickerSetCovered) {
-                    positionsToSets.put(totalItems, (TLRPC.StickerSetCovered) pack);
-                }
-                positionToRow.put(totalItems, startRow);
-                for (int b = 0, size = documents.size(); b < size; b++) {
-                    int num = 1 + b + totalItems;
-                    cache.put(num, documents.get(b));
-                    if (pack != null) {
-                        cacheParent.put(num, pack);
-                    }
-                    positionToRow.put(1 + b + totalItems, startRow + 1 + b / stickersGridAdapter.stickersPerRow);
-                    if (a >= localSize && pack instanceof TLRPC.StickerSetCovered) {
-                        positionsToSets.put(1 + b + totalItems, (TLRPC.StickerSetCovered) pack);
-                    }
-                }
-                for (int b = 0; b < count + 1; b++) {
-                    if (pack != null) {
-                        rowStartPack.put(startRow + b, pack);
-                    } else {
-                        rowStartPack.put(startRow + b, documents);
-                    }
-                }
-                totalItems += count * stickersGridAdapter.stickersPerRow + 1;
-                startRow += count + 1;
-            }
-            super.notifyDataSetChanged();
-        }
+///*        @Override
+//        public void notifyDataSetChanged() {
+//            rowStartPack.clear();
+//            positionToRow.clear();
+//            cache.clear();
+//            positionsToSets.clear();
+//            totalItems = 0;
+//            int startRow = 0;
+//            for (int a = -1, serverSize = serverPacks.size(), localSize = localPacks.size(), emojiSize = emojiArrays.size(); a < serverSize + localSize + emojiSize; a++) {
+//                ArrayList<TLRPC.Document> documents;
+//                Object pack = null;
+//                String key;
+//                if (a == -1) {
+//                    cache.put(totalItems++, "search");
+//                    startRow++;
+//                    continue;
+//                } else {
+//                    int idx = a;
+//                    if (idx < localSize) {
+//                        TLRPC.TL_messages_stickerSet set = localPacks.get(idx);
+//                        documents = set.documents;
+//                        pack = set;
+//                    } else {
+//                        idx -= localSize;
+//                        if (idx < emojiSize) {
+//                            documents = emojiArrays.get(idx);
+//                        } else {
+//                            idx -= emojiSize;
+//                            TLRPC.StickerSetCovered set = serverPacks.get(idx);
+//                            documents = set.covers;
+//                            pack = set;
+//                        }
+//                    }
+//                }
+//                if (documents.isEmpty()) {
+//                    continue;
+//                }
+//                int count = (int) Math.ceil(documents.size() / (float) stickersGridAdapter.stickersPerRow);
+//                if (pack != null) {
+//                    cache.put(totalItems, pack);
+//                } else {
+//                    cache.put(totalItems, documents);
+//                }
+//                if (a >= localSize && pack instanceof TLRPC.StickerSetCovered) {
+//                    positionsToSets.put(totalItems, (TLRPC.StickerSetCovered) pack);
+//                }
+//                positionToRow.put(totalItems, startRow);
+//                for (int b = 0, size = documents.size(); b < size; b++) {
+//                    int num = 1 + b + totalItems;
+//                    cache.put(num, documents.get(b));
+//                    if (pack != null) {
+//                        cacheParent.put(num, pack);
+//                    }
+//                    positionToRow.put(1 + b + totalItems, startRow + 1 + b / stickersGridAdapter.stickersPerRow);
+//                    if (a >= localSize && pack instanceof TLRPC.StickerSetCovered) {
+//                        positionsToSets.put(1 + b + totalItems, (TLRPC.StickerSetCovered) pack);
+//                    }
+//                }
+//                for (int b = 0; b < count + 1; b++) {
+//                    if (pack != null) {
+//                        rowStartPack.put(startRow + b, pack);
+//                    } else {
+//                        rowStartPack.put(startRow + b, documents);
+//                    }
+//                }
+//                totalItems += count * stickersGridAdapter.stickersPerRow + 1;
+//                startRow += count + 1;
+//            }
+//            super.notifyDataSetChanged();
+//        }*/
     }
 }

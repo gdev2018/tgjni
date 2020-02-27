@@ -120,7 +120,7 @@ import com.github.gdev2018.master.VideoEditedInfo;
 import com.github.gdev2018.master.WebFile;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScrollerEnd;
+///*import androidx.recyclerview.widget.LinearSmoothScrollerEnd;*/
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLObject;
@@ -2896,16 +2896,16 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 outRect.right = AndroidUtilities.dp(3);
             }
         });
-        ((DefaultItemAnimator) selectedPhotosListView.getItemAnimator()).setDelayAnimations(false);
+///*        ((DefaultItemAnimator) selectedPhotosListView.getItemAnimator()).setDelayAnimations(false);*/
         selectedPhotosListView.setBackgroundColor(0x7f000000);
         selectedPhotosListView.setPadding(0, AndroidUtilities.dp(3), 0, AndroidUtilities.dp(3));
         selectedPhotosListView.setLayoutManager(new LinearLayoutManager(parentActivity, LinearLayoutManager.HORIZONTAL, false) {
 
             @Override
             public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
-                LinearSmoothScrollerEnd linearSmoothScroller = new LinearSmoothScrollerEnd(recyclerView.getContext());
-                linearSmoothScroller.setTargetPosition(position);
-                startSmoothScroll(linearSmoothScroller);
+///*                LinearSmoothScrollerEnd linearSmoothScroller = new LinearSmoothScrollerEnd(recyclerView.getContext());
+//                linearSmoothScroller.setTargetPosition(position);
+//                startSmoothScroll(linearSmoothScroller);*/
             }
         });
         selectedPhotosListView.setAdapter(selectedPhotosAdapter = new ListAdapter(parentActivity));

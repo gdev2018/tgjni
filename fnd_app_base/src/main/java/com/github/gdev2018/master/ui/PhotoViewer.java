@@ -136,7 +136,7 @@ import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Cells.PhotoPickerPhotoCell;
 import com.github.gdev2018.master.ui.Components.AnimatedFileDrawable;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
-import com.github.gdev2018.master.ui.Components.ChatAttachAlert;
+///*import com.github.gdev2018.master.ui.Components.ChatAttachAlert;*/
 import com.github.gdev2018.master.ui.Components.CheckBox;
 import com.github.gdev2018.master.ui.Components.ClippingImageView;
 import com.github.gdev2018.master.ui.Components.GroupedPhotosListView;
@@ -1705,9 +1705,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         updateMinMax(scale);
     }
 
-    public void setParentAlert(ChatAttachAlert alert) {
-///*        parentAlert = alert;*/
-    }
+///*    public void setParentAlert(ChatAttachAlert alert) {
+//        parentAlert = alert;
+//    }*/
 
     public void setParentActivity(final Activity activity) {
         currentAccount = BaseUserConfig.selectedAccount;

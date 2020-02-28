@@ -51,7 +51,7 @@ import com.github.gdev2018.master.ui.Components.RLottieDrawable;
 import com.github.gdev2018.master.ui.Components.RLottieImageView;
 import com.github.gdev2018.master.ui.Components.RadialProgressView;
 import com.github.gdev2018.master.ui.Components.RadioButton;
-import com.github.gdev2018.master.ui.Components.RecyclerListView;
+///*import com.github.gdev2018.master.ui.Components.RecyclerListView;*/
 import com.github.gdev2018.master.ui.Components.SeekBarView;
 import com.github.gdev2018.master.ui.Components.TypefaceSpan;
 import com.github.gdev2018.master.ui.Components.VideoTimelineView;
@@ -415,49 +415,49 @@ public class ThemeDescription {
                 AndroidUtilities.setViewPagerEdgeEffectColor((ViewPager) viewToInvalidate, color);
             }
         }
-        if (viewToInvalidate instanceof RecyclerListView) {
-            RecyclerListView recyclerListView = (RecyclerListView) viewToInvalidate;
-            if ((changeFlags & FLAG_SELECTOR) != 0) {
-                if (currentKey.equals(Theme.key_listSelector)) {
-                    recyclerListView.setListSelectorColor(color);
-                }
-            }
-            if ((changeFlags & FLAG_FASTSCROLL) != 0) {
-                recyclerListView.updateFastScrollColors();
-            }
-            if ((changeFlags & FLAG_LISTGLOWCOLOR) != 0) {
-///*                recyclerListView.setGlowColor(color);*/
-            }
-            if ((changeFlags & FLAG_SECTIONS) != 0) {
-                ArrayList<View> headers = recyclerListView.getHeaders();
-                if (headers != null) {
-                    for (int a = 0; a < headers.size(); a++) {
-                        processViewColor(headers.get(a), color);
-                    }
-                }
-                headers = recyclerListView.getHeadersCache();
-                if (headers != null) {
-                    for (int a = 0; a < headers.size(); a++) {
-                        processViewColor(headers.get(a), color);
-                    }
-                }
-                View header = recyclerListView.getPinnedHeader();
-                if (header != null) {
-                    processViewColor(header, color);
-                }
-            }
-        } else if (viewToInvalidate != null && (listClasses == null || listClasses.length == 0)) {
-            if ((changeFlags & FLAG_SELECTOR) != 0) {
-                viewToInvalidate.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            } else if ((changeFlags & FLAG_SELECTORWHITE) != 0) {
-                viewToInvalidate.setBackgroundDrawable(Theme.getSelectorDrawable(true));
-            }
-        }
+///*        if (viewToInvalidate instanceof RecyclerListView) {
+//            RecyclerListView recyclerListView = (RecyclerListView) viewToInvalidate;
+//            if ((changeFlags & FLAG_SELECTOR) != 0) {
+//                if (currentKey.equals(Theme.key_listSelector)) {
+//                    recyclerListView.setListSelectorColor(color);
+//                }
+//            }
+//            if ((changeFlags & FLAG_FASTSCROLL) != 0) {
+//                recyclerListView.updateFastScrollColors();
+//            }
+//            if ((changeFlags & FLAG_LISTGLOWCOLOR) != 0) {
+//                recyclerListView.setGlowColor(color);
+//            }
+//            if ((changeFlags & FLAG_SECTIONS) != 0) {
+//                ArrayList<View> headers = recyclerListView.getHeaders();
+//                if (headers != null) {
+//                    for (int a = 0; a < headers.size(); a++) {
+//                        processViewColor(headers.get(a), color);
+//                    }
+//                }
+//                headers = recyclerListView.getHeadersCache();
+//                if (headers != null) {
+//                    for (int a = 0; a < headers.size(); a++) {
+//                        processViewColor(headers.get(a), color);
+//                    }
+//                }
+//                View header = recyclerListView.getPinnedHeader();
+//                if (header != null) {
+//                    processViewColor(header, color);
+//                }
+//            }
+//        } else if (viewToInvalidate != null && (listClasses == null || listClasses.length == 0)) {
+//            if ((changeFlags & FLAG_SELECTOR) != 0) {
+//                viewToInvalidate.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+//            } else if ((changeFlags & FLAG_SELECTORWHITE) != 0) {
+//                viewToInvalidate.setBackgroundDrawable(Theme.getSelectorDrawable(true));
+//            }
+//        }*/
         if (listClasses != null) {
-            if (viewToInvalidate instanceof RecyclerListView) {
-                RecyclerListView recyclerListView = (RecyclerListView) viewToInvalidate;
-                recyclerListView.getRecycledViewPool().clear();
-///*                int count = recyclerListView.getHiddenChildCount();
+///*            if (viewToInvalidate instanceof RecyclerListView) {
+//                RecyclerListView recyclerListView = (RecyclerListView) viewToInvalidate;
+//                recyclerListView.getRecycledViewPool().clear();
+//                int count = recyclerListView.getHiddenChildCount();
 //                for (int a = 0; a < count; a++) {
 //                    processViewColor(recyclerListView.getHiddenChildAt(a), color);
 //                }
@@ -468,8 +468,8 @@ public class ThemeDescription {
 //                count = recyclerListView.getAttachedScrapChildCount();
 //                for (int a = 0; a < count; a++) {
 //                    processViewColor(recyclerListView.getAttachedScrapChildAt(a), color);
-//                }*/
-            }
+//                }
+//            }*/
             if (viewToInvalidate instanceof ViewGroup) {
                 ViewGroup viewGroup = (ViewGroup) viewToInvalidate;
                 int count = viewGroup.getChildCount();

@@ -39,7 +39,7 @@ import com.github.gdev2018.master.ui.Components.CombinedDrawable;
 import com.github.gdev2018.master.ui.Components.ContextProgressView;
 import com.github.gdev2018.master.ui.Components.EditTextBoldCursor;
 import com.github.gdev2018.master.ui.Components.EditTextCaption;
-import com.github.gdev2018.master.ui.Components.EditTextEmoji;
+///*import com.github.gdev2018.master.ui.Components.EditTextEmoji;*/
 import com.github.gdev2018.master.ui.Components.EmptyTextProgressView;
 import com.github.gdev2018.master.ui.Components.GroupCreateCheckBox;
 import com.github.gdev2018.master.ui.Components.GroupCreateSpan;
@@ -125,9 +125,9 @@ public class ThemeDescription {
         changeFlags = flags;
         listClasses = classes;
         delegate = themeDescriptionDelegate;
-        if (viewToInvalidate instanceof EditTextEmoji) {
-            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
-        }
+///*        if (viewToInvalidate instanceof EditTextEmoji) {
+//            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
+//        }*/
     }
 
     public ThemeDescription(View view, int flags, Class[] classes, Paint paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
@@ -140,9 +140,9 @@ public class ThemeDescription {
         changeFlags = flags;
         listClasses = classes;
         delegate = themeDescriptionDelegate;
-        if (viewToInvalidate instanceof EditTextEmoji) {
-            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
-        }
+///*        if (viewToInvalidate instanceof EditTextEmoji) {
+//            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
+//        }*/
     }
 
     public ThemeDescription(View view, int flags, Class[] classes, RLottieDrawable[] drawables, String layerName, String key) {
@@ -152,9 +152,9 @@ public class ThemeDescription {
         viewToInvalidate = view;
         changeFlags = flags;
         listClasses = classes;
-        if (viewToInvalidate instanceof EditTextEmoji) {
-            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
-        }
+///*        if (viewToInvalidate instanceof EditTextEmoji) {
+//            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
+//        }*/
     }
 
     public ThemeDescription(View view, int flags, Class[] classes, String[] classesFields, Paint[] paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
@@ -173,9 +173,9 @@ public class ThemeDescription {
         delegate = themeDescriptionDelegate;
         cachedFields = new HashMap<>();
         notFoundCachedFields = new HashMap<>();
-        if (viewToInvalidate instanceof EditTextEmoji) {
-            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
-        }
+///*        if (viewToInvalidate instanceof EditTextEmoji) {
+//            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
+//        }*/
     }
 
     public ThemeDescription(View view, int flags, Class[] classes, String[] classesFields, String layerName, String key) {
@@ -187,9 +187,9 @@ public class ThemeDescription {
         listClassesFieldName = classesFields;
         cachedFields = new HashMap<>();
         notFoundCachedFields = new HashMap<>();
-        if (viewToInvalidate instanceof EditTextEmoji) {
-            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
-        }
+///*        if (viewToInvalidate instanceof EditTextEmoji) {
+//            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
+//        }*/
     }
 
     public ThemeDescriptionDelegate setDelegateDisabled() {

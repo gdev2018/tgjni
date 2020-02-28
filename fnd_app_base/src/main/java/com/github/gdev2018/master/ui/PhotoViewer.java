@@ -243,7 +243,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private TextView captionTextView;
     private TextView switchCaptionTextView;
     private AnimatorSet currentCaptionAnimation;
-    private ChatAttachAlert parentAlert;
+///*    private ChatAttachAlert parentAlert;*/
     private PhotoViewerCaptionEnterView captionEditText;
     private int sendPhotoType;
     private boolean needCaptionLayout;
@@ -1706,7 +1706,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     public void setParentAlert(ChatAttachAlert alert) {
-        parentAlert = alert;
+///*        parentAlert = alert;*/
     }
 
     public void setParentActivity(final Activity activity) {
@@ -7024,7 +7024,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             currentThumb.release();
             currentThumb = null;
         }
-        parentAlert = null;
+///*        parentAlert = null;*/
         if (currentAnimation != null) {
             currentAnimation.setSecondParentView(null);
             currentAnimation = null;

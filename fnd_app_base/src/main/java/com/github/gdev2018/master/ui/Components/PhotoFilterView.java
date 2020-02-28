@@ -108,7 +108,7 @@ public class PhotoFilterView extends FrameLayout {
     private TextView cancelTextView;
     private TextureView textureView;
     private EGLThread eglThread;
-    private RecyclerListView recyclerListView;
+///*    private RecyclerListView recyclerListView;*/
     private FrameLayout blurLayout;
     private PhotoFilterBlurControl blurControl;
     private PhotoFilterCurvesControl curvesControl;
@@ -1804,14 +1804,14 @@ public class PhotoFilterView extends FrameLayout {
             switchMode();
         });
 
-        recyclerListView = new RecyclerListView(context);
+///*        recyclerListView = new RecyclerListView(context);*/
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerListView.setLayoutManager(layoutManager);
-        recyclerListView.setClipToPadding(false);
-        recyclerListView.setOverScrollMode(RecyclerListView.OVER_SCROLL_NEVER);
-        recyclerListView.setAdapter(new ToolsAdapter(context));
-        toolsView.addView(recyclerListView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 120, Gravity.LEFT | Gravity.TOP));
+///*        recyclerListView.setLayoutManager(layoutManager);
+//        recyclerListView.setClipToPadding(false);
+//        recyclerListView.setOverScrollMode(RecyclerListView.OVER_SCROLL_NEVER);
+//        recyclerListView.setAdapter(new ToolsAdapter(context));
+//        toolsView.addView(recyclerListView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 120, Gravity.LEFT | Gravity.TOP));*/
 
         curveLayout = new FrameLayout(context);
         curveLayout.setVisibility(INVISIBLE);
@@ -2036,9 +2036,9 @@ public class PhotoFilterView extends FrameLayout {
             curveLayout.setVisibility(INVISIBLE);
             curvesControl.setVisibility(INVISIBLE);
 
-            recyclerListView.setVisibility(VISIBLE);
+///*            recyclerListView.setVisibility(VISIBLE);*/
         } else if (selectedTool == 1) {
-            recyclerListView.setVisibility(INVISIBLE);
+///*            recyclerListView.setVisibility(INVISIBLE);*/
             curveLayout.setVisibility(INVISIBLE);
             curvesControl.setVisibility(INVISIBLE);
 
@@ -2048,7 +2048,7 @@ public class PhotoFilterView extends FrameLayout {
             }
             updateSelectedBlurType();
         } else if (selectedTool == 2) {
-            recyclerListView.setVisibility(INVISIBLE);
+///*            recyclerListView.setVisibility(INVISIBLE);*/
             blurLayout.setVisibility(INVISIBLE);
             blurControl.setVisibility(INVISIBLE);
 
@@ -2123,14 +2123,14 @@ public class PhotoFilterView extends FrameLayout {
 
         if (AndroidUtilities.isTablet()) {
             int total = AndroidUtilities.dp(86) * 10;
-            layoutParams = (LayoutParams) recyclerListView.getLayoutParams();
-            if (total < viewWidth) {
-                layoutParams.width = total;
-                layoutParams.leftMargin = (viewWidth - total) / 2;
-            } else {
-                layoutParams.width = LayoutHelper.MATCH_PARENT;
-                layoutParams.leftMargin = 0;
-            }
+///*            layoutParams = (LayoutParams) recyclerListView.getLayoutParams();
+//            if (total < viewWidth) {
+//                layoutParams.width = total;
+//                layoutParams.leftMargin = (viewWidth - total) / 2;
+//            } else {
+//                layoutParams.width = LayoutHelper.MATCH_PARENT;
+//                layoutParams.leftMargin = 0;
+//            }*/
         }
     }
 
@@ -2210,131 +2210,131 @@ public class PhotoFilterView extends FrameLayout {
         return cancelTextView;
     }
 
-    public class ToolsAdapter extends RecyclerListView.SelectionAdapter {
-
-        private Context mContext;
-
-        public ToolsAdapter(Context context) {
-            mContext = context;
-        }
-
-        @Override
-        public int getItemCount() {
-            return 13;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View view;
-            if (i == 0) {
-                PhotoEditToolCell cell = new PhotoEditToolCell(mContext);
-                view = cell;
-                cell.setSeekBarDelegate((i1, progress) -> {
-                    if (i1 == enhanceTool) {
-                        enhanceValue = progress;
-                    } else if (i1 == highlightsTool) {
-                        highlightsValue = progress;
-                    } else if (i1 == contrastTool) {
-                        contrastValue = progress;
-                    } else if (i1 == exposureTool) {
-                        exposureValue = progress;
-                    } else if (i1 == warmthTool) {
-                        warmthValue = progress;
-                    } else if (i1 == saturationTool) {
-                        saturationValue = progress;
-                    } else if (i1 == vignetteTool) {
-                        vignetteValue = progress;
-                    } else if (i1 == shadowsTool) {
-                        shadowsValue = progress;
-                    } else if (i1 == grainTool) {
-                        grainValue = progress;
-                    } else if (i1 == sharpenTool) {
-                        sharpenValue = progress;
-                    }  else if (i1 == fadeTool) {
-                        fadeValue = progress;
-                    }
-                    if (eglThread != null) {
-                        eglThread.requestRender(true);
-                    }
-                });
-            } else {
-                view = new PhotoEditRadioCell(mContext);
-                view.setOnClickListener(v -> {
-                    PhotoEditRadioCell cell = (PhotoEditRadioCell) v;
-                    Integer row = (Integer) cell.getTag();
-                    if (row == tintShadowsTool) {
-                        tintShadowsColor = cell.getCurrentColor();
-                    } else {
-                        tintHighlightsColor = cell.getCurrentColor();
-                    }
-                    if (eglThread != null) {
-                        eglThread.requestRender(false);
-                    }
-                });
-            }
-            return new RecyclerListView.Holder(view);
-        }
-
-        @Override
-        public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            return false;
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int i) {
-            switch (holder.getItemViewType()) {
-                case 0: {
-                    PhotoEditToolCell cell = (PhotoEditToolCell) holder.itemView;
-                    cell.setTag(i);
-                    if (i == enhanceTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Enhance", R.string.Enhance), enhanceValue, 0, 100);
-                    } else if (i == highlightsTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Highlights", R.string.Highlights), highlightsValue, -100, 100);
-                    } else if (i == contrastTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Contrast", R.string.Contrast), contrastValue, -100, 100);
-                    } else if (i == exposureTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Exposure", R.string.Exposure), exposureValue, -100, 100);
-                    } else if (i == warmthTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Warmth", R.string.Warmth), warmthValue, -100, 100);
-                    } else if (i == saturationTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Saturation", R.string.Saturation), saturationValue, -100, 100);
-                    } else if (i == vignetteTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Vignette", R.string.Vignette), vignetteValue, 0, 100);
-                    } else if (i == shadowsTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Shadows", R.string.Shadows), shadowsValue, -100, 100);
-                    } else if (i == grainTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Grain", R.string.Grain), grainValue, 0, 100);
-                    } else if (i == sharpenTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Sharpen", R.string.Sharpen), sharpenValue, 0, 100);
-                    } else if (i == fadeTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Fade", R.string.Fade), fadeValue, 0, 100);
-                    }
-                    break;
-                }
-                case 1: {
-                    PhotoEditRadioCell cell = (PhotoEditRadioCell) holder.itemView;
-                    cell.setTag(i);
-                    if (i == tintShadowsTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("TintShadows", R.string.TintShadows), 0, tintShadowsColor);
-                    } else if (i == tintHighlightsTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("TintHighlights", R.string.TintHighlights), 0, tintHighlightsColor);
-                    }
-                    break;
-                }
-            }
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            if (position == tintShadowsTool || position == tintHighlightsTool) {
-                return 1;
-            }
-            return 0;
-        }
-    }
+///*    public class ToolsAdapter extends RecyclerListView.SelectionAdapter {
+//
+//        private Context mContext;
+//
+//        public ToolsAdapter(Context context) {
+//            mContext = context;
+//        }
+//
+//        @Override
+//        public int getItemCount() {
+//            return 13;
+//        }
+//
+//        @Override
+//        public long getItemId(int i) {
+//            return i;
+//        }
+//
+//        @Override
+//        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+//            View view;
+//            if (i == 0) {
+//                PhotoEditToolCell cell = new PhotoEditToolCell(mContext);
+//                view = cell;
+//                cell.setSeekBarDelegate((i1, progress) -> {
+//                    if (i1 == enhanceTool) {
+//                        enhanceValue = progress;
+//                    } else if (i1 == highlightsTool) {
+//                        highlightsValue = progress;
+//                    } else if (i1 == contrastTool) {
+//                        contrastValue = progress;
+//                    } else if (i1 == exposureTool) {
+//                        exposureValue = progress;
+//                    } else if (i1 == warmthTool) {
+//                        warmthValue = progress;
+//                    } else if (i1 == saturationTool) {
+//                        saturationValue = progress;
+//                    } else if (i1 == vignetteTool) {
+//                        vignetteValue = progress;
+//                    } else if (i1 == shadowsTool) {
+//                        shadowsValue = progress;
+//                    } else if (i1 == grainTool) {
+//                        grainValue = progress;
+//                    } else if (i1 == sharpenTool) {
+//                        sharpenValue = progress;
+//                    }  else if (i1 == fadeTool) {
+//                        fadeValue = progress;
+//                    }
+//                    if (eglThread != null) {
+//                        eglThread.requestRender(true);
+//                    }
+//                });
+//            } else {
+//                view = new PhotoEditRadioCell(mContext);
+//                view.setOnClickListener(v -> {
+//                    PhotoEditRadioCell cell = (PhotoEditRadioCell) v;
+//                    Integer row = (Integer) cell.getTag();
+//                    if (row == tintShadowsTool) {
+//                        tintShadowsColor = cell.getCurrentColor();
+//                    } else {
+//                        tintHighlightsColor = cell.getCurrentColor();
+//                    }
+//                    if (eglThread != null) {
+//                        eglThread.requestRender(false);
+//                    }
+//                });
+//            }
+//            return new RecyclerListView.Holder(view);
+//        }
+//
+//        @Override
+//        public boolean isEnabled(RecyclerView.ViewHolder holder) {
+//            return false;
+//        }
+//
+//        @Override
+//        public void onBindViewHolder(RecyclerView.ViewHolder holder, int i) {
+//            switch (holder.getItemViewType()) {
+//                case 0: {
+//                    PhotoEditToolCell cell = (PhotoEditToolCell) holder.itemView;
+//                    cell.setTag(i);
+//                    if (i == enhanceTool) {
+//                        cell.setIconAndTextAndValue(LocaleController.getString("Enhance", R.string.Enhance), enhanceValue, 0, 100);
+//                    } else if (i == highlightsTool) {
+//                        cell.setIconAndTextAndValue(LocaleController.getString("Highlights", R.string.Highlights), highlightsValue, -100, 100);
+//                    } else if (i == contrastTool) {
+//                        cell.setIconAndTextAndValue(LocaleController.getString("Contrast", R.string.Contrast), contrastValue, -100, 100);
+//                    } else if (i == exposureTool) {
+//                        cell.setIconAndTextAndValue(LocaleController.getString("Exposure", R.string.Exposure), exposureValue, -100, 100);
+//                    } else if (i == warmthTool) {
+//                        cell.setIconAndTextAndValue(LocaleController.getString("Warmth", R.string.Warmth), warmthValue, -100, 100);
+//                    } else if (i == saturationTool) {
+//                        cell.setIconAndTextAndValue(LocaleController.getString("Saturation", R.string.Saturation), saturationValue, -100, 100);
+//                    } else if (i == vignetteTool) {
+//                        cell.setIconAndTextAndValue(LocaleController.getString("Vignette", R.string.Vignette), vignetteValue, 0, 100);
+//                    } else if (i == shadowsTool) {
+//                        cell.setIconAndTextAndValue(LocaleController.getString("Shadows", R.string.Shadows), shadowsValue, -100, 100);
+//                    } else if (i == grainTool) {
+//                        cell.setIconAndTextAndValue(LocaleController.getString("Grain", R.string.Grain), grainValue, 0, 100);
+//                    } else if (i == sharpenTool) {
+//                        cell.setIconAndTextAndValue(LocaleController.getString("Sharpen", R.string.Sharpen), sharpenValue, 0, 100);
+//                    } else if (i == fadeTool) {
+//                        cell.setIconAndTextAndValue(LocaleController.getString("Fade", R.string.Fade), fadeValue, 0, 100);
+//                    }
+//                    break;
+//                }
+//                case 1: {
+//                    PhotoEditRadioCell cell = (PhotoEditRadioCell) holder.itemView;
+//                    cell.setTag(i);
+//                    if (i == tintShadowsTool) {
+//                        cell.setIconAndTextAndValue(LocaleController.getString("TintShadows", R.string.TintShadows), 0, tintShadowsColor);
+//                    } else if (i == tintHighlightsTool) {
+//                        cell.setIconAndTextAndValue(LocaleController.getString("TintHighlights", R.string.TintHighlights), 0, tintHighlightsColor);
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+//
+//        @Override
+//        public int getItemViewType(int position) {
+//            if (position == tintShadowsTool || position == tintHighlightsTool) {
+//                return 1;
+//            }
+//            return 0;
+//        }
+//    }*/
 }

@@ -72,7 +72,7 @@ import com.github.gdev2018.master.ui.Components.BackgroundGradientDrawable;
 import com.github.gdev2018.master.ui.Components.CombinedDrawable;
 import com.github.gdev2018.master.ui.Components.RLottieDrawable;
 import com.github.gdev2018.master.ui.Components.ScamDrawable;
-import com.github.gdev2018.master.ui.Components.ThemeEditorView;
+///*import com.github.gdev2018.master.ui.Components.ThemeEditorView;*/
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -2735,10 +2735,10 @@ public class Theme {
         if (themeInfo == null) {
             return;
         }
-        ThemeEditorView editorView = ThemeEditorView.getInstance();
-        if (editorView != null) {
-            editorView.destroy();
-        }
+///*        ThemeEditorView editorView = ThemeEditorView.getInstance();
+//        if (editorView != null) {
+//            editorView.destroy();
+//        }*/
         try {
             if (themeInfo.pathToFile != null || themeInfo.assetName != null) {
                 if (!nightTheme && save) {

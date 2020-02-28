@@ -48,7 +48,7 @@ import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.BaseFragment;
 import com.github.gdev2018.master.ui.Components.AvatarDrawable;
-import com.github.gdev2018.master.ui.Components.StickersArchiveAlert;
+///*import com.github.gdev2018.master.ui.Components.StickersArchiveAlert;*/
 import com.github.gdev2018.master.ui.Components.TypefaceSpan;
 import com.github.gdev2018.master.ui.Components.URLSpanReplacement;
 import com.github.gdev2018.master.ui.Components.URLSpanUserMention;
@@ -1426,8 +1426,8 @@ public class DataQuery {
                     if (response instanceof TLRPC.TL_messages_stickerSetInstallResultArchive) {
                         NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.needReloadArchivedStickers, type);
                         if (hide != 1 && baseFragment != null && baseFragment.getParentActivity() != null) {
-                            StickersArchiveAlert alert = new StickersArchiveAlert(baseFragment.getParentActivity(), showSettings ? baseFragment : null, ((TLRPC.TL_messages_stickerSetInstallResultArchive) response).sets);
-                            baseFragment.showDialog(alert.create());
+///*                            StickersArchiveAlert alert = new StickersArchiveAlert(baseFragment.getParentActivity(), showSettings ? baseFragment : null, ((TLRPC.TL_messages_stickerSetInstallResultArchive) response).sets);
+//                            baseFragment.showDialog(alert.create());*/
                         }
                     }
                 });

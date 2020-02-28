@@ -100,7 +100,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     private String initialText;
 
     private boolean pickingSticker;
-    private StickerMasksView stickersView;
+///*    private StickerMasksView stickersView;*/
 
     private ActionBarPopupWindow popupWindow;
     private ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout;
@@ -546,9 +546,9 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         selectionContainerView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(maxHeight, MeasureSpec.EXACTLY));
         colorPicker.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(maxHeight, MeasureSpec.EXACTLY));
         toolsView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48), MeasureSpec.EXACTLY));
-        if (stickersView != null) {
-            stickersView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y, MeasureSpec.EXACTLY));
-        }
+///*        if (stickersView != null) {
+//            stickersView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y, MeasureSpec.EXACTLY));
+//        }*/
     }
 
     @Override
@@ -592,9 +592,9 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         colorPicker.layout(0, actionBarHeight2, colorPicker.getMeasuredWidth(), actionBarHeight2 + colorPicker.getMeasuredHeight());
         toolsView.layout(0, height - toolsView.getMeasuredHeight(), toolsView.getMeasuredWidth(), height);
         curtainView.layout(0, 0, width, maxHeight);
-        if (stickersView != null) {
-            stickersView.layout(0, status, stickersView.getMeasuredWidth(), status + stickersView.getMeasuredHeight());
-        }
+///*        if (stickersView != null) {
+//            stickersView.layout(0, status, stickersView.getMeasuredWidth(), status + stickersView.getMeasuredHeight());
+//        }*/
 
         if (currentEntityView != null) {
             currentEntityView.updateSelectionView(); //TODO this is bug
@@ -752,49 +752,49 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     private void openStickersView() {
-        if (stickersView != null && stickersView.getVisibility() == VISIBLE) {
-            return;
-        }
-        pickingSticker = true;
-
-        if (stickersView == null) {
-            stickersView = new StickerMasksView(getContext());
-            stickersView.setListener(new StickerMasksView.Listener() {
-                @Override
-                public void onStickerSelected(Object parentObject, TLRPC.Document sticker) {
-                    closeStickersView();
-                    createSticker(parentObject, sticker);
-                }
-
-                @Override
-                public void onTypeChanged() {
-
-                }
-            });
-            addView(stickersView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
-        }
-
-        stickersView.setVisibility(VISIBLE);
-        Animator a = ObjectAnimator.ofFloat(stickersView, "alpha", 0.0f, 1.0f);
-        a.setDuration(200);
-        a.start();
+///*        if (stickersView != null && stickersView.getVisibility() == VISIBLE) {
+//            return;
+//        }
+//        pickingSticker = true;
+//
+//        if (stickersView == null) {
+//            stickersView = new StickerMasksView(getContext());
+//            stickersView.setListener(new StickerMasksView.Listener() {
+//                @Override
+//                public void onStickerSelected(Object parentObject, TLRPC.Document sticker) {
+//                    closeStickersView();
+//                    createSticker(parentObject, sticker);
+//                }
+//
+//                @Override
+//                public void onTypeChanged() {
+//
+//                }
+//            });
+//            addView(stickersView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
+//        }
+//
+//        stickersView.setVisibility(VISIBLE);
+//        Animator a = ObjectAnimator.ofFloat(stickersView, "alpha", 0.0f, 1.0f);
+//        a.setDuration(200);
+//        a.start();*/
     }
 
     private void closeStickersView() {
-        if (stickersView == null || stickersView.getVisibility() != VISIBLE) {
-            return;
-        }
-        pickingSticker = false;
-
-        Animator a = ObjectAnimator.ofFloat(stickersView, "alpha", 1.0f, 0.0f);
-        a.setDuration(200);
-        a.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                stickersView.setVisibility(GONE);
-            }
-        });
-        a.start();
+///*        if (stickersView == null || stickersView.getVisibility() != VISIBLE) {
+//            return;
+//        }
+//        pickingSticker = false;
+//
+//        Animator a = ObjectAnimator.ofFloat(stickersView, "alpha", 1.0f, 0.0f);
+//        a.setDuration(200);
+//        a.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationEnd(Animator animator) {
+//                stickersView.setVisibility(GONE);
+//            }
+//        });
+//        a.start();*/
     }
 
     private Size baseStickerSize() {

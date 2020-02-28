@@ -132,7 +132,7 @@ import com.github.gdev2018.master.ui.ActionBar.AlertDialog;
 import com.github.gdev2018.master.ui.ActionBar.BottomSheet;
 import com.github.gdev2018.master.ui.ActionBar.SimpleTextView;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Adapters.MentionsAdapter;
+//import com.github.gdev2018.master.ui.Adapters.MentionsAdapter;
 import com.github.gdev2018.master.ui.Cells.PhotoPickerPhotoCell;
 import com.github.gdev2018.master.ui.Components.AnimatedFileDrawable;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
@@ -518,7 +518,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 ///*    private ChatActivity parentChatActivity;*/
     private Activity parentChatActivity;
 
-    private MentionsAdapter mentionsAdapter;
+///*    private MentionsAdapter mentionsAdapter;*/
     private RecyclerListView mentionListView;
     private LinearLayoutManager mentionLayoutManager;
     private AnimatorSet mentionListAnimation;
@@ -2963,25 +2963,25 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
             @Override
             public void onTextChanged(CharSequence text) {
-                if (mentionsAdapter != null && captionEditText != null && parentChatActivity != null && text != null) {
-//                    /*mentionsAdapter.searchUsernameOrHashtag(text.toString(), captionEditText.getCursorPosition(), parentChatActivity.messages, false);*/
-                }
+//                if (mentionsAdapter != null && captionEditText != null && parentChatActivity != null && text != null) {
+////                    /*mentionsAdapter.searchUsernameOrHashtag(text.toString(), captionEditText.getCursorPosition(), parentChatActivity.messages, false);*/
+//                }
             }
 
             @Override
             public void onWindowSizeChanged(int size) {
-                int height = AndroidUtilities.dp(36 * Math.min(3, mentionsAdapter.getItemCount()) + (mentionsAdapter.getItemCount() > 3 ? 18 : 0));
-                if (size - ActionBar.getCurrentActionBarHeight() * 2 < height) {
-                    allowMentions = false;
-                    if (mentionListView != null && mentionListView.getVisibility() == View.VISIBLE) {
-                        mentionListView.setVisibility(View.INVISIBLE);
-                    }
-                } else {
-                    allowMentions = true;
-                    if (mentionListView != null && mentionListView.getVisibility() == View.INVISIBLE) {
-                        mentionListView.setVisibility(View.VISIBLE);
-                    }
-                }
+///*                int height = AndroidUtilities.dp(36 * Math.min(3, mentionsAdapter.getItemCount()) + (mentionsAdapter.getItemCount() > 3 ? 18 : 0));
+//                if (size - ActionBar.getCurrentActionBarHeight() * 2 < height) {
+//                    allowMentions = false;
+//                    if (mentionListView != null && mentionListView.getVisibility() == View.VISIBLE) {
+//                        mentionListView.setVisibility(View.INVISIBLE);
+//                    }
+//                } else {
+//                    allowMentions = true;
+//                    if (mentionListView != null && mentionListView.getVisibility() == View.INVISIBLE) {
+//                        mentionListView.setVisibility(View.VISIBLE);
+//                    }
+//                }*/
             }
         });
         containerView.addView(captionEditText, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT));
@@ -3017,123 +3017,123 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         mentionListView.setOverScrollMode(RecyclerListView.OVER_SCROLL_NEVER);
         containerView.addView(mentionListView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 110, Gravity.LEFT | Gravity.BOTTOM));
 
-        mentionListView.setAdapter(mentionsAdapter = new MentionsAdapter(actvityContext, true, 0, new MentionsAdapter.MentionsAdapterDelegate() {
-            @Override
-            public void needChangePanelVisibility(boolean show) {
-                if (show) {
-                    FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) mentionListView.getLayoutParams();
-                    int height = 36 * Math.min(3, mentionsAdapter.getItemCount()) + (mentionsAdapter.getItemCount() > 3 ? 18 : 0);
-                    layoutParams3.height = AndroidUtilities.dp(height);
-                    layoutParams3.topMargin = -AndroidUtilities.dp(height);
-                    mentionListView.setLayoutParams(layoutParams3);
+///*        mentionListView.setAdapter(mentionsAdapter = new MentionsAdapter(actvityContext, true, 0, new MentionsAdapter.MentionsAdapterDelegate() {
+//            @Override
+//            public void needChangePanelVisibility(boolean show) {
+//                if (show) {
+//                    FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) mentionListView.getLayoutParams();
+//                    int height = 36 * Math.min(3, mentionsAdapter.getItemCount()) + (mentionsAdapter.getItemCount() > 3 ? 18 : 0);
+//                    layoutParams3.height = AndroidUtilities.dp(height);
+//                    layoutParams3.topMargin = -AndroidUtilities.dp(height);
+//                    mentionListView.setLayoutParams(layoutParams3);
+//
+//                    if (mentionListAnimation != null) {
+//                        mentionListAnimation.cancel();
+//                        mentionListAnimation = null;
+//                    }
+//
+//                    if (mentionListView.getVisibility() == View.VISIBLE) {
+//                        mentionListView.setAlpha(1.0f);
+//                        return;
+//                    } else {
+//                        mentionLayoutManager.scrollToPositionWithOffset(0, 10000);
+//                    }
+//                    if (allowMentions) {
+//                        mentionListView.setVisibility(View.VISIBLE);
+//                        mentionListAnimation = new AnimatorSet();
+//                        mentionListAnimation.playTogether(
+//                                ObjectAnimator.ofFloat(mentionListView, View.ALPHA, 0.0f, 1.0f)
+//                        );
+//                        mentionListAnimation.addListener(new AnimatorListenerAdapter() {
+//                            @Override
+//                            public void onAnimationEnd(Animator animation) {
+//                                if (mentionListAnimation != null && mentionListAnimation.equals(animation)) {
+//                                    mentionListAnimation = null;
+//                                }
+//                            }
+//                        });
+//                        mentionListAnimation.setDuration(200);
+//                        mentionListAnimation.start();
+//                    } else {
+//                        mentionListView.setAlpha(1.0f);
+//                        mentionListView.setVisibility(View.INVISIBLE);
+//                    }
+//                } else {
+//                    if (mentionListAnimation != null) {
+//                        mentionListAnimation.cancel();
+//                        mentionListAnimation = null;
+//                    }
+//
+//                    if (mentionListView.getVisibility() == View.GONE) {
+//                        return;
+//                    }
+//                    if (allowMentions) {
+//                        mentionListAnimation = new AnimatorSet();
+//                        mentionListAnimation.playTogether(
+//                                ObjectAnimator.ofFloat(mentionListView, View.ALPHA, 0.0f)
+//                        );
+//                        mentionListAnimation.addListener(new AnimatorListenerAdapter() {
+//                            @Override
+//                            public void onAnimationEnd(Animator animation) {
+//                                if (mentionListAnimation != null && mentionListAnimation.equals(animation)) {
+//                                    mentionListView.setVisibility(View.GONE);
+//                                    mentionListAnimation = null;
+//                                }
+//                            }
+//                        });
+//                        mentionListAnimation.setDuration(200);
+//                        mentionListAnimation.start();
+//                    } else {
+//                        mentionListView.setVisibility(View.GONE);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onContextSearch(boolean searching) {
+//
+//            }
+//
+//            @Override
+//            public void onContextClick(TLRPC.BotInlineResult result) {
+//
+//            }
+//        }));*/
 
-                    if (mentionListAnimation != null) {
-                        mentionListAnimation.cancel();
-                        mentionListAnimation = null;
-                    }
-
-                    if (mentionListView.getVisibility() == View.VISIBLE) {
-                        mentionListView.setAlpha(1.0f);
-                        return;
-                    } else {
-                        mentionLayoutManager.scrollToPositionWithOffset(0, 10000);
-                    }
-                    if (allowMentions) {
-                        mentionListView.setVisibility(View.VISIBLE);
-                        mentionListAnimation = new AnimatorSet();
-                        mentionListAnimation.playTogether(
-                                ObjectAnimator.ofFloat(mentionListView, View.ALPHA, 0.0f, 1.0f)
-                        );
-                        mentionListAnimation.addListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                if (mentionListAnimation != null && mentionListAnimation.equals(animation)) {
-                                    mentionListAnimation = null;
-                                }
-                            }
-                        });
-                        mentionListAnimation.setDuration(200);
-                        mentionListAnimation.start();
-                    } else {
-                        mentionListView.setAlpha(1.0f);
-                        mentionListView.setVisibility(View.INVISIBLE);
-                    }
-                } else {
-                    if (mentionListAnimation != null) {
-                        mentionListAnimation.cancel();
-                        mentionListAnimation = null;
-                    }
-
-                    if (mentionListView.getVisibility() == View.GONE) {
-                        return;
-                    }
-                    if (allowMentions) {
-                        mentionListAnimation = new AnimatorSet();
-                        mentionListAnimation.playTogether(
-                                ObjectAnimator.ofFloat(mentionListView, View.ALPHA, 0.0f)
-                        );
-                        mentionListAnimation.addListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                if (mentionListAnimation != null && mentionListAnimation.equals(animation)) {
-                                    mentionListView.setVisibility(View.GONE);
-                                    mentionListAnimation = null;
-                                }
-                            }
-                        });
-                        mentionListAnimation.setDuration(200);
-                        mentionListAnimation.start();
-                    } else {
-                        mentionListView.setVisibility(View.GONE);
-                    }
-                }
-            }
-
-            @Override
-            public void onContextSearch(boolean searching) {
-
-            }
-
-            @Override
-            public void onContextClick(TLRPC.BotInlineResult result) {
-
-            }
-        }));
-
-        mentionListView.setOnItemClickListener((view, position) -> {
-            Object object = mentionsAdapter.getItem(position);
-            int start = mentionsAdapter.getResultStartPosition();
-            int len = mentionsAdapter.getResultLength();
-            if (object instanceof TLRPC.User) {
-                TLRPC.User user = (TLRPC.User) object;
-                if (user.username != null) {
-                    captionEditText.replaceWithText(start, len, "@" + user.username + " ", false);
-                } else {
-                    String name = UserObject.getFirstName(user);
-                    Spannable spannable = new SpannableString(name + " ");
-                    spannable.setSpan(new URLSpanUserMentionPhotoViewer("" + user.id, true), 0, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    captionEditText.replaceWithText(start, len, spannable, false);
-                }
-            } else if (object instanceof String) {
-                captionEditText.replaceWithText(start, len, object + " ", false);
-            } else if (object instanceof EmojiSuggestion) {
-                String code = ((EmojiSuggestion) object).emoji;
-                captionEditText.addEmojiToRecent(code);
-                captionEditText.replaceWithText(start, len, code, true);
-            }
-        });
+///*        mentionListView.setOnItemClickListener((view, position) -> {
+//            Object object = mentionsAdapter.getItem(position);
+//            int start = mentionsAdapter.getResultStartPosition();
+//            int len = mentionsAdapter.getResultLength();
+//            if (object instanceof TLRPC.User) {
+//                TLRPC.User user = (TLRPC.User) object;
+//                if (user.username != null) {
+//                    captionEditText.replaceWithText(start, len, "@" + user.username + " ", false);
+//                } else {
+//                    String name = UserObject.getFirstName(user);
+//                    Spannable spannable = new SpannableString(name + " ");
+//                    spannable.setSpan(new URLSpanUserMentionPhotoViewer("" + user.id, true), 0, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                    captionEditText.replaceWithText(start, len, spannable, false);
+//                }
+//            } else if (object instanceof String) {
+//                captionEditText.replaceWithText(start, len, object + " ", false);
+//            } else if (object instanceof EmojiSuggestion) {
+//                String code = ((EmojiSuggestion) object).emoji;
+//                captionEditText.addEmojiToRecent(code);
+//                captionEditText.replaceWithText(start, len, code, true);
+//            }
+//        });*/
 
         mentionListView.setOnItemLongClickListener((view, position) -> {
-            Object object = mentionsAdapter.getItem(position);
-            if (object instanceof String) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.getString("ClearSearch", R.string.ClearSearch));
-                builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> mentionsAdapter.clearRecentHashtags());
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                showAlertDialog(builder);
-                return true;
-            }
+///*            Object object = mentionsAdapter.getItem(position);
+//            if (object instanceof String) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+//                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+//                builder.setMessage(LocaleController.getString("ClearSearch", R.string.ClearSearch));
+//                builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> mentionsAdapter.clearRecentHashtags());
+//                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+//                showAlertDialog(builder);
+//                return true;
+//            }*/
             return false;
         });
     }

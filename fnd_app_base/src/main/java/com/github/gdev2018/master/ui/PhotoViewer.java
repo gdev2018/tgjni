@@ -120,7 +120,7 @@ import com.github.gdev2018.master.VideoEditedInfo;
 import com.github.gdev2018.master.WebFile;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-///*import androidx.recyclerview.widget.LinearSmoothScrollerEnd;*/
+import androidx.recyclerview.widget.LinearSmoothScrollerEnd;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLObject;
@@ -150,7 +150,7 @@ import com.github.gdev2018.master.ui.Components.PhotoPaintView;
 import com.github.gdev2018.master.ui.Components.PickerBottomLayoutViewer;
 import com.github.gdev2018.master.ui.Components.PipVideoView;
 import com.github.gdev2018.master.ui.Components.RadialProgressView;
-///*import com.github.gdev2018.master.ui.Components.RecyclerListView;*/
+import com.github.gdev2018.master.ui.Components.RecyclerListView;
 import com.github.gdev2018.master.ui.Components.SeekBar;
 import com.github.gdev2018.master.ui.Components.SizeNotifierFrameLayoutPhoto;
 import com.github.gdev2018.master.ui.Components.URLSpanUserMentionPhotoViewer;
@@ -228,8 +228,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private ImageView muteItem;
     private ImageView compressItem;
     private GroupedPhotosListView groupedPhotosListView;
-///*    private RecyclerListView selectedPhotosListView;*/
-///*    private ListAdapter selectedPhotosAdapter;*/
+    private RecyclerListView selectedPhotosListView;
+    private ListAdapter selectedPhotosAdapter;
     private AnimatorSet compressItemAnimation;
     private boolean isCurrentVideo;
 
@@ -309,7 +309,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private boolean isStreaming;
     private boolean firstAnimationDelay;
     private long lastBufferedPositionCheck;
-    
+
     public final static int SELECT_TYPE_AVATAR = 1;
     public final static int SELECT_TYPE_WALLPAPER = 3;
 
@@ -519,7 +519,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private Activity parentChatActivity;
 
 ///*    private MentionsAdapter mentionsAdapter;*/
-///*    private RecyclerListView mentionListView;*/
+    private RecyclerListView mentionListView;
     private LinearLayoutManager mentionLayoutManager;
     private AnimatorSet mentionListAnimation;
     private boolean allowMentions;
@@ -2882,54 +2882,54 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             togglePhotosListView(!isPhotosListViewVisible, true);
         });
 
-///*        selectedPhotosListView = new RecyclerListView(parentActivity);
-//        selectedPhotosListView.setVisibility(View.GONE);
-//        selectedPhotosListView.setAlpha(0.0f);
-//        selectedPhotosListView.setTranslationY(-AndroidUtilities.dp(10));
-//        selectedPhotosListView.addItemDecoration(new RecyclerView.ItemDecoration() {
-//            @Override
-//            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-//                int position = parent.getChildAdapterPosition(view);
-//                if (view instanceof PhotoPickerPhotoCell && position == 0) {
-//                    outRect.left = AndroidUtilities.dp(3);
-//                } else {
-//                    outRect.left = 0;
-//                }
-//                outRect.right = AndroidUtilities.dp(3);
-//            }
-//        });*/
-///*        ((DefaultItemAnimator) selectedPhotosListView.getItemAnimator()).setDelayAnimations(false);*/
-///*        selectedPhotosListView.setBackgroundColor(0x7f000000);
-//        selectedPhotosListView.setPadding(0, AndroidUtilities.dp(3), 0, AndroidUtilities.dp(3));
-//        selectedPhotosListView.setLayoutManager(new LinearLayoutManager(parentActivity, LinearLayoutManager.HORIZONTAL, false) {
-//
-//            @Override
-//            public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
-//                LinearSmoothScrollerEnd linearSmoothScroller = new LinearSmoothScrollerEnd(recyclerView.getContext());
-//                linearSmoothScroller.setTargetPosition(position);
-//                startSmoothScroll(linearSmoothScroller);
-//            }
-//        });*/
-///*        selectedPhotosListView.setAdapter(selectedPhotosAdapter = new ListAdapter(parentActivity));
-//        containerView.addView(selectedPhotosListView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 88, Gravity.LEFT | Gravity.TOP));
-//        selectedPhotosListView.setOnItemClickListener((view, position) -> {
-//            if (position == 0 && placeProvider.allowGroupPhotos()) {
-//                boolean enabled = SharedConfig.groupPhotosEnabled;
-//                SharedConfig.toggleGroupPhotosEnabled();
-//                placeProvider.toggleGroupPhotosEnabled();
-//                ImageView imageView = (ImageView) view;
-//                imageView.setColorFilter(!enabled ? new PorterDuffColorFilter(0xff66bffa, PorterDuff.Mode.MULTIPLY) : null);
-//                showHint(false, !enabled);
-//            } else {
-//                ignoreDidSetImage = true;
-//                int idx = imagesArrLocals.indexOf(view.getTag());
-//                if (idx >= 0) {
-//                    currentIndex = -1;
-//                    setImageIndex(idx, true);
-//                }
-//                ignoreDidSetImage = false;
-//            }
-//        });*/
+        selectedPhotosListView = new RecyclerListView(parentActivity);
+        selectedPhotosListView.setVisibility(View.GONE);
+        selectedPhotosListView.setAlpha(0.0f);
+        selectedPhotosListView.setTranslationY(-AndroidUtilities.dp(10));
+        selectedPhotosListView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                int position = parent.getChildAdapterPosition(view);
+                if (view instanceof PhotoPickerPhotoCell && position == 0) {
+                    outRect.left = AndroidUtilities.dp(3);
+                } else {
+                    outRect.left = 0;
+                }
+                outRect.right = AndroidUtilities.dp(3);
+            }
+        });
+        ((DefaultItemAnimator) selectedPhotosListView.getItemAnimator()).setDelayAnimations(false);
+        selectedPhotosListView.setBackgroundColor(0x7f000000);
+        selectedPhotosListView.setPadding(0, AndroidUtilities.dp(3), 0, AndroidUtilities.dp(3));
+        selectedPhotosListView.setLayoutManager(new LinearLayoutManager(parentActivity, LinearLayoutManager.HORIZONTAL, false) {
+
+            @Override
+            public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
+                LinearSmoothScrollerEnd linearSmoothScroller = new LinearSmoothScrollerEnd(recyclerView.getContext());
+                linearSmoothScroller.setTargetPosition(position);
+                startSmoothScroll(linearSmoothScroller);
+            }
+        });
+        selectedPhotosListView.setAdapter(selectedPhotosAdapter = new ListAdapter(parentActivity));
+        containerView.addView(selectedPhotosListView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 88, Gravity.LEFT | Gravity.TOP));
+        selectedPhotosListView.setOnItemClickListener((view, position) -> {
+            if (position == 0 && placeProvider.allowGroupPhotos()) {
+///*                boolean enabled = SharedConfig.groupPhotosEnabled;
+//                SharedConfig.toggleGroupPhotosEnabled();*/
+                placeProvider.toggleGroupPhotosEnabled();
+                ImageView imageView = (ImageView) view;
+///*                imageView.setColorFilter(!enabled ? new PorterDuffColorFilter(0xff66bffa, PorterDuff.Mode.MULTIPLY) : null);
+//                showHint(false, !enabled);*/
+            } else {
+                ignoreDidSetImage = true;
+                int idx = imagesArrLocals.indexOf(view.getTag());
+                if (idx >= 0) {
+                    currentIndex = -1;
+                    setImageIndex(idx, true);
+                }
+                ignoreDidSetImage = false;
+            }
+        });
 
 //        captionEditText = new PhotoViewerCaptionEnterView(actvityContext, containerView, windowView) {
 //            @Override
@@ -8808,142 +8808,142 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
     }
 
-//    private class ListAdapter extends RecyclerListView.SelectionAdapter {
-//
-//        private Context mContext;
-//
-//        public ListAdapter(Context context) {
-//            mContext = context;
-//        }
-//
-//        @Override
-//        public boolean isEnabled(RecyclerView.ViewHolder holder) {
-//            return true;
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            if (placeProvider != null && placeProvider.getSelectedPhotosOrder() != null) {
-//                if (placeProvider.allowGroupPhotos()) {
-//                    return 1 + placeProvider.getSelectedPhotosOrder().size();
-//                } else {
-//                    return placeProvider.getSelectedPhotosOrder().size();
-//                }
-//            }
-//            return 0;
-//        }
-//
-//        @Override
-//        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//            View view;
-//            switch (viewType) {
-//                case 0:
-//                    PhotoPickerPhotoCell cell = new PhotoPickerPhotoCell(mContext, false);
-//                    cell.checkFrame.setOnClickListener(v -> {
-//                        Object photoEntry = ((View) v.getParent()).getTag();
-//                        int idx = imagesArrLocals.indexOf(photoEntry);
-//                        if (idx >= 0) {
-//                            int num = placeProvider.setPhotoChecked(idx, getCurrentVideoEditedInfo());
-//                            boolean checked = placeProvider.isPhotoChecked(idx);
-//                            if (idx == currentIndex) {
-//                                checkImageView.setChecked(-1, false, true);
-//                            }
-//                            if (num >= 0) {
-//                                if (placeProvider.allowGroupPhotos()) {
-//                                    num++;
-//                                }
-//                                selectedPhotosAdapter.notifyItemRemoved(num);
-//                            }
-//                            updateSelectedCount();
-//                        } else {
-//                            int num = placeProvider.setPhotoUnchecked(photoEntry);
-//                            if (num >= 0) {
-//                                if (placeProvider.allowGroupPhotos()) {
-//                                    num++;
-//                                }
-//                                selectedPhotosAdapter.notifyItemRemoved(num);
-//                                updateSelectedCount();
-//                            }
-//                        }
-//                    });
-//                    view = cell;
-//                    break;
-//                case 1:
-//                default:
-//                    ImageView imageView = new ImageView(mContext) {
-//                        @Override
-//                        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//                            super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(66), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(heightMeasureSpec), MeasureSpec.EXACTLY));
-//                        }
-//                    };
-//                    imageView.setScaleType(ImageView.ScaleType.CENTER);
-//                    imageView.setImageResource(R.drawable.photos_group);
-//                    view = imageView;
-//                    break;
-//            }
-//            return new RecyclerListView.Holder(view);
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-//            switch (holder.getItemViewType()) {
-//                case 0: {
-//                    PhotoPickerPhotoCell cell = (PhotoPickerPhotoCell) holder.itemView;
-//                    cell.itemWidth = AndroidUtilities.dp(82);
-//                    BackupImageView imageView = cell.photoImage;
-//                    boolean showing;
-//                    imageView.setOrientation(0, true);
-//                    ArrayList<Object> order = placeProvider.getSelectedPhotosOrder();
-//                    if (placeProvider.allowGroupPhotos()) {
-//                        position--;
-//                    }
-//                    Object object = placeProvider.getSelectedPhotos().get(order.get(position));
-//                    if (object instanceof MediaController.PhotoEntry) {
-//                        MediaController.PhotoEntry photoEntry = (MediaController.PhotoEntry) object;
-//                        cell.setTag(photoEntry);
-//                        cell.videoInfoContainer.setVisibility(View.INVISIBLE);
-//                        if (photoEntry.thumbPath != null) {
-//                            imageView.setImage(photoEntry.thumbPath, null, mContext.getResources().getDrawable(R.drawable.nophotos));
-//                        } else if (photoEntry.path != null) {
-//                            imageView.setOrientation(photoEntry.orientation, true);
-//                            if (photoEntry.isVideo) {
-//                                cell.videoInfoContainer.setVisibility(View.VISIBLE);
-//                                int minutes = photoEntry.duration / 60;
-//                                int seconds = photoEntry.duration - minutes * 60;
-//                                cell.videoTextView.setText(String.format("%d:%02d", minutes, seconds));
-//                                imageView.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, mContext.getResources().getDrawable(R.drawable.nophotos));
-//                            } else {
-//                                imageView.setImage("thumb://" + photoEntry.imageId + ":" + photoEntry.path, null, mContext.getResources().getDrawable(R.drawable.nophotos));
-//                            }
-//                        } else {
-//                            imageView.setImageResource(R.drawable.nophotos);
-//                        }
-//                        cell.setChecked(-1, true, false);
-//                        cell.checkBox.setVisibility(View.VISIBLE);
-//                    } else if (object instanceof MediaController.SearchImage) {
-//                        MediaController.SearchImage photoEntry = (MediaController.SearchImage) object;
-//                        cell.setTag(photoEntry);
-//                        cell.setImage(photoEntry);
-//                        cell.videoInfoContainer.setVisibility(View.INVISIBLE);
-//                        cell.setChecked(-1, true, false);
-//                        cell.checkBox.setVisibility(View.VISIBLE);
-//                    }
-//                    break;
-//                }
-//                case 1: {
-//                    ImageView imageView = (ImageView) holder.itemView;
-/////*                    imageView.setColorFilter(SharedConfig.groupPhotosEnabled ? new PorterDuffColorFilter(0xff66bffa, PorterDuff.Mode.MULTIPLY) : null);*/
-//                    break;
-//                }
-//            }
-//        }
-//
-//        @Override
-//        public int getItemViewType(int i) {
-//            if (i == 0 && placeProvider.allowGroupPhotos()) {
-//                return 1;
-//            }
-//            return 0;
-//        }
-//    }
+    private class ListAdapter extends RecyclerListView.SelectionAdapter {
+
+        private Context mContext;
+
+        public ListAdapter(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        public boolean isEnabled(RecyclerView.ViewHolder holder) {
+            return true;
+        }
+
+        @Override
+        public int getItemCount() {
+            if (placeProvider != null && placeProvider.getSelectedPhotosOrder() != null) {
+                if (placeProvider.allowGroupPhotos()) {
+                    return 1 + placeProvider.getSelectedPhotosOrder().size();
+                } else {
+                    return placeProvider.getSelectedPhotosOrder().size();
+                }
+            }
+            return 0;
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            switch (viewType) {
+                case 0:
+                    PhotoPickerPhotoCell cell = new PhotoPickerPhotoCell(mContext, false);
+                    cell.checkFrame.setOnClickListener(v -> {
+                        Object photoEntry = ((View) v.getParent()).getTag();
+                        int idx = imagesArrLocals.indexOf(photoEntry);
+                        if (idx >= 0) {
+                            int num = placeProvider.setPhotoChecked(idx, getCurrentVideoEditedInfo());
+                            boolean checked = placeProvider.isPhotoChecked(idx);
+                            if (idx == currentIndex) {
+                                checkImageView.setChecked(-1, false, true);
+                            }
+                            if (num >= 0) {
+                                if (placeProvider.allowGroupPhotos()) {
+                                    num++;
+                                }
+                                selectedPhotosAdapter.notifyItemRemoved(num);
+                            }
+                            updateSelectedCount();
+                        } else {
+                            int num = placeProvider.setPhotoUnchecked(photoEntry);
+                            if (num >= 0) {
+                                if (placeProvider.allowGroupPhotos()) {
+                                    num++;
+                                }
+                                selectedPhotosAdapter.notifyItemRemoved(num);
+                                updateSelectedCount();
+                            }
+                        }
+                    });
+                    view = cell;
+                    break;
+                case 1:
+                default:
+                    ImageView imageView = new ImageView(mContext) {
+                        @Override
+                        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                            super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(66), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(heightMeasureSpec), MeasureSpec.EXACTLY));
+                        }
+                    };
+                    imageView.setScaleType(ImageView.ScaleType.CENTER);
+                    imageView.setImageResource(R.drawable.photos_group);
+                    view = imageView;
+                    break;
+            }
+            return new RecyclerListView.Holder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            switch (holder.getItemViewType()) {
+                case 0: {
+                    PhotoPickerPhotoCell cell = (PhotoPickerPhotoCell) holder.itemView;
+                    cell.itemWidth = AndroidUtilities.dp(82);
+                    BackupImageView imageView = cell.photoImage;
+                    boolean showing;
+                    imageView.setOrientation(0, true);
+                    ArrayList<Object> order = placeProvider.getSelectedPhotosOrder();
+                    if (placeProvider.allowGroupPhotos()) {
+                        position--;
+                    }
+                    Object object = placeProvider.getSelectedPhotos().get(order.get(position));
+                    if (object instanceof MediaController.PhotoEntry) {
+                        MediaController.PhotoEntry photoEntry = (MediaController.PhotoEntry) object;
+                        cell.setTag(photoEntry);
+                        cell.videoInfoContainer.setVisibility(View.INVISIBLE);
+                        if (photoEntry.thumbPath != null) {
+                            imageView.setImage(photoEntry.thumbPath, null, mContext.getResources().getDrawable(R.drawable.nophotos));
+                        } else if (photoEntry.path != null) {
+                            imageView.setOrientation(photoEntry.orientation, true);
+                            if (photoEntry.isVideo) {
+                                cell.videoInfoContainer.setVisibility(View.VISIBLE);
+                                int minutes = photoEntry.duration / 60;
+                                int seconds = photoEntry.duration - minutes * 60;
+                                cell.videoTextView.setText(String.format("%d:%02d", minutes, seconds));
+                                imageView.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, mContext.getResources().getDrawable(R.drawable.nophotos));
+                            } else {
+                                imageView.setImage("thumb://" + photoEntry.imageId + ":" + photoEntry.path, null, mContext.getResources().getDrawable(R.drawable.nophotos));
+                            }
+                        } else {
+                            imageView.setImageResource(R.drawable.nophotos);
+                        }
+                        cell.setChecked(-1, true, false);
+                        cell.checkBox.setVisibility(View.VISIBLE);
+                    } else if (object instanceof MediaController.SearchImage) {
+                        MediaController.SearchImage photoEntry = (MediaController.SearchImage) object;
+                        cell.setTag(photoEntry);
+                        cell.setImage(photoEntry);
+                        cell.videoInfoContainer.setVisibility(View.INVISIBLE);
+                        cell.setChecked(-1, true, false);
+                        cell.checkBox.setVisibility(View.VISIBLE);
+                    }
+                    break;
+                }
+                case 1: {
+                    ImageView imageView = (ImageView) holder.itemView;
+///*                    imageView.setColorFilter(SharedConfig.groupPhotosEnabled ? new PorterDuffColorFilter(0xff66bffa, PorterDuff.Mode.MULTIPLY) : null);*/
+                    break;
+                }
+            }
+        }
+
+        @Override
+        public int getItemViewType(int i) {
+            if (i == 0 && placeProvider.allowGroupPhotos()) {
+                return 1;
+            }
+            return 0;
+        }
+    }
 }

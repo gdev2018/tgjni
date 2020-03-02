@@ -47,7 +47,7 @@ import com.github.gdev2018.master.ui.Cells.ContextLinkCell;
 import com.github.gdev2018.master.ui.Cells.StickerCell;
 import com.github.gdev2018.master.ui.Cells.StickerEmojiCell;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
-///*import com.github.gdev2018.master.ui.Components.RecyclerListView;*/
+import com.github.gdev2018.master.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 
@@ -203,8 +203,8 @@ public class StickerPreviewViewer {
                 AndroidUtilities.runOnUIThread(() -> {
                     if (listView instanceof AbsListView) {
                         ((AbsListView) listView).setOnItemClickListener((AdapterView.OnItemClickListener) listener);
-///*                    } else if (listView instanceof RecyclerListView) {
-//                        ((RecyclerListView) listView).setOnItemClickListener((RecyclerListView.OnItemClickListener) listener);*/
+                    } else if (listView instanceof RecyclerListView) {
+                        ((RecyclerListView) listView).setOnItemClickListener((RecyclerListView.OnItemClickListener) listener);
                     }
                 }, 150);
                 if (openStickerPreviewRunnable != null) {
@@ -231,15 +231,15 @@ public class StickerPreviewViewer {
                         int count = 0;
                         if (listView instanceof AbsListView) {
                             count = ((AbsListView) listView).getChildCount();
-///*                        } else if (listView instanceof RecyclerListView) {
-//                            count = ((RecyclerListView) listView).getChildCount();*/
+                        } else if (listView instanceof RecyclerListView) {
+                            count = ((RecyclerListView) listView).getChildCount();
                         }
                         for (int a = 0; a < count; a++) {
                             View view = null;
                             if (listView instanceof AbsListView) {
                                 view = ((AbsListView) listView).getChildAt(a);
-///*                            } else if (listView instanceof RecyclerListView) {
-//                                view = ((RecyclerListView) listView).getChildAt(a);*/
+                            } else if (listView instanceof RecyclerListView) {
+                                view = ((RecyclerListView) listView).getChildAt(a);
                             }
                             if (view == null) {
                                 return false;
@@ -309,15 +309,15 @@ public class StickerPreviewViewer {
             int count = 0;
             if (listView instanceof AbsListView) {
                 count = ((AbsListView) listView).getChildCount();
-///*            } else if (listView instanceof RecyclerListView) {
-//                count = ((RecyclerListView) listView).getChildCount();*/
+            } else if (listView instanceof RecyclerListView) {
+                count = ((RecyclerListView) listView).getChildCount();
             }
             for (int a = 0; a < count; a++) {
                 View view = null;
                 if (listView instanceof AbsListView) {
                     view = ((AbsListView) listView).getChildAt(a);
-///*                } else if (listView instanceof RecyclerListView) {
-//                    view = ((RecyclerListView) listView).getChildAt(a);*/
+                } else if (listView instanceof RecyclerListView) {
+                    view = ((RecyclerListView) listView).getChildAt(a);
                 }
                 if (view == null) {
                     return false;
@@ -351,9 +351,9 @@ public class StickerPreviewViewer {
                     if (listView instanceof AbsListView) {
                         ((AbsListView) listView).setOnItemClickListener(null);
                         ((AbsListView) listView).requestDisallowInterceptTouchEvent(true);
-///*                    } else if (listView instanceof RecyclerListView) {
-//                        ((RecyclerListView) listView).setOnItemClickListener((RecyclerListView.OnItemClickListener) null);
-//                        ((RecyclerListView) listView).requestDisallowInterceptTouchEvent(true);*/
+                    } else if (listView instanceof RecyclerListView) {
+                        ((RecyclerListView) listView).setOnItemClickListener((RecyclerListView.OnItemClickListener) null);
+                        ((RecyclerListView) listView).requestDisallowInterceptTouchEvent(true);
                     }
                     openStickerPreviewRunnable = null;
                     setParentActivity((Activity) listView.getContext());

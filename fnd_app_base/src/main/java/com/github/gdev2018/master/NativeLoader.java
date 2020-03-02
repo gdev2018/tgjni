@@ -130,6 +130,7 @@ public class NativeLoader {
                 }
                 return;
             } catch (Error e) {
+                FileLog.d("error on initNativeLibs");
                 FileLog.e(e);
             }
 

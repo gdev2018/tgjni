@@ -101,11 +101,12 @@ dependencies {
     // Espresso
     implementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
 
+
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     // tg way --->
     implementation 'androidx.core:core:1.1.0-beta01'
     implementation 'androidx.palette:palette:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.1.0-beta01'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     compileOnly 'org.checkerframework:checker-qual:2.5.2'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.0'
@@ -128,7 +129,7 @@ publish {
     groupId = 'com.github.gdev2018'
     repoName = 'tgjni'
     artifactId = 'fnd_app_base'
-    publishVersion = '0.9.3'
+    publishVersion = '0.9.4'
     desc = 'tgjni project - fnd_app_base module/package/artifact'
     licences = ['GPL-2.0']
     website = 'https://github.com/gdev2018/tgjni'

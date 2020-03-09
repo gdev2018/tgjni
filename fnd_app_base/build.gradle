@@ -65,7 +65,7 @@ android {
 //            splits.abi.enable = false
 //            splits.density.enable = false
 //
-//            // Technique 5: Disable PNG Crunching
+//         ThemeActivity   // Technique 5: Disable PNG Crunching
 //            aaptOptions.cruncherEnabled = false
 //
 //            // Technique 7: Disable Updating Build ID

@@ -5590,7 +5590,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
             newMsg.action = new TLRPC.TL_messageActionCreatedBroadcastList();
 ///*            newMsg.local_id = newMsg.id = BaseUserConfig.getInstance(currentAccount).getNewMessageId();*/
             newMsg.from_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
-            newMsg.dialog_id = AndroidUtilities.makeBroadcastId(chat.id);
+///*            newMsg.dialog_id = AndroidUtilities.makeBroadcastId(chat.id);*/
             newMsg.to_id = new TLRPC.TL_peerChat();
             newMsg.to_id.chat_id = chat.id;
             newMsg.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();

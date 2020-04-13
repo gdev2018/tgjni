@@ -51,8 +51,7 @@ public class SharedConfig {
     public static int passcodeType;
     public static int autoLockIn = 60 * 60;
     public static boolean allowScreenCapture;
-    public static int lastPauseTime;
-    public static long lastAppPauseTime;
+    public static long lastPauseTime;
     public static boolean isWaitingForPasscodeEnter;
     public static boolean useFingerprint = true;
     public static String lastUpdateVersion;
@@ -60,6 +59,12 @@ public class SharedConfig {
     public static boolean loopStickers;
     public static int keepMedia = 2;
     public static int lastKeepMediaCheckTime;
+    public static int searchMessagesAsListHintShows;
+    public static int textSelectionHintShows;
+    public static int scheduledOrNoSoundHintShows;
+    public static int lockRecordAudioVideoHint;
+    public static boolean searchMessagesAsListUsed;
+    public static boolean stickersReorderingHintUsed;
     private static int lastLocalId = -210000;
 
     private static String passportConfigJson = "";
@@ -84,7 +89,10 @@ public class SharedConfig {
     public static boolean streamAllVideo = false;
     public static boolean streamMkv = false;
     public static boolean saveStreamMedia = true;
+    public static boolean smoothKeyboard = false;
+    public static boolean pauseMusicOnRecord = true;
     public static boolean sortContactsByName;
+    public static boolean sortFilesByName;
     public static boolean shuffleMusic;
     public static boolean playOrderReversed;
     public static boolean hasCameraCache;
@@ -92,7 +100,9 @@ public class SharedConfig {
     public static int repeatMode;
     public static boolean allowBigEmoji;
     public static boolean useSystemEmoji;
-    public static int fontSize = AndroidUtilities.dp(16);
+    public static int fontSize = 16;
+    public static int bubbleRadius = 10;
+    public static int ivFontSize = 16;
     private static int devicePerformanceClass;
 
     public static boolean drawDialogIcons;
@@ -158,8 +168,8 @@ public class SharedConfig {
                 editor.putLong("lastUptimeMillis", lastUptimeMillis);
                 editor.putInt("badPasscodeTries", badPasscodeTries);
                 editor.putInt("autoLockIn", autoLockIn);
-                editor.putInt("lastPauseTime", lastPauseTime);
-                editor.putLong("lastAppPauseTime", lastAppPauseTime);
+                editor.putLong("lastPauseTime", lastPauseTime);
+                editor.putLong("lastPauseTime", lastPauseTime);
                 editor.putString("lastUpdateVersion2", lastUpdateVersion);
                 editor.putBoolean("useFingerprint", useFingerprint);
                 editor.putBoolean("allowScreenCapture", allowScreenCapture);
@@ -200,7 +210,7 @@ public class SharedConfig {
             badPasscodeTries = preferences.getInt("badPasscodeTries", 0);
             autoLockIn = preferences.getInt("autoLockIn", 60 * 60);
             lastPauseTime = preferences.getInt("lastPauseTime", 0);
-            lastAppPauseTime = preferences.getLong("lastAppPauseTime", 0);
+            lastPauseTime = preferences.getLong("lastPauseTime", 0);
             useFingerprint = preferences.getBoolean("useFingerprint", true);
             lastUpdateVersion = preferences.getString("lastUpdateVersion2", "3.5");
             allowScreenCapture = preferences.getBoolean("allowScreenCapture", false);

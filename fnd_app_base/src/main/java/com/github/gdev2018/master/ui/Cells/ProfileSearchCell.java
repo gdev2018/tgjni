@@ -158,7 +158,8 @@ public class ProfileSearchCell extends BaseCell {
         } else {
             if (chat != null) {
                 if (chat.id < 0) {
-                    dialog_id = AndroidUtilities.makeBroadcastId(chat.id);
+///*                    dialog_id = AndroidUtilities.makeBroadcastId(chat.id);*/
+                    dialog_id = -chat.id;
                     drawNameBroadcast = true;
                     nameLockTop = AndroidUtilities.dp(28.5f);
                 } else {

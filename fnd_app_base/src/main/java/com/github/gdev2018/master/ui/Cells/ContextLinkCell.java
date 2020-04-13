@@ -216,7 +216,7 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
                     if (MessagesController.getInstance(currentAccount).mapProvider == 2) {
                         webFile = WebFile.createWithGeoPoint(inlineResult.send_message.geo, 72, 72, 15, Math.min(2, (int) Math.ceil(AndroidUtilities.density)));
                     } else {
-                        urlLocation = AndroidUtilities.formapMapUrl(currentAccount, lat, lon, 72, 72, true, 15);
+                        urlLocation = AndroidUtilities.formapMapUrl(currentAccount, lat, lon, 72, 72, true, 15, -1);
                     }
                 }
             }

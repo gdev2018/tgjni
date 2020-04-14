@@ -129,7 +129,7 @@ publish {
     groupId = 'com.github.gdev2018'
     repoName = 'tgjni'
     artifactId = 'fnd_app_base'
-    publishVersion = '0.9.6'
+    publishVersion = '0.9.7'
     desc = 'tgjni project - fnd_app_base module/package/artifact'
     licences = ['GPL-2.0']
     website = 'https://github.com/gdev2018/tgjni'

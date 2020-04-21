@@ -39,7 +39,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private TimerDrawable timerDrawable;
     private ChatActivity parentFragment;
     private StatusDrawable[] statusDrawables = new StatusDrawable[5];
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private AvatarDrawableDeprecated avatarDrawableDeprecated = new AvatarDrawableDeprecated();
     private int currentAccount = BaseUserConfig.selectedAccount;
     private boolean occupyStatusBar = true;
 
@@ -340,23 +340,23 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         if (chat.photo != null) {
             newPhoto = chat.photo.photo_small;
         }
-        avatarDrawable.setInfo(chat);
+        avatarDrawableDeprecated.setInfo(chat);
         if (avatarImageView != null) {
-            avatarImageView.setImage(newPhoto, "50_50", avatarDrawable, chat);
+            avatarImageView.setImage(newPhoto, "50_50", avatarDrawableDeprecated, chat);
         }
     }
 
     public void setUserAvatar(TLRPC.User user) {
         TLRPC.FileLocation newPhoto = null;
-        avatarDrawable.setInfo(user);
+        avatarDrawableDeprecated.setInfo(user);
         if (UserObject.isUserSelf(user)) {
-            avatarDrawable.setSavedMessages(2);
+            avatarDrawableDeprecated.setSavedMessages(2);
         } else if (user.photo != null) {
             newPhoto = user.photo.photo_small;
         }
 
         if (avatarImageView != null) {
-            avatarImageView.setImage(newPhoto, "50_50", avatarDrawable, user);
+            avatarImageView.setImage(newPhoto, "50_50", avatarDrawableDeprecated, user);
         }
     }
 
@@ -369,9 +369,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
 ///*        TLRPC.User user = parentFragment.getCurrentUser();
 //        TLRPC.Chat chat = parentFragment.getCurrentChat();
 //        if (user != null) {
-//            avatarDrawable.setInfo(user);
+//            avatarDrawableDeprecated.setInfo(user);
 //            if (UserObject.isUserSelf(user)) {
-//                avatarDrawable.setSavedMessages(2);
+//                avatarDrawableDeprecated.setSavedMessages(2);
 //            } else if (user.photo != null) {
 //                newPhoto = user.photo.photo_small;
 //            }
@@ -380,11 +380,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
 //            if (chat.photo != null) {
 //                newPhoto = chat.photo.photo_small;
 //            }
-//            avatarDrawable.setInfo(chat);
+//            avatarDrawableDeprecated.setInfo(chat);
 //            parentObject = chat;
 //        }*/
         if (avatarImageView != null) {
-            avatarImageView.setImage(newPhoto, "50_50", avatarDrawable, parentObject);
+            avatarImageView.setImage(newPhoto, "50_50", avatarDrawableDeprecated, parentObject);
         }
     }
 

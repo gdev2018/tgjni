@@ -79,7 +79,7 @@ import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.BottomSheet;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.voip.VoIPHelper;
 ///*import com.github.gdev2018.master.ui.VoIPPermissionActivity;*/
 
@@ -1001,11 +1001,11 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 		}
 		if(bitmap==null){
 			Theme.createDialogsResources(this);
-			AvatarDrawable placeholder;
+			AvatarDrawableDeprecated placeholder;
 			if(userOrChat instanceof TLRPC.User)
-				placeholder=new AvatarDrawable((TLRPC.User)userOrChat);
+				placeholder=new AvatarDrawableDeprecated((TLRPC.User)userOrChat);
 			else
-				placeholder=new AvatarDrawable((TLRPC.Chat)userOrChat);
+				placeholder=new AvatarDrawableDeprecated((TLRPC.Chat)userOrChat);
 			bitmap=Bitmap.createBitmap(AndroidUtilities.dp(42), AndroidUtilities.dp(42), Bitmap.Config.ARGB_8888);
 			placeholder.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
 			placeholder.draw(new Canvas(bitmap));

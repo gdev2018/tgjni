@@ -22,7 +22,7 @@ import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.SimpleTextView;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
 import com.github.gdev2018.master.ui.Components.GroupCreateCheckBox;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
@@ -33,7 +33,7 @@ public class GroupCreateUserCell extends FrameLayout {
     private SimpleTextView nameTextView;
     private SimpleTextView statusTextView;
     private GroupCreateCheckBox checkBox;
-    private AvatarDrawable avatarDrawable;
+    private AvatarDrawableDeprecated avatarDrawableDeprecated;
     private TLRPC.User currentUser;
     private CharSequence currentName;
     private CharSequence currentStatus;
@@ -46,7 +46,7 @@ public class GroupCreateUserCell extends FrameLayout {
 
     public GroupCreateUserCell(Context context, boolean needCheck, int padding) {
         super(context);
-        avatarDrawable = new AvatarDrawable();
+        avatarDrawableDeprecated = new AvatarDrawableDeprecated();
 
         avatarImageView = new BackupImageView(context);
         avatarImageView.setRoundRadius(AndroidUtilities.dp(24));
@@ -132,7 +132,7 @@ public class GroupCreateUserCell extends FrameLayout {
             }
         }
 
-        avatarDrawable.setInfo(currentUser);
+        avatarDrawableDeprecated.setInfo(currentUser);
         lastStatus = currentUser.status != null ? currentUser.status.expires : 0;
 
         if (currentName != null) {
@@ -165,7 +165,7 @@ public class GroupCreateUserCell extends FrameLayout {
             }
         }
 
-        avatarImageView.setImage(photo, "50_50", avatarDrawable, currentUser);
+        avatarImageView.setImage(photo, "50_50", avatarDrawableDeprecated, currentUser);
     }
 
     @Override

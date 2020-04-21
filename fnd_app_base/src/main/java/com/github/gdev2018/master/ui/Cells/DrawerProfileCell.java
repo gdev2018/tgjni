@@ -32,7 +32,7 @@ import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
@@ -186,8 +186,8 @@ public class DrawerProfileCell extends FrameLayout {
         arrowView.setImageResource(accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
         nameTextView.setText(UserObject.getUserName(user));
         phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
-        AvatarDrawable avatarDrawable = new AvatarDrawable(user);
-        avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
-        avatarImageView.setImage(photo, "50_50", avatarDrawable, user);
+        AvatarDrawableDeprecated avatarDrawableDeprecated = new AvatarDrawableDeprecated(user);
+        avatarDrawableDeprecated.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
+        avatarImageView.setImage(photo, "50_50", avatarDrawableDeprecated, user);
     }
 }

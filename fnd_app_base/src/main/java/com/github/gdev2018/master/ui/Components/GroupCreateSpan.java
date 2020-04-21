@@ -40,7 +40,7 @@ public class GroupCreateSpan extends View {
     private RectF rect = new RectF();
     private ImageReceiver imageReceiver;
     private StaticLayout nameLayout;
-    private AvatarDrawable avatarDrawable;
+    private AvatarDrawableDeprecated avatarDrawableDeprecated;
     private ContactsController.Contact currentContact;
     private int textWidth;
     private float textX;
@@ -64,13 +64,13 @@ public class GroupCreateSpan extends View {
         deleteDrawable = getResources().getDrawable(R.drawable.delete);
         textPaint.setTextSize(AndroidUtilities.dp(14));
 
-        avatarDrawable = new AvatarDrawable();
-        avatarDrawable.setTextSize(AndroidUtilities.dp(12));
+        avatarDrawableDeprecated = new AvatarDrawableDeprecated();
+        avatarDrawableDeprecated.setTextSize(AndroidUtilities.dp(12));
         if (user != null) {
-            avatarDrawable.setInfo(user);
+            avatarDrawableDeprecated.setInfo(user);
             uid = user.id;
         } else {
-            avatarDrawable.setInfo(0, contact.first_name, contact.last_name, false);
+            avatarDrawableDeprecated.setInfo(0, contact.first_name, contact.last_name, false);
             uid = contact.contact_id;
             key = contact.key;
         }
@@ -107,7 +107,7 @@ public class GroupCreateSpan extends View {
         if (user != null && user.photo != null) {
             photo = user.photo.photo_small;
         }
-///*        imageReceiver.setImage(photo, "50_50", avatarDrawable, null, null, 0, null, user, 1);*/
+///*        imageReceiver.setImage(photo, "50_50", avatarDrawableDeprecated, null, null, 0, null, user, 1);*/
         updateColors();
     }
 
@@ -127,7 +127,7 @@ public class GroupCreateSpan extends View {
         textPaint.setColor(text);
         deleteDrawable.setColorFilter(new PorterDuffColorFilter(delete, PorterDuff.Mode.MULTIPLY));
         backPaint.setColor(back);
-        avatarDrawable.setColor(AvatarDrawable.getColorForId(5));
+        avatarDrawableDeprecated.setColor(AvatarDrawableDeprecated.getColorForId(5));
     }
 
     public boolean isDeleting() {
@@ -196,7 +196,7 @@ public class GroupCreateSpan extends View {
         canvas.drawRoundRect(rect, AndroidUtilities.dp(16), AndroidUtilities.dp(16), backPaint);
         imageReceiver.draw(canvas);
         if (progress != 0) {
-            int color = avatarDrawable.getColor();
+            int color = avatarDrawableDeprecated.getColor();
             float alpha = Color.alpha(color) / 255.0f;
             backPaint.setColor(color);
             backPaint.setAlpha((int) (255 * progress * alpha));

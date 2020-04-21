@@ -24,7 +24,7 @@ import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
 import com.github.gdev2018.master.ui.Components.CheckBox;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
@@ -34,7 +34,7 @@ public class ShareDialogCell extends FrameLayout {
     private BackupImageView imageView;
     private TextView nameTextView;
     private CheckBox checkBox;
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private AvatarDrawableDeprecated avatarDrawableDeprecated = new AvatarDrawableDeprecated();
 
     private int currentAccount = BaseUserConfig.selectedAccount;
 
@@ -72,10 +72,10 @@ public class ShareDialogCell extends FrameLayout {
         Object parentObject;
         if (uid > 0) {
             TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(uid);
-            avatarDrawable.setInfo(user);
+            avatarDrawableDeprecated.setInfo(user);
             if (UserObject.isUserSelf(user)) {
                 nameTextView.setText(LocaleController.getString("SavedMessages", R.string.SavedMessages));
-                avatarDrawable.setSavedMessages(1);
+                avatarDrawableDeprecated.setSavedMessages(1);
             } else {
                 if (name != null) {
                     nameTextView.setText(name);
@@ -98,13 +98,13 @@ public class ShareDialogCell extends FrameLayout {
             } else {
                 nameTextView.setText("");
             }
-            avatarDrawable.setInfo(chat);
+            avatarDrawableDeprecated.setInfo(chat);
             if (chat != null && chat.photo != null) {
                 photo = chat.photo.photo_small;
             }
             parentObject = chat;
         }
-        imageView.setImage(photo, "50_50", avatarDrawable, parentObject);
+        imageView.setImage(photo, "50_50", avatarDrawableDeprecated, parentObject);
         checkBox.setChecked(checked, false);
     }
 

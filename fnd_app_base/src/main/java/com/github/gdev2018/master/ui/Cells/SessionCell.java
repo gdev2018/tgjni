@@ -25,7 +25,7 @@ import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
@@ -38,7 +38,7 @@ public class SessionCell extends FrameLayout {
     private TextView detailTextView;
     private TextView detailExTextView;
     private BackupImageView imageView;
-    private AvatarDrawable avatarDrawable;
+    private AvatarDrawableDeprecated avatarDrawableDeprecated;
     private boolean needDivider;
 
     private int currentAccount = BaseUserConfig.selectedAccount;
@@ -54,8 +54,8 @@ public class SessionCell extends FrameLayout {
         if (type == 1) {
             addView(linearLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 30, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 11 : 45), 11, (LocaleController.isRTL ? 45 : 11), 0));
 
-            avatarDrawable = new AvatarDrawable();
-            avatarDrawable.setTextSize(AndroidUtilities.dp(10));
+            avatarDrawableDeprecated = new AvatarDrawableDeprecated();
+            avatarDrawableDeprecated.setTextSize(AndroidUtilities.dp(10));
 
             imageView = new BackupImageView(context);
             imageView.setRoundRadius(AndroidUtilities.dp(10));
@@ -177,7 +177,7 @@ public class SessionCell extends FrameLayout {
 //            nameTextView.setText(session.domain);
 //            String name;
 //            if (user != null) {
-//                avatarDrawable.setInfo(user);
+//                avatarDrawableDeprecated.setInfo(user);
 //                name = UserObject.getFirstName(user);
 //                TLRPC.FileLocation currentPhoto;
 //                if (user.photo != null) {
@@ -185,7 +185,7 @@ public class SessionCell extends FrameLayout {
 //                } else {
 //                    currentPhoto = null;
 //                }
-//                imageView.setImage(currentPhoto, "50_50", avatarDrawable);
+//                imageView.setImage(currentPhoto, "50_50", avatarDrawableDeprecated);
 //            } else {
 //                name = "";
 //            }*/

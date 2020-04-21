@@ -16,6 +16,7 @@ import com.github.gdev2018.master.ImageReceiver;
 import com.github.gdev2018.master.SecureDocument;
 import com.github.gdev2018.master.tgnet.TLObject;
 
+// @deprecated
 public class BackupImageView extends View {
 
     private ImageReceiver imageReceiver;

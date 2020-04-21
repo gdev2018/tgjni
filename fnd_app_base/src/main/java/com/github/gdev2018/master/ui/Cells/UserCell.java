@@ -29,7 +29,7 @@ import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
 import com.github.gdev2018.master.ui.Components.CheckBox;
 import com.github.gdev2018.master.ui.Components.CheckBoxSquare;
@@ -47,7 +47,7 @@ public class UserCell extends FrameLayout {
     private CheckBoxSquare checkBoxBig;
     private TextView adminTextView;
 
-    private AvatarDrawable avatarDrawable;
+    private AvatarDrawableDeprecated avatarDrawableDeprecated;
     private TLObject currentObject;
     private TLRPC.EncryptedChat encryptedChat;
 
@@ -73,7 +73,7 @@ public class UserCell extends FrameLayout {
         statusColor = Theme.getColor(Theme.key_windowBackgroundWhiteGrayText);
         statusOnlineColor = Theme.getColor(Theme.key_windowBackgroundWhiteBlueText);
 
-        avatarDrawable = new AvatarDrawable();
+        avatarDrawableDeprecated = new AvatarDrawableDeprecated();
 
         avatarImageView = new BackupImageView(context);
         avatarImageView.setRoundRadius(AndroidUtilities.dp(24));
@@ -358,18 +358,18 @@ public class UserCell extends FrameLayout {
         }
 
         if (currentUser != null) {
-            avatarDrawable.setInfo(currentUser);
+            avatarDrawableDeprecated.setInfo(currentUser);
             if (currentUser.status != null) {
                 lastStatus = currentUser.status.expires;
             } else {
                 lastStatus = 0;
             }
         } else if (currentChat != null) {
-            avatarDrawable.setInfo(currentChat);
+            avatarDrawableDeprecated.setInfo(currentChat);
         } else if (currentName != null) {
-            avatarDrawable.setInfo(currentId, currentName.toString(), null, false);
+            avatarDrawableDeprecated.setInfo(currentId, currentName.toString(), null, false);
         } else {
-            avatarDrawable.setInfo(currentId, "#", null, false);
+            avatarDrawableDeprecated.setInfo(currentId, "#", null, false);
         }
 
         if (currentName != null) {
@@ -409,7 +409,7 @@ public class UserCell extends FrameLayout {
             imageView.setVisibility(currentDrawable == 0 ? GONE : VISIBLE);
             imageView.setImageResource(currentDrawable);
         }
-        avatarImageView.setImage(photo, "50_50", avatarDrawable, currentObject);
+        avatarImageView.setImage(photo, "50_50", avatarDrawableDeprecated, currentObject);
     }
 
     @Override

@@ -20,7 +20,7 @@ import com.github.gdev2018.master.ContactsController;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
@@ -28,7 +28,7 @@ public class JoinSheetUserCell extends FrameLayout {
 
     private BackupImageView imageView;
     private TextView nameTextView;
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private AvatarDrawableDeprecated avatarDrawableDeprecated = new AvatarDrawableDeprecated();
     private int result[] = new int[1];
 
     public JoinSheetUserCell(Context context) {
@@ -56,17 +56,17 @@ public class JoinSheetUserCell extends FrameLayout {
 
     public void setUser(TLRPC.User user) {
         nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
-        avatarDrawable.setInfo(user);
+        avatarDrawableDeprecated.setInfo(user);
         TLRPC.FileLocation photo = null;
         if (user != null && user.photo != null) {
             photo = user.photo.photo_small;
         }
-        imageView.setImage(photo, "50_50", avatarDrawable, user);
+        imageView.setImage(photo, "50_50", avatarDrawableDeprecated, user);
     }
 
     public void setCount(int count) {
         nameTextView.setText("");
-        avatarDrawable.setInfo(0, null, null, false, "+" + LocaleController.formatShortNumber(count, result));
-        imageView.setImage(null, "50_50", avatarDrawable, null);
+        avatarDrawableDeprecated.setInfo(0, null, null, false, "+" + LocaleController.formatShortNumber(count, result));
+        imageView.setImage(null, "50_50", avatarDrawableDeprecated, null);
     }
 }

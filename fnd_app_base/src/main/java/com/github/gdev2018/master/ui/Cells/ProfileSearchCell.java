@@ -28,14 +28,14 @@ import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 
 public class ProfileSearchCell extends BaseCell {
 
     private CharSequence currentName;
 ///*    private ImageReceiver avatarImage;*/
-    private AvatarDrawable avatarDrawable;
+    private AvatarDrawableDeprecated avatarDrawableDeprecated;
     private CharSequence subLabel;
 
     private TLRPC.User user;
@@ -84,7 +84,7 @@ public class ProfileSearchCell extends BaseCell {
 
 ///*        avatarImage = new ImageReceiver(this);
 //        avatarImage.setRoundRadius(AndroidUtilities.dp(26));*/
-        avatarDrawable = new AvatarDrawable();
+        avatarDrawableDeprecated = new AvatarDrawableDeprecated();
     }
 
     public void setData(TLObject object, TLRPC.EncryptedChat ec, CharSequence n, CharSequence s, boolean needCount, boolean saved) {
@@ -376,9 +376,9 @@ public class ProfileSearchCell extends BaseCell {
     public void update(int mask) {
         TLRPC.FileLocation photo = null;
         if (user != null) {
-            avatarDrawable.setInfo(user);
+            avatarDrawableDeprecated.setInfo(user);
             if (savedMessages) {
-                avatarDrawable.setSavedMessages(1);
+                avatarDrawableDeprecated.setSavedMessages(1);
             } else if (user.photo != null) {
                 photo = user.photo.photo_small;
             }
@@ -386,9 +386,9 @@ public class ProfileSearchCell extends BaseCell {
             if (chat.photo != null) {
                 photo = chat.photo.photo_small;
             }
-            avatarDrawable.setInfo(chat);
+            avatarDrawableDeprecated.setInfo(chat);
         } else {
-            avatarDrawable.setInfo(0, null, null, false);
+            avatarDrawableDeprecated.setInfo(0, null, null, false);
         }
 
         if (mask != 0) {
@@ -442,7 +442,7 @@ public class ProfileSearchCell extends BaseCell {
         }
 
         lastAvatar = photo;
-///*        avatarImage.setImage(photo, "50_50", avatarDrawable, null, 0);*/
+///*        avatarImage.setImage(photo, "50_50", avatarDrawableDeprecated, null, 0);*/
 
         if (getMeasuredWidth() != 0 || getMeasuredHeight() != 0) {
             buildLayout();

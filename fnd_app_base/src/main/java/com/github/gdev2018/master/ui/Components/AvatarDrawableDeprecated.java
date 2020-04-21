@@ -18,23 +18,8 @@ import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
-import android.graphics.PixelFormat;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.text.Layout;
-import android.text.StaticLayout;
-import android.text.TextPaint;
-
-import com.github.gdev2018.master.AndroidUtilities;
-import com.github.gdev2018.master.FileLog;
-import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.ui.ActionBar.Theme;
-
-public class AvatarDrawable extends Drawable {
+// @deprecated
+public class AvatarDrawableDeprecated extends Drawable {
 
     private TextPaint namePaint;
     private int color;
@@ -47,7 +32,7 @@ public class AvatarDrawable extends Drawable {
     private int savedMessages;
     private StringBuilder stringBuilder = new StringBuilder(5);
 
-    public AvatarDrawable() {
+    public AvatarDrawableDeprecated() {
         super();
 
         namePaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
@@ -55,15 +40,15 @@ public class AvatarDrawable extends Drawable {
         namePaint.setTextSize(AndroidUtilities.dp(18));
     }
 
-    public AvatarDrawable(TLRPC.User user) {
+    public AvatarDrawableDeprecated(TLRPC.User user) {
         this(user, false);
     }
 
-    public AvatarDrawable(TLRPC.Chat chat) {
+    public AvatarDrawableDeprecated(TLRPC.Chat chat) {
         this(chat, false);
     }
 
-    public AvatarDrawable(TLRPC.User user, boolean profile) {
+    public AvatarDrawableDeprecated(TLRPC.User user, boolean profile) {
         this();
         isProfile = profile;
         if (user != null) {
@@ -71,7 +56,7 @@ public class AvatarDrawable extends Drawable {
         }
     }
 
-    public AvatarDrawable(TLRPC.Chat chat, boolean profile) {
+    public AvatarDrawableDeprecated(TLRPC.Chat chat, boolean profile) {
         this();
         isProfile = profile;
         if (chat != null) {

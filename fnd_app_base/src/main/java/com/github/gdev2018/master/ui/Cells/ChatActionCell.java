@@ -30,7 +30,7 @@ import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.browser.Browser;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.PhotoViewer;
 
 public class ChatActionCell extends BaseCell {
@@ -55,7 +55,7 @@ public class ChatActionCell extends BaseCell {
     private URLSpan pressedLink;
     private int currentAccount = BaseUserConfig.selectedAccount;
     private ImageReceiver imageReceiver;
-    private AvatarDrawable avatarDrawable;
+    private AvatarDrawableDeprecated avatarDrawableDeprecated;
     private StaticLayout textLayout;
     private int textWidth = 0;
     private int textHeight = 0;
@@ -77,7 +77,7 @@ public class ChatActionCell extends BaseCell {
         super(context);
         imageReceiver = new ImageReceiver(this);
         imageReceiver.setRoundRadius(AndroidUtilities.dp(32));
-        avatarDrawable = new AvatarDrawable();
+        avatarDrawableDeprecated = new AvatarDrawableDeprecated();
     }
 
     public void setDelegate(ChatActionCellDelegate delegate) {
@@ -123,15 +123,15 @@ public class ChatActionCell extends BaseCell {
                     }
                 }
             }
-            avatarDrawable.setInfo(id, null, null, false);
+            avatarDrawableDeprecated.setInfo(id, null, null, false);
             if (currentMessageObject.messageOwner.action instanceof TLRPC.TL_messageActionUserUpdatedPhoto) {
-///*                imageReceiver.setImage(currentMessageObject.messageOwner.action.newUserPhoto.photo_small, "50_50", avatarDrawable, null, currentMessageObject, 0);*/
+///*                imageReceiver.setImage(currentMessageObject.messageOwner.action.newUserPhoto.photo_small, "50_50", avatarDrawableDeprecated, null, currentMessageObject, 0);*/
             } else {
                 TLRPC.PhotoSize photo = FileLoader.getClosestPhotoSizeWithSize(currentMessageObject.photoThumbs, AndroidUtilities.dp(64));
                 if (photo != null) {
-///*                    imageReceiver.setImage(photo, "50_50", avatarDrawable, null, currentMessageObject, 0);*/
+///*                    imageReceiver.setImage(photo, "50_50", avatarDrawableDeprecated, null, currentMessageObject, 0);*/
                 } else {
-                    imageReceiver.setImageBitmap(avatarDrawable);
+                    imageReceiver.setImageBitmap(avatarDrawableDeprecated);
                 }
             }
             imageReceiver.setVisible(!PhotoViewer.isShowingImage(currentMessageObject), false);

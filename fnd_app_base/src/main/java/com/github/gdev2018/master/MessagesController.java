@@ -36,7 +36,7 @@ import com.github.gdev2018.master.ui.ActionBar.AlertDialog;
 import com.github.gdev2018.master.ui.ActionBar.BaseFragment;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 ///*import com.github.gdev2018.master.ui.ChatActivity;*/
-import com.github.gdev2018.master.ui.Components.AlertsCreator;
+///*import com.github.gdev2018.master.ui.Components.AlertsCreator;*/
 ///*import com.github.gdev2018.master.ui.DialogsActivity;*/
 ///*import com.github.gdev2018.master.ui.ProfileActivity;*/
 
@@ -2062,7 +2062,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                 processUpdates((TLRPC.Updates) response, false);
                 AndroidUtilities.runOnUIThread(() -> loadFullChat(chatId, 0, true), 1000);
             } else {
-                AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, parentFragment, req, isChannel));
+///*                AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, parentFragment, req, isChannel));*/
             }
         });
     }
@@ -2079,7 +2079,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                 processUpdates((TLRPC.Updates) response, false);
                 AndroidUtilities.runOnUIThread(() -> loadFullChat(chatId, 0, true), 1000);
             } else {
-                AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, parentFragment, req, isChannel));
+///*                AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, parentFragment, req, isChannel));*/
             }
         });
     }
@@ -2099,7 +2099,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                     processUpdates((TLRPC.Updates) response, false);
                     AndroidUtilities.runOnUIThread(() -> loadFullChat(chatId, 0, true), 1000);
                 } else {
-                    AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, parentFragment, req, isChannel));
+///*                    AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, parentFragment, req, isChannel));*/
                 }
             });
         } else {
@@ -2111,7 +2111,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                 if (error == null) {
                     AndroidUtilities.runOnUIThread(() -> loadFullChat(chatId, 0, true), 1000);
                 } else {
-                    AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, parentFragment, req, false));
+///*                    AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, parentFragment, req, false));*/
                 }
             };
             if (req.is_admin && addingNew) {
@@ -5623,7 +5623,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
             return ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
                 if (error != null) {
                     AndroidUtilities.runOnUIThread(() -> {
-                        AlertsCreator.processError(currentAccount, error, fragment, req);
+///*                        AlertsCreator.processError(currentAccount, error, fragment, req);*/
                         NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.chatDidFailCreate);
                     });
                     return;
@@ -5652,7 +5652,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
             return ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
                 if (error != null) {
                     AndroidUtilities.runOnUIThread(() -> {
-                        AlertsCreator.processError(currentAccount, error, fragment, req);
+///*                        AlertsCreator.processError(currentAccount, error, fragment, req);*/
                         NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.chatDidFailCreate);
                     });
                     return;
@@ -5735,7 +5735,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
         req.users = users;
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
             if (error != null) {
-                AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, fragment, req, true));
+///*                AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, fragment, req, true));*/
                 return;
             }
             processUpdates((TLRPC.Updates) response, false);
@@ -5881,7 +5881,9 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                     AndroidUtilities.runOnUIThread(() -> joiningToChannels.remove((Integer) chat_id));
                 }
                 if (error != null) {
-                    AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, fragment, request, isChannel && !isMegagroup));
+///*
+//                    AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, fragment, request, isChannel && !isMegagroup));
+//*/
                     return;
                 }
                 boolean hasJoinMessage = false;

@@ -25,7 +25,7 @@ import com.github.gdev2018.master.ContactsController;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
@@ -34,15 +34,15 @@ public class AccountSelectCell extends FrameLayout {
     private TextView textView;
     private BackupImageView imageView;
     private ImageView checkImageView;
-    private AvatarDrawable avatarDrawable;
+    private AvatarDrawableDeprecated avatarDrawableDeprecated;
 
     private int accountNumber;
 
     public AccountSelectCell(Context context) {
         super(context);
 
-        avatarDrawable = new AvatarDrawable();
-        avatarDrawable.setTextSize(AndroidUtilities.dp(12));
+        avatarDrawableDeprecated = new AvatarDrawableDeprecated();
+        avatarDrawableDeprecated.setTextSize(AndroidUtilities.dp(12));
 
         imageView = new BackupImageView(context);
         imageView.setRoundRadius(AndroidUtilities.dp(18));
@@ -80,7 +80,7 @@ public class AccountSelectCell extends FrameLayout {
     public void setAccount(int account, boolean check) {
         accountNumber = account;
         TLRPC.User user = BaseUserConfig.getInstance(accountNumber).getCurrentUser();
-        avatarDrawable.setInfo(user);
+        avatarDrawableDeprecated.setInfo(user);
         textView.setText(ContactsController.formatName(user.first_name, user.last_name));
         TLRPC.FileLocation avatar;
         if (user.photo != null && user.photo.photo_small != null && user.photo.photo_small.volume_id != 0 && user.photo.photo_small.local_id != 0) {
@@ -89,7 +89,7 @@ public class AccountSelectCell extends FrameLayout {
             avatar = null;
         }
         imageView.getImageReceiver().setCurrentAccount(account);
-        imageView.setImage(avatar, "50_50", avatarDrawable, user);
+        imageView.setImage(avatar, "50_50", avatarDrawableDeprecated, user);
         checkImageView.setVisibility(check && account == BaseUserConfig.selectedAccount ? VISIBLE : INVISIBLE);
     }
 

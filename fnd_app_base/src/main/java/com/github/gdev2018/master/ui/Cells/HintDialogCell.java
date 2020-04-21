@@ -27,7 +27,7 @@ import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
@@ -35,7 +35,7 @@ public class HintDialogCell extends FrameLayout {
 
     private BackupImageView imageView;
     private TextView nameTextView;
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private AvatarDrawableDeprecated avatarDrawableDeprecated = new AvatarDrawableDeprecated();
     private RectF rect = new RectF();
 
     private int lastUnreadCount;
@@ -104,10 +104,10 @@ public class HintDialogCell extends FrameLayout {
         TLRPC.FileLocation photo = null;
         if (uid > 0) {
             currentUser = MessagesController.getInstance(currentAccount).getUser(uid);
-            avatarDrawable.setInfo(currentUser);
+            avatarDrawableDeprecated.setInfo(currentUser);
         } else {
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-uid);
-            avatarDrawable.setInfo(chat);
+            avatarDrawableDeprecated.setInfo(chat);
             currentUser = null;
         }
     }
@@ -125,7 +125,7 @@ public class HintDialogCell extends FrameLayout {
             } else {
                 nameTextView.setText("");
             }
-            avatarDrawable.setInfo(currentUser);
+            avatarDrawableDeprecated.setInfo(currentUser);
             if (currentUser != null && currentUser.photo != null) {
                 photo = currentUser.photo.photo_small;
             }
@@ -139,14 +139,14 @@ public class HintDialogCell extends FrameLayout {
             } else {
                 nameTextView.setText("");
             }
-            avatarDrawable.setInfo(chat);
+            avatarDrawableDeprecated.setInfo(chat);
             if (chat != null && chat.photo != null) {
                 photo = chat.photo.photo_small;
             }
             parentObject = chat;
             currentUser = null;
         }
-        imageView.setImage(photo, "50_50", avatarDrawable, parentObject);
+        imageView.setImage(photo, "50_50", avatarDrawableDeprecated, parentObject);
         if (counter) {
             update(0);
         } else {

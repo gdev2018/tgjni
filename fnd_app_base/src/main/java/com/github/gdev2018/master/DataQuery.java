@@ -47,7 +47,7 @@ import com.github.gdev2018.master.tgnet.SerializedData;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.BaseFragment;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 ///*import com.github.gdev2018.master.ui.Components.StickersArchiveAlert;*/
 import com.github.gdev2018.master.ui.Components.TypefaceSpan;
 import com.github.gdev2018.master.ui.Components.URLSpanReplacement;
@@ -2817,10 +2817,10 @@ public class DataQuery {
                         result.eraseColor(Color.TRANSPARENT);
                         Canvas canvas = new Canvas(result);
                         if (selfUser) {
-                            AvatarDrawable avatarDrawable = new AvatarDrawable(user);
-                            avatarDrawable.setSavedMessages(1);
-                            avatarDrawable.setBounds(0, 0, size, size);
-                            avatarDrawable.draw(canvas);
+                            AvatarDrawableDeprecated avatarDrawableDeprecated = new AvatarDrawableDeprecated(user);
+                            avatarDrawableDeprecated.setSavedMessages(1);
+                            avatarDrawableDeprecated.setBounds(0, 0, size, size);
+                            avatarDrawableDeprecated.draw(canvas);
                         } else {
                             BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
                             if (roundPaint == null) {

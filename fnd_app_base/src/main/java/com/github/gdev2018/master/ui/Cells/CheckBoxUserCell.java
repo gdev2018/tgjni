@@ -21,7 +21,7 @@ import com.github.gdev2018.master.ContactsController;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
 import com.github.gdev2018.master.ui.Components.CheckBoxSquare;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
@@ -31,7 +31,7 @@ public class CheckBoxUserCell extends FrameLayout {
     private TextView textView;
     private BackupImageView imageView;
     private CheckBoxSquare checkBox;
-    private AvatarDrawable avatarDrawable;
+    private AvatarDrawableDeprecated avatarDrawableDeprecated;
     private boolean needDivider;
 
     private TLRPC.User currentUser;
@@ -49,7 +49,7 @@ public class CheckBoxUserCell extends FrameLayout {
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 21 : 94), 0, (LocaleController.isRTL ? 94 : 21), 0));
 
-        avatarDrawable = new AvatarDrawable();
+        avatarDrawableDeprecated = new AvatarDrawableDeprecated();
         imageView = new BackupImageView(context);
         imageView.setRoundRadius(AndroidUtilities.dp(36));
         addView(imageView, LayoutHelper.createFrame(36, 36, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 48, 7, 48, 0));
@@ -76,11 +76,11 @@ public class CheckBoxUserCell extends FrameLayout {
         textView.setText(ContactsController.formatName(user.first_name, user.last_name));
         checkBox.setChecked(checked, false);
         TLRPC.FileLocation photo = null;
-        avatarDrawable.setInfo(user);
+        avatarDrawableDeprecated.setInfo(user);
         if (user != null && user.photo != null) {
             photo = user.photo.photo_small;
         }
-        imageView.setImage(photo, "50_50", avatarDrawable, user);
+        imageView.setImage(photo, "50_50", avatarDrawableDeprecated, user);
         needDivider = divider;
         setWillNotDraw(!divider);
     }

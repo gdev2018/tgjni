@@ -141,13 +141,13 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         imageView.setRoundRadius(AndroidUtilities.dp(15));
         TLRPC.FileLocation photo = null;
 
-        AvatarDrawable avatarDrawable = new AvatarDrawable();
+        AvatarDrawableDeprecated avatarDrawableDeprecated = new AvatarDrawableDeprecated();
         if (chat.photo != null) {
             photo = chat.photo.photo_small;
         }
-        avatarDrawable.setTextSize(AndroidUtilities.dp(14));
-        avatarDrawable.setInfo(chat);
-        imageView.setImage(photo, "50_50", avatarDrawable, chat);
+        avatarDrawableDeprecated.setTextSize(AndroidUtilities.dp(14));
+        avatarDrawableDeprecated.setInfo(chat);
+        imageView.setImage(photo, "50_50", avatarDrawableDeprecated, chat);
 
         imageView.setAspectFit(true);
         tab.addView(imageView, LayoutHelper.createFrame(30, 30, Gravity.CENTER));

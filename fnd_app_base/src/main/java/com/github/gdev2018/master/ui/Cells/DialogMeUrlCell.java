@@ -27,14 +27,14 @@ import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 
 public class DialogMeUrlCell extends BaseCell {
 
     private TLRPC.RecentMeUrl recentMeUrl;
 
     private ImageReceiver avatarImage = new ImageReceiver(this);
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private AvatarDrawableDeprecated avatarDrawableDeprecated = new AvatarDrawableDeprecated();
 
     public boolean useSeparator;
 
@@ -134,7 +134,7 @@ public class DialogMeUrlCell extends BaseCell {
             } else {
                 image = null;
             }
-            avatarDrawable.setInfo(chat);
+            avatarDrawableDeprecated.setInfo(chat);
         } else if (recentMeUrl instanceof TLRPC.TL_recentMeUrlUser) {
             TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(recentMeUrl.user_id);
             if (!LocaleController.isRTL) {
@@ -162,7 +162,7 @@ public class DialogMeUrlCell extends BaseCell {
             } else {
                 image = null;
             }
-            avatarDrawable.setInfo(user);
+            avatarDrawableDeprecated.setInfo(user);
         } else if (recentMeUrl instanceof TLRPC.TL_recentMeUrlStickerSet) {
             if (!LocaleController.isRTL) {
                 nameLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
@@ -171,7 +171,7 @@ public class DialogMeUrlCell extends BaseCell {
             }
             nameString = recentMeUrl.set.set.title;
             image = recentMeUrl.set.cover;
-            avatarDrawable.setInfo(5, recentMeUrl.set.set.title, null, false);
+            avatarDrawableDeprecated.setInfo(5, recentMeUrl.set.set.title, null, false);
         } else if (recentMeUrl instanceof TLRPC.TL_recentMeUrlChatInvite) {
             if (!LocaleController.isRTL) {
                 nameLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
@@ -179,7 +179,7 @@ public class DialogMeUrlCell extends BaseCell {
                 nameLeft = AndroidUtilities.dp(14);
             }
             if (recentMeUrl.chat_invite.chat != null) {
-                avatarDrawable.setInfo(recentMeUrl.chat_invite.chat);
+                avatarDrawableDeprecated.setInfo(recentMeUrl.chat_invite.chat);
                 nameString = recentMeUrl.chat_invite.chat.title;
                 if (recentMeUrl.chat_invite.chat.photo != null) {
                     image = recentMeUrl.chat_invite.chat.photo.photo_small;
@@ -197,7 +197,7 @@ public class DialogMeUrlCell extends BaseCell {
             } else {
                 nameString = recentMeUrl.chat_invite.title;
 //                image = recentMeUrl.chat_invite.photo.photo_small;/*
-//*/                avatarDrawable.setInfo(5, recentMeUrl.chat_invite.title, null, false);
+//*/                avatarDrawableDeprecated.setInfo(5, recentMeUrl.chat_invite.title, null, false);
                 if (recentMeUrl.chat_invite.broadcast || recentMeUrl.chat_invite.channel) {
                     drawNameBroadcast = true;
                     nameLockTop = AndroidUtilities.dp(16.5f);
@@ -225,7 +225,7 @@ public class DialogMeUrlCell extends BaseCell {
             image = null;
         }
         messageString = MessagesController.getInstance(currentAccount).linkPrefix + "/" + recentMeUrl.url;
-///*        avatarImage.setImage(image, "50_50", avatarDrawable, null, recentMeUrl, 0);*/
+///*        avatarImage.setImage(image, "50_50", avatarDrawableDeprecated, null, recentMeUrl, 0);*/
 
         if (TextUtils.isEmpty(nameString)) {
             nameString = LocaleController.getString("HiddenName", R.string.HiddenName);

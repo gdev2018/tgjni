@@ -70,7 +70,7 @@ import com.github.gdev2018.master.browser.Browser;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.Components.AnimatedFileDrawable;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.LinkPath;
 import com.github.gdev2018.master.ui.Components.MediaActionDrawable;
 import com.github.gdev2018.master.ui.Components.RadialProgress2;
@@ -223,7 +223,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private RadialProgress2 videoRadialProgress;
     private boolean drawRadialCheckBackground;
     private ImageReceiver photoImage;
-    private AvatarDrawable contactAvatarDrawable;
+    private AvatarDrawableDeprecated contactAvatarDrawableDeprecated;
 
     private boolean disallowLongPress;
 
@@ -432,7 +432,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private int layoutHeight;
 
     private ImageReceiver avatarImage;
-    private AvatarDrawable avatarDrawable;
+    private AvatarDrawableDeprecated avatarDrawableDeprecated;
     private boolean avatarPressed;
     private boolean forwardNamePressed;
     private boolean forwardBotPressed;
@@ -526,13 +526,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
         avatarImage = new ImageReceiver();
         avatarImage.setRoundRadius(AndroidUtilities.dp(21));
-        avatarDrawable = new AvatarDrawable();
+        avatarDrawableDeprecated = new AvatarDrawableDeprecated();
         replyImageReceiver = new ImageReceiver(this);
         locationImageReceiver = new ImageReceiver(this);
         locationImageReceiver.setRoundRadius(AndroidUtilities.dp(26.1f));
         TAG = DownloadController.getInstance(currentAccount).generateObserverTag();
 
-        contactAvatarDrawable = new AvatarDrawable();
+        contactAvatarDrawableDeprecated = new AvatarDrawableDeprecated();
         photoImage = new ImageReceiver(this);
         photoImage.setDelegate(this);
         radialProgress = new RadialProgress2(this);
@@ -3037,9 +3037,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     if (user.photo != null) {
                         currentPhoto = user.photo.photo_small;
                     }
-                    contactAvatarDrawable.setInfo(user);
+                    contactAvatarDrawableDeprecated.setInfo(user);
                 }
-///*                photoImage.setImage(currentPhoto, "50_50", user != null ? contactAvatarDrawable : Theme.chat_contactDrawable[messageObject.isOutOwner() ? 1 : 0], null, messageObject, 0);*/
+///*                photoImage.setImage(currentPhoto, "50_50", user != null ? contactAvatarDrawableDeprecated : Theme.chat_contactDrawable[messageObject.isOutOwner() ? 1 : 0], null, messageObject, 0);*/
 
                 CharSequence phone;
                 if (!TextUtils.isEmpty(messageObject.vCardData)) {
@@ -3414,16 +3414,16 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             if (currentUser.photo != null) {
                                 currentPhoto = currentUser.photo.photo_small;
                             }
-                            contactAvatarDrawable.setInfo(currentUser);
+                            contactAvatarDrawableDeprecated.setInfo(currentUser);
                             parentObject = currentUser;
                         } else if (currentChat != null) {
                             if (currentChat.photo != null) {
                                 currentPhoto = currentChat.photo.photo_small;
                             }
-                            contactAvatarDrawable.setInfo(currentChat);
+                            contactAvatarDrawableDeprecated.setInfo(currentChat);
                             parentObject = currentChat;
                         }
-///*                        locationImageReceiver.setImage(currentPhoto, "50_50", contactAvatarDrawable, null, parentObject, 0);*/
+///*                        locationImageReceiver.setImage(currentPhoto, "50_50", contactAvatarDrawableDeprecated, null, parentObject, 0);*/
 
                         infoLayout = new StaticLayout(LocaleController.formatLocationUpdateDate(messageObject.messageOwner.edit_date != 0 ? messageObject.messageOwner.edit_date : messageObject.messageOwner.date), Theme.chat_locationAddressPaint, maxWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     } else if (!TextUtils.isEmpty(messageObject.messageOwner.media.title)) {
@@ -6757,7 +6757,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 } else {
                     currentPhoto = null;
                 }
-                avatarDrawable.setInfo(currentUser);
+                avatarDrawableDeprecated.setInfo(currentUser);
                 parentObject = currentUser;
             } else if (currentChat != null) {
                 if (currentChat.photo != null) {
@@ -6765,13 +6765,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 } else {
                     currentPhoto = null;
                 }
-                avatarDrawable.setInfo(currentChat);
+                avatarDrawableDeprecated.setInfo(currentChat);
                 parentObject = currentChat;
             } else {
                 currentPhoto = null;
-                avatarDrawable.setInfo(messageObject.messageOwner.from_id, null, null, false);
+                avatarDrawableDeprecated.setInfo(messageObject.messageOwner.from_id, null, null, false);
             }
-///*            avatarImage.setImage(currentPhoto, "50_50", avatarDrawable, null, parentObject, 0);*/
+///*            avatarImage.setImage(currentPhoto, "50_50", avatarDrawableDeprecated, null, parentObject, 0);*/
         } else {
             currentPhoto = null;
         }
@@ -7402,15 +7402,15 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     nameX = backgroundDrawableLeft + AndroidUtilities.dp(!mediaBackground && drawPinnedBottom ? 11 : 17) - nameOffsetX;
                 }
                 if (currentUser != null) {
-                    Theme.chat_namePaint.setColor(AvatarDrawable.getNameColorForId(currentUser.id));
+                    Theme.chat_namePaint.setColor(AvatarDrawableDeprecated.getNameColorForId(currentUser.id));
                 } else if (currentChat != null) {
                     if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
-                        Theme.chat_namePaint.setColor(AvatarDrawable.getNameColorForId(5));
+                        Theme.chat_namePaint.setColor(AvatarDrawableDeprecated.getNameColorForId(5));
                     } else {
-                        Theme.chat_namePaint.setColor(AvatarDrawable.getNameColorForId(currentChat.id));
+                        Theme.chat_namePaint.setColor(AvatarDrawableDeprecated.getNameColorForId(currentChat.id));
                     }
                 } else {
-                    Theme.chat_namePaint.setColor(AvatarDrawable.getNameColorForId(0));
+                    Theme.chat_namePaint.setColor(AvatarDrawableDeprecated.getNameColorForId(0));
                 }
                 nameY = AndroidUtilities.dp(drawPinnedTop ? 9 : 10);
             }

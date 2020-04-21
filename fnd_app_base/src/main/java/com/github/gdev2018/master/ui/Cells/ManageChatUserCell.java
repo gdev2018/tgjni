@@ -26,7 +26,7 @@ import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.SimpleTextView;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
@@ -37,7 +37,7 @@ public class ManageChatUserCell extends FrameLayout {
     private SimpleTextView statusTextView;
     private ImageView optionsButton;
 
-    private AvatarDrawable avatarDrawable;
+    private AvatarDrawableDeprecated avatarDrawableDeprecated;
     private TLRPC.User currentUser;
 
     private CharSequence currentName;
@@ -71,7 +71,7 @@ public class ManageChatUserCell extends FrameLayout {
 
         namePadding = nPadding;
 
-        avatarDrawable = new AvatarDrawable();
+        avatarDrawableDeprecated = new AvatarDrawableDeprecated();
 
         avatarImageView = new BackupImageView(context);
         avatarImageView.setRoundRadius(AndroidUtilities.dp(23));
@@ -176,7 +176,7 @@ public class ManageChatUserCell extends FrameLayout {
             }
         }
 
-        avatarDrawable.setInfo(currentUser);
+        avatarDrawableDeprecated.setInfo(currentUser);
         if (currentUser.status != null) {
             lastStatus = currentUser.status.expires;
         } else {
@@ -211,7 +211,7 @@ public class ManageChatUserCell extends FrameLayout {
                 }
             }
         }
-        avatarImageView.setImage(photo, "50_50", avatarDrawable, currentUser);
+        avatarImageView.setImage(photo, "50_50", avatarDrawableDeprecated, currentUser);
     }
 
     public void recycle() {

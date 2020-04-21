@@ -36,7 +36,7 @@ import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.GroupCreateCheckBox;
 ///*import com.github.gdev2018.master.ui.DialogsActivity;*/
 
@@ -77,7 +77,7 @@ public class DialogCell extends BaseCell {
     private int messageId;
 
     private ImageReceiver avatarImage = new ImageReceiver(this);
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private AvatarDrawableDeprecated avatarDrawableDeprecated = new AvatarDrawableDeprecated();
 
     private TLRPC.User user;
     private TLRPC.Chat chat;
@@ -937,8 +937,8 @@ public class DialogCell extends BaseCell {
             unreadCount = customDialog.unread_count;
             drawPin = customDialog.pinned;
             dialogMuted = customDialog.muted;
-            avatarDrawable.setInfo(customDialog.id, customDialog.name, null, false);
-            avatarImage.setImage(null, "50_50", avatarDrawable, null, 0);
+            avatarDrawableDeprecated.setInfo(customDialog.id, customDialog.name, null, false);
+            avatarImage.setImage(null, "50_50", avatarDrawableDeprecated, null, 0);
         } else {
             if (isDialogCell) {
                 TLRPC.TL_dialog dialog = MessagesController.getInstance(currentAccount).dialogs_dict.get(currentDialogId);
@@ -1055,9 +1055,9 @@ public class DialogCell extends BaseCell {
             TLRPC.FileLocation photo = null;
             Object parentObject = null;
             if (user != null) {
-                avatarDrawable.setInfo(user);
+                avatarDrawableDeprecated.setInfo(user);
                 if (UserObject.isUserSelf(user)) {
-                    avatarDrawable.setSavedMessages(1);
+                    avatarDrawableDeprecated.setSavedMessages(1);
                 } else if (user.photo != null) {
                     photo = user.photo.photo_small;
                 }
@@ -1066,10 +1066,10 @@ public class DialogCell extends BaseCell {
                 if (chat.photo != null) {
                     photo = chat.photo.photo_small;
                 }
-                avatarDrawable.setInfo(chat);
+                avatarDrawableDeprecated.setInfo(chat);
                 parentObject = chat;
             }
-///*            avatarImage.setImage(photo, "50_50", avatarDrawable, null, parentObject, 0);*/
+///*            avatarImage.setImage(photo, "50_50", avatarDrawableDeprecated, null, parentObject, 0);*/
         }
         if (getMeasuredWidth() != 0 || getMeasuredHeight() != 0) {
             buildLayout();

@@ -57,7 +57,7 @@ import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.AlertDialog;
 import com.github.gdev2018.master.ui.ActionBar.BaseFragment;
 import com.github.gdev2018.master.ui.ChatActivity;
-import com.github.gdev2018.master.ui.Components.AlertsCreator;
+///*import com.github.gdev2018.master.ui.Components.AlertsCreator;*/
 ///*import com.github.gdev2018.master.ui.PaymentFormActivity;*/
 
 import java.io.File;
@@ -1466,7 +1466,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                             }
                             StatsController.getInstance(currentAccount).incrementSentItemsCount(BaseApplication.getCurrentNetworkType(), StatsController.TYPE_MESSAGES, sentCount);
                         } else {
-                            AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, null, req));
+///*                            AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, null, req));*/
                         }
                         for (int a1 = 0; a1 < newMsgObjArr.size(); a1++) {
                             final TLRPC.Message newMsgObj1 = newMsgObjArr.get(a1);
@@ -1842,7 +1842,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
             if (error == null) {
                 MessagesController.getInstance(currentAccount).processUpdates((TLRPC.Updates) response, false);
             } else {
-                AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, fragment, req));
+///*                AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, fragment, req));*/
             }
             AndroidUtilities.runOnUIThread(callback);
         });
@@ -3887,7 +3887,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                 }
                 Utilities.stageQueue.postRunnable(() -> MessagesController.getInstance(currentAccount).processUpdates(updates, false));
             } else {
-                AlertsCreator.processError(currentAccount, error, null, req);
+///*                AlertsCreator.processError(currentAccount, error, null, req);*/
                 isSentError = true;
             }
             if (isSentError) {
@@ -4016,7 +4016,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                             stopVideoService(attachPath);
                         }
                     } else {
-                        AlertsCreator.processError(currentAccount, error, null, req);
+///*                        AlertsCreator.processError(currentAccount, error, null, req);*/
                         if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
                             stopVideoService(newMsgObj.attachPath);
                         }
@@ -4137,7 +4137,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                             });
                         }
                     } else {
-                        AlertsCreator.processError(currentAccount, error, null, req);
+///*                        AlertsCreator.processError(currentAccount, error, null, req);*/
                         isSentError = true;
                     }
                     if (isSentError) {

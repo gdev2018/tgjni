@@ -21,7 +21,7 @@ import com.github.gdev2018.master.EmojiSuggestion;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
@@ -30,15 +30,15 @@ public class MentionCell extends LinearLayout {
     private BackupImageView imageView;
     private TextView nameTextView;
     private TextView usernameTextView;
-    private AvatarDrawable avatarDrawable;
+    private AvatarDrawableDeprecated avatarDrawableDeprecated;
 
     public MentionCell(Context context) {
         super(context);
 
         setOrientation(HORIZONTAL);
 
-        avatarDrawable = new AvatarDrawable();
-        avatarDrawable.setTextSize(AndroidUtilities.dp(12));
+        avatarDrawableDeprecated = new AvatarDrawableDeprecated();
+        avatarDrawableDeprecated.setTextSize(AndroidUtilities.dp(12));
 
         imageView = new BackupImageView(context);
         imageView.setRoundRadius(AndroidUtilities.dp(14));
@@ -73,11 +73,11 @@ public class MentionCell extends LinearLayout {
             imageView.setImageDrawable(null);
             return;
         }
-        avatarDrawable.setInfo(user);
+        avatarDrawableDeprecated.setInfo(user);
         if (user.photo != null && user.photo.photo_small != null) {
-            imageView.setImage(user.photo.photo_small, "50_50", avatarDrawable, user);
+            imageView.setImage(user.photo.photo_small, "50_50", avatarDrawableDeprecated, user);
         } else {
-            imageView.setImageDrawable(avatarDrawable);
+            imageView.setImageDrawable(avatarDrawableDeprecated);
         }
         nameTextView.setText(UserObject.getUserName(user));
         if (user.username != null) {
@@ -114,11 +114,11 @@ public class MentionCell extends LinearLayout {
     public void setBotCommand(String command, String help, TLRPC.User user) {
         if (user != null) {
             imageView.setVisibility(VISIBLE);
-            avatarDrawable.setInfo(user);
+            avatarDrawableDeprecated.setInfo(user);
             if (user.photo != null && user.photo.photo_small != null) {
-                imageView.setImage(user.photo.photo_small, "50_50", avatarDrawable, user);
+                imageView.setImage(user.photo.photo_small, "50_50", avatarDrawableDeprecated, user);
             } else {
-                imageView.setImageDrawable(avatarDrawable);
+                imageView.setImageDrawable(avatarDrawableDeprecated);
             }
         } else {
             imageView.setVisibility(INVISIBLE);

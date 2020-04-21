@@ -31,7 +31,7 @@ import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.FileLog;
-import com.github.gdev2018.master.ui.Components.AvatarDrawable;
+import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
 import com.github.gdev2018.master.ui.Components.ChatBigEmptyView;
 import com.github.gdev2018.master.ui.Components.CheckBox;
@@ -248,8 +248,8 @@ public class ThemeDescription {
                     } else {
                         ((CombinedDrawable) drawablesToUpdate[a]).getIcon().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                     }
-                } else if (drawablesToUpdate[a] instanceof AvatarDrawable) {
-                    ((AvatarDrawable) drawablesToUpdate[a]).setColor(color);
+                } else if (drawablesToUpdate[a] instanceof AvatarDrawableDeprecated) {
+                    ((AvatarDrawableDeprecated) drawablesToUpdate[a]).setColor(color);
                 } else {
                     drawablesToUpdate[a].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                 }

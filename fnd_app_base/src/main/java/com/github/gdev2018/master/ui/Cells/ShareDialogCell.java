@@ -25,13 +25,13 @@ import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.CheckBox;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
 public class ShareDialogCell extends FrameLayout {
 
-    private BackupImageView imageView;
+    private BackupImageViewDeprecated imageView;
     private TextView nameTextView;
     private CheckBox checkBox;
     private AvatarDrawableDeprecated avatarDrawableDeprecated = new AvatarDrawableDeprecated();
@@ -41,7 +41,7 @@ public class ShareDialogCell extends FrameLayout {
     public ShareDialogCell(Context context) {
         super(context);
 
-        imageView = new BackupImageView(context);
+        imageView = new BackupImageViewDeprecated(context);
         imageView.setRoundRadius(AndroidUtilities.dp(27));
         addView(imageView, LayoutHelper.createFrame(54, 54, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 7, 0, 0));
 

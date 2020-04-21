@@ -23,13 +23,13 @@ import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.SimpleTextView;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.GroupCreateCheckBox;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
 public class GroupCreateUserCell extends FrameLayout {
 
-    private BackupImageView avatarImageView;
+    private BackupImageViewDeprecated avatarImageView;
     private SimpleTextView nameTextView;
     private SimpleTextView statusTextView;
     private GroupCreateCheckBox checkBox;
@@ -48,7 +48,7 @@ public class GroupCreateUserCell extends FrameLayout {
         super(context);
         avatarDrawableDeprecated = new AvatarDrawableDeprecated();
 
-        avatarImageView = new BackupImageView(context);
+        avatarImageView = new BackupImageViewDeprecated(context);
         avatarImageView.setRoundRadius(AndroidUtilities.dp(24));
         addView(avatarImageView, LayoutHelper.createFrame(46, 46, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : (13 + padding), 6, LocaleController.isRTL ? (13 + padding) : 0, 0));
 

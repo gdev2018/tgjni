@@ -24,14 +24,14 @@ import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.GroupCreateCheckBox;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
 public class DrawerUserCell extends FrameLayout {
 
     private TextView textView;
-    private BackupImageView imageView;
+    private BackupImageViewDeprecated imageView;
     private AvatarDrawableDeprecated avatarDrawableDeprecated;
     private GroupCreateCheckBox checkBox;
 
@@ -44,7 +44,7 @@ public class DrawerUserCell extends FrameLayout {
         avatarDrawableDeprecated = new AvatarDrawableDeprecated();
         avatarDrawableDeprecated.setTextSize(AndroidUtilities.dp(12));
 
-        imageView = new BackupImageView(context);
+        imageView = new BackupImageViewDeprecated(context);
         imageView.setRoundRadius(AndroidUtilities.dp(18));
         addView(imageView, LayoutHelper.createFrame(36, 36, Gravity.LEFT | Gravity.TOP, 14, 6, 0, 0));
 

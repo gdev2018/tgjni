@@ -22,13 +22,13 @@ import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.Emoji;
 import com.github.gdev2018.master.FileLoader;
 import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
 
 public class StickerEmojiCell extends FrameLayout {
 
-    private BackupImageView imageView;
+    private BackupImageViewDeprecated imageView;
     private TLRPC.Document sticker;
     private Object parentObject;
     private TextView emojiTextView;
@@ -45,7 +45,7 @@ public class StickerEmojiCell extends FrameLayout {
     public StickerEmojiCell(Context context) {
         super(context);
 
-        imageView = new BackupImageView(context);
+        imageView = new BackupImageViewDeprecated(context);
         imageView.setAspectFit(true);
         addView(imageView, LayoutHelper.createFrame(66, 66, Gravity.CENTER));
 

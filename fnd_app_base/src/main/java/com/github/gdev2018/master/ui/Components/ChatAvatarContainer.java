@@ -32,7 +32,7 @@ import com.github.gdev2018.master.ui.ChatActivity;
 
 public class ChatAvatarContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
-    private BackupImageView avatarImageView;
+    private BackupImageViewDeprecated avatarImageView;
     private SimpleTextView titleTextView;
     private SimpleTextView subtitleTextView;
     private ImageView timeItem;
@@ -51,7 +51,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         super(context);
         parentFragment = chatActivity;
 
-        avatarImageView = new BackupImageView(context);
+        avatarImageView = new BackupImageViewDeprecated(context);
         avatarImageView.setRoundRadius(AndroidUtilities.dp(21));
         addView(avatarImageView);
 

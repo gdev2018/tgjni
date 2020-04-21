@@ -137,7 +137,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         tab.setOnClickListener(v -> delegate.onPageSelected(position));
         tabsContainer.addView(tab);
         tab.setSelected(position == currentPosition);
-        BackupImageView imageView = new BackupImageView(getContext());
+        BackupImageViewDeprecated imageView = new BackupImageViewDeprecated(getContext());
         imageView.setRoundRadius(AndroidUtilities.dp(15));
         TLRPC.FileLocation photo = null;
 
@@ -162,7 +162,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         tab.setOnClickListener(v -> delegate.onPageSelected(position));
         tabsContainer.addView(tab);
         tab.setSelected(position == currentPosition);
-        BackupImageView imageView = new BackupImageView(getContext());
+        BackupImageViewDeprecated imageView = new BackupImageViewDeprecated(getContext());
         imageView.setAspectFit(true);
         tab.addView(imageView, LayoutHelper.createFrame(30, 30, Gravity.CENTER));
     }
@@ -212,7 +212,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             if (!(object instanceof TLRPC.Document)) {
                 continue;
             }
-            BackupImageView imageView = (BackupImageView) ((FrameLayout) child).getChildAt(0);
+            BackupImageViewDeprecated imageView = (BackupImageViewDeprecated) ((FrameLayout) child).getChildAt(0);
             TLRPC.Document sticker = (TLRPC.Document) object;
             TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(sticker.thumbs, 90);
             imageView.setImage(thumb, null, "webp", null, parentObject);
@@ -241,7 +241,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             if (!(object instanceof TLRPC.Document)) {
                 continue;
             }
-            BackupImageView imageView = (BackupImageView) ((FrameLayout) child).getChildAt(0);
+            BackupImageViewDeprecated imageView = (BackupImageViewDeprecated) ((FrameLayout) child).getChildAt(0);
             if (a < newStart || a >= newStart + count) {
                 imageView.setImageDrawable(null);
             } else {

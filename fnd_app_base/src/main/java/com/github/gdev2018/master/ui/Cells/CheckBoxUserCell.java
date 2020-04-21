@@ -22,14 +22,14 @@ import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.CheckBoxSquare;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
 public class CheckBoxUserCell extends FrameLayout {
 
     private TextView textView;
-    private BackupImageView imageView;
+    private BackupImageViewDeprecated imageView;
     private CheckBoxSquare checkBox;
     private AvatarDrawableDeprecated avatarDrawableDeprecated;
     private boolean needDivider;
@@ -50,7 +50,7 @@ public class CheckBoxUserCell extends FrameLayout {
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 21 : 94), 0, (LocaleController.isRTL ? 94 : 21), 0));
 
         avatarDrawableDeprecated = new AvatarDrawableDeprecated();
-        imageView = new BackupImageView(context);
+        imageView = new BackupImageViewDeprecated(context);
         imageView.setRoundRadius(AndroidUtilities.dp(36));
         addView(imageView, LayoutHelper.createFrame(36, 36, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 48, 7, 48, 0));
 

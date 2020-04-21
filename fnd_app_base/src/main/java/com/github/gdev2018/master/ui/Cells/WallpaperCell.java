@@ -18,19 +18,19 @@ import android.widget.ImageView;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
 public class WallpaperCell extends FrameLayout {
 
-    private BackupImageView imageView;
+    private BackupImageViewDeprecated imageView;
     private View selectionView;
     private ImageView imageView2;
 
     public WallpaperCell(Context context) {
         super(context);
 
-        imageView = new BackupImageView(context);
+        imageView = new BackupImageViewDeprecated(context);
         addView(imageView, LayoutHelper.createFrame(100, 100, Gravity.LEFT | Gravity.BOTTOM));
 
         imageView2 = new ImageView(context);

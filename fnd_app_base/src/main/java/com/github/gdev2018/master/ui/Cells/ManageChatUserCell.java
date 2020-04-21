@@ -27,12 +27,12 @@ import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.SimpleTextView;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
 public class ManageChatUserCell extends FrameLayout {
 
-    private BackupImageView avatarImageView;
+    private BackupImageViewDeprecated avatarImageView;
     private SimpleTextView nameTextView;
     private SimpleTextView statusTextView;
     private ImageView optionsButton;
@@ -73,7 +73,7 @@ public class ManageChatUserCell extends FrameLayout {
 
         avatarDrawableDeprecated = new AvatarDrawableDeprecated();
 
-        avatarImageView = new BackupImageView(context);
+        avatarImageView = new BackupImageViewDeprecated(context);
         avatarImageView.setRoundRadius(AndroidUtilities.dp(23));
         addView(avatarImageView, LayoutHelper.createFrame(46, 46, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 7 + avatarPadding, 8, LocaleController.isRTL ? 7 + avatarPadding : 0, 0));
 

@@ -45,7 +45,6 @@ import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -101,7 +100,6 @@ import com.github.gdev2018.master.BaseBuildVars;
 ///*import com.github.gdev2018.master.ContactsController;*/
 import com.github.gdev2018.master.DataQuery;
 import com.github.gdev2018.master.Emoji;
-import com.github.gdev2018.master.EmojiSuggestion;
 import com.github.gdev2018.master.FileLoader;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.ImageLoader;
@@ -135,7 +133,7 @@ import com.github.gdev2018.master.ui.ActionBar.Theme;
 //import com.github.gdev2018.master.ui.Adapters.MentionsAdapter;
 import com.github.gdev2018.master.ui.Cells.PhotoPickerPhotoCell;
 import com.github.gdev2018.master.ui.Components.AnimatedFileDrawable;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 ///*import com.github.gdev2018.master.ui.Components.ChatAttachAlert;*/
 import com.github.gdev2018.master.ui.Components.CheckBox;
 import com.github.gdev2018.master.ui.Components.ClippingImageView;
@@ -153,7 +151,6 @@ import com.github.gdev2018.master.ui.Components.RadialProgressView;
 import com.github.gdev2018.master.ui.Components.RecyclerListView;
 import com.github.gdev2018.master.ui.Components.SeekBar;
 import com.github.gdev2018.master.ui.Components.SizeNotifierFrameLayoutPhoto;
-import com.github.gdev2018.master.ui.Components.URLSpanUserMentionPhotoViewer;
 import com.github.gdev2018.master.ui.Components.VideoForwardDrawable;
 import com.github.gdev2018.master.ui.Components.VideoPlayer;
 import com.github.gdev2018.master.ui.Components.VideoTimelinePlayView;
@@ -8890,7 +8887,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 case 0: {
                     PhotoPickerPhotoCell cell = (PhotoPickerPhotoCell) holder.itemView;
                     cell.itemWidth = AndroidUtilities.dp(82);
-                    BackupImageView imageView = cell.photoImage;
+                    BackupImageViewDeprecated imageView = cell.photoImage;
                     boolean showing;
                     imageView.setOrientation(0, true);
                     ArrayList<Object> order = placeProvider.getSelectedPhotosOrder();

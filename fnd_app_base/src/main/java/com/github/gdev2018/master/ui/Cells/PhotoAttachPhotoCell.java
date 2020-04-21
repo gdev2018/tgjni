@@ -27,14 +27,14 @@ import android.widget.TextView;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.MediaController;
 import com.github.gdev2018.master.R;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.CheckBox;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 import com.github.gdev2018.master.ui.PhotoViewer;
 
 public class PhotoAttachPhotoCell extends FrameLayout {
 
-    private BackupImageView imageView;
+    private BackupImageViewDeprecated imageView;
     private FrameLayout checkFrame;
     private CheckBox checkBox;
     private TextView videoTextView;
@@ -56,7 +56,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
     public PhotoAttachPhotoCell(Context context) {
         super(context);
 
-        imageView = new BackupImageView(context);
+        imageView = new BackupImageViewDeprecated(context);
         addView(imageView, LayoutHelper.createFrame(80, 80));
         checkFrame = new FrameLayout(context);
         addView(checkFrame, LayoutHelper.createFrame(42, 42, Gravity.LEFT | Gravity.TOP, 38, 0, 0, 0));
@@ -101,7 +101,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         return photoEntry;
     }
 
-    public BackupImageView getImageView() {
+    public BackupImageViewDeprecated getImageView() {
         return imageView;
     }
 

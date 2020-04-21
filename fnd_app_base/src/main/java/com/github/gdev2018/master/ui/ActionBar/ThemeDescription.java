@@ -32,7 +32,7 @@ import android.widget.TextView;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.ChatBigEmptyView;
 import com.github.gdev2018.master.ui.Components.CheckBox;
 import com.github.gdev2018.master.ui.Components.CombinedDrawable;
@@ -397,7 +397,7 @@ public class ThemeDescription {
                     } else {
                         ((ImageView) viewToInvalidate).setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                     }
-                } else if (viewToInvalidate instanceof BackupImageView) {
+                } else if (viewToInvalidate instanceof BackupImageViewDeprecated) {
                     //((BackupImageView) viewToInvalidate).setResourceImageColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                 } else if (viewToInvalidate instanceof SimpleTextView) {
                     SimpleTextView textView = (SimpleTextView) viewToInvalidate;
@@ -614,8 +614,8 @@ public class ThemeDescription {
                                     }
                                 } else if (object instanceof ImageView) {
                                     ((ImageView) object).setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-                                } else if (object instanceof BackupImageView) {
-                                    Drawable drawable = ((BackupImageView) object).getImageReceiver().getStaticThumb();
+                                } else if (object instanceof BackupImageViewDeprecated) {
+                                    Drawable drawable = ((BackupImageViewDeprecated) object).getImageReceiver().getStaticThumb();
                                     if (drawable instanceof CombinedDrawable) {
                                         if ((changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
                                             ((CombinedDrawable) drawable).getBackground().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));

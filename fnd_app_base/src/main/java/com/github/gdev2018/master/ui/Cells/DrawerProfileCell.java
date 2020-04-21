@@ -33,14 +33,14 @@ import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.SnowflakesEffect;
 
 public class DrawerProfileCell extends FrameLayout {
 
-    private BackupImageView avatarImageView;
+    private BackupImageViewDeprecated avatarImageView;
     private TextView nameTextView;
     private TextView phoneTextView;
     private ImageView shadowView;
@@ -61,7 +61,7 @@ public class DrawerProfileCell extends FrameLayout {
         shadowView.setImageResource(R.drawable.bottom_shadow);
         addView(shadowView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 70, Gravity.LEFT | Gravity.BOTTOM));
 
-        avatarImageView = new BackupImageView(context);
+        avatarImageView = new BackupImageViewDeprecated(context);
         avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(32));
         addView(avatarImageView, LayoutHelper.createFrame(64, 64, Gravity.LEFT | Gravity.BOTTOM, 16, 0, 0, 67));
 

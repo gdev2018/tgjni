@@ -19,7 +19,7 @@ import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
 public class PaymentInfoCell extends FrameLayout {
@@ -27,12 +27,12 @@ public class PaymentInfoCell extends FrameLayout {
     private TextView nameTextView;
     private TextView detailTextView;
     private TextView detailExTextView;
-    private BackupImageView imageView;
+    private BackupImageViewDeprecated imageView;
 
     public PaymentInfoCell(Context context) {
         super(context);
 
-        imageView = new BackupImageView(context);
+        imageView = new BackupImageViewDeprecated(context);
         addView(imageView, LayoutHelper.createFrame(100, 100, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), 10, 10, 10, 0));
 
         nameTextView = new TextView(context);

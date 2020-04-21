@@ -158,7 +158,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private Size pictureSize;
     private Size aspectRatio = SharedConfig.roundCamera16to9 ? new Size(16, 9) : new Size(4, 3);
     private TextureView textureView;
-    private BackupImageView textureOverlayView;
+    private BackupImageViewDeprecated textureOverlayView;
     private CameraSession cameraSession;
 
     private float[] mMVPMatrix = new float[16];
@@ -341,7 +341,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         addView(muteImageView, LayoutHelper.createFrame(48, 48, Gravity.CENTER));
         ((LayoutParams) muteImageView.getLayoutParams()).topMargin = AndroidUtilities.roundMessageSize / 2 - AndroidUtilities.dp(24);
 
-        textureOverlayView = new BackupImageView(getContext());
+        textureOverlayView = new BackupImageViewDeprecated(getContext());
         textureOverlayView.setRoundRadius(AndroidUtilities.roundMessageSize / 2);
         addView(textureOverlayView, new FrameLayout.LayoutParams(AndroidUtilities.roundMessageSize, AndroidUtilities.roundMessageSize, Gravity.CENTER));
 

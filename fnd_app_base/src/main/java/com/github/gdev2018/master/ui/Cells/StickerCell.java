@@ -23,12 +23,12 @@ import com.github.gdev2018.master.FileLoader;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
 public class StickerCell extends FrameLayout {
 
-    private BackupImageView imageView;
+    private BackupImageViewDeprecated imageView;
     private TLRPC.Document sticker;
     private long lastUpdateTime;
     private boolean scaled;
@@ -39,7 +39,7 @@ public class StickerCell extends FrameLayout {
     public StickerCell(Context context) {
         super(context);
 
-        imageView = new BackupImageView(context);
+        imageView = new BackupImageViewDeprecated(context);
         imageView.setAspectFit(true);
         addView(imageView, LayoutHelper.createFrame(66, 66, Gravity.CENTER_HORIZONTAL, 0, 5, 0, 0));
     }

@@ -17,23 +17,23 @@ import com.github.gdev2018.master.SecureDocument;
 import com.github.gdev2018.master.tgnet.TLObject;
 
 // @deprecated
-public class BackupImageView extends View {
+public class BackupImageViewDeprecated extends View {
 
     private ImageReceiver imageReceiver;
     private int width = -1;
     private int height = -1;
 
-    public BackupImageView(Context context) {
+    public BackupImageViewDeprecated(Context context) {
         super(context);
         init();
     }
 
-    public BackupImageView(Context context, AttributeSet attrs) {
+    public BackupImageViewDeprecated(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public BackupImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BackupImageViewDeprecated(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }

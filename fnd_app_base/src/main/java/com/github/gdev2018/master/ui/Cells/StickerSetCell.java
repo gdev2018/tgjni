@@ -27,7 +27,7 @@ import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 import com.github.gdev2018.master.ui.Components.RadialProgressView;
 
@@ -37,7 +37,7 @@ public class StickerSetCell extends FrameLayout {
 
     private TextView textView;
     private TextView valueTextView;
-    private BackupImageView imageView;
+    private BackupImageViewDeprecated imageView;
     private RadialProgressView progressView;
     private boolean needDivider;
     private ImageView optionsButton;
@@ -66,7 +66,7 @@ public class StickerSetCell extends FrameLayout {
         valueTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         addView(valueTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, LocaleController.isRTL ? 40 : 71, 35, LocaleController.isRTL ? 71 : 40, 0));
 
-        imageView = new BackupImageView(context);
+        imageView = new BackupImageViewDeprecated(context);
         imageView.setAspectFit(true);
         addView(imageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 12, 8, LocaleController.isRTL ? 12 : 0, 0));
 

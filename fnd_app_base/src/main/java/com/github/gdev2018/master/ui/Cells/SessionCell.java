@@ -26,7 +26,7 @@ import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
 import java.util.Locale;
@@ -37,7 +37,7 @@ public class SessionCell extends FrameLayout {
     private TextView onlineTextView;
     private TextView detailTextView;
     private TextView detailExTextView;
-    private BackupImageView imageView;
+    private BackupImageViewDeprecated imageView;
     private AvatarDrawableDeprecated avatarDrawableDeprecated;
     private boolean needDivider;
 
@@ -57,7 +57,7 @@ public class SessionCell extends FrameLayout {
             avatarDrawableDeprecated = new AvatarDrawableDeprecated();
             avatarDrawableDeprecated.setTextSize(AndroidUtilities.dp(10));
 
-            imageView = new BackupImageView(context);
+            imageView = new BackupImageViewDeprecated(context);
             imageView.setRoundRadius(AndroidUtilities.dp(10));
             addView(imageView, LayoutHelper.createFrame(20, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 0 : 17), 13, (LocaleController.isRTL ? 17 : 0), 0));
         } else {

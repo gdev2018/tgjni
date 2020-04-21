@@ -27,13 +27,13 @@ import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.SimpleTextView;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 import com.github.gdev2018.master.ui.Components.URLSpanNoUnderline;
 
 public class AdminedChannelCell extends FrameLayout {
 
-    private BackupImageView avatarImageView;
+    private BackupImageViewDeprecated avatarImageView;
     private SimpleTextView nameTextView;
     private SimpleTextView statusTextView;
     private AvatarDrawableDeprecated avatarDrawableDeprecated;
@@ -47,7 +47,7 @@ public class AdminedChannelCell extends FrameLayout {
 
         avatarDrawableDeprecated = new AvatarDrawableDeprecated();
 
-        avatarImageView = new BackupImageView(context);
+        avatarImageView = new BackupImageViewDeprecated(context);
         avatarImageView.setRoundRadius(AndroidUtilities.dp(24));
         addView(avatarImageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 12, 12, LocaleController.isRTL ? 12 : 0, 0));
 

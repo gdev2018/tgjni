@@ -23,7 +23,7 @@ import com.github.gdev2018.master.FileLoader;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 import com.github.gdev2018.master.ui.Components.Switch;
 
@@ -31,7 +31,7 @@ public class ArchivedStickerSetCell extends FrameLayout {
 
     private TextView textView;
     private TextView valueTextView;
-    private BackupImageView imageView;
+    private BackupImageViewDeprecated imageView;
     private boolean needDivider;
     private Switch checkBox;
     private TLRPC.StickerSetCovered stickersSet;
@@ -60,7 +60,7 @@ public class ArchivedStickerSetCell extends FrameLayout {
         valueTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         addView(valueTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 71, 35, needCheckBox ? 71 : 21, 0));
 
-        imageView = new BackupImageView(context);
+        imageView = new BackupImageViewDeprecated(context);
         imageView.setAspectFit(true);
         addView(imageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 12, 8, LocaleController.isRTL ? 12 : 0, 0));
 

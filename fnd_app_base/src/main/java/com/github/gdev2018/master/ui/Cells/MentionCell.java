@@ -22,12 +22,12 @@ import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
 public class MentionCell extends LinearLayout {
 
-    private BackupImageView imageView;
+    private BackupImageViewDeprecated imageView;
     private TextView nameTextView;
     private TextView usernameTextView;
     private AvatarDrawableDeprecated avatarDrawableDeprecated;
@@ -40,7 +40,7 @@ public class MentionCell extends LinearLayout {
         avatarDrawableDeprecated = new AvatarDrawableDeprecated();
         avatarDrawableDeprecated.setTextSize(AndroidUtilities.dp(12));
 
-        imageView = new BackupImageView(context);
+        imageView = new BackupImageViewDeprecated(context);
         imageView.setRoundRadius(AndroidUtilities.dp(14));
         addView(imageView, LayoutHelper.createLinear(28, 28, 12, 4, 0, 0));
 

@@ -21,20 +21,20 @@ import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
 public class LocationCell extends FrameLayout {
 
     private TextView nameTextView;
     private TextView addressTextView;
-    private BackupImageView imageView;
+    private BackupImageViewDeprecated imageView;
     private boolean needDivider;
 
     public LocationCell(Context context) {
         super(context);
 
-        imageView = new BackupImageView(context);
+        imageView = new BackupImageViewDeprecated(context);
         imageView.setBackgroundResource(R.drawable.round_grey);
         imageView.setSize(AndroidUtilities.dp(30), AndroidUtilities.dp(30));
 ///*        imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), PorterDuff.Mode.MULTIPLY));*/

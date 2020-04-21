@@ -27,13 +27,13 @@ import com.github.gdev2018.master.MediaController;
 import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.ui.Components.BackupImageView;
+import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
 import com.github.gdev2018.master.ui.Components.CheckBox;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 
 public class PhotoPickerPhotoCell extends FrameLayout {
 
-    public BackupImageView photoImage;
+    public BackupImageViewDeprecated photoImage;
     public FrameLayout checkFrame;
     public CheckBox checkBox;
     public TextView videoTextView;
@@ -48,7 +48,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
 
         zoomOnSelect = zoom;
 
-        photoImage = new BackupImageView(context);
+        photoImage = new BackupImageViewDeprecated(context);
         addView(photoImage, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         checkFrame = new FrameLayout(context);

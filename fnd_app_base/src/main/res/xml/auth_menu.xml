@@ -5,8 +5,8 @@
     <PreferenceScreen android:key="account_settings"
         android:title="@string/AccountSettings"
         android:summary="">
-        <intent android:action="com.github.gdev2018.master.OPEN_ACCOUNT"
-            android:targetPackage="com.github.gdev2018.master"
-            android:targetClass="com.github.gdev2018.master.ui.LaunchActivity"/>
+        <intent android:action="org.telegram.messenger.OPEN_ACCOUNT"
+            android:targetPackage="org.telegram.messenger"
+            android:targetClass="org.telegram.ui.LaunchActivity"/>
     </PreferenceScreen>
 </PreferenceScreen>

@@ -185,11 +185,11 @@ public class Theme {
             if ("Default".equals(name)) {
                 return LocaleController.getString("Default", R.string.Default);
             } else if ("Blue".equals(name)) {
-                return LocaleController.getString("ThemeBlue", R.string.ThemeBlue);
+///*                return LocaleController.getString("ThemeBlue", R.string.ThemeBlue);*/
             } else if ("Dark Blue".equals(name)) {
                 return LocaleController.getString("ThemeDark", R.string.ThemeDark);
             } else if ("Graphite".equals(name)) {
-                return LocaleController.getString("ThemeGraphite", R.string.ThemeGraphite);
+///*                return LocaleController.getString("ThemeGraphite", R.string.ThemeGraphite);*/
             } else if ("Arctic Blue".equals(name)) {
                 return LocaleController.getString("ThemeArcticBlue", R.string.ThemeArcticBlue);
             }

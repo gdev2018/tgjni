@@ -8967,10 +8967,10 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                 if (Math.abs(SystemClock.uptimeMillis() - time) < 600) {
                     continue;
                 }
-                MessagesStorage.getInstance(currentAccount).updateMessagePollResults(update.poll_id, update.poll, update.results);
-                if (updatesOnMainThread == null) {
-                    updatesOnMainThread = new ArrayList<>();
-                }
+///*                MessagesStorage.getInstance(currentAccount).updateMessagePollResults(update.poll_id, update.poll, update.results);
+//                if (updatesOnMainThread == null) {
+//                    updatesOnMainThread = new ArrayList<>();
+//                }*/
                 updatesOnMainThread.add(baseUpdate);
             }
         }

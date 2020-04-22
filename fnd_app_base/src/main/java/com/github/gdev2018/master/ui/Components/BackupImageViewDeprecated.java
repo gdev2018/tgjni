@@ -122,7 +122,8 @@ public class BackupImageViewDeprecated extends View {
     }
 
     public int getRoundRadius() {
-        return imageReceiver.getRoundRadius();
+///*        return imageReceiver.getRoundRadius();*/
+        return 0;
     }
 
     public void setAspectFit(boolean value) {

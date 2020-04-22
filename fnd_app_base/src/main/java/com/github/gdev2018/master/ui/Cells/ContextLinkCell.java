@@ -8,16 +8,25 @@
 
 package com.github.gdev2018.master.ui.Cells;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextUtils;
+import android.util.Property;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.FrameLayout;
 
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.BaseUserConfig;
@@ -26,15 +35,20 @@ import com.github.gdev2018.master.Emoji;
 import com.github.gdev2018.master.FileLoader;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.ImageLoader;
+import com.github.gdev2018.master.ImageLocation;
 import com.github.gdev2018.master.ImageReceiver;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MediaController;
 import com.github.gdev2018.master.MessageObject;
 import com.github.gdev2018.master.MessagesController;
+import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.WebFile;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
+import com.github.gdev2018.master.ui.Components.AnimationProperties;
+import com.github.gdev2018.master.ui.Components.CheckBox2;
+import com.github.gdev2018.master.ui.Components.LayoutHelper;
 import com.github.gdev2018.master.ui.Components.LetterDrawable;
 import com.github.gdev2018.master.ui.Components.MediaActionDrawable;
 import com.github.gdev2018.master.ui.Components.RadialProgress2;
@@ -44,7 +58,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class ContextLinkCell extends View implements DownloadController.FileDownloadProgressListener {
+public class ContextLinkCell extends FrameLayout implements DownloadController.FileDownloadProgressListener {
 
     private final static int DOCUMENT_ATTACH_TYPE_NONE = 0;
     private final static int DOCUMENT_ATTACH_TYPE_DOCUMENT = 1;
@@ -70,6 +84,8 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
     private boolean buttonPressed;
     private boolean needShadow;
 
+    private boolean canPreviewGif;
+
     private int linkY;
     private StaticLayout linkLayout;
 
@@ -81,10 +97,16 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
 
     private TLRPC.BotInlineResult inlineResult;
     private TLRPC.Document documentAttach;
+    private int currentDate;
+    private TLRPC.Photo photoAttach;
     private TLRPC.PhotoSize currentPhotoObject;
     private int documentAttachType;
     private boolean mediaWebpage;
     private MessageObject currentMessageObject;
+
+    private AnimatorSet animator;
+
+    private Paint backgroundPaint;
 
     private int TAG;
     private int buttonState;
@@ -95,15 +117,37 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
     private float scale;
     private static AccelerateInterpolator interpolator = new AccelerateInterpolator(0.5f);
 
+    private CheckBox2 checkBox;
+
     private ContextLinkCellDelegate delegate;
 
     public ContextLinkCell(Context context) {
+        this(context, false);
+    }
+
+    public ContextLinkCell(Context context, boolean needsCheckBox) {
         super(context);
 
         linkImageView = new ImageReceiver(this);
+        linkImageView.setLayerNum(1);
+        linkImageView.setUseSharedAnimationQueue(true);
         letterDrawable = new LetterDrawable();
         radialProgress = new RadialProgress2(this);
         TAG = DownloadController.getInstance(currentAccount).generateObserverTag();
+        setFocusable(true);
+
+        if (needsCheckBox) {
+            backgroundPaint = new Paint();
+            backgroundPaint.setColor(Theme.getColor(Theme.key_sharedMedia_photoPlaceholder));
+
+            checkBox = new CheckBox2(context, 21);
+            checkBox.setVisibility(INVISIBLE);
+            checkBox.setColor(null, Theme.key_sharedMedia_photoPlaceholder, Theme.key_checkboxCheck);
+            checkBox.setDrawUnchecked(false);
+            checkBox.setDrawBackgroundAsArc(1);
+            addView(checkBox, LayoutHelper.createFrame(24, 24, Gravity.RIGHT | Gravity.TOP, 0, 1, 1, 0));
+        }
+        setWillNotDraw(false);
     }
 
     @SuppressLint("DrawAllocation")
@@ -174,7 +218,7 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
         if (documentAttach != null) {
             if (MessageObject.isGifDocument(documentAttach)) {
                 currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(documentAttach.thumbs, 90);
-            } else if (MessageObject.isStickerDocument(documentAttach)) {
+            } else if (MessageObject.isStickerDocument(documentAttach) || MessageObject.isAnimatedStickerDocument(documentAttach, true)) {
                 currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(documentAttach.thumbs, 90);
                 ext = "webp";
             } else {
@@ -193,10 +237,8 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
             if (inlineResult.content instanceof TLRPC.TL_webDocument) {
                 if (inlineResult.type != null) {
                     if (inlineResult.type.startsWith("gif")) {
-                        if (documentAttachType != DOCUMENT_ATTACH_TYPE_GIF) {
-                            webDocument = (TLRPC.TL_webDocument) inlineResult.content;
-                            documentAttachType = DOCUMENT_ATTACH_TYPE_GIF;
-                        }
+                        webDocument = (TLRPC.TL_webDocument) inlineResult.content;
+                        documentAttachType = DOCUMENT_ATTACH_TYPE_GIF;
                     } else if (inlineResult.type.equals("photo")) {
                         if (inlineResult.thumb instanceof TLRPC.TL_webDocument) {
                             webDocument = (TLRPC.TL_webDocument) inlineResult.thumb;
@@ -247,7 +289,7 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
                 w = currentPhotoObject.w;
                 h = currentPhotoObject.h;
             } else if (inlineResult != null) {
-                int result[] = MessageObject.getInlineResultWidthAndHeight(inlineResult);
+                int[] result = MessageObject.getInlineResultWidthAndHeight(inlineResult);
                 w = result[0];
                 h = result[1];
             }
@@ -272,19 +314,31 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
             }
             linkImageView.setAspectFit(documentAttachType == DOCUMENT_ATTACH_TYPE_STICKER);
 
-///*            if (documentAttachType == DOCUMENT_ATTACH_TYPE_GIF) {
-//                if (documentAttach != null) {
-//                    linkImageView.setImage(documentAttach, null, currentPhotoObject, currentPhotoFilter, documentAttach.size, ext, parentObject, 0);
-//                } else {
-//                    linkImageView.setImage(webFile != null ? webFile : urlLocation, null, null, currentPhotoObject, currentPhotoFilter, -1, ext, parentObject, 1);
-//                }
-//            } else {
-//                if (currentPhotoObject != null) {
-//                    linkImageView.setImage(currentPhotoObject, currentPhotoFilter, currentPhotoObjectThumb, currentPhotoFilterThumb, currentPhotoObject.size, ext, parentObject, 0);
-//                } else {
-//                    linkImageView.setImage(webFile != null ? webFile : urlLocation, currentPhotoFilter, null, currentPhotoObjectThumb, currentPhotoFilterThumb, -1, ext, parentObject, 1);
-//                }
-//            }*/
+            if (documentAttachType == DOCUMENT_ATTACH_TYPE_GIF) {
+                if (documentAttach != null) {
+                    linkImageView.setImage(ImageLocation.getForDocument(documentAttach), null, ImageLocation.getForDocument(currentPhotoObject, documentAttach), currentPhotoFilter, documentAttach.size, ext, parentObject, 0);
+                } else if (webFile != null) {
+                    linkImageView.setImage(ImageLocation.getForWebFile(webFile), null, ImageLocation.getForPhoto(currentPhotoObject, photoAttach), currentPhotoFilter, -1, ext, parentObject, 1);
+                } else {
+                    linkImageView.setImage(ImageLocation.getForPath(urlLocation), null, ImageLocation.getForPhoto(currentPhotoObject, photoAttach), currentPhotoFilter, -1, ext, parentObject, 1);
+                }
+            } else {
+                if (currentPhotoObject != null) {
+                    if (MessageObject.canAutoplayAnimatedSticker(documentAttach)) {
+                        linkImageView.setImage(ImageLocation.getForDocument(documentAttach), "80_80", ImageLocation.getForDocument(currentPhotoObject, documentAttach), currentPhotoFilterThumb, currentPhotoObject.size, null, parentObject, 0);
+                    } else {
+                        if (documentAttach != null) {
+                            linkImageView.setImage(ImageLocation.getForDocument(currentPhotoObject, documentAttach), currentPhotoFilter, ImageLocation.getForPhoto(currentPhotoObjectThumb, photoAttach), currentPhotoFilterThumb, currentPhotoObject.size, ext, parentObject, 0);
+                        } else {
+                            linkImageView.setImage(ImageLocation.getForPhoto(currentPhotoObject, photoAttach), currentPhotoFilter, ImageLocation.getForPhoto(currentPhotoObjectThumb, photoAttach), currentPhotoFilterThumb, currentPhotoObject.size, ext, parentObject, 0);
+                        }
+                    }
+                } else if (webFile != null) {
+                    linkImageView.setImage(ImageLocation.getForWebFile(webFile), currentPhotoFilter, ImageLocation.getForPhoto(currentPhotoObjectThumb, photoAttach), currentPhotoFilterThumb, -1, ext, parentObject, 1);
+                } else {
+                    linkImageView.setImage(ImageLocation.getForPath(urlLocation), currentPhotoFilter, ImageLocation.getForPhoto(currentPhotoObjectThumb, photoAttach), currentPhotoFilterThumb, -1, ext, parentObject, 1);
+                }
+            }
             drawLinkImageView = true;
         }
 
@@ -323,6 +377,9 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
                 radialProgress.setProgressRect(x + AndroidUtilities.dp(4), AndroidUtilities.dp(12), x + AndroidUtilities.dp(48), AndroidUtilities.dp(56));
             }
         }
+        if (checkBox != null) {
+            measureChildWithMargins(checkBox, widthMeasureSpec, 0, heightMeasureSpec, 0);
+        }
     }
 
     private void setAttachType() {
@@ -331,7 +388,7 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
         if (documentAttach != null) {
             if (MessageObject.isGifDocument(documentAttach)) {
                 documentAttachType = DOCUMENT_ATTACH_TYPE_GIF;
-            } else if (MessageObject.isStickerDocument(documentAttach)) {
+            } else if (MessageObject.isStickerDocument(documentAttach) || MessageObject.isAnimatedStickerDocument(documentAttach, true)) {
                 documentAttachType = DOCUMENT_ATTACH_TYPE_STICKER;
             } else if (MessageObject.isMusicDocument(documentAttach)) {
                 documentAttachType = DOCUMENT_ATTACH_TYPE_MUSIC;
@@ -398,10 +455,12 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
         needDivider = divider;
         needShadow = shadow;
         parentObject = inlineResult = contextResult;
-        if (inlineResult != null && inlineResult.document != null) {
+        if (inlineResult != null) {
             documentAttach = inlineResult.document;
+            photoAttach = inlineResult.photo;
         } else {
             documentAttach = null;
+            photoAttach = null;
         }
         mediaWebpage = media;
         setAttachType();
@@ -409,12 +468,22 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
         updateButtonState(false, false);
     }
 
+    public Object getParentObject() {
+        return parentObject;
+    }
+
     public void setGif(TLRPC.Document document, boolean divider) {
+        setGif(document, "gif" + document, 0, divider);
+    }
+
+    public void setGif(TLRPC.Document document, Object parent, int date, boolean divider) {
         needDivider = divider;
         needShadow = false;
+        currentDate = date;
         inlineResult = null;
-        parentObject = "gif";
+        parentObject = parent;
         documentAttach = document;
+        photoAttach = null;
         mediaWebpage = true;
         setAttachType();
         requestLayout();
@@ -425,12 +494,24 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
         return documentAttachType == DOCUMENT_ATTACH_TYPE_STICKER;
     }
 
+    public boolean isGif() {
+        return documentAttachType == DOCUMENT_ATTACH_TYPE_GIF && canPreviewGif;
+    }
+
     public boolean showingBitmap() {
         return linkImageView.getBitmap() != null;
     }
 
+    public int getDate() {
+        return currentDate;
+    }
+
     public TLRPC.Document getDocument() {
         return documentAttach;
+    }
+
+    public TLRPC.BotInlineResult getBotInlineResult() {
+        return inlineResult;
     }
 
     public ImageReceiver getPhotoImage() {
@@ -441,6 +522,14 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
         scaled = value;
         lastUpdateTime = System.currentTimeMillis();
         invalidate();
+    }
+
+    public void setCanPreviewGif(boolean value) {
+        canPreviewGif = value;
+    }
+
+    public boolean isCanPreviewGif() {
+        return canPreviewGif;
     }
 
     @Override
@@ -575,6 +664,11 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
 
     @Override
     protected void onDraw(Canvas canvas) {
+        if (checkBox != null) {
+            if (checkBox.isChecked() || !linkImageView.hasBitmapImage() || linkImageView.getCurrentAlpha() != 1.0f || PhotoViewer.isShowingImage((MessageObject) parentObject)) {
+                canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), backgroundPaint);
+            }
+        }
         if (titleLayout != null) {
             canvas.save();
             canvas.translate(AndroidUtilities.dp(LocaleController.isRTL ? 8 : AndroidUtilities.leftBaseline), titleY);
@@ -599,6 +693,11 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
         }
 
         if (!mediaWebpage) {
+            if (drawLinkImageView && !PhotoViewer.isShowingImage(inlineResult)) {
+                letterDrawable.setAlpha((int) (255 * (1.0f - linkImageView.getCurrentAlpha())));
+            } else {
+                letterDrawable.setAlpha(255);
+            }
             if (documentAttachType == DOCUMENT_ATTACH_TYPE_AUDIO || documentAttachType == DOCUMENT_ATTACH_TYPE_MUSIC) {
                 radialProgress.setProgressColor(Theme.getColor(buttonPressed ? Theme.key_chat_inAudioSelectedProgress : Theme.key_chat_inAudioProgress));
                 radialProgress.draw(canvas);
@@ -662,7 +761,7 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
                 }
                 invalidate();
             }
-            canvas.scale(scale, scale, getMeasuredWidth() / 2, getMeasuredHeight() / 2);
+            canvas.scale(scale * imageScale, scale * imageScale, getMeasuredWidth() / 2, getMeasuredHeight() / 2);
             linkImageView.draw(canvas);
             canvas.restore();
         }
@@ -803,8 +902,8 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
     }
 
     @Override
-    public void onProgressDownload(String fileName, float progress) {
-        radialProgress.setProgress(progress, true);
+    public void onProgressDownload(String fileName, long downloadedSize, long totalSize) {
+        radialProgress.setProgress(Math.min(1f, downloadedSize / (float) totalSize), true);
         if (documentAttachType == DOCUMENT_ATTACH_TYPE_AUDIO || documentAttachType == DOCUMENT_ATTACH_TYPE_MUSIC) {
             if (buttonState != 4) {
                 updateButtonState(false, true);
@@ -817,12 +916,120 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
     }
 
     @Override
-    public void onProgressUpload(String fileName, float progress, boolean isEncrypted) {
+    public void onProgressUpload(String fileName, long uploadedSize, long totalSize, boolean isEncrypted) {
 
     }
 
     @Override
     public int getObserverTag() {
         return TAG;
+    }
+
+    @Override
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        StringBuilder sbuf = new StringBuilder();
+        switch (documentAttachType) {
+            case DOCUMENT_ATTACH_TYPE_DOCUMENT:
+                sbuf.append(LocaleController.getString("AttachDocument", R.string.AttachDocument));
+                break;
+            case DOCUMENT_ATTACH_TYPE_GIF:
+                sbuf.append(LocaleController.getString("AttachGif", R.string.AttachGif));
+                break;
+            case DOCUMENT_ATTACH_TYPE_AUDIO:
+                sbuf.append(LocaleController.getString("AttachAudio", R.string.AttachAudio));
+                break;
+            case DOCUMENT_ATTACH_TYPE_VIDEO:
+                sbuf.append(LocaleController.getString("AttachVideo", R.string.AttachVideo));
+                break;
+            case DOCUMENT_ATTACH_TYPE_MUSIC:
+                sbuf.append(LocaleController.getString("AttachMusic", R.string.AttachMusic));
+                if (descriptionLayout != null && titleLayout != null) {
+                    sbuf.append(", ");
+                    sbuf.append(LocaleController.formatString("AccDescrMusicInfo", R.string.AccDescrMusicInfo, descriptionLayout.getText(), titleLayout.getText()));
+                }
+                break;
+            case DOCUMENT_ATTACH_TYPE_STICKER:
+                sbuf.append(LocaleController.getString("AttachSticker", R.string.AttachSticker));
+                break;
+            case DOCUMENT_ATTACH_TYPE_PHOTO:
+                sbuf.append(LocaleController.getString("AttachPhoto", R.string.AttachPhoto));
+                break;
+            case DOCUMENT_ATTACH_TYPE_GEO:
+                sbuf.append(LocaleController.getString("AttachLocation", R.string.AttachLocation));
+                break;
+            default:
+                if (titleLayout != null && !TextUtils.isEmpty(titleLayout.getText())) {
+                    sbuf.append(titleLayout.getText());
+                }
+                if (descriptionLayout != null && !TextUtils.isEmpty(descriptionLayout.getText())) {
+                    if (sbuf.length() > 0)
+                        sbuf.append(", ");
+                    sbuf.append(descriptionLayout.getText());
+                }
+                break;
+        }
+        info.setText(sbuf);
+        if (checkBox != null && checkBox.isChecked()) {
+            info.setCheckable(true);
+            info.setChecked(true);
+        }
+    }
+
+    private float imageScale = 1.0f;
+
+    public final Property<ContextLinkCell, Float> IMAGE_SCALE = new AnimationProperties.FloatProperty<ContextLinkCell>("animationValue") {
+        @Override
+        public void setValue(ContextLinkCell object, float value) {
+            imageScale = value;
+            invalidate();
+        }
+
+        @Override
+        public Float get(ContextLinkCell object) {
+            return imageScale;
+        }
+    };
+
+    public void setChecked(boolean checked, boolean animated) {
+        if (checkBox == null) {
+            return;
+        }
+        if (checkBox.getVisibility() != VISIBLE) {
+            checkBox.setVisibility(VISIBLE);
+        }
+        checkBox.setChecked(checked, animated);
+        if (animator != null) {
+            animator.cancel();
+            animator = null;
+        }
+        if (animated) {
+            animator = new AnimatorSet();
+            animator.playTogether(
+                    ObjectAnimator.ofFloat(this, IMAGE_SCALE, checked ? 0.81f : 1.0f));
+            animator.setDuration(200);
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (animator != null && animator.equals(animation)) {
+                        animator = null;
+                        if (!checked) {
+                            setBackgroundColor(0);
+                        }
+                    }
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    if (animator != null && animator.equals(animation)) {
+                        animator = null;
+                    }
+                }
+            });
+            animator.start();
+        } else {
+            imageScale = checked ? 0.85f : 1.0f;
+            invalidate();
+        }
     }
 }

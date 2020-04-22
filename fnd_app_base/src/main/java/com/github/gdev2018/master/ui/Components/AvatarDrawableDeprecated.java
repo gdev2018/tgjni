@@ -215,28 +215,28 @@ public class AvatarDrawableDeprecated extends Drawable {
         canvas.translate(bounds.left, bounds.top);
         canvas.drawCircle(size / 2.0f, size / 2.0f, size / 2.0f, Theme.avatar_backgroundPaint);
 
-        if (savedMessages != 0 && Theme.avatar_savedDrawable != null) {
-            int w = Theme.avatar_savedDrawable.getIntrinsicWidth();
-            int h = Theme.avatar_savedDrawable.getIntrinsicHeight();
-            if (savedMessages == 2) {
-                w *= 0.8f;
-                h *= 0.8f;
-            }
-            int x = (size - w) / 2;
-            int y = (size - h) / 2;
-            Theme.avatar_savedDrawable.setBounds(x, y, x + w, y + h);
-            Theme.avatar_savedDrawable.draw(canvas);
-///*        } else if (drawBrodcast && Theme.avatar_broadcastDrawable != null) {
-//            int x = (size - Theme.avatar_broadcastDrawable.getIntrinsicWidth()) / 2;
-//            int y = (size - Theme.avatar_broadcastDrawable.getIntrinsicHeight()) / 2;
-//            Theme.avatar_broadcastDrawable.setBounds(x, y, x + Theme.avatar_broadcastDrawable.getIntrinsicWidth(), y + Theme.avatar_broadcastDrawable.getIntrinsicHeight());
-//            Theme.avatar_broadcastDrawable.draw(canvas);*/
-        } else {
-            if (textLayout != null) {
-                canvas.translate((size - textWidth) / 2 - textLeft, (size - textHeight) / 2);
-                textLayout.draw(canvas);
-            }
-        }
+//        if (savedMessages != 0 && Theme.avatar_savedDrawable != null) {
+//            int w = Theme.avatar_savedDrawable.getIntrinsicWidth();
+//            int h = Theme.avatar_savedDrawable.getIntrinsicHeight();
+//            if (savedMessages == 2) {
+//                w *= 0.8f;
+//                h *= 0.8f;
+//            }
+//            int x = (size - w) / 2;
+//            int y = (size - h) / 2;
+//            Theme.avatar_savedDrawable.setBounds(x, y, x + w, y + h);
+//            Theme.avatar_savedDrawable.draw(canvas);
+/////*        } else if (drawBrodcast && Theme.avatar_broadcastDrawable != null) {
+////            int x = (size - Theme.avatar_broadcastDrawable.getIntrinsicWidth()) / 2;
+////            int y = (size - Theme.avatar_broadcastDrawable.getIntrinsicHeight()) / 2;
+////            Theme.avatar_broadcastDrawable.setBounds(x, y, x + Theme.avatar_broadcastDrawable.getIntrinsicWidth(), y + Theme.avatar_broadcastDrawable.getIntrinsicHeight());
+////            Theme.avatar_broadcastDrawable.draw(canvas);*/
+//        } else {
+//            if (textLayout != null) {
+//                canvas.translate((size - textWidth) / 2 - textLeft, (size - textHeight) / 2);
+//                textLayout.draw(canvas);
+//            }
+//        }
         canvas.restore();
     }
 

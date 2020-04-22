@@ -112,7 +112,7 @@ public class GroupCreateSpan extends View {
     }
 
     public void updateColors() {
-        int color = Theme.getColor(Theme.key_avatar_backgroundGroupCreateSpanBlue);
+        int color = Theme.getColor(Theme.key_avatar_backgroundActionBarBlue);
         int back = Theme.getColor(Theme.key_groupcreate_spanBackground);
         int text = Theme.getColor(Theme.key_groupcreate_spanText);
         int delete = Theme.getColor(Theme.key_groupcreate_spanDelete);

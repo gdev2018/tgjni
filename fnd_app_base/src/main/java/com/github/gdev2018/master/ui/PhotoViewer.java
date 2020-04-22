@@ -2812,34 +2812,34 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         gestureDetector = new GestureDetector(containerView.getContext(), this);
         setDoubleTapEnabled(true);
 
-        ImageReceiver.ImageReceiverDelegate imageReceiverDelegate = (imageReceiver, set, thumb) -> {
-            if (imageReceiver == centerImage && set && !thumb && (currentEditMode == 1 || sendPhotoType == SELECT_TYPE_AVATAR) && photoCropView != null) {
-                Bitmap bitmap = imageReceiver.getBitmap();
-                if (bitmap != null) {
-                    photoCropView.setBitmap(bitmap, imageReceiver.getOrientation(), sendPhotoType != SELECT_TYPE_AVATAR, true);
-                }
-            }
-            if (imageReceiver == centerImage && set && placeProvider != null && placeProvider.scaleToFill() && !ignoreDidSetImage) {
-                if (!wasLayout) {
-                    dontResetZoomOnFirstLayout = true;
-                } else {
-                    setScaleToFill();
-                }
-            }
-        };
+///*        ImageReceiver.ImageReceiverDelegate imageReceiverDelegate = (imageReceiver, set, thumb) -> {
+//            if (imageReceiver == centerImage && set && !thumb && (currentEditMode == 1 || sendPhotoType == SELECT_TYPE_AVATAR) && photoCropView != null) {
+//                Bitmap bitmap = imageReceiver.getBitmap();
+//                if (bitmap != null) {
+//                    photoCropView.setBitmap(bitmap, imageReceiver.getOrientation(), sendPhotoType != SELECT_TYPE_AVATAR, true);
+//                }
+//            }
+//            if (imageReceiver == centerImage && set && placeProvider != null && placeProvider.scaleToFill() && !ignoreDidSetImage) {
+//                if (!wasLayout) {
+//                    dontResetZoomOnFirstLayout = true;
+//                } else {
+//                    setScaleToFill();
+//                }
+//            }
+//        };*/
 
         centerImage.setParentView(containerView);
         centerImage.setCrossfadeAlpha((byte) 2);
         centerImage.setInvalidateAll(true);
-        centerImage.setDelegate(imageReceiverDelegate);
+///*        centerImage.setDelegate(imageReceiverDelegate);*/
         leftImage.setParentView(containerView);
         leftImage.setCrossfadeAlpha((byte) 2);
         leftImage.setInvalidateAll(true);
-        leftImage.setDelegate(imageReceiverDelegate);
+///*        leftImage.setDelegate(imageReceiverDelegate);*/
         rightImage.setParentView(containerView);
         rightImage.setCrossfadeAlpha((byte) 2);
         rightImage.setInvalidateAll(true);
-        rightImage.setDelegate(imageReceiverDelegate);
+///*        rightImage.setDelegate(imageReceiverDelegate);*/
 
         WindowManager manager = (WindowManager) BaseApplication.mApplicationContext.getSystemService(Activity.WINDOW_SERVICE);
         int rotation = manager.getDefaultDisplay().getRotation();
@@ -3349,7 +3349,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     private void createVideoControlsInterface() {
-        videoPlayerSeekbar = new SeekBar(containerView.getContext());
+///*        videoPlayerSeekbar = new SeekBar(containerView.getContext());*/
         videoPlayerSeekbar.setLineHeight(AndroidUtilities.dp(4));
         videoPlayerSeekbar.setColors(0x66ffffff, 0x66ffffff, 0xffd5d0d7, 0xffffffff, 0xffffffff);
         videoPlayerSeekbar.setDelegate(progress -> {
@@ -5311,11 +5311,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 captionTextView.setTranslationY(AndroidUtilities.dp(48));
             } else {
                 masksItem.setVisibility(newMessageObject.hasPhotoStickers() && (int) newMessageObject.getDialogId() != 0 ? View.VISIBLE : View.GONE);
-                if (newMessageObject.canDeleteMessage(null) && slideshowMessageId == 0) {
-                    menuItem.showSubItem(gallery_menu_delete);
-                } else {
-                    menuItem.hideSubItem(gallery_menu_delete);
-                }
+///*                if (newMessageObject.canDeleteMessage(null) && slideshowMessageId == 0) {
+//                    menuItem.showSubItem(gallery_menu_delete);
+//                } else {
+//                    menuItem.hideSubItem(gallery_menu_delete);
+//                }*/
                 if (isVideo) {
                     menuItem.showSubItem(gallery_menu_openin);
                     if (pipItem.getVisibility() != View.VISIBLE) {
@@ -5368,9 +5368,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (currentAnimation != null) {
                 menuItem.hideSubItem(gallery_menu_save);
                 menuItem.hideSubItem(gallery_menu_share);
-                if (!newMessageObject.canDeleteMessage(null)) {
-                    menuItem.setVisibility(View.GONE);
-                }
+///*                if (!newMessageObject.canDeleteMessage(null)) {
+//                    menuItem.setVisibility(View.GONE);
+//                }*/
                 allowShare = true;
                 shareButton.setVisibility(View.VISIBLE);
                 actionBar.setTitle(LocaleController.getString("AttachGif", R.string.AttachGif));

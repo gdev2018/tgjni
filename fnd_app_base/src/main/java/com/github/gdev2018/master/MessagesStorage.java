@@ -1269,8 +1269,9 @@ public class MessagesStorage {
                             String name = cursor.isNull(6) ? null : cursor.stringValue(6);
                             String userName = cursor.isNull(7) ? null : cursor.stringValue(7);
                             int flags = cursor.intValue(8);
-
-                            pushMessages.add(new MessageObject(currentAccount, message, messageText, name, userName, (flags & 1) != 0, (flags & 2) != 0));
+///*
+//                            pushMessages.add(new MessageObject(currentAccount, message, messageText, name, userName, (flags & 1) != 0, (flags & 2) != 0));
+//*/
                             addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
                         }
                     }

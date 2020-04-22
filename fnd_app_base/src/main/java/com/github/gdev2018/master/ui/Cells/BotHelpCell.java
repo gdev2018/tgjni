@@ -192,8 +192,8 @@ public class BotHelpCell extends View {
     protected void onDraw(Canvas canvas) {
         int x = (canvas.getWidth() - width) / 2;
         int y = AndroidUtilities.dp(4);
-        Theme.chat_msgInMediaShadowDrawable.setBounds(x, y, width + x, height + y);
-        Theme.chat_msgInMediaShadowDrawable.draw(canvas);
+///*        Theme.chat_msgInMediaShadowDrawable.setBounds(x, y, width + x, height + y);
+//        Theme.chat_msgInMediaShadowDrawable.draw(canvas);*/
         Theme.chat_msgInMediaDrawable.setBounds(x, y, width + x, height + y);
         Theme.chat_msgInMediaDrawable.draw(canvas);
         Theme.chat_msgTextPaint.setColor(Theme.getColor(Theme.key_chat_messageTextIn));

@@ -30,8 +30,8 @@ public class DownloadController implements NotificationCenter.NotificationCenter
     public interface FileDownloadProgressListener {
         void onFailedDownload(String fileName, boolean canceled);
         void onSuccessDownload(String fileName);
-        void onProgressDownload(String fileName, float progress);
-        void onProgressUpload(String fileName, float progress, boolean isEncrypted);
+        void onProgressDownload(String fileName, long downloadSize, long totalSize);
+        void onProgressUpload(String fileName, long downloadSize, long totalSize, boolean isEncrypted);
         int getObserverTag();
     }
 
@@ -915,7 +915,7 @@ public class DownloadController implements NotificationCenter.NotificationCenter
                 for (int a = 0, size = arrayList.size(); a < size; a++) {
                     WeakReference<FileDownloadProgressListener> reference = arrayList.get(a);
                     if (reference.get() != null) {
-                        reference.get().onProgressDownload(fileName, progress);
+///*                        reference.get().onProgressDownload(fileName, progress);*/
                     }
                 }
             }
@@ -931,7 +931,7 @@ public class DownloadController implements NotificationCenter.NotificationCenter
                 for (int a = 0, size = arrayList.size(); a < size; a++) {
                     WeakReference<FileDownloadProgressListener> reference = arrayList.get(a);
                     if (reference.get() != null) {
-                        reference.get().onProgressUpload(fileName, progress, enc);
+///*                        reference.get().onProgressUpload(fileName, progress, enc);*/
                     }
                 }
             }

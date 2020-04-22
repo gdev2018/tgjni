@@ -16,8 +16,11 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.ChatObject;
+import com.github.gdev2018.master.FileLoader;
 import com.github.gdev2018.master.FileLog;
+import com.github.gdev2018.master.ImageLocation;
 import com.github.gdev2018.master.ImageReceiver;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.MessagesController;
@@ -34,7 +37,7 @@ public class DialogMeUrlCell extends BaseCell {
     private TLRPC.RecentMeUrl recentMeUrl;
 
     private ImageReceiver avatarImage = new ImageReceiver(this);
-    private AvatarDrawableDeprecated avatarDrawableDeprecated = new AvatarDrawableDeprecated();
+///*    private AvatarDrawable avatarDrawable = new AvatarDrawable();*/
 
     public boolean useSeparator;
 
@@ -99,16 +102,14 @@ public class DialogMeUrlCell extends BaseCell {
     public void buildLayout() {
         String nameString = "";
         CharSequence messageString;
-        TextPaint currentNamePaint = Theme.dialogs_namePaint;
-        TextPaint currentMessagePaint = Theme.dialogs_messagePaint;
+        TextPaint currentNamePaint = Theme.dialogs_namePaint[0];
+        TextPaint currentMessagePaint = Theme.dialogs_messagePaint[0];
 
         drawNameGroup = false;
         drawNameBroadcast = false;
         drawNameLock = false;
         drawNameBot = false;
         drawVerified = false;
-
-        TLObject image;
 
         if (recentMeUrl instanceof TLRPC.TL_recentMeUrlChat) {
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(recentMeUrl.chat_id);
@@ -129,12 +130,8 @@ public class DialogMeUrlCell extends BaseCell {
                 nameLeft = AndroidUtilities.dp(14);
             }
             nameString = chat.title;
-            if (chat.photo != null) {
-                image = chat.photo.photo_small;
-            } else {
-                image = null;
-            }
-            avatarDrawableDeprecated.setInfo(chat);
+///*            avatarDrawable.setInfo(chat);
+//            avatarImage.setImage(ImageLocation.getForChat(chat, false), "50_50", avatarDrawable, null, recentMeUrl, 0);*/
         } else if (recentMeUrl instanceof TLRPC.TL_recentMeUrlUser) {
             TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(recentMeUrl.user_id);
             if (!LocaleController.isRTL) {
@@ -157,12 +154,8 @@ public class DialogMeUrlCell extends BaseCell {
                 drawVerified = user.verified;
             }
             nameString = UserObject.getUserName(user);
-            if (user.photo != null) {
-                image = user.photo.photo_small;
-            } else {
-                image = null;
-            }
-            avatarDrawableDeprecated.setInfo(user);
+///*            avatarDrawable.setInfo(user);
+//            avatarImage.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, null, recentMeUrl, 0);*/
         } else if (recentMeUrl instanceof TLRPC.TL_recentMeUrlStickerSet) {
             if (!LocaleController.isRTL) {
                 nameLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
@@ -170,8 +163,10 @@ public class DialogMeUrlCell extends BaseCell {
                 nameLeft = AndroidUtilities.dp(14);
             }
             nameString = recentMeUrl.set.set.title;
-            image = recentMeUrl.set.cover;
-            avatarDrawableDeprecated.setInfo(5, recentMeUrl.set.set.title, null, false);
+///*
+//            avatarDrawable.setInfo(5, recentMeUrl.set.set.title, null);
+//            avatarImage.setImage(ImageLocation.getForDocument(recentMeUrl.set.cover), null, avatarDrawable, null, recentMeUrl, 0);
+//*/
         } else if (recentMeUrl instanceof TLRPC.TL_recentMeUrlChatInvite) {
             if (!LocaleController.isRTL) {
                 nameLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
@@ -179,13 +174,8 @@ public class DialogMeUrlCell extends BaseCell {
                 nameLeft = AndroidUtilities.dp(14);
             }
             if (recentMeUrl.chat_invite.chat != null) {
-                avatarDrawableDeprecated.setInfo(recentMeUrl.chat_invite.chat);
+///*                avatarDrawable.setInfo(recentMeUrl.chat_invite.chat);*/
                 nameString = recentMeUrl.chat_invite.chat.title;
-                if (recentMeUrl.chat_invite.chat.photo != null) {
-                    image = recentMeUrl.chat_invite.chat.photo.photo_small;
-                } else {
-                    image = null;
-                }
                 if (recentMeUrl.chat_invite.chat.id < 0 || ChatObject.isChannel(recentMeUrl.chat_invite.chat) && !recentMeUrl.chat_invite.chat.megagroup) {
                     drawNameBroadcast = true;
                     nameLockTop = AndroidUtilities.dp(16.5f);
@@ -194,10 +184,12 @@ public class DialogMeUrlCell extends BaseCell {
                     nameLockTop = AndroidUtilities.dp(17.5f);
                 }
                 drawVerified = recentMeUrl.chat_invite.chat.verified;
+///*
+//                avatarImage.setImage(ImageLocation.getForChat(recentMeUrl.chat_invite.chat, false), "50_50", avatarDrawable, null, recentMeUrl, 0);
+//*/
             } else {
                 nameString = recentMeUrl.chat_invite.title;
-//                image = recentMeUrl.chat_invite.photo.photo_small;/*
-//*/                avatarDrawableDeprecated.setInfo(5, recentMeUrl.chat_invite.title, null, false);
+///*                avatarDrawable.setInfo(5, recentMeUrl.chat_invite.title, null);*/
                 if (recentMeUrl.chat_invite.broadcast || recentMeUrl.chat_invite.channel) {
                     drawNameBroadcast = true;
                     nameLockTop = AndroidUtilities.dp(16.5f);
@@ -205,6 +197,10 @@ public class DialogMeUrlCell extends BaseCell {
                     drawNameGroup = true;
                     nameLockTop = AndroidUtilities.dp(17.5f);
                 }
+                TLRPC.PhotoSize size = FileLoader.getClosestPhotoSizeWithSize(recentMeUrl.chat_invite.photo.sizes, 50);
+///*
+//                avatarImage.setImage(ImageLocation.getForPhoto(size, recentMeUrl.chat_invite.photo), "50_50", avatarDrawable, null, recentMeUrl, 0);
+//*/
             }
             if (!LocaleController.isRTL) {
                 nameLockLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
@@ -220,12 +216,11 @@ public class DialogMeUrlCell extends BaseCell {
                 nameLeft = AndroidUtilities.dp(14);
             }
             nameString = "Url";
-            image = null;
+///*            avatarImage.setImage(null, null, avatarDrawable, null, recentMeUrl, 0);*/
         } else {
-            image = null;
+///*            avatarImage.setImage(null, null, avatarDrawable, null, recentMeUrl, 0);*/
         }
         messageString = MessagesController.getInstance(currentAccount).linkPrefix + "/" + recentMeUrl.url;
-///*        avatarImage.setImage(image, "50_50", avatarDrawableDeprecated, null, recentMeUrl, 0);*/
 
         if (TextUtils.isEmpty(nameString)) {
             nameString = LocaleController.getString("HiddenName", R.string.HiddenName);

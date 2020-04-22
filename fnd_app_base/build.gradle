@@ -2,7 +2,7 @@ apply plugin: 'com.novoda.bintray-release'  // 4public custom module in maven/jc
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     lintOptions {
         disable 'MissingTranslation'
         disable 'ExtraTranslation'
@@ -31,7 +31,7 @@ android {
     defaultConfig {
 //        applicationId = "com.github.gdev2018.master"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 

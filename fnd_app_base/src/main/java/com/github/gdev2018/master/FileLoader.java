@@ -18,6 +18,10 @@ import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,12 +31,12 @@ import java.util.concurrent.CountDownLatch;
 public class FileLoader {
 
     public interface FileLoaderDelegate {
-        void fileUploadProgressChanged(String location, float progress, boolean isEncrypted);
+        void fileUploadProgressChanged(String location, long uploadedSize, long totalSize, boolean isEncrypted);
         void fileDidUploaded(String location, TLRPC.InputFile inputFile, TLRPC.InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv, long totalFileSize);
         void fileDidFailedUpload(String location, boolean isEncrypted);
         void fileDidLoaded(String location, File finalFile, int type);
-        void httpFileDidFailedLoad(String location, int state);
-        void fileLoadProgressChanged(String location, float progress);
+        void fileDidFailedLoad(String location, int state);
+        void fileLoadProgressChanged(String location, long uploadedSize, long totalSize);
     }
 
     public static final int MEDIA_DIR_IMAGE = 0;
@@ -40,6 +44,12 @@ public class FileLoader {
     public static final int MEDIA_DIR_VIDEO = 2;
     public static final int MEDIA_DIR_DOCUMENT = 3;
     public static final int MEDIA_DIR_CACHE = 4;
+
+    public static final int IMAGE_TYPE_LOTTIE = 1;
+    public static final int IMAGE_TYPE_ANIMATION = 2;
+    public static final int IMAGE_TYPE_SVG = 3;
+    public static final int IMAGE_TYPE_SVG_WHITE = 4;
+    public static final int IMAGE_TYPE_THEME_PREVIEW = 5;
 
     private volatile static DispatchQueue fileLoaderQueue = new DispatchQueue("fileUploadQueue");
 
@@ -324,7 +334,7 @@ public class FileLoader {
                 @Override
                 public void didChangedUploadProgress(FileUploadOperation operation, final float progress) {
                     if (delegate != null) {
-                        delegate.fileUploadProgressChanged(location, progress, encrypted);
+                        delegate.fileUploadProgressChanged(location, 0, estimatedSize, encrypted);
                     }
                 }
             });
@@ -658,14 +668,14 @@ public class FileLoader {
                 loadOperationPathsUI.remove(finalFileName);
                 checkDownloadQueue(operation.getDatacenterId(), document, webDocument, location, finalFileName);
                 if (delegate != null) {
-                    delegate.httpFileDidFailedLoad(finalFileName, reason);
+                    delegate.fileDidFailedLoad(finalFileName, reason);
                 }
             }
 
             @Override
-            public void didChangedLoadProgress(FileLoadOperation operation, float progress) {
+            public void didChangedLoadProgress(FileLoadOperation operation, long uploadedSize, long totalSize) {
                 if (delegate != null) {
-                    delegate.fileLoadProgressChanged(finalFileName, progress);
+                    delegate.fileLoadProgressChanged(finalFileName, uploadedSize, totalSize);
                 }
             }
         };
@@ -1227,5 +1237,68 @@ public class FileLoader {
 
     public static boolean isVideoMimeType(String mime) {
         return "video/mp4".equals(mime) || SharedConfig.streamMkv && "video/x-matroska".equals(mime);
+    }
+
+    public static boolean copyFile(InputStream sourceFile, File destFile) throws IOException {
+        return copyFile(sourceFile, destFile, -1);
+    }
+
+    public static boolean copyFile(InputStream sourceFile, File destFile, int maxSize) throws IOException {
+        FileOutputStream out = new FileOutputStream(destFile);
+        byte[] buf = new byte[4096];
+        int len;
+        int totalLen = 0;
+        while ((len = sourceFile.read(buf)) > 0) {
+            Thread.yield();
+            out.write(buf, 0, len);
+            totalLen += len;
+            if (maxSize > 0 && totalLen >= maxSize) {
+                break;
+            }
+        }
+        out.getFD().sync();
+        out.close();
+        return true;
+    }
+
+    public static long getTempFileSize(TLRPC.Document documentLocation, boolean encrypt) {
+        long location_id = documentLocation.id;
+        long datacenterId = documentLocation.dc_id;
+
+        if (datacenterId == 0 || location_id == 0) {
+            return 0;
+        }
+
+        String fileName = datacenterId + "_" + location_id + (encrypt ? ".temp.enc" : ".temp");
+        String fileNameParts = datacenterId + "_" + location_id + ".pt";
+        File f = new File(getDirectory(MEDIA_DIR_CACHE), fileName);
+
+        long size = 0;
+        if (f.exists()) {
+            size = f.length();
+        }
+
+        if (size != 0) {
+            File cacheFileParts = new File(getDirectory(MEDIA_DIR_CACHE), fileNameParts);
+            try {
+                RandomAccessFile filePartsStream = new RandomAccessFile(cacheFileParts, "r");
+                long len = filePartsStream.length();
+                if (len % 8 == 4) {
+                    len -= 4;
+                    int count = filePartsStream.readInt();
+                    if (count <= len / 2) {
+                        size = documentLocation.size;
+                        for (int a = 0; a < count; a++) {
+                            int start = filePartsStream.readInt();
+                            int end = filePartsStream.readInt();
+                            size -= end - start;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+        return size;
     }
 }

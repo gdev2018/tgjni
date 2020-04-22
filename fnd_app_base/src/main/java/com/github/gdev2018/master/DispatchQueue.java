@@ -33,8 +33,8 @@ public class DispatchQueue extends Thread {
             } else {
                 handler.sendMessageDelayed(msg, delay);
             }
-        } catch (Exception e) {
-            FileLog.e(e);
+        } catch (Exception ignore) {
+
         }
     }
 
@@ -42,6 +42,17 @@ public class DispatchQueue extends Thread {
         try {
             syncLatch.await();
             handler.removeCallbacks(runnable);
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
+    public void cancelRunnables(Runnable[] runnables) {
+        try {
+            syncLatch.await();
+            for (int i = 0; i < runnables.length; i++) {
+                handler.removeCallbacks(runnables[i]);
+            }
         } catch (Exception e) {
             FileLog.e(e);
         }

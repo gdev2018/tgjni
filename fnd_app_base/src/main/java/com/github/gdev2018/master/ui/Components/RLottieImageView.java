@@ -2,17 +2,17 @@ package com.github.gdev2018.master.ui.Components;
 
 import android.content.Context;
 import android.widget.ImageView;
-
-
 import com.github.gdev2018.master.AndroidUtilities;
-
-
 import java.util.HashMap;
 
 public class RLottieImageView extends ImageView {
 
     private HashMap<String, Integer> layerColors;
     private RLottieDrawable drawable;
+    private boolean autoRepeat;
+    private boolean attachedToWindow;
+    private boolean playing;
+    private boolean startOnAttach;
 
     public RLottieImageView(Context context) {
         super(context);
@@ -28,17 +28,56 @@ public class RLottieImageView extends ImageView {
         }
     }
 
+    public void replaceColors(int[] colors) {
+        if (drawable != null) {
+            drawable.replaceColors(colors);
+        }
+    }
+
     public void setAnimation(int resId, int w, int h) {
-        drawable = new RLottieDrawable(resId, "" + resId, AndroidUtilities.dp(w), AndroidUtilities.dp(h), false);
-        drawable.beginApplyLayerColors();
+        setAnimation(resId, w, h, null);
+    }
+
+    public void setAnimation(int resId, int w, int h, int[] colorReplacement) {
+        drawable = new RLottieDrawable(resId, "" + resId, AndroidUtilities.dp(w), AndroidUtilities.dp(h), false, colorReplacement);
+        if (autoRepeat) {
+            drawable.setAutoRepeat(1);
+        }
         if (layerColors != null) {
+            drawable.beginApplyLayerColors();
             for (HashMap.Entry<String, Integer> entry : layerColors.entrySet()) {
                 drawable.setLayerColor(entry.getKey(), entry.getValue());
             }
+            drawable.commitApplyLayerColors();
         }
-        drawable.commitApplyLayerColors();
         drawable.setAllowDecodeSingleFrame(true);
         setImageDrawable(drawable);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        attachedToWindow = true;
+        if (playing && drawable != null) {
+            drawable.start();
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        attachedToWindow = false;
+        if (drawable != null) {
+            drawable.stop();
+        }
+    }
+
+    public boolean isPlaying() {
+        return drawable != null && drawable.isRunning();
+    }
+
+    public void setAutoRepeat(boolean repeat) {
+        autoRepeat = repeat;
     }
 
     public void setProgress(float progress) {
@@ -52,6 +91,27 @@ public class RLottieImageView extends ImageView {
         if (drawable == null) {
             return;
         }
-        drawable.start();
+        playing = true;
+        if (attachedToWindow) {
+            drawable.start();
+        } else {
+            startOnAttach = true;
+        }
+    }
+
+    public void stopAnimation() {
+        if (drawable == null) {
+            return;
+        }
+        playing = false;
+        if (attachedToWindow) {
+            drawable.stop();
+        } else {
+            startOnAttach = false;
+        }
+    }
+
+    public RLottieDrawable getAnimatedDrawable() {
+        return drawable;
     }
 }

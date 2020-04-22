@@ -5146,18 +5146,18 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                 if (bitmap == null) {
                     bitmap = ImageLoader.loadBitmap(path, uri, 800, 800, true);
                 }
-                if (!bigExists) {
-                    TLRPC.PhotoSize size = ImageLoader.scaleAndSaveImage(bigSize, bitmap, AndroidUtilities.getPhotoSize(), AndroidUtilities.getPhotoSize(), 80, false, 101, 101);
-                    if (size != bigSize) {
-                        photo.sizes.add(0, size);
-                    }
-                }
-                if (!smallExists) {
-                    TLRPC.PhotoSize size = ImageLoader.scaleAndSaveImage(smallSize, bitmap, 90, 90, 55, true);
-                    if (size != smallSize) {
-                        photo.sizes.add(0, size);
-                    }
-                }
+///*                if (!bigExists) {
+//                    TLRPC.PhotoSize size = ImageLoader.scaleAndSaveImage(bigSize, bitmap, AndroidUtilities.getPhotoSize(), AndroidUtilities.getPhotoSize(), 80, false, 101, 101);
+//                    if (size != bigSize) {
+//                        photo.sizes.add(0, size);
+//                    }
+//                }
+//                if (!smallExists) {
+//                    TLRPC.PhotoSize size = ImageLoader.scaleAndSaveImage(smallSize, bitmap, 90, 90, 55, true);
+//                    if (size != smallSize) {
+//                        photo.sizes.add(0, size);
+//                    }
+//                }*/
                 if (bitmap != null) {
                     bitmap.recycle();
                 }
@@ -5176,7 +5176,7 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                         thumb = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Video.Thumbnails.MINI_KIND);
                     }
                     int side = isEncrypted ? 90 : 320;
-                    document.thumbs.set(0, ImageLoader.scaleAndSaveImage(photoSize, thumb, side, side, side > 90 ? 70 : 55, false));
+///*                    document.thumbs.set(0, ImageLoader.scaleAndSaveImage(photoSize, thumb, side, side, side > 90 ? 70 : 55, false));*/
                 }
             }
         }

@@ -2,21 +2,47 @@
 
 package com.github.gdev2018.master.ui.Components;
 
+import android.annotation.SuppressLint;
+import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-import com.github.gdev2018.master.AndroidUtilities;
+import androidx.core.view.ViewCompat;
 
+import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.LocaleController;
+
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class LayoutHelper {
 
     public static final int MATCH_PARENT = -1;
     public static final int WRAP_CONTENT = -2;
-    
+
     private static int getSize(float size) {
         return (int) (size < 0 ? size : AndroidUtilities.dp(size));
     }
+
+    //region Gravity
+
+    private static int getAbsoluteGravity(int gravity) {
+        return Gravity.getAbsoluteGravity(gravity, LocaleController.isRTL ? ViewCompat.LAYOUT_DIRECTION_RTL : ViewCompat.LAYOUT_DIRECTION_LTR);
+    }
+
+    @SuppressLint("RtlHardcoded")
+    public static int getAbsoluteGravityStart() {
+        return LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT;
+    }
+
+    @SuppressLint("RtlHardcoded")
+    public static int getAbsoluteGravityEnd() {
+        return LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT;
+    }
+
+    //endregion
+
+    //region ScrollView
 
     public static ScrollView.LayoutParams createScroll(int width, int height, int gravity) {
         return new ScrollView.LayoutParams(getSize(width), getSize(height), gravity);
@@ -31,6 +57,10 @@ public class LayoutHelper {
         return layoutParams;
     }
 
+    //endregion
+
+    //region FrameLayout
+
     public static FrameLayout.LayoutParams createFrame(int width, float height, int gravity, float leftMargin, float topMargin, float rightMargin, float bottomMargin) {
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(getSize(width), getSize(height), gravity);
         layoutParams.setMargins(AndroidUtilities.dp(leftMargin), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(rightMargin), AndroidUtilities.dp(bottomMargin));
@@ -44,6 +74,27 @@ public class LayoutHelper {
     public static FrameLayout.LayoutParams createFrame(int width, float height) {
         return new FrameLayout.LayoutParams(getSize(width), getSize(height));
     }
+
+    public static FrameLayout.LayoutParams createFrame(float width, float height, int gravity) {
+        return new FrameLayout.LayoutParams(getSize(width), getSize(height), gravity);
+    }
+
+    public static FrameLayout.LayoutParams createFrameRelatively(float width, float height, int gravity, float startMargin, float topMargin, float endMargin, float bottomMargin) {
+        final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(getSize(width), getSize(height), getAbsoluteGravity(gravity));
+        layoutParams.leftMargin = AndroidUtilities.dp(LocaleController.isRTL ? endMargin : startMargin);
+        layoutParams.topMargin = AndroidUtilities.dp(topMargin);
+        layoutParams.rightMargin = AndroidUtilities.dp(LocaleController.isRTL ? startMargin : endMargin);
+        layoutParams.bottomMargin = AndroidUtilities.dp(bottomMargin);
+        return layoutParams;
+    }
+
+    public static FrameLayout.LayoutParams createFrameRelatively(float width, float height, int gravity) {
+        return new FrameLayout.LayoutParams(getSize(width), getSize(height), getAbsoluteGravity(gravity));
+    }
+
+    //endregion
+
+    //region RelativeLayout
 
     public static RelativeLayout.LayoutParams createRelative(float width, float height, int leftMargin, int topMargin, int rightMargin, int bottomMargin, int alignParent, int alignRelative, int anchorRelative) {
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(getSize(width), getSize(height));
@@ -87,6 +138,10 @@ public class LayoutHelper {
     public static RelativeLayout.LayoutParams createRelative(int width, int height, int alignRelative, int anchorRelative) {
         return createRelative(width, height, 0, 0, 0, 0, -1, alignRelative, anchorRelative);
     }
+
+    //endregion
+
+    //region LinearLayout
 
     public static LinearLayout.LayoutParams createLinear(int width, int height, float weight, int gravity, int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize(width), getSize(height), weight);
@@ -133,4 +188,19 @@ public class LayoutHelper {
     public static LinearLayout.LayoutParams createLinear(int width, int height) {
         return new LinearLayout.LayoutParams(getSize(width), getSize(height));
     }
+
+    public static LinearLayout.LayoutParams createLinearRelatively(float width, float height, int gravity, float startMargin, float topMargin, float endMargin, float bottomMargin) {
+        final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize(width), getSize(height), getAbsoluteGravity(gravity));
+        layoutParams.leftMargin = AndroidUtilities.dp(LocaleController.isRTL ? endMargin : startMargin);
+        layoutParams.topMargin = AndroidUtilities.dp(topMargin);
+        layoutParams.rightMargin = AndroidUtilities.dp(LocaleController.isRTL ? startMargin : endMargin);
+        layoutParams.bottomMargin = AndroidUtilities.dp(bottomMargin);
+        return layoutParams;
+    }
+
+    public static LinearLayout.LayoutParams createLinearRelatively(float width, float height, int gravity) {
+        return new LinearLayout.LayoutParams(getSize(width), getSize(height), getAbsoluteGravity(gravity));
+    }
+
+    //endregion
 }

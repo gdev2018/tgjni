@@ -103,24 +103,24 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
         final int horizontalInsets = decorInsets.left + decorInsets.right
                 + lp.leftMargin + lp.rightMargin;
         final int availableSpaceInOther = mCachedBorders[lp.mSpanSize];
-        final int wSpec = RecyclerView.LayoutManager.getChildMeasureSpec(availableSpaceInOther, otherDirParentSpecMode,
+        final int wSpec = getChildMeasureSpec(availableSpaceInOther, otherDirParentSpecMode,
                     horizontalInsets, lp.width, false);
-        final int hSpec = RecyclerView.LayoutManager.getChildMeasureSpec(mOrientationHelper.getTotalSpace(), getHeightMode(),
+        final int hSpec = getChildMeasureSpec(mOrientationHelper.getTotalSpace(), getHeightMode(),
                     verticalInsets, lp.height, true);
         measureChildWithDecorationsAndMargin(view, wSpec, hSpec, alreadyMeasured);
     }
 
     @Override
-    void layoutChunk(RecyclerView.Recycler recycler, RecyclerView.State state, LinearLayoutManager.LayoutState layoutState, LinearLayoutManager.LayoutChunkResult result) {
+    void layoutChunk(RecyclerView.Recycler recycler, RecyclerView.State state, LayoutState layoutState, LayoutChunkResult result) {
         final int otherDirSpecMode = mOrientationHelper.getModeInOther();
 
-        final boolean layingOutInPrimaryDirection = layoutState.mItemDirection == LinearLayoutManager.LayoutState.ITEM_DIRECTION_TAIL;
+        final boolean layingOutInPrimaryDirection = layoutState.mItemDirection == LayoutState.ITEM_DIRECTION_TAIL;
         boolean working = true;
         result.mConsumed = 0;
         int yOffset = 0;
 
         int startPosition = layoutState.mCurrentPosition;
-        if (layoutState.mLayoutDirection != LinearLayoutManager.LayoutState.LAYOUT_START && hasSiblingChild(layoutState.mCurrentPosition) && findViewByPosition(layoutState.mCurrentPosition + 1) == null) {
+        if (layoutState.mLayoutDirection != LayoutState.LAYOUT_START && hasSiblingChild(layoutState.mCurrentPosition) && findViewByPosition(layoutState.mCurrentPosition + 1) == null) {
             if (hasSiblingChild(layoutState.mCurrentPosition + 1)) {
                 layoutState.mCurrentPosition += 3;
             } else {
@@ -171,7 +171,7 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
                 consumedSpanCount += spanSize;
                 mSet[count] = view;
                 count++;
-                if (layoutState.mLayoutDirection == LinearLayoutManager.LayoutState.LAYOUT_START && remainingSpan <= 0 && hasSiblingChild(pos)) {
+                if (layoutState.mLayoutDirection == LayoutState.LAYOUT_START && remainingSpan <= 0 && hasSiblingChild(pos)) {
                     working = true;
                 }
             }
@@ -225,7 +225,7 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
                     final int horizontalInsets = decorInsets.left + decorInsets.right + lp.leftMargin + lp.rightMargin;
                     final int totalSpaceInOther = mCachedBorders[lp.mSpanSize];
 
-                    final int wSpec = RecyclerView.LayoutManager.getChildMeasureSpec(totalSpaceInOther, View.MeasureSpec.EXACTLY, horizontalInsets, lp.width, false);
+                    final int wSpec = getChildMeasureSpec(totalSpaceInOther, View.MeasureSpec.EXACTLY, horizontalInsets, lp.width, false);
                     final int hSpec = View.MeasureSpec.makeMeasureSpec(maxSize - verticalInsets, View.MeasureSpec.EXACTLY);
 
                     measureChildWithDecorationsAndMargin(view, wSpec, hSpec, true);
@@ -235,8 +235,8 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
             int left, right, top, bottom;
 
             boolean fromOpositeSide = shouldLayoutChildFromOpositeSide(mSet[0]);
-            if (fromOpositeSide && layoutState.mLayoutDirection == LinearLayoutManager.LayoutState.LAYOUT_START || !fromOpositeSide && layoutState.mLayoutDirection == LinearLayoutManager.LayoutState.LAYOUT_END) {
-                if (layoutState.mLayoutDirection == LinearLayoutManager.LayoutState.LAYOUT_START) {
+            if (fromOpositeSide && layoutState.mLayoutDirection == LayoutState.LAYOUT_START || !fromOpositeSide && layoutState.mLayoutDirection == LayoutState.LAYOUT_END) {
+                if (layoutState.mLayoutDirection == LayoutState.LAYOUT_START) {
                     bottom = layoutState.mOffset - result.mConsumed;
                     top = bottom - maxSize;
                     left = 0;
@@ -250,11 +250,11 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
                     LayoutParams params = (LayoutParams) view.getLayoutParams();
 
                     right = mOrientationHelper.getDecoratedMeasurementInOther(view);
-                    if (layoutState.mLayoutDirection == LinearLayoutManager.LayoutState.LAYOUT_END) {
+                    if (layoutState.mLayoutDirection == LayoutState.LAYOUT_END) {
                         left -= right;
                     }
                     layoutDecoratedWithMargins(view, left, top, left + right, bottom);
-                    if (layoutState.mLayoutDirection == LinearLayoutManager.LayoutState.LAYOUT_START) {
+                    if (layoutState.mLayoutDirection == LayoutState.LAYOUT_START) {
                         left += right;
                     }
                     if (params.isItemRemoved() || params.isItemChanged()) {
@@ -263,7 +263,7 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
                     result.mFocusable |= view.hasFocusable();
                 }
             } else {
-                if (layoutState.mLayoutDirection == LinearLayoutManager.LayoutState.LAYOUT_START) {
+                if (layoutState.mLayoutDirection == LayoutState.LAYOUT_START) {
                     bottom = layoutState.mOffset - result.mConsumed;
                     top = bottom - maxSize;
                     left = getWidth();
@@ -277,11 +277,11 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
                     LayoutParams params = (LayoutParams) view.getLayoutParams();
 
                     right = mOrientationHelper.getDecoratedMeasurementInOther(view);
-                    if (layoutState.mLayoutDirection == LinearLayoutManager.LayoutState.LAYOUT_START) {
+                    if (layoutState.mLayoutDirection == LayoutState.LAYOUT_START) {
                         left -= right;
                     }
                     layoutDecoratedWithMargins(view, left, top, left + right, bottom);
-                    if (layoutState.mLayoutDirection != LinearLayoutManager.LayoutState.LAYOUT_START) {
+                    if (layoutState.mLayoutDirection != LayoutState.LAYOUT_START) {
                         left += right;
                     }
                     if (params.isItemRemoved() || params.isItemChanged()) {

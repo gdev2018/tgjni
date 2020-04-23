@@ -31,7 +31,7 @@ class ItemTouchUIUtilImpl implements ItemTouchUIUtil {
 
     @Override
     public void onDraw(Canvas c, RecyclerView recyclerView, View view, float dX, float dY,
-                       int actionState, boolean isCurrentlyActive) {
+            int actionState, boolean isCurrentlyActive) {
         if (Build.VERSION.SDK_INT >= 21) {
             if (isCurrentlyActive) {
                 Object originalElevation = view.getTag();
@@ -66,7 +66,7 @@ class ItemTouchUIUtilImpl implements ItemTouchUIUtil {
 
     @Override
     public void onDrawOver(Canvas c, RecyclerView recyclerView, View view, float dX, float dY,
-                           int actionState, boolean isCurrentlyActive) {
+            int actionState, boolean isCurrentlyActive) {
     }
 
     @Override

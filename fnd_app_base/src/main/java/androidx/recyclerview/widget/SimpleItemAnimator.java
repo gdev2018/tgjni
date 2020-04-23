@@ -86,7 +86,7 @@ public abstract class SimpleItemAnimator extends RecyclerView.ItemAnimator {
 
     @Override
     public boolean animateDisappearance(@NonNull RecyclerView.ViewHolder viewHolder,
-                                        @NonNull RecyclerView.ItemAnimator.ItemHolderInfo preLayoutInfo, @Nullable RecyclerView.ItemAnimator.ItemHolderInfo postLayoutInfo) {
+            @NonNull ItemHolderInfo preLayoutInfo, @Nullable ItemHolderInfo postLayoutInfo) {
         int oldLeft = preLayoutInfo.left;
         int oldTop = preLayoutInfo.top;
         View disappearingItemView = viewHolder.itemView;
@@ -110,7 +110,7 @@ public abstract class SimpleItemAnimator extends RecyclerView.ItemAnimator {
 
     @Override
     public boolean animateAppearance(@NonNull RecyclerView.ViewHolder viewHolder,
-                                     @Nullable RecyclerView.ItemAnimator.ItemHolderInfo preLayoutInfo, @NonNull RecyclerView.ItemAnimator.ItemHolderInfo postLayoutInfo) {
+            @Nullable ItemHolderInfo preLayoutInfo, @NonNull ItemHolderInfo postLayoutInfo) {
         if (preLayoutInfo != null && (preLayoutInfo.left != postLayoutInfo.left
                 || preLayoutInfo.top != postLayoutInfo.top)) {
             // slide items in if before/after locations differ
@@ -129,7 +129,7 @@ public abstract class SimpleItemAnimator extends RecyclerView.ItemAnimator {
 
     @Override
     public boolean animatePersistence(@NonNull RecyclerView.ViewHolder viewHolder,
-                                      @NonNull RecyclerView.ItemAnimator.ItemHolderInfo preInfo, @NonNull RecyclerView.ItemAnimator.ItemHolderInfo postInfo) {
+            @NonNull ItemHolderInfo preInfo, @NonNull ItemHolderInfo postInfo) {
         if (preInfo.left != postInfo.left || preInfo.top != postInfo.top) {
             if (DEBUG) {
                 Log.d(TAG, "PERSISTENT: " + viewHolder
@@ -144,7 +144,7 @@ public abstract class SimpleItemAnimator extends RecyclerView.ItemAnimator {
 
     @Override
     public boolean animateChange(@NonNull RecyclerView.ViewHolder oldHolder, @NonNull RecyclerView.ViewHolder newHolder,
-                                 @NonNull RecyclerView.ItemAnimator.ItemHolderInfo preInfo, @NonNull RecyclerView.ItemAnimator.ItemHolderInfo postInfo) {
+            @NonNull ItemHolderInfo preInfo, @NonNull ItemHolderInfo postInfo) {
         if (DEBUG) {
             Log.d(TAG, "CHANGED: " + oldHolder + " with view " + oldHolder.itemView);
         }
@@ -230,7 +230,7 @@ public abstract class SimpleItemAnimator extends RecyclerView.ItemAnimator {
      * false otherwise.
      */
     public abstract boolean animateMove(RecyclerView.ViewHolder holder, int fromX, int fromY,
-                                        int toX, int toY);
+            int toX, int toY);
 
     /**
      * Called when an item is changed in the RecyclerView, as indicated by a call to
@@ -263,7 +263,7 @@ public abstract class SimpleItemAnimator extends RecyclerView.ItemAnimator {
      * false otherwise.
      */
     public abstract boolean animateChange(RecyclerView.ViewHolder oldHolder,
-                                          RecyclerView.ViewHolder newHolder, int fromLeft, int fromTop, int toLeft, int toTop);
+            RecyclerView.ViewHolder newHolder, int fromLeft, int fromTop, int toLeft, int toTop);
 
     /**
      * Method to be called by subclasses when a remove animation is done.

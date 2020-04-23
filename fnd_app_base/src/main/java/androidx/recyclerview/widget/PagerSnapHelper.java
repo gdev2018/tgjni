@@ -78,7 +78,7 @@ public class PagerSnapHelper extends SnapHelper {
 
     @Override
     public int findTargetSnapPosition(RecyclerView.LayoutManager layoutManager, int velocityX,
-                                      int velocityY) {
+            int velocityY) {
         final int itemCount = layoutManager.getItemCount();
         if (itemCount == 0) {
             return RecyclerView.NO_POSITION;
@@ -143,7 +143,7 @@ public class PagerSnapHelper extends SnapHelper {
     }
 
     private boolean isForwardFling(RecyclerView.LayoutManager layoutManager, int velocityX,
-                                   int velocityY) {
+            int velocityY) {
         if (layoutManager.canScrollHorizontally()) {
             return velocityX > 0;
         } else {
@@ -184,7 +184,7 @@ public class PagerSnapHelper extends SnapHelper {
 
             @Override
             protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
-                return SnapHelper.MILLISECONDS_PER_INCH / displayMetrics.densityDpi;
+                return MILLISECONDS_PER_INCH / displayMetrics.densityDpi;
             }
 
             @Override
@@ -195,7 +195,7 @@ public class PagerSnapHelper extends SnapHelper {
     }
 
     private int distanceToCenter(@NonNull RecyclerView.LayoutManager layoutManager,
-                                 @NonNull View targetView, OrientationHelper helper) {
+            @NonNull View targetView, OrientationHelper helper) {
         final int childCenter = helper.getDecoratedStart(targetView)
                 + (helper.getDecoratedMeasurement(targetView) / 2);
         final int containerCenter;
@@ -218,7 +218,7 @@ public class PagerSnapHelper extends SnapHelper {
      */
     @Nullable
     private View findCenterView(RecyclerView.LayoutManager layoutManager,
-                                OrientationHelper helper) {
+            OrientationHelper helper) {
         int childCount = layoutManager.getChildCount();
         if (childCount == 0) {
             return null;

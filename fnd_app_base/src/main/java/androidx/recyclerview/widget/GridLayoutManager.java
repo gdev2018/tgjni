@@ -80,7 +80,7 @@ public class GridLayoutManager extends LinearLayoutManager {
      * @param reverseLayout When set to true, layouts from end to start.
      */
     public GridLayoutManager(Context context, int spanCount,
-                             @RecyclerView.Orientation int orientation, boolean reverseLayout) {
+            @RecyclerView.Orientation int orientation, boolean reverseLayout) {
         super(context, orientation, reverseLayout);
         setSpanCount(spanCount);
     }
@@ -101,7 +101,7 @@ public class GridLayoutManager extends LinearLayoutManager {
 
     @Override
     public int getRowCountForAccessibility(RecyclerView.Recycler recycler,
-                                           RecyclerView.State state) {
+            RecyclerView.State state) {
         if (mOrientation == HORIZONTAL) {
             return mSpanCount;
         }
@@ -115,7 +115,7 @@ public class GridLayoutManager extends LinearLayoutManager {
 
     @Override
     public int getColumnCountForAccessibility(RecyclerView.Recycler recycler,
-                                              RecyclerView.State state) {
+            RecyclerView.State state) {
         if (mOrientation == VERTICAL) {
             return mSpanCount;
         }
@@ -129,7 +129,7 @@ public class GridLayoutManager extends LinearLayoutManager {
 
     @Override
     public void onInitializeAccessibilityNodeInfoForItem(RecyclerView.Recycler recycler,
-                                                         RecyclerView.State state, View host, AccessibilityNodeInfoCompat info) {
+            RecyclerView.State state, View host, AccessibilityNodeInfoCompat info) {
         ViewGroup.LayoutParams lp = host.getLayoutParams();
         if (!(lp instanceof LayoutParams)) {
             super.onInitializeAccessibilityNodeInfoForItem(host, info);
@@ -203,7 +203,7 @@ public class GridLayoutManager extends LinearLayoutManager {
 
     @Override
     public void onItemsUpdated(RecyclerView recyclerView, int positionStart, int itemCount,
-                               Object payload) {
+            Object payload) {
         mSpanSizeLookup.invalidateSpanIndexCache();
         mSpanSizeLookup.invalidateSpanGroupIndexCache();
     }
@@ -360,7 +360,7 @@ public class GridLayoutManager extends LinearLayoutManager {
 
     @Override
     public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler,
-                                    RecyclerView.State state) {
+            RecyclerView.State state) {
         updateMeasurements();
         ensureViewSet();
         return super.scrollHorizontallyBy(dx, recycler, state);
@@ -368,16 +368,16 @@ public class GridLayoutManager extends LinearLayoutManager {
 
     @Override
     public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler,
-                                  RecyclerView.State state) {
+            RecyclerView.State state) {
         updateMeasurements();
         ensureViewSet();
         return super.scrollVerticallyBy(dy, recycler, state);
     }
 
     private void ensureAnchorIsInCorrectSpan(RecyclerView.Recycler recycler,
-                                             RecyclerView.State state, AnchorInfo anchorInfo, int itemDirection) {
+            RecyclerView.State state, AnchorInfo anchorInfo, int itemDirection) {
         final boolean layingOutInPrimaryDirection =
-                itemDirection == LinearLayoutManager.LayoutState.ITEM_DIRECTION_TAIL;
+                itemDirection == LayoutState.ITEM_DIRECTION_TAIL;
         int span = getSpanIndex(recycler, state, anchorInfo.mPosition);
         if (layingOutInPrimaryDirection) {
             // choose span 0
@@ -439,7 +439,7 @@ public class GridLayoutManager extends LinearLayoutManager {
     }
 
     private int getSpanGroupIndex(RecyclerView.Recycler recycler, RecyclerView.State state,
-                                  int viewPosition) {
+            int viewPosition) {
         if (!state.isPreLayout()) {
             return mSpanSizeLookup.getCachedSpanGroupIndex(viewPosition, mSpanCount);
         }
@@ -498,8 +498,8 @@ public class GridLayoutManager extends LinearLayoutManager {
     }
 
     @Override
-    void collectPrefetchPositionsForLayoutState(RecyclerView.State state, LinearLayoutManager.LayoutState layoutState,
-                                                LayoutPrefetchRegistry layoutPrefetchRegistry) {
+    void collectPrefetchPositionsForLayoutState(RecyclerView.State state, LayoutState layoutState,
+            LayoutPrefetchRegistry layoutPrefetchRegistry) {
         int remainingSpan = mSpanCount;
         int count = 0;
         while (count < mSpanCount && layoutState.hasMore(state) && remainingSpan > 0) {
@@ -514,7 +514,7 @@ public class GridLayoutManager extends LinearLayoutManager {
 
     @Override
     void layoutChunk(RecyclerView.Recycler recycler, RecyclerView.State state,
-                     LinearLayoutManager.LayoutState layoutState, LayoutChunkResult result) {
+            LayoutState layoutState, LayoutChunkResult result) {
         final int otherDirSpecMode = mOrientationHelper.getModeInOther();
         final boolean flexibleInOtherDir = otherDirSpecMode != View.MeasureSpec.EXACTLY;
         final int currentOtherDirSize = getChildCount() > 0 ? mCachedBorders[mSpanCount] : 0;
@@ -525,7 +525,7 @@ public class GridLayoutManager extends LinearLayoutManager {
             updateMeasurements(); //  reset measurements
         }
         final boolean layingOutInPrimaryDirection =
-                layoutState.mItemDirection == LinearLayoutManager.LayoutState.ITEM_DIRECTION_TAIL;
+                layoutState.mItemDirection == LayoutState.ITEM_DIRECTION_TAIL;
         int count = 0;
         int consumedSpanCount = 0;
         int remainingSpan = mSpanCount;
@@ -642,7 +642,7 @@ public class GridLayoutManager extends LinearLayoutManager {
 
         int left = 0, right = 0, top = 0, bottom = 0;
         if (mOrientation == VERTICAL) {
-            if (layoutState.mLayoutDirection == LinearLayoutManager.LayoutState.LAYOUT_START) {
+            if (layoutState.mLayoutDirection == LayoutState.LAYOUT_START) {
                 bottom = layoutState.mOffset;
                 top = bottom - maxSize;
             } else {
@@ -650,7 +650,7 @@ public class GridLayoutManager extends LinearLayoutManager {
                 bottom = top + maxSize;
             }
         } else {
-            if (layoutState.mLayoutDirection == LinearLayoutManager.LayoutState.LAYOUT_START) {
+            if (layoutState.mLayoutDirection == LayoutState.LAYOUT_START) {
                 right = layoutState.mOffset;
                 left = right - maxSize;
             } else {
@@ -755,7 +755,7 @@ public class GridLayoutManager extends LinearLayoutManager {
     }
 
     protected void assignSpans(RecyclerView.Recycler recycler, RecyclerView.State state, int count,
-                               boolean layingOutInPrimaryDirection) {
+            boolean layingOutInPrimaryDirection) {
         // spans are always assigned from 0 to N no matter if it is RTL or not.
         // RTL is used only when positioning the view.
         int span, start, end, diff;
@@ -1052,7 +1052,7 @@ public class GridLayoutManager extends LinearLayoutManager {
 
     @Override
     public View onFocusSearchFailed(View focused, int focusDirection,
-                                    RecyclerView.Recycler recycler, RecyclerView.State state) {
+            RecyclerView.Recycler recycler, RecyclerView.State state) {
         View prevFocusedChild = findContainingItemView(focused);
         if (prevFocusedChild == null) {
             return null;
@@ -1067,7 +1067,7 @@ public class GridLayoutManager extends LinearLayoutManager {
         // LinearLayoutManager finds the last child. What we want is the child which has the same
         // spanIndex.
         final int layoutDir = convertFocusDirectionToLayoutDirection(focusDirection);
-        final boolean ascend = (layoutDir == LinearLayoutManager.LayoutState.LAYOUT_END) != mShouldReverseLayout;
+        final boolean ascend = (layoutDir == LayoutState.LAYOUT_END) != mShouldReverseLayout;
         final int start, inc, limit;
         if (ascend) {
             start = getChildCount() - 1;

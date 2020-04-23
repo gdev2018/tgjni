@@ -78,7 +78,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         }
 
         ChangeInfo(RecyclerView.ViewHolder oldHolder, RecyclerView.ViewHolder newHolder,
-                   int fromX, int fromY, int toX, int toY) {
+                int fromX, int fromY, int toX, int toY) {
             this(oldHolder, newHolder);
             this.fromX = fromX;
             this.fromY = fromY;
@@ -259,7 +259,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
 
     @Override
     public boolean animateMove(final RecyclerView.ViewHolder holder, int fromX, int fromY,
-                               int toX, int toY) {
+            int toX, int toY) {
         final View view = holder.itemView;
         fromX += (int) holder.itemView.getTranslationX();
         fromY += (int) holder.itemView.getTranslationY();
@@ -323,7 +323,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
 
     @Override
     public boolean animateChange(RecyclerView.ViewHolder oldHolder, RecyclerView.ViewHolder newHolder,
-                                 int fromX, int fromY, int toX, int toY) {
+            int fromX, int fromY, int toX, int toY) {
         if (oldHolder == newHolder) {
             // Don't know how to run change animations when the same view holder is re-used.
             // run a move animation to handle position changes.

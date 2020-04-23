@@ -17,6 +17,10 @@
 
 package androidx.recyclerview.widget;
 
+import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
+import static androidx.core.view.ViewCompat.TYPE_NON_TOUCH;
+import static androidx.core.view.ViewCompat.TYPE_TOUCH;
+
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -54,6 +58,8 @@ import android.widget.EdgeEffect;
 import android.widget.LinearLayout;
 import android.widget.OverScroller;
 
+import com.github.gdev2018.master.AndroidUtilities;
+
 import androidx.annotation.CallSuper;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
@@ -76,10 +82,7 @@ import androidx.core.view.accessibility.AccessibilityEventCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.core.widget.EdgeEffectCompat;
 import androidx.customview.view.AbsSavedState;
-
 import androidx.recyclerview.widget.RecyclerView.ItemAnimator.ItemHolderInfo;
-
-import com.github.gdev2018.master.AndroidUtilities;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -89,10 +92,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
-import static androidx.core.view.ViewCompat.TYPE_NON_TOUCH;
-import static androidx.core.view.ViewCompat.TYPE_TOUCH;
 
 /**
  * A flexible view for providing a limited window into a large data set.
@@ -576,7 +575,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
     private int topGlowOffset = 0;
     private int bottomGlowOffset = 0;
-    private int glowColor = 0;
+    private Integer glowColor = null;
 
     public void setTopGlowOffset(int offset) {
         topGlowOffset = offset;
@@ -621,7 +620,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     }
 
     void applyEdgeEffectColor(EdgeEffect edgeEffect) {
-        if (edgeEffect != null && Build.VERSION.SDK_INT >= 21 && glowColor != 0) {
+        if (edgeEffect != null && Build.VERSION.SDK_INT >= 21 && glowColor != null) {
             edgeEffect.setColor(glowColor);
         }
     }
@@ -661,20 +660,20 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     private final ViewInfoStore.ProcessCallback mViewInfoProcessCallback =
             new ViewInfoStore.ProcessCallback() {
                 @Override
-                public void processDisappeared(ViewHolder viewHolder, @NonNull RecyclerView.ItemAnimator.ItemHolderInfo info,
-                        @Nullable RecyclerView.ItemAnimator.ItemHolderInfo postInfo) {
+                public void processDisappeared(ViewHolder viewHolder, @NonNull ItemHolderInfo info,
+                        @Nullable ItemHolderInfo postInfo) {
                     mRecycler.unscrapView(viewHolder);
                     animateDisappearance(viewHolder, info, postInfo);
                 }
                 @Override
                 public void processAppeared(ViewHolder viewHolder,
-                                            ItemHolderInfo preInfo, ItemHolderInfo info) {
+                        ItemHolderInfo preInfo, ItemHolderInfo info) {
                     animateAppearance(viewHolder, preInfo, info);
                 }
 
                 @Override
                 public void processPersistent(ViewHolder viewHolder,
-                                              @NonNull RecyclerView.ItemAnimator.ItemHolderInfo preInfo, @NonNull RecyclerView.ItemAnimator.ItemHolderInfo postInfo) {
+                        @NonNull ItemHolderInfo preInfo, @NonNull ItemHolderInfo postInfo) {
                     viewHolder.setIsRecyclable(false);
                     if (mDataSetHasChangedAfterLayout) {
                         // since it was rebound, use change instead as we'll be mapping them from
@@ -792,7 +791,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
     @Override
     public CharSequence getAccessibilityClassName() {
-        return "RecyclerView";
+        return "androidx.recyclerview.widget.RecyclerView";
     }
 
     /**
@@ -2842,7 +2841,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
      * @param focused The descendant view that actually has the focus if child is focusable, null
      *                otherwise.
      */
-    private void requestChildOnScreen(@NonNull View child, @Nullable View focused) {
+    protected void requestChildOnScreen(@NonNull View child, @Nullable View focused) {
         View rectView = (focused != null) ? focused : child;
         mTempRect.set(0, 0, rectView.getWidth(), rectView.getHeight());
 
@@ -4287,7 +4286,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     }
 
     void animateAppearance(@NonNull ViewHolder itemHolder,
-                           @Nullable RecyclerView.ItemAnimator.ItemHolderInfo preLayoutInfo, @NonNull RecyclerView.ItemAnimator.ItemHolderInfo postLayoutInfo) {
+            @Nullable ItemHolderInfo preLayoutInfo, @NonNull ItemHolderInfo postLayoutInfo) {
         itemHolder.setIsRecyclable(false);
         if (mItemAnimator.animateAppearance(itemHolder, preLayoutInfo, postLayoutInfo)) {
             postAnimationRunner();
@@ -4295,7 +4294,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     }
 
     void animateDisappearance(@NonNull ViewHolder holder,
-                              @NonNull RecyclerView.ItemAnimator.ItemHolderInfo preLayoutInfo, @Nullable RecyclerView.ItemAnimator.ItemHolderInfo postLayoutInfo) {
+            @NonNull ItemHolderInfo preLayoutInfo, @Nullable ItemHolderInfo postLayoutInfo) {
         addAnimatingView(holder);
         holder.setIsRecyclable(false);
         if (mItemAnimator.animateDisappearance(holder, preLayoutInfo, postLayoutInfo)) {
@@ -4304,8 +4303,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     }
 
     private void animateChange(@NonNull ViewHolder oldHolder, @NonNull ViewHolder newHolder,
-                               @NonNull RecyclerView.ItemAnimator.ItemHolderInfo preInfo, @NonNull RecyclerView.ItemAnimator.ItemHolderInfo postInfo,
-                               boolean oldHolderDisappearing, boolean newHolderDisappearing) {
+            @NonNull ItemHolderInfo preInfo, @NonNull ItemHolderInfo postInfo,
+            boolean oldHolderDisappearing, boolean newHolderDisappearing) {
         oldHolder.setIsRecyclable(false);
         if (oldHolderDisappearing) {
             addAnimatingView(oldHolder);
@@ -4363,42 +4362,44 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         // TODO If padding is not 0 and clipChildrenToPadding is false, to draw glows properly, we
         // need find children closest to edges. Not sure if it is worth the effort.
         boolean needsInvalidate = false;
-        if (mLeftGlow != null && !mLeftGlow.isFinished()) {
-            final int restore = c.save();
-            final int padding = mClipToPadding ? getPaddingBottom() : 0;
-            c.rotate(270);
-            c.translate(-getHeight() + padding, 0);
-            needsInvalidate = mLeftGlow != null && mLeftGlow.draw(c);
-            c.restoreToCount(restore);
-        }
-        if (mTopGlow != null && !mTopGlow.isFinished()) {
-            final int restore = c.save();
-            if (mClipToPadding) {
-                c.translate(getPaddingLeft(), getPaddingTop());
+        if (glowColor == null || glowColor != 0) {
+            if (mLeftGlow != null && !mLeftGlow.isFinished()) {
+                final int restore = c.save();
+                final int padding = mClipToPadding ? getPaddingBottom() : 0;
+                c.rotate(270);
+                c.translate(-getHeight() + padding, 0);
+                needsInvalidate = mLeftGlow != null && mLeftGlow.draw(c);
+                c.restoreToCount(restore);
             }
-            c.translate(0, topGlowOffset);
-            needsInvalidate |= mTopGlow != null && mTopGlow.draw(c);
-            c.restoreToCount(restore);
-        }
-        if (mRightGlow != null && !mRightGlow.isFinished()) {
-            final int restore = c.save();
-            final int width = getWidth();
-            final int padding = mClipToPadding ? getPaddingTop() : 0;
-            c.rotate(90);
-            c.translate(-padding, -width);
-            needsInvalidate |= mRightGlow != null && mRightGlow.draw(c);
-            c.restoreToCount(restore);
-        }
-        if (mBottomGlow != null && !mBottomGlow.isFinished()) {
-            final int restore = c.save();
-            c.rotate(180);
-            if (mClipToPadding) {
-                c.translate(-getWidth() + getPaddingRight(), -getHeight() + getPaddingBottom());
-            } else {
-                c.translate(-getWidth(), -getHeight() + bottomGlowOffset);
+            if (mTopGlow != null && !mTopGlow.isFinished()) {
+                final int restore = c.save();
+                if (mClipToPadding) {
+                    c.translate(getPaddingLeft(), getPaddingTop());
+                }
+                c.translate(0, topGlowOffset);
+                needsInvalidate |= mTopGlow != null && mTopGlow.draw(c);
+                c.restoreToCount(restore);
             }
-            needsInvalidate |= mBottomGlow != null && mBottomGlow.draw(c);
-            c.restoreToCount(restore);
+            if (mRightGlow != null && !mRightGlow.isFinished()) {
+                final int restore = c.save();
+                final int width = getWidth();
+                final int padding = mClipToPadding ? getPaddingTop() : 0;
+                c.rotate(90);
+                c.translate(-padding, -width);
+                needsInvalidate |= mRightGlow != null && mRightGlow.draw(c);
+                c.restoreToCount(restore);
+            }
+            if (mBottomGlow != null && !mBottomGlow.isFinished()) {
+                final int restore = c.save();
+                c.rotate(180);
+                if (mClipToPadding) {
+                    c.translate(-getWidth() + getPaddingRight(), -getHeight() + getPaddingBottom());
+                } else {
+                    c.translate(-getWidth(), -getHeight() + bottomGlowOffset);
+                }
+                needsInvalidate |= mBottomGlow != null && mBottomGlow.draw(c);
+                c.restoreToCount(restore);
+            }
         }
 
         // If some views are animating, ItemDecorators are likely to move/change with them.
@@ -5805,7 +5806,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
      * an adapter's data set representing the data at a given position or item ID.
      * If the view to be reused is considered "dirty" the adapter will be asked to rebind it.
      * If not, the view can be quickly reused by the LayoutManager with no further work.
-     * Clean views that have not {@link View#isLayoutRequested() requested layout}
+     * Clean views that have not {@link android.view.View#isLayoutRequested() requested layout}
      * may be repositioned by a LayoutManager without remeasurement.</p>
      */
     public final class Recycler {
@@ -7033,7 +7034,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
         /**
          * Indicates whether each item in the data set can be represented with a unique identifier
-         * of type {@link Long}.
+         * of type {@link java.lang.Long}.
          *
          * @param hasStableIds Whether items in data set have unique identifiers or not.
          * @see #hasStableIds()
@@ -7255,9 +7256,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         public void notifyDataSetChanged() {
             mObservable.notifyChanged();
         }
-        public void notifyDataSetChanged2() {
-            mObservable.notifyChanged();
-        }
+
         /**
          * Notify any registered observers that the item at <code>position</code> has changed.
          * Equivalent to calling <code>notifyItemChanged(position, null);</code>.
@@ -7775,14 +7774,14 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * @return A size that fits to the given specs
          */
         public static int chooseSize(int spec, int desired, int min) {
-            final int mode = MeasureSpec.getMode(spec);
-            final int size = MeasureSpec.getSize(spec);
+            final int mode = View.MeasureSpec.getMode(spec);
+            final int size = View.MeasureSpec.getSize(spec);
             switch (mode) {
-                case MeasureSpec.EXACTLY:
+                case View.MeasureSpec.EXACTLY:
                     return size;
-                case MeasureSpec.AT_MOST:
+                case View.MeasureSpec.AT_MOST:
                     return Math.min(size, Math.max(desired, min));
-                case MeasureSpec.UNSPECIFIED:
+                case View.MeasureSpec.UNSPECIFIED:
                 default:
                     return Math.max(desired, min);
             }
@@ -7843,7 +7842,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * More specifically:
          * <ol>
          * <li>When {@link RecyclerView#onMeasure(int, int)} is called, if the provided measure
-         * specs both have a mode of {@link MeasureSpec#EXACTLY}, RecyclerView will set its
+         * specs both have a mode of {@link View.MeasureSpec#EXACTLY}, RecyclerView will set its
          * measured dimensions accordingly and return, allowing layout to continue as normal
          * (Actually, RecyclerView will call
          * {@link LayoutManager#onMeasure(Recycler, State, int, int)} for backwards compatibility
@@ -8211,8 +8210,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * <p><em>Important:</em> if you use your own custom <code>LayoutParams</code> type
          * you must also override
          * {@link #checkLayoutParams(LayoutParams)},
-         * {@link #generateLayoutParams(ViewGroup.LayoutParams)} and
-         * {@link #generateLayoutParams(Context, AttributeSet)}.</p>
+         * {@link #generateLayoutParams(android.view.ViewGroup.LayoutParams)} and
+         * {@link #generateLayoutParams(android.content.Context, android.util.AttributeSet)}.</p>
          *
          * @return A new LayoutParams for a child view
          */
@@ -8239,8 +8238,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * <p><em>Important:</em> if you use your own custom <code>LayoutParams</code> type
          * you must also override
          * {@link #checkLayoutParams(LayoutParams)},
-         * {@link #generateLayoutParams(ViewGroup.LayoutParams)} and
-         * {@link #generateLayoutParams(Context, AttributeSet)}.</p>
+         * {@link #generateLayoutParams(android.view.ViewGroup.LayoutParams)} and
+         * {@link #generateLayoutParams(android.content.Context, android.util.AttributeSet)}.</p>
          *
          * @param lp Source LayoutParams object to copy values from
          * @return a new LayoutParams object
@@ -8262,8 +8261,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * <p><em>Important:</em> if you use your own custom <code>LayoutParams</code> type
          * you must also override
          * {@link #checkLayoutParams(LayoutParams)},
-         * {@link #generateLayoutParams(ViewGroup.LayoutParams)} and
-         * {@link #generateLayoutParams(Context, AttributeSet)}.</p>
+         * {@link #generateLayoutParams(android.view.ViewGroup.LayoutParams)} and
+         * {@link #generateLayoutParams(android.content.Context, android.util.AttributeSet)}.</p>
          *
          * @param c Context for obtaining styled attributes
          * @param attrs AttributeSet describing the supplied arguments
@@ -8349,7 +8348,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * @param position Scroll to this adapter position.
          */
         public void smoothScrollToPosition(RecyclerView recyclerView, State state,
-                                           int position) {
+                int position) {
             Log.e(TAG, "You must override smoothScrollToPosition to support smooth scrolling");
         }
 
@@ -8519,7 +8518,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * Remove a view from the currently attached RecyclerView if needed. LayoutManagers should
          * use this method to completely remove a child view that is no longer needed.
          * LayoutManagers should strongly consider recycling removed views using
-         * {@link Recycler#recycleView(View)}.
+         * {@link Recycler#recycleView(android.view.View)}.
          *
          * @param child View to remove
          */
@@ -8531,7 +8530,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * Remove a view from the currently attached RecyclerView if needed. LayoutManagers should
          * use this method to completely remove a child view that is no longer needed.
          * LayoutManagers should strongly consider recycling removed views using
-         * {@link Recycler#recycleView(View)}.
+         * {@link Recycler#recycleView(android.view.View)}.
          *
          * @param index Index of the child view to remove
          */
@@ -8650,12 +8649,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          *
          * <p>LayoutManagers may want to perform a lightweight detach operation to rearrange
          * views currently attached to the RecyclerView. Generally LayoutManager implementations
-         * will want to use {@link #detachAndScrapView(View, RecyclerView.Recycler)}
+         * will want to use {@link #detachAndScrapView(android.view.View, RecyclerView.Recycler)}
          * so that the detached view may be rebound and reused.</p>
          *
          * <p>If a LayoutManager uses this method to detach a view, it <em>must</em>
-         * {@link #attachView(View, int, RecyclerView.LayoutParams) reattach}
-         * or {@link #removeDetachedView(View) fully remove} the detached view
+         * {@link #attachView(android.view.View, int, RecyclerView.LayoutParams) reattach}
+         * or {@link #removeDetachedView(android.view.View) fully remove} the detached view
          * before the LayoutManager entry point method called by RecyclerView returns.</p>
          *
          * @param child Child to detach
@@ -8672,12 +8671,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          *
          * <p>LayoutManagers may want to perform a lightweight detach operation to rearrange
          * views currently attached to the RecyclerView. Generally LayoutManager implementations
-         * will want to use {@link #detachAndScrapView(View, RecyclerView.Recycler)}
+         * will want to use {@link #detachAndScrapView(android.view.View, RecyclerView.Recycler)}
          * so that the detached view may be rebound and reused.</p>
          *
          * <p>If a LayoutManager uses this method to detach a view, it <em>must</em>
-         * {@link #attachView(View, int, RecyclerView.LayoutParams) reattach}
-         * or {@link #removeDetachedView(View) fully remove} the detached view
+         * {@link #attachView(android.view.View, int, RecyclerView.LayoutParams) reattach}
+         * or {@link #removeDetachedView(android.view.View) fully remove} the detached view
          * before the LayoutManager entry point method called by RecyclerView returns.</p>
          *
          * @param index Index of the child to detach
@@ -8694,9 +8693,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         }
 
         /**
-         * Reattach a previously {@link #detachView(View) detached} view.
+         * Reattach a previously {@link #detachView(android.view.View) detached} view.
          * This method should not be used to reattach views that were previously
-         * {@link #detachAndScrapView(View, RecyclerView.Recycler)}  scrapped}.
+         * {@link #detachAndScrapView(android.view.View, RecyclerView.Recycler)}  scrapped}.
          *
          * @param child Child to reattach
          * @param index Intended child index for child
@@ -8716,9 +8715,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         }
 
         /**
-         * Reattach a previously {@link #detachView(View) detached} view.
+         * Reattach a previously {@link #detachView(android.view.View) detached} view.
          * This method should not be used to reattach views that were previously
-         * {@link #detachAndScrapView(View, RecyclerView.Recycler)}  scrapped}.
+         * {@link #detachAndScrapView(android.view.View, RecyclerView.Recycler)}  scrapped}.
          *
          * @param child Child to reattach
          * @param index Intended child index for child
@@ -8728,9 +8727,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         }
 
         /**
-         * Reattach a previously {@link #detachView(View) detached} view.
+         * Reattach a previously {@link #detachView(android.view.View) detached} view.
          * This method should not be used to reattach views that were previously
-         * {@link #detachAndScrapView(View, RecyclerView.Recycler)}  scrapped}.
+         * {@link #detachAndScrapView(android.view.View, RecyclerView.Recycler)}  scrapped}.
          *
          * @param child Child to reattach
          */
@@ -8740,7 +8739,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
         /**
          * Finish removing a view that was previously temporarily
-         * {@link #detachView(View) detached}.
+         * {@link #detachView(android.view.View) detached}.
          *
          * @param child Detached child to remove
          */
@@ -8842,11 +8841,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * {@link #setAutoMeasureEnabled(boolean)}.
          *
          * <p>When RecyclerView is running a layout, this value is always set to
-         * {@link MeasureSpec#EXACTLY} even if it was measured with a different spec mode.
+         * {@link View.MeasureSpec#EXACTLY} even if it was measured with a different spec mode.
          *
          * @return Width measure spec mode
          *
-         * @see MeasureSpec#getMode(int)
+         * @see View.MeasureSpec#getMode(int)
          */
         public int getWidthMode() {
             return mWidthMode;
@@ -8859,11 +8858,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * {@link #setAutoMeasureEnabled(boolean)}.
          *
          * <p>When RecyclerView is running a layout, this value is always set to
-         * {@link MeasureSpec#EXACTLY} even if it was measured with a different spec mode.
+         * {@link View.MeasureSpec#EXACTLY} even if it was measured with a different spec mode.
          *
          * @return Height measure spec mode
          *
-         * @see MeasureSpec#getMode(int)
+         * @see View.MeasureSpec#getMode(int)
          */
         public int getHeightMode() {
             return mHeightMode;
@@ -8873,7 +8872,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * Returns the width that is currently relevant to the LayoutManager.
          *
          * <p>This value is usually equal to the laid out width of the {@link RecyclerView} but may
-         * reflect the current {@link MeasureSpec} width if the
+         * reflect the current {@link android.view.View.MeasureSpec} width if the
          * {@link LayoutManager} is using AutoMeasure and the RecyclerView is in the process of
          * measuring. The LayoutManager must always use this method to retrieve the width relevant
          * to it at any given time.
@@ -8889,7 +8888,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * Returns the height that is currently relevant to the LayoutManager.
          *
          * <p>This value is usually equal to the laid out height of the {@link RecyclerView} but may
-         * reflect the current {@link MeasureSpec} height if the
+         * reflect the current {@link android.view.View.MeasureSpec} height if the
          * {@link LayoutManager} is using AutoMeasure and the RecyclerView is in the process of
          * measuring. The LayoutManager must always use this method to retrieve the height relevant
          * to it at any given time.
@@ -9770,8 +9769,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         }
         /**
          * Called when a child of the RecyclerView wants a particular rectangle to be positioned
-         * onto the screen. See {@link ViewParent#requestChildRectangleOnScreen(View,
-         * Rect, boolean)} for more details.
+         * onto the screen. See {@link ViewParent#requestChildRectangleOnScreen(android.view.View,
+         * android.graphics.Rect, boolean)} for more details.
          *
          * <p>The base implementation will attempt to perform a standard programmatic scroll
          * to bring the given rect into view, within the padded area of the RecyclerView.</p>
@@ -9888,7 +9887,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          */
         @Deprecated
         public boolean onRequestChildFocus(@NonNull RecyclerView parent, @NonNull View child,
-                                           @Nullable View focused) {
+                @Nullable View focused) {
             // eat the request if we are in the middle of a scroll or layout
             return isSmoothScrolling() || parent.isComputingLayout();
         }
@@ -9911,7 +9910,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * @return true if the default scroll behavior should be suppressed
          */
         public boolean onRequestChildFocus(@NonNull RecyclerView parent, @NonNull State state,
-                                           @NonNull View child, @Nullable View focused) {
+                @NonNull View child, @Nullable View focused) {
             return onRequestChildFocus(parent, child, focused);
         }
 
@@ -9936,7 +9935,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * Called to populate focusable views within the RecyclerView.
          *
          * <p>The LayoutManager implementation should return <code>true</code> if the default
-         * behavior of {@link ViewGroup#addFocusables(ArrayList, int)} should be
+         * behavior of {@link ViewGroup#addFocusables(java.util.ArrayList, int)} should be
          * suppressed.</p>
          *
          * <p>The default implementation returns <code>false</code> to trigger RecyclerView
@@ -9981,7 +9980,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * @param itemCount
          */
         public void onItemsAdded(@NonNull RecyclerView recyclerView, int positionStart,
-                                 int itemCount) {
+                int itemCount) {
         }
 
         /**
@@ -9992,7 +9991,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * @param itemCount
          */
         public void onItemsRemoved(@NonNull RecyclerView recyclerView, int positionStart,
-                                   int itemCount) {
+                int itemCount) {
         }
 
         /**
@@ -10005,7 +10004,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * @param itemCount
          */
         public void onItemsUpdated(@NonNull RecyclerView recyclerView, int positionStart,
-                                   int itemCount) {
+                int itemCount) {
         }
 
         /**
@@ -10018,7 +10017,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * @param payload
          */
         public void onItemsUpdated(@NonNull RecyclerView recyclerView, int positionStart,
-                                   int itemCount, @Nullable Object payload) {
+                int itemCount, @Nullable Object payload) {
             onItemsUpdated(recyclerView, positionStart, itemCount);
         }
 
@@ -10035,7 +10034,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * @param itemCount
          */
         public void onItemsMoved(@NonNull RecyclerView recyclerView, int from, int to,
-                                 int itemCount) {
+                int itemCount) {
 
         }
 
@@ -10147,8 +10146,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          *
          * @param recycler Recycler
          * @param state Transient state of RecyclerView
-         * @param widthSpec Width {@link MeasureSpec}
-         * @param heightSpec Height {@link MeasureSpec}
+         * @param widthSpec Width {@link android.view.View.MeasureSpec}
+         * @param heightSpec Height {@link android.view.View.MeasureSpec}
          *
          * @see #isAutoMeasureEnabled()
          * @see #setMeasuredDimension(int, int)
@@ -10308,7 +10307,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          *                 positions
          * @param state    The current state of RecyclerView
          * @param event    The event instance to initialize
-         * @see View#onInitializeAccessibilityEvent(AccessibilityEvent)
+         * @see View#onInitializeAccessibilityEvent(android.view.accessibility.AccessibilityEvent)
          */
         public void onInitializeAccessibilityEvent(@NonNull Recycler recycler, @NonNull State state,
                 @NonNull AccessibilityEvent event) {
@@ -10461,7 +10460,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * @param state     The current state of RecyclerView
          * @param action    The action to perform
          * @param args      Optional action arguments
-         * @see View#performAccessibilityAction(int, Bundle)
+         * @see View#performAccessibilityAction(int, android.os.Bundle)
          */
         public boolean performAccessibilityAction(@NonNull Recycler recycler, @NonNull State state,
                 int action, @Nullable Bundle args) {
@@ -10514,7 +10513,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * @param action   The action to perform
          * @param args     Optional action arguments
          * @return true if action is handled
-         * @see View#performAccessibilityAction(int, Bundle)
+         * @see View#performAccessibilityAction(int, android.os.Bundle)
          */
         public boolean performAccessibilityActionForItem(@NonNull Recycler recycler,
                 @NonNull State state, @NonNull View view, int action, @Nullable Bundle args) {
@@ -10655,7 +10654,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * @param state   The current state of RecyclerView.
          */
         public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
-                                   @NonNull RecyclerView parent, @NonNull State state) {
+                @NonNull RecyclerView parent, @NonNull State state) {
             getItemOffsets(outRect, ((LayoutParams) view.getLayoutParams()).getViewLayoutPosition(),
                     parent);
         }
@@ -11487,12 +11486,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     }
 
     /**
-     * {@link MarginLayoutParams LayoutParams} subclass for children of
+     * {@link android.view.ViewGroup.MarginLayoutParams LayoutParams} subclass for children of
      * {@link RecyclerView}. Custom {@link LayoutManager layout managers} are encouraged
      * to create their own subclass of this <code>LayoutParams</code> class
      * to store any additional required per-child view metadata about the layout.
      */
-    public static class LayoutParams extends MarginLayoutParams {
+    public static class LayoutParams extends android.view.ViewGroup.MarginLayoutParams {
         ViewHolder mViewHolder;
         public final Rect mDecorInsets = new Rect();
         boolean mInsetsDirty = true;
@@ -11661,7 +11660,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * Starts a smooth scroll for the given target position.
          * <p>In each animation step, {@link RecyclerView} will check
          * for the target view and call either
-         * {@link #onTargetFound(View, RecyclerView.State, SmoothScroller.Action)} or
+         * {@link #onTargetFound(android.view.View, RecyclerView.State, SmoothScroller.Action)} or
          * {@link #onSeekTargetStep(int, int, RecyclerView.State, SmoothScroller.Action)} until
          * SmoothScroller is stopped.</p>
          *
@@ -11734,7 +11733,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         /**
          * Stops running the SmoothScroller in each animation callback. Note that this does not
          * cancel any existing {@link Action} updated by
-         * {@link #onTargetFound(View, RecyclerView.State, SmoothScroller.Action)} or
+         * {@link #onTargetFound(android.view.View, RecyclerView.State, SmoothScroller.Action)} or
          * {@link #onSeekTargetStep(int, int, RecyclerView.State, SmoothScroller.Action)}.
          */
         protected final void stop() {
@@ -11832,7 +11831,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         }
 
         /**
-         * @see RecyclerView#getChildLayoutPosition(View)
+         * @see RecyclerView#getChildLayoutPosition(android.view.View)
          */
         public int getChildPosition(View view) {
             return mRecyclerView.getChildLayoutPosition(view);
@@ -12211,7 +12210,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             mLayoutState = other.mLayoutState;
         }
 
-        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.ClassLoaderCreator<SavedState>() {
+        public static final Creator<SavedState> CREATOR = new ClassLoaderCreator<SavedState>() {
             @Override
             public SavedState createFromParcel(Parcel in, ClassLoader loader) {
                 return new SavedState(in, loader);

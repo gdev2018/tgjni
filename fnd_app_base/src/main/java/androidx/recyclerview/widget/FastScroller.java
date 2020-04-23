@@ -136,9 +136,9 @@ class FastScroller extends RecyclerView.ItemDecoration implements RecyclerView.O
     };
 
     FastScroller(RecyclerView recyclerView, StateListDrawable verticalThumbDrawable,
-                 Drawable verticalTrackDrawable, StateListDrawable horizontalThumbDrawable,
-                 Drawable horizontalTrackDrawable, int defaultWidth, int scrollbarMinimumRange,
-                 int margin) {
+            Drawable verticalTrackDrawable, StateListDrawable horizontalThumbDrawable,
+            Drawable horizontalTrackDrawable, int defaultWidth, int scrollbarMinimumRange,
+            int margin) {
         mVerticalThumbDrawable = verticalThumbDrawable;
         mVerticalTrackDrawable = verticalTrackDrawable;
         mHorizontalThumbDrawable = horizontalThumbDrawable;

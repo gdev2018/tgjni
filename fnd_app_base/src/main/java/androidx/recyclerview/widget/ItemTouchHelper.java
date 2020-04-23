@@ -32,15 +32,14 @@ import android.view.ViewConfiguration;
 import android.view.ViewParent;
 import android.view.animation.Interpolator;
 
+import com.github.gdev2018.master.AndroidUtilities;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.core.view.ViewCompat;
-
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
-
-import com.github.gdev2018.master.AndroidUtilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -927,7 +926,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
-                               RecyclerView.State state) {
+            RecyclerView.State state) {
         outRect.setEmpty();
     }
 
@@ -1378,7 +1377,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
      * dragging View overlaps multiple other views, Callback chooses the closest View with which
      * dragged View might have changed positions. Although this approach works for many use cases,
      * if you have a custom LayoutManager, you can override
-     * {@link #chooseDropTarget(ViewHolder, List, int, int)} to select a
+     * {@link #chooseDropTarget(ViewHolder, java.util.List, int, int)} to select a
      * custom drop target.
      * <p>
      * When a View is swiped, ItemTouchHelper animates it until it goes out of bounds, then calls
@@ -1431,7 +1430,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
          * implementations for different platform versions.
          * <p>
          * By default, {@link Callback} applies these changes on
-         * {@link ViewHolder#itemView}.
+         * {@link RecyclerView.ViewHolder#itemView}.
          * <p>
          * For example, if you have a use case where you only want the text to move when user
          * swipes over the view, you can do the following:
@@ -1476,7 +1475,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
          *
          * @param flags           The flag value that include any number of movement flags.
          * @param layoutDirection The layout direction of the View. Can be obtained from
-         *                        {@link ViewCompat#getLayoutDirection(View)}.
+         *                        {@link ViewCompat#getLayoutDirection(android.view.View)}.
          * @return Updated flags which uses relative flags ({@link #START}, {@link #END}) instead
          * of {@link #LEFT}, {@link #RIGHT}.
          * @see #convertToAbsoluteDirection(int, int)
@@ -1593,7 +1592,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
         }
 
         final int getAbsoluteMovementFlags(RecyclerView recyclerView,
-                                           ViewHolder viewHolder) {
+                ViewHolder viewHolder) {
             final int flags = getMovementFlags(recyclerView, viewHolder);
             return convertToAbsoluteDirection(flags, ViewCompat.getLayoutDirection(recyclerView));
         }
@@ -1604,7 +1603,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
         }
 
         boolean hasSwipeFlag(RecyclerView recyclerView,
-                             ViewHolder viewHolder) {
+                ViewHolder viewHolder) {
             final int flags = getAbsoluteMovementFlags(recyclerView, viewHolder);
             return (flags & ACTION_MODE_SWIPE_MASK) != 0;
         }
@@ -1614,7 +1613,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
          * <p>
          * This method is used when selecting drop target for the dragged View. After Views are
          * eliminated either via bounds check or via this method, resulting set of views will be
-         * passed to {@link #chooseDropTarget(ViewHolder, List, int, int)}.
+         * passed to {@link #chooseDropTarget(ViewHolder, java.util.List, int, int)}.
          * <p>
          * Default implementation returns true.
          *
@@ -1626,7 +1625,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
          */
         @SuppressWarnings("WeakerAccess")
         public boolean canDropOver(@NonNull RecyclerView recyclerView, @NonNull ViewHolder current,
-                                   @NonNull ViewHolder target) {
+                @NonNull ViewHolder target) {
             return true;
         }
 
@@ -1893,7 +1892,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
          * @param actionState One of {@link ItemTouchHelper#ACTION_STATE_IDLE},
          *                    {@link ItemTouchHelper#ACTION_STATE_SWIPE} or
          *                    {@link ItemTouchHelper#ACTION_STATE_DRAG}.
-         * @see #clearView(RecyclerView, ViewHolder)
+         * @see #clearView(RecyclerView, RecyclerView.ViewHolder)
          */
         public void onSelectedChanged(@Nullable ViewHolder viewHolder, int actionState) {
             if (viewHolder != null) {
@@ -1976,8 +1975,8 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
         }
 
         void onDraw(Canvas c, RecyclerView parent, ViewHolder selected,
-                    List<RecoverAnimation> recoverAnimationList,
-                    int actionState, float dX, float dY) {
+                List<ItemTouchHelper.RecoverAnimation> recoverAnimationList,
+                int actionState, float dX, float dY) {
             final int recoverAnimSize = recoverAnimationList.size();
             for (int i = 0; i < recoverAnimSize; i++) {
                 final ItemTouchHelper.RecoverAnimation anim = recoverAnimationList.get(i);
@@ -1995,8 +1994,8 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
         }
 
         void onDrawOver(Canvas c, RecyclerView parent, ViewHolder selected,
-                        List<RecoverAnimation> recoverAnimationList,
-                        int actionState, float dX, float dY) {
+                List<ItemTouchHelper.RecoverAnimation> recoverAnimationList,
+                int actionState, float dX, float dY) {
             final int recoverAnimSize = recoverAnimationList.size();
             for (int i = 0; i < recoverAnimSize; i++) {
                 final ItemTouchHelper.RecoverAnimation anim = recoverAnimationList.get(i);
@@ -2029,7 +2028,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
          * also completed its animation.
          * <p>
          * This is a good place to clear all changes on the View that was done in
-         * {@link #onSelectedChanged(ViewHolder, int)},
+         * {@link #onSelectedChanged(RecyclerView.ViewHolder, int)},
          * {@link #onChildDraw(Canvas, RecyclerView, ViewHolder, float, float, int,
          * boolean)} or
          * {@link #onChildDrawOver(Canvas, RecyclerView, ViewHolder, float, float, int, boolean)}.
@@ -2131,7 +2130,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
          */
         @SuppressWarnings("WeakerAccess")
         public long getAnimationDuration(@NonNull RecyclerView recyclerView, int animationType,
-                                         float animateDx, float animateDy) {
+                float animateDx, float animateDy) {
             final RecyclerView.ItemAnimator itemAnimator = recyclerView.getItemAnimator();
             if (itemAnimator == null) {
                 return animationType == ANIMATION_TYPE_DRAG ? DEFAULT_DRAG_ANIMATION_DURATION

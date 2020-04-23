@@ -62,7 +62,7 @@ public class LinearSnapHelper extends SnapHelper {
 
     @Override
     public int findTargetSnapPosition(RecyclerView.LayoutManager layoutManager, int velocityX,
-                                      int velocityY) {
+            int velocityY) {
         if (!(layoutManager instanceof RecyclerView.SmoothScroller.ScrollVectorProvider)) {
             return RecyclerView.NO_POSITION;
         }
@@ -139,7 +139,7 @@ public class LinearSnapHelper extends SnapHelper {
     }
 
     private int distanceToCenter(@NonNull RecyclerView.LayoutManager layoutManager,
-                                 @NonNull View targetView, OrientationHelper helper) {
+            @NonNull View targetView, OrientationHelper helper) {
         final int childCenter = helper.getDecoratedStart(targetView)
                 + (helper.getDecoratedMeasurement(targetView) / 2);
         final int containerCenter;
@@ -163,7 +163,7 @@ public class LinearSnapHelper extends SnapHelper {
      * @return The diff between the target scroll position and the current position.
      */
     private int estimateNextPositionDiffForFling(RecyclerView.LayoutManager layoutManager,
-                                                 OrientationHelper helper, int velocityX, int velocityY) {
+            OrientationHelper helper, int velocityX, int velocityY) {
         int[] distances = calculateScrollDistance(velocityX, velocityY);
         float distancePerChild = computeDistancePerChild(layoutManager, helper);
         if (distancePerChild <= 0) {
@@ -185,7 +185,7 @@ public class LinearSnapHelper extends SnapHelper {
      */
     @Nullable
     private View findCenterView(RecyclerView.LayoutManager layoutManager,
-                                OrientationHelper helper) {
+            OrientationHelper helper) {
         int childCount = layoutManager.getChildCount();
         if (childCount == 0) {
             return null;
@@ -229,7 +229,7 @@ public class LinearSnapHelper extends SnapHelper {
      * the relevant direction.
      */
     private float computeDistancePerChild(RecyclerView.LayoutManager layoutManager,
-                                          OrientationHelper helper) {
+            OrientationHelper helper) {
         View minPosView = null;
         View maxPosView = null;
         int minPos = Integer.MAX_VALUE;

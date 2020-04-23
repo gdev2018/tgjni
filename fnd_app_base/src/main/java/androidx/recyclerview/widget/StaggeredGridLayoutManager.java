@@ -16,6 +16,9 @@
 
 package androidx.recyclerview.widget;
 
+import static androidx.annotation.RestrictTo.Scope.LIBRARY;
+import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PointF;
@@ -38,9 +41,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.List;
-
-import static androidx.annotation.RestrictTo.Scope.LIBRARY;
-import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
 /**
  * A LayoutManager that lays out children in a staggered grid formation.
@@ -593,7 +593,7 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
 
 
     private void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state,
-                                  boolean shouldCheckForGaps) {
+            boolean shouldCheckForGaps) {
         final AnchorInfo anchorInfo = mAnchorInfo;
         if (mPendingSavedState != null || mPendingScrollPosition != RecyclerView.NO_POSITION) {
             if (state.getItemCount() == 0) {
@@ -1265,7 +1265,7 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
 
     @Override
     public void onInitializeAccessibilityNodeInfoForItem(RecyclerView.Recycler recycler,
-                                                         RecyclerView.State state, View host, AccessibilityNodeInfoCompat info) {
+            RecyclerView.State state, View host, AccessibilityNodeInfoCompat info) {
         ViewGroup.LayoutParams lp = host.getLayoutParams();
         if (!(lp instanceof LayoutParams)) {
             super.onInitializeAccessibilityNodeInfoForItem(host, info);
@@ -1319,7 +1319,7 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
 
     @Override
     public int getRowCountForAccessibility(RecyclerView.Recycler recycler,
-                                           RecyclerView.State state) {
+            RecyclerView.State state) {
         if (mOrientation == HORIZONTAL) {
             return mSpanCount;
         }
@@ -1328,7 +1328,7 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
 
     @Override
     public int getColumnCountForAccessibility(RecyclerView.Recycler recycler,
-                                              RecyclerView.State state) {
+            RecyclerView.State state) {
         if (mOrientation == VERTICAL) {
             return mSpanCount;
         }
@@ -1395,7 +1395,7 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
     }
 
     private void fixEndGap(RecyclerView.Recycler recycler, RecyclerView.State state,
-                           boolean canOffsetChildren) {
+            boolean canOffsetChildren) {
         final int maxEndLine = getMaxEnd(Integer.MIN_VALUE);
         if (maxEndLine == Integer.MIN_VALUE) {
             return;
@@ -1414,7 +1414,7 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
     }
 
     private void fixStartGap(RecyclerView.Recycler recycler, RecyclerView.State state,
-                             boolean canOffsetChildren) {
+            boolean canOffsetChildren) {
         final int minStartLine = getMinStart(Integer.MAX_VALUE);
         if (minStartLine == Integer.MAX_VALUE) {
             return;
@@ -1508,7 +1508,7 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
 
     @Override
     public void onItemsUpdated(RecyclerView recyclerView, int positionStart, int itemCount,
-                               Object payload) {
+            Object payload) {
         handleUpdate(positionStart, itemCount, AdapterHelper.UpdateOp.UPDATE);
     }
 
@@ -1559,7 +1559,7 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
     }
 
     private int fill(RecyclerView.Recycler recycler, LayoutState layoutState,
-                     RecyclerView.State state) {
+            RecyclerView.State state) {
         mRemainingSpans.set(0, mSpanCount, true);
         // The target position we are trying to reach.
         final int targetLine;
@@ -2054,7 +2054,7 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
 
     @Override
     public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state,
-                                       int position) {
+            int position) {
         LinearSmoothScroller scroller = new LinearSmoothScroller(recyclerView.getContext());
         scroller.setTargetPosition(position);
         startSmoothScroll(scroller);
@@ -3114,8 +3114,8 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
                         + '}';
             }
 
-            public static final Creator<FullSpanItem> CREATOR =
-                    new Creator<FullSpanItem>() {
+            public static final Parcelable.Creator<FullSpanItem> CREATOR =
+                    new Parcelable.Creator<FullSpanItem>() {
                         @Override
                         public FullSpanItem createFromParcel(Parcel in) {
                             return new FullSpanItem(in);
@@ -3224,8 +3224,8 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
             dest.writeList(mFullSpanItems);
         }
 
-        public static final Creator<SavedState> CREATOR =
-                new Creator<SavedState>() {
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
                     @Override
                     public SavedState createFromParcel(Parcel in) {
                         return new SavedState(in);

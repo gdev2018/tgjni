@@ -153,7 +153,7 @@ public abstract class SnapHelper extends RecyclerView.OnFlingListener {
      * @return true if it is handled, false otherwise.
      */
     private boolean snapFromFling(@NonNull RecyclerView.LayoutManager layoutManager, int velocityX,
-                                  int velocityY) {
+            int velocityY) {
         if (!(layoutManager instanceof RecyclerView.SmoothScroller.ScrollVectorProvider)) {
             return false;
         }
@@ -226,7 +226,7 @@ public abstract class SnapHelper extends RecyclerView.OnFlingListener {
         }
         return new LinearSmoothScroller(mRecyclerView.getContext()) {
             @Override
-            protected void onTargetFound(View targetView, RecyclerView.State state, RecyclerView.SmoothScroller.Action action) {
+            protected void onTargetFound(View targetView, RecyclerView.State state, Action action) {
                 if (mRecyclerView == null) {
                     // The associated RecyclerView has been removed so there is no action to take.
                     return;
@@ -298,5 +298,5 @@ public abstract class SnapHelper extends RecyclerView.OnFlingListener {
      *         if no snapping should happen
      */
     public abstract int findTargetSnapPosition(RecyclerView.LayoutManager layoutManager, int velocityX,
-                                               int velocityY);
+            int velocityY);
 }

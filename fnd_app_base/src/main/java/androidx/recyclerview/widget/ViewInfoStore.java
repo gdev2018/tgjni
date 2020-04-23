@@ -15,13 +15,6 @@
  */
 package androidx.recyclerview.widget;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
-import androidx.collection.ArrayMap;
-import androidx.collection.LongSparseArray;
-import androidx.core.util.Pools;
-
 import static androidx.recyclerview.widget.ViewInfoStore.InfoRecord.FLAG_APPEAR;
 import static androidx.recyclerview.widget.ViewInfoStore.InfoRecord.FLAG_APPEAR_AND_DISAPPEAR;
 import static androidx.recyclerview.widget.ViewInfoStore.InfoRecord.FLAG_APPEAR_PRE_AND_POST;
@@ -30,6 +23,12 @@ import static androidx.recyclerview.widget.ViewInfoStore.InfoRecord.FLAG_POST;
 import static androidx.recyclerview.widget.ViewInfoStore.InfoRecord.FLAG_PRE;
 import static androidx.recyclerview.widget.ViewInfoStore.InfoRecord.FLAG_PRE_AND_POST;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.collection.ArrayMap;
+import androidx.collection.LongSparseArray;
+import androidx.core.util.Pools;
 /**
  * This class abstracts all tracking for Views to run animations.
  */
@@ -278,11 +277,11 @@ class ViewInfoStore {
 
     interface ProcessCallback {
         void processDisappeared(RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ItemAnimator.ItemHolderInfo preInfo,
-                                @Nullable RecyclerView.ItemAnimator.ItemHolderInfo postInfo);
+                @Nullable RecyclerView.ItemAnimator.ItemHolderInfo postInfo);
         void processAppeared(RecyclerView.ViewHolder viewHolder, @Nullable RecyclerView.ItemAnimator.ItemHolderInfo preInfo,
-                             RecyclerView.ItemAnimator.ItemHolderInfo postInfo);
+                RecyclerView.ItemAnimator.ItemHolderInfo postInfo);
         void processPersistent(RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ItemAnimator.ItemHolderInfo preInfo,
-                               @NonNull RecyclerView.ItemAnimator.ItemHolderInfo postInfo);
+                @NonNull RecyclerView.ItemAnimator.ItemHolderInfo postInfo);
         void unused(RecyclerView.ViewHolder holder);
     }
 

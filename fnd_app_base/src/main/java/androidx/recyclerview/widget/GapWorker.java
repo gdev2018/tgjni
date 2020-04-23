@@ -275,7 +275,7 @@ final class GapWorker implements Runnable {
     }
 
     private RecyclerView.ViewHolder prefetchPositionWithDeadline(RecyclerView view,
-                                                                 int position, long deadlineNs) {
+            int position, long deadlineNs) {
         if (isPrefetchPositionAttached(view, position)) {
             // don't attempt to prefetch attached views
             return null;

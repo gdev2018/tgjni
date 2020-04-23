@@ -1509,7 +1509,7 @@ public class MessagesStorage {
                     state.bindInteger(2, searchImage.type);
                     state.bindString(3, searchImage.imageUrl != null ? searchImage.imageUrl : "");
                     state.bindString(4, searchImage.thumbUrl != null ? searchImage.thumbUrl : "");
-                    state.bindString(5, searchImage.localUrl != null ? searchImage.localUrl : "");
+///*                    state.bindString(5, searchImage.localUrl != null ? searchImage.localUrl : "");*/
                     state.bindInteger(6, searchImage.width);
                     state.bindInteger(7, searchImage.height);
                     state.bindInteger(8, searchImage.size);

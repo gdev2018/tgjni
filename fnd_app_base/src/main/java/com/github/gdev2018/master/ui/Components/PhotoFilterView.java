@@ -1657,7 +1657,7 @@ public class PhotoFilterView extends FrameLayout {
             sharpenValue = state.sharpenValue;
             curvesToolValue = state.curvesToolValue;
             blurExcludeSize = state.blurExcludeSize;
-            blurExcludePoint = state.blurExcludePoint;
+///*            blurExcludePoint = state.blurExcludePoint;*/
             blurExcludeBlurSize = state.blurExcludeBlurSize;
             blurAngle = state.blurAngle;
             lastState = state;
@@ -1980,7 +1980,7 @@ public class PhotoFilterView extends FrameLayout {
         state.sharpenValue = sharpenValue;
         state.curvesToolValue = curvesToolValue;
         state.blurExcludeSize = blurExcludeSize;
-        state.blurExcludePoint = blurExcludePoint;
+///*        state.blurExcludePoint = blurExcludePoint;*/
         state.blurExcludeBlurSize = blurExcludeBlurSize;
         state.blurAngle = blurAngle;
         return state;

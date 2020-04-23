@@ -5304,9 +5304,9 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                             cacheFile = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), md5);
                         }
                         if (document == null) {
-                            if (info.searchImage.localUrl != null) {
-                                params.put("url", info.searchImage.localUrl);
-                            }
+///*                            if (info.searchImage.localUrl != null) {
+//                                params.put("url", info.searchImage.localUrl);
+//                            }*/
                             File thumbFile = null;
                             document = new TLRPC.TL_document();
                             document.id = 0;
@@ -6067,40 +6067,40 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
             return null;
         }
 
-        if (Build.VERSION.SDK_INT < 18) {
-            try {
-                MediaCodecInfo codecInfo = MediaController.selectCodec(MediaController.MIME_TYPE);
-                if (codecInfo == null) {
-                    if (BaseBuildVars.LOGS_ENABLED) {
-                        FileLog.d("no codec info for " + MediaController.MIME_TYPE);
-                    }
-                    return null;
-                } else {
-                    String name = codecInfo.getName();
-                    if (name.equals("OMX.google.h264.encoder") ||
-                            name.equals("OMX.ST.VFM.H264Enc") ||
-                            name.equals("OMX.Exynos.avc.enc") ||
-                            name.equals("OMX.MARVELL.VIDEO.HW.CODA7542ENCODER") ||
-                            name.equals("OMX.MARVELL.VIDEO.H264ENCODER") ||
-                            name.equals("OMX.k3.video.encoder.avc") ||
-                            name.equals("OMX.TI.DUCATI1.VIDEO.H264E")) {
-                        if (BaseBuildVars.LOGS_ENABLED) {
-                            FileLog.d("unsupported encoder = " + name);
-                        }
-                        return null;
-                    } else {
-                        if (MediaController.selectColorFormat(codecInfo, MediaController.MIME_TYPE) == 0) {
-                            if (BaseBuildVars.LOGS_ENABLED) {
-                                FileLog.d("no color format for " + MediaController.MIME_TYPE);
-                            }
-                            return null;
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                return null;
-            }
-        }
+///*        if (Build.VERSION.SDK_INT < 18) {
+//            try {
+//                MediaCodecInfo codecInfo = MediaController.selectCodec(MediaController.MIME_TYPE);
+//                if (codecInfo == null) {
+//                    if (BaseBuildVars.LOGS_ENABLED) {
+//                        FileLog.d("no codec info for " + MediaController.MIME_TYPE);
+//                    }
+//                    return null;
+//                } else {
+//                    String name = codecInfo.getName();
+//                    if (name.equals("OMX.google.h264.encoder") ||
+//                            name.equals("OMX.ST.VFM.H264Enc") ||
+//                            name.equals("OMX.Exynos.avc.enc") ||
+//                            name.equals("OMX.MARVELL.VIDEO.HW.CODA7542ENCODER") ||
+//                            name.equals("OMX.MARVELL.VIDEO.H264ENCODER") ||
+//                            name.equals("OMX.k3.video.encoder.avc") ||
+//                            name.equals("OMX.TI.DUCATI1.VIDEO.H264E")) {
+//                        if (BaseBuildVars.LOGS_ENABLED) {
+//                            FileLog.d("unsupported encoder = " + name);
+//                        }
+//                        return null;
+//                    } *//*else {
+//                        if (MediaController.selectColorFormat(codecInfo, MediaController.MIME_TYPE) == 0) {
+//                            if (BaseBuildVars.LOGS_ENABLED) {
+//                                FileLog.d("no color format for " + MediaController.MIME_TYPE);
+//                            }
+//                            return null;
+//                        }
+//                    }*//*
+//                }
+//            } catch (Exception e) {
+//                return null;
+//            }
+//        }*/
         videoDuration *= 1000;
 
         VideoEditedInfo videoEditedInfo = new VideoEditedInfo();

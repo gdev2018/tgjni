@@ -351,32 +351,32 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     FileLog.e(e);
                 }
                 final ArrayList<Object> arrayList = new ArrayList<>();
-                arrayList.add(new MediaController.PhotoEntry(0, 0, 0, currentPicturePath, orientation, false));
-                PhotoViewer.getInstance().openPhotoForSelect(arrayList, 0, PhotoViewer.SELECT_TYPE_AVATAR, new PhotoViewer.EmptyPhotoViewerProvider() {
-                    @Override
-                    public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
-                        String path = null;
-                        MediaController.PhotoEntry photoEntry = (MediaController.PhotoEntry) arrayList.get(0);
-                        if (photoEntry.imagePath != null) {
-                            path = photoEntry.imagePath;
-                        } else if (photoEntry.path != null) {
-                            path = photoEntry.path;
-                        }
-                        Bitmap bitmap = ImageLoader.loadBitmap(path, null, 800, 800, true);
-                        processBitmap(bitmap);
-                    }
-
-                    @Override
-                    public boolean allowCaption() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean canScrollAway() {
-                        return false;
-                    }
-                }, null);
-                AndroidUtilities.addMediaToGallery(currentPicturePath);
+///*                arrayList.add(new MediaController.PhotoEntry(0, 0, 0, currentPicturePath, orientation, false));
+//                PhotoViewer.getInstance().openPhotoForSelect(arrayList, 0, PhotoViewer.SELECT_TYPE_AVATAR, new PhotoViewer.EmptyPhotoViewerProvider() {
+//                    @Override
+//                    public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
+//                        String path = null;
+//                        MediaController.PhotoEntry photoEntry = (MediaController.PhotoEntry) arrayList.get(0);
+//                        if (photoEntry.imagePath != null) {
+//                            path = photoEntry.imagePath;
+//                        } else if (photoEntry.path != null) {
+//                            path = photoEntry.path;
+//                        }
+//                        Bitmap bitmap = ImageLoader.loadBitmap(path, null, 800, 800, true);
+//                        processBitmap(bitmap);
+//                    }
+//
+//                    @Override
+//                    public boolean allowCaption() {
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public boolean canScrollAway() {
+//                        return false;
+//                    }
+//                }, null);
+// */               AndroidUtilities.addMediaToGallery(currentPicturePath);
                 currentPicturePath = null;
             } else if (requestCode == 14) {
                 if (data == null || data.getData() == null) {

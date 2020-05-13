@@ -41,11 +41,11 @@ import com.github.gdev2018.master.tgnet.ConnectionsManager;
 
 public class BaseFragment {
 
+    protected int currentAccount = BaseUserConfig.selectedAccount;
+
     private boolean isFinished;
     private boolean finishing;
     protected Dialog visibleDialog;
-    protected int currentAccount = BaseUserConfig.selectedAccount;
-
     protected View fragmentView;
     protected ActionBarLayout parentLayout;
     protected ActionBar actionBar;

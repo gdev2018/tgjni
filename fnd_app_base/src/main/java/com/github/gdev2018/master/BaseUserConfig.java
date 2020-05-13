@@ -23,7 +23,7 @@ import java.io.File;
 public class BaseUserConfig {
 
     public static int selectedAccount;
-    public final static int MAX_ACCOUNT_COUNT = 2;
+    public final static int MAX_ACCOUNT_COUNT = 3;
 
     private final Object sync = new Object();
     private boolean configLoaded;

@@ -13315,7 +13315,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //    }
 //
 //    @Override
-//    public ThemeDescription[] getThemeDescriptions() {
+//    public ArrayList<ThemeDescription> getThemeDescriptions() {
 //        ThemeDescription.ThemeDescriptionDelegate selectedBackgroundDelegate = () -> {
 //            updateVisibleRows();
 //            if (chatActivityEnterView != null && chatActivityEnterView.getEmojiView() != null) {

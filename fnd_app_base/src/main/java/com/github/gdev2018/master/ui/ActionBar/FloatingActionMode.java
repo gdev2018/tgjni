@@ -42,7 +42,7 @@ public final class FloatingActionMode extends ActionMode {
     private static final int MAX_HIDE_DURATION = 3000;
     private static final int MOVING_HIDE_DELAY = 50;
     private final Context mContext;
-    private final Callback2 mCallback;
+    private final ActionMode.Callback2 mCallback;
     private final Menu mMenu;
     private final Rect mContentRect;
     private final Rect mContentRectOnScreen;
@@ -78,7 +78,7 @@ public final class FloatingActionMode extends ActionMode {
     private FloatingToolbar mFloatingToolbar;
     private FloatingToolbarVisibilityHelper mFloatingToolbarVisibilityHelper;
 
-    public FloatingActionMode(Context context, Callback2 callback, View originatingView, FloatingToolbar floatingToolbar) {
+    public FloatingActionMode(Context context, ActionMode.Callback2 callback, View originatingView, FloatingToolbar floatingToolbar) {
         mContext = context;
         mCallback = callback;
 

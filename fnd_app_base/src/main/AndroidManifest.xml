@@ -62,13 +62,9 @@
     <application
         android:allowBackup="false"
         android:hardwareAccelerated="@bool/useHardwareAcceleration"
-        android:icon="@mipmap/powerlabor"
-        android:roundIcon="@mipmap/powerlabor"
         android:largeHeap="true"
         android:supportsRtl="false"
         tools:replace="android:supportsRtl">
-
-
     </application>
 
 </manifest>

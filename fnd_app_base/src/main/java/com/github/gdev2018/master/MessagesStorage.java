@@ -1444,7 +1444,9 @@ public class MessagesStorage {
                     arrayList.add(searchImage);
                 }
                 cursor.dispose();*/
-                AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.recentImagesDidLoad, type, arrayList));
+///*
+//                AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.recentImagesDidLoad, type, arrayList));
+//*/
             } catch (Throwable e) {
                 FileLog.e(e);
             }

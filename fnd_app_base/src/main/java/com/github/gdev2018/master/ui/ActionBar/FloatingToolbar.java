@@ -1168,7 +1168,7 @@ public final class FloatingToolbar {
 
             public int calculateWidth(MenuItem menuItem) {
                 updateMenuItemButton(mCalculator, menuItem, mIconTextSpacing);
-                mCalculator.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
+                mCalculator.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
                 return mCalculator.getMeasuredWidth();
             }
 

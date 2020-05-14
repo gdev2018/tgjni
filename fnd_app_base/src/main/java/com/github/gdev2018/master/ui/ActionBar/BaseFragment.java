@@ -39,13 +39,15 @@ import com.github.gdev2018.master.SendMessagesHelper;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 
-public class BaseFragment {
+import java.util.ArrayList;
 
-    protected int currentAccount = BaseUserConfig.selectedAccount;
+public class BaseFragment {
 
     private boolean isFinished;
     private boolean finishing;
     protected Dialog visibleDialog;
+    protected int currentAccount = BaseUserConfig.selectedAccount;
+
     protected View fragmentView;
     protected ActionBarLayout parentLayout;
     protected ActionBar actionBar;
@@ -476,8 +478,8 @@ public class BaseFragment {
         return false;
     }
 
-    public ThemeDescription[] getThemeDescriptions() {
-        return new ThemeDescription[0];
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
+        return new ArrayList<>();
     }
 
 ///*    public AccountInstance getAccountInstance() {
@@ -500,7 +502,7 @@ public class BaseFragment {
 //        return getAccountInstance().getConnectionsManager();
 //    }
 //
-//    protected LocationController getLocationController() {
+//    public LocationController getLocationController() {
 //        return getAccountInstance().getLocationController();
 //    }
 //

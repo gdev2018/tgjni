@@ -1424,7 +1424,7 @@ public class DataQuery {
             ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
                 AndroidUtilities.runOnUIThread(() -> {
                     if (response instanceof TLRPC.TL_messages_stickerSetInstallResultArchive) {
-                        NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.needReloadArchivedStickers, type);
+///*                        NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.needReloadArchivedStickers, type);*/
                         if (hide != 1 && baseFragment != null && baseFragment.getParentActivity() != null) {
 ///*                            StickersArchiveAlert alert = new StickersArchiveAlert(baseFragment.getParentActivity(), showSettings ? baseFragment : null, ((TLRPC.TL_messages_stickerSetInstallResultArchive) response).sets);
 //                            baseFragment.showDialog(alert.create());*/

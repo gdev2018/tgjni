@@ -2836,7 +2836,9 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                                 array.put(req.id.get(a1), (Integer) vector.objects.get(a1));
                             }
                             MessagesStorage.getInstance(currentAccount).putChannelViews(channelViews, req.peer instanceof TLRPC.TL_inputPeerChannel);
-                            AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.didUpdatedMessagesViews, channelViews));
+///*
+//                            AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.didUpdatedMessagesViews, channelViews));
+//*/
                         }
                     });
                 }
@@ -9522,7 +9524,9 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                 }
             }
             if (channelViewsFinal != null) {
-                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.didUpdatedMessagesViews, channelViewsFinal);
+///*
+//                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.didUpdatedMessagesViews, channelViewsFinal);
+//*/
             }
             if (updateMask != 0) {
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.updateInterfaces, updateMask);

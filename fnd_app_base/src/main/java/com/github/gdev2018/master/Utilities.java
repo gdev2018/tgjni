@@ -25,6 +25,14 @@ import java.util.regex.Pattern;
 
 public class Utilities {
 
+    public interface IntCallback {
+        void run(int param);
+    }
+
+    public interface BooleanCallback {
+        void run(boolean param);
+    }
+
     public static Pattern pattern = Pattern.compile("[\\-0-9]+");
     public static SecureRandom random = new SecureRandom();
 

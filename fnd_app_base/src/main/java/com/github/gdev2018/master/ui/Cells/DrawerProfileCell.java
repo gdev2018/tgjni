@@ -8,7 +8,9 @@
 
 package com.github.gdev2018.master.ui.Cells;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -18,6 +20,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -25,15 +29,21 @@ import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.gdev2018.master.LocaleController;
+import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.PhoneFormat.PhoneFormat;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.UserObject;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.R;
+import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.tgnet.TLRPC;
+import com.github.gdev2018.master.ui.Components.AvatarDrawable;
 import com.github.gdev2018.master.ui.Components.AvatarDrawableDeprecated;
 import com.github.gdev2018.master.ui.Components.BackupImageViewDeprecated;
+import com.github.gdev2018.master.ui.Components.CubicBezierInterpolator;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import com.github.gdev2018.master.ui.Components.SnowflakesEffect;
@@ -45,12 +55,17 @@ public class DrawerProfileCell extends FrameLayout {
     private TextView phoneTextView;
     private ImageView shadowView;
     private ImageView arrowView;
+    private ImageView darkThemeView;
+
     private Rect srcRect = new Rect();
     private Rect destRect = new Rect();
     private Paint paint = new Paint();
+    private Paint backPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Integer currentColor;
+    private Integer currentMoonColor;
     private SnowflakesEffect snowflakesEffect;
-    private boolean accountsShowed;
+    private boolean accountsShown;
+    private int darkThemeBackgroundColor;
 
     public DrawerProfileCell(Context context) {
         super(context);
@@ -85,11 +100,66 @@ public class DrawerProfileCell extends FrameLayout {
 
         arrowView = new ImageView(context);
         arrowView.setScaleType(ImageView.ScaleType.CENTER);
+        arrowView.setImageResource(R.drawable.menu_expand);
         addView(arrowView, LayoutHelper.createFrame(59, 59, Gravity.RIGHT | Gravity.BOTTOM));
+        setArrowState(false);
+
+        darkThemeView = new ImageView(context);
+        darkThemeView.setScaleType(ImageView.ScaleType.CENTER);
+        darkThemeView.setImageResource(R.drawable.menu_night);
+        darkThemeView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuName), PorterDuff.Mode.MULTIPLY));
+        if (Build.VERSION.SDK_INT >= 21) {
+            darkThemeView.setBackgroundDrawable(Theme.createSelectorDrawable(darkThemeBackgroundColor = Theme.getColor(Theme.key_listSelector), 1, AndroidUtilities.dp(17)));
+            Theme.setRippleDrawableForceSoftware((RippleDrawable) darkThemeView.getBackground());
+        }
+        darkThemeView.setOnClickListener(v -> {
+            SharedPreferences preferences = BaseApplication.mApplicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
+            String dayThemeName = preferences.getString("lastDayTheme", "Blue");
+            if (Theme.getTheme(dayThemeName) == null) {
+                dayThemeName = "Blue";
+            }
+            String nightThemeName = preferences.getString("lastDarkTheme", "Dark Blue");
+            if (Theme.getTheme(nightThemeName) == null) {
+                nightThemeName = "Dark Blue";
+            }
+            Theme.ThemeInfo themeInfo = Theme.getActiveTheme();
+            if (dayThemeName.equals(nightThemeName)) {
+                if (themeInfo.isDark()) {
+                    dayThemeName = "Blue";
+                } else {
+                    nightThemeName = "Dark Blue";
+                }
+            }
+
+            if (dayThemeName.equals(themeInfo.getKey())) {
+                themeInfo = Theme.getTheme(nightThemeName);
+            } else {
+                themeInfo = Theme.getTheme(dayThemeName);
+            }
+            if (Theme.selectedAutoNightType != Theme.AUTO_NIGHT_TYPE_NONE) {
+                Toast.makeText(getContext(), LocaleController.getString("AutoNightModeOff", R.string.AutoNightModeOff), Toast.LENGTH_SHORT).show();
+                Theme.selectedAutoNightType = Theme.AUTO_NIGHT_TYPE_NONE;
+                Theme.saveAutoNightThemeConfig();
+                Theme.cancelAutoNightThemeCallbacks();
+            }
+            int[] pos = new int[2];
+            darkThemeView.getLocationInWindow(pos);
+            pos[0] += darkThemeView.getMeasuredWidth() / 2;
+            pos[1] += darkThemeView.getMeasuredHeight() / 2;
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, false, pos, -1);
+        });
+        addView(darkThemeView, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 6, 90));
 
         if (Theme.getEventType() == 0) {
             snowflakesEffect = new SnowflakesEffect();
+            snowflakesEffect.setColorKey(Theme.key_chats_menuName);
         }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        updateColors();
     }
 
     @Override
@@ -109,23 +179,40 @@ public class DrawerProfileCell extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         Drawable backgroundDrawable = Theme.getCachedWallpaper();
+        String backgroundKey = applyBackground(false);
+        boolean useImageBackground = !backgroundKey.equals(Theme.key_chats_menuTopBackground) && Theme.isCustomTheme() && !Theme.isPatternWallpaper() && backgroundDrawable != null && !(backgroundDrawable instanceof ColorDrawable) && !(backgroundDrawable instanceof GradientDrawable);
+        boolean drawCatsShadow = false;
         int color;
-        if (Theme.hasThemeKey(Theme.key_chats_menuTopShadow)) {
-            color = Theme.getColor(Theme.key_chats_menuTopShadow);
+        int darkBackColor = 0;
+        if (!useImageBackground && Theme.hasThemeKey(Theme.key_chats_menuTopShadowCats)) {
+            color = Theme.getColor(Theme.key_chats_menuTopShadowCats);
+            drawCatsShadow = true;
         } else {
-            color = Theme.getServiceMessageColor() | 0xff000000;
+            if (Theme.hasThemeKey(Theme.key_chats_menuTopShadow)) {
+                color = Theme.getColor(Theme.key_chats_menuTopShadow);
+            } else {
+                color = Theme.getServiceMessageColor() | 0xff000000;
+            }
         }
         if (currentColor == null || currentColor != color) {
             currentColor = color;
             shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
         }
+        color = Theme.getColor(Theme.key_chats_menuName);
+        if (currentMoonColor == null || currentColor != color) {
+            currentMoonColor = color;
+            darkThemeView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+        }
         nameTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
-        if (Theme.isCustomTheme() && !Theme.isPatternWallpaper() && backgroundDrawable != null) {
+        if (useImageBackground) {
             phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhone));
-            shadowView.setVisibility(VISIBLE);
-            if (backgroundDrawable instanceof ColorDrawable) {
+            if (shadowView.getVisibility() != VISIBLE) {
+                shadowView.setVisibility(VISIBLE);
+            }
+            if (backgroundDrawable instanceof ColorDrawable || backgroundDrawable instanceof GradientDrawable) {
                 backgroundDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 backgroundDrawable.draw(canvas);
+                darkBackColor = Theme.getColor(Theme.key_listSelector);
             } else if (backgroundDrawable instanceof BitmapDrawable) {
                 Bitmap bitmap = ((BitmapDrawable) backgroundDrawable).getBitmap();
                 float scaleX = (float) getMeasuredWidth() / (float) bitmap.getWidth();
@@ -142,11 +229,28 @@ public class DrawerProfileCell extends FrameLayout {
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
+                darkBackColor = (Theme.getServiceMessageColor() & 0x00ffffff) | 0x50000000;
             }
         } else {
-            shadowView.setVisibility(INVISIBLE);
+            int visibility = drawCatsShadow? VISIBLE : INVISIBLE;
+            if (shadowView.getVisibility() != visibility) {
+                shadowView.setVisibility(visibility);
+            }
             phoneTextView.setTextColor(Theme.getColor(Theme.key_chats_menuPhoneCats));
             super.onDraw(canvas);
+            darkBackColor = Theme.getColor(Theme.key_listSelector);
+        }
+
+        if (darkBackColor != 0) {
+            if (darkBackColor != darkThemeBackgroundColor) {
+                backPaint.setColor(darkThemeBackgroundColor = darkBackColor);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    Theme.setSelectorDrawableColor(darkThemeView.getBackground(), darkThemeBackgroundColor = darkBackColor, true);
+                }
+            }
+            if (useImageBackground && backgroundDrawable instanceof BitmapDrawable) {
+                canvas.drawCircle(darkThemeView.getX() + darkThemeView.getMeasuredWidth() / 2, darkThemeView.getY() + darkThemeView.getMeasuredHeight() / 2, AndroidUtilities.dp(17), backPaint);
+            }
         }
 
         if (snowflakesEffect != null) {
@@ -154,40 +258,57 @@ public class DrawerProfileCell extends FrameLayout {
         }
     }
 
-    public boolean isAccountsShowed() {
-        return accountsShowed;
+    public boolean isAccountsShown() {
+        return accountsShown;
     }
 
-    public void setAccountsShowed(boolean value) {
-        if (accountsShowed == value) {
+    public void setAccountsShown(boolean value, boolean animated) {
+        if (accountsShown == value) {
             return;
         }
-        accountsShowed = value;
-        arrowView.setImageResource(accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
-    }
-
-    public void setOnArrowClickListener(final OnClickListener onClickListener) {
-        arrowView.setOnClickListener(v -> {
-            accountsShowed = !accountsShowed;
-            arrowView.setImageResource(accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
-            onClickListener.onClick(DrawerProfileCell.this);
-        });
+        accountsShown = value;
+        setArrowState(animated);
     }
 
     public void setUser(TLRPC.User user, boolean accounts) {
         if (user == null) {
             return;
         }
-        TLRPC.FileLocation photo = null;
-        if (user.photo != null) {
-            photo = user.photo.photo_small;
-        }
-        accountsShowed = accounts;
-        arrowView.setImageResource(accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
+        accountsShown = accounts;
+        setArrowState(false);
         nameTextView.setText(UserObject.getUserName(user));
         phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
-        AvatarDrawableDeprecated avatarDrawableDeprecated = new AvatarDrawableDeprecated(user);
-        avatarDrawableDeprecated.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
-        avatarImageView.setImage(photo, "50_50", avatarDrawableDeprecated, user);
+        AvatarDrawable avatarDrawable = new AvatarDrawable(user);
+        avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
+///*        avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, user);*/
+
+        applyBackground(true);
+    }
+
+    public String applyBackground(boolean force) {
+        String currentTag = (String) getTag();
+        String backgroundKey = Theme.hasThemeKey(Theme.key_chats_menuTopBackground) && Theme.getColor(Theme.key_chats_menuTopBackground) != 0 ? Theme.key_chats_menuTopBackground : Theme.key_chats_menuTopBackgroundCats;
+        if (force || !backgroundKey.equals(currentTag)) {
+            setBackgroundColor(Theme.getColor(backgroundKey));
+            setTag(backgroundKey);
+        }
+        return backgroundKey;
+    }
+
+    public void updateColors() {
+        if (snowflakesEffect != null) {
+            snowflakesEffect.updateColors();
+        }
+    }
+
+    private void setArrowState(boolean animated) {
+        final float rotation = accountsShown ? 180.0f : 0.0f;
+        if (animated) {
+            arrowView.animate().rotation(rotation).setDuration(220).setInterpolator(CubicBezierInterpolator.EASE_OUT).start();
+        } else {
+            arrowView.animate().cancel();
+            arrowView.setRotation(rotation);
+        }
+        arrowView.setContentDescription(accountsShown ? LocaleController.getString("AccDescrHideAccounts", R.string.AccDescrHideAccounts) : LocaleController.getString("AccDescrShowAccounts", R.string.AccDescrShowAccounts));
     }
 }

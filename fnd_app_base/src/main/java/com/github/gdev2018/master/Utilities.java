@@ -33,6 +33,21 @@ public class Utilities {
         void run(boolean param);
     }
 
+    public interface SuccessCallback {
+        void onSuccess();
+    }
+
+    public interface LongSuccessErrorCallback {
+        void onSuccess(long luuid);
+        void onError();
+    }
+
+    public interface VoidSuccessErrorCallback {
+        void onSuccess();
+        void onError();
+    }
+
+
     public static Pattern pattern = Pattern.compile("[\\-0-9]+");
     public static SecureRandom random = new SecureRandom();
 

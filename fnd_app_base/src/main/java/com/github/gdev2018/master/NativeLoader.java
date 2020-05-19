@@ -13,16 +13,12 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 
-import net.hockeyapp.android.Constants;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import com.github.gdev2018.master.FileLog;
 
 public class NativeLoader {
 
@@ -118,8 +114,6 @@ public class NativeLoader {
         if (nativeLoaded) {
             return;
         }
-
-        Constants.loadFromContext(context);
 
         try {
             try {

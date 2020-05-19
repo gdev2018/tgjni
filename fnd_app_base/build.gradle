@@ -106,30 +106,33 @@ dependencies {
     // tg way --->
     implementation 'androidx.core:core:1.1.0-beta01'
     implementation 'androidx.palette:palette:1.0.0'
-    implementation 'androidx.exifinterface:exifinterface:1.1.0-beta01'
+    implementation 'androidx.exifinterface:exifinterface:1.2.0'
+//    implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
+//    implementation 'com.android.support:multidex:1.0.3'
 
     compileOnly 'org.checkerframework:checker-qual:2.5.2'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.0'
-    implementation 'com.google.firebase:firebase-messaging:20.0.0'
-    implementation 'com.google.firebase:firebase-config:19.0.0'
+    implementation 'com.google.firebase:firebase-messaging:20.1.6'
+    implementation 'com.google.firebase:firebase-config:19.1.4'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.android.gms:play-services-vision:16.2.0'
-    implementation 'com.google.android.gms:play-services-wallet:17.0.0'
     implementation 'com.google.android.gms:play-services-wearable:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
-    implementation 'net.hockeyapp.android:HockeySDK:5.2.0'
+    implementation "com.microsoft.appcenter:appcenter-distribute:3.1.0"
+    implementation "com.microsoft.appcenter:appcenter-crashes:3.1.0"
     implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
     implementation 'com.stripe:stripe-android:2.0.2'
+//    implementation files('libs/libgsaverification-client.aar')
 }
 
-// это блок будет обработан плагином bintray-release
+// 4 bintray-release plugin
 publish {
     userOrg = 'gdev2018'
     groupId = 'com.github.gdev2018'
     repoName = 'tgjni'
     artifactId = 'fnd_app_base'
-    publishVersion = '1.1.2'
+    publishVersion = '1.1.5'
     desc = 'tgjni project - fnd_app_base module/package/artifact'
     licences = ['GPL-2.0']
     website = 'https://github.com/gdev2018/tgjni'

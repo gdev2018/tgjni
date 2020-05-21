@@ -5,6 +5,7 @@ package com.github.gdev2018.master.SQLite;
 import android.database.Cursor;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.Utilities;
 
 import java.util.Date;
 
@@ -37,17 +38,14 @@ public class PlaborDBCursor implements PlaborDBRow {
         return cursor.getInt(cursor.getColumnIndexOrThrow(name)) != 0;
     }
 
-        @Override
+    @Override
     public Date getDate(String name) {
         String s_Date;
         s_Date =  cursor.getString(cursor.getColumnIndexOrThrow(name));
 
-        Date dt_Date = AndroidUtilities.stringToDate(s_Date, "");    // if s_Date = null, then returns 1900-01-01, not the current time
+        Date dt_Date = Utilities.stringToDate(s_Date, "");    // if s_Date = null, then returns 1900-01-01, not the current time
         return dt_Date;
     }
-
-
-
 
     public boolean next() {
         return cursor.moveToNext();

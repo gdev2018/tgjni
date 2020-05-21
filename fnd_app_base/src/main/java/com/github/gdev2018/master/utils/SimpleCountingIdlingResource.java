@@ -6,7 +6,7 @@ import androidx.test.espresso.IdlingResource;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.github.gdev2018.master.AndroidUtilities.checkNotNull;
+import static com.github.gdev2018.master.Utilities.checkNotNull;
 
 /**
  * An simple counter implementation of {IdlingResource} that determines idleness by

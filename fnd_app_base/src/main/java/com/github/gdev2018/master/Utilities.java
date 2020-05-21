@@ -580,7 +580,7 @@ public class Utilities {
         return dateToString(currentDateTime(), "");
     }
 
-    public int compareDatesWithoutTime(Calendar c1, Calendar c2) {
+    public static int compareDatesWithoutTime(Calendar c1, Calendar c2) {
         if (c1.get(Calendar.YEAR) != c2.get(Calendar.YEAR))
             return c1.get(Calendar.YEAR) - c2.get(Calendar.YEAR);
         if (c1.get(Calendar.MONTH) != c2.get(Calendar.MONTH))
@@ -666,9 +666,7 @@ public class Utilities {
         if (realMap == null) {
             throw new NullPointerException();
         }
-
         Map<String, Object> immutableMap = Collections.unmodifiableMap(new HashMap<String, Object>(realMap));
-
         return immutableMap;
     }
 }

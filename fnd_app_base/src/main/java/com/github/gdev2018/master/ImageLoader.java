@@ -36,7 +36,7 @@ import com.github.gdev2018.master.secretmedia.EncryptedFileInputStream;
 import com.github.gdev2018.master.tgnet.ConnectionsManager;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
-import com.github.gdev2018.master.ui.Cells.ChatMessageCell;
+/*import com.github.gdev2018.master.ui.Cells.ChatMessageCell;*/
 import com.github.gdev2018.master.ui.Components.AnimatedFileDrawable;
 import com.github.gdev2018.master.ui.Components.Point;
 import com.github.gdev2018.master.ui.Components.RLottieDrawable;
@@ -3313,77 +3313,79 @@ public class ImageLoader {
         }
     }
 
-    public static MessageThumb generateMessageThumb(TLRPC.Message message) {
-        TLRPC.PhotoSize photoSize = findPhotoCachedSize(message);
-
-        if (photoSize != null && photoSize.bytes != null && photoSize.bytes.length != 0) {
-            File file = FileLoader.getPathToAttach(photoSize, true);
-
-            TLRPC.TL_photoSize newPhotoSize = new TLRPC.TL_photoSize();
-            newPhotoSize.w = photoSize.w;
-            newPhotoSize.h = photoSize.h;
-            newPhotoSize.location = photoSize.location;
-            newPhotoSize.size = photoSize.size;
-            newPhotoSize.type = photoSize.type;
-
-            if (file.exists() && message.grouped_id == 0) {
-                int h = photoSize.h;
-                int w = photoSize.w;
-                Point point = ChatMessageCell.getMessageSize(w, h);
-                String key = String.format(Locale.US, "%d_%d@%d_%d_b", photoSize.location.volume_id, photoSize.location.local_id, (int) (point.x / AndroidUtilities.density), (int) (point.y / AndroidUtilities.density));
-                if (!getInstance().isInMemCache(key, false)) {
-                    Bitmap bitmap = ImageLoader.loadBitmap(file.getPath(), null, (int) (point.x / AndroidUtilities.density), (int) (point.y / AndroidUtilities.density), false);
-                    if (bitmap != null) {
-                        Utilities.blurBitmap(bitmap, 3, 1, bitmap.getWidth(), bitmap.getHeight(), bitmap.getRowBytes());
-                        Bitmap scaledBitmap = Bitmaps.createScaledBitmap(bitmap, (int) (point.x / AndroidUtilities.density), (int) (point.y / AndroidUtilities.density), true);
-                        if (scaledBitmap != bitmap) {
-                            bitmap.recycle();
-                            bitmap = scaledBitmap;
-                        }
-                        return new MessageThumb(key, new BitmapDrawable(bitmap));
-                    }
-                }
-            }
-        } else if (message.media instanceof TLRPC.TL_messageMediaDocument) {
-            for (int a = 0, count = message.media.document.thumbs.size(); a < count; a++) {
-                TLRPC.PhotoSize size = message.media.document.thumbs.get(a);
-                if (size instanceof TLRPC.TL_photoStrippedSize) {
-                    TLRPC.PhotoSize thumbSize = FileLoader.getClosestPhotoSizeWithSize(message.media.document.thumbs, 320);
-                    int h = 0;
-                    int w = 0;
-                    if (thumbSize != null) {
-                        h = thumbSize.h;
-                        w = thumbSize.w;
-                    } else {
-                        for (int k = 0; k < message.media.document.attributes.size(); k++) {
-                            if (message.media.document.attributes.get(k) instanceof TLRPC.TL_documentAttributeVideo) {
-                                TLRPC.TL_documentAttributeVideo videoAttribute = (TLRPC.TL_documentAttributeVideo) message.media.document.attributes.get(k);
-                                h = videoAttribute.h;
-                                w = videoAttribute.w;
-                                break;
-                            }
-                        }
-                    }
-
-                    Point point = ChatMessageCell.getMessageSize(w, h);
-                    String key = String.format(Locale.US, "%s_false@%d_%d_b", ImageLocation.getStippedKey(message, message, size), (int) (point.x / AndroidUtilities.density), (int) (point.y / AndroidUtilities.density));
-                    if (!getInstance().memCache.contains(key)) {
-                        Bitmap b = getStrippedPhotoBitmap(size.bytes, null);
-                        if (b != null) {
-                            Utilities.blurBitmap(b, 3, 1, b.getWidth(), b.getHeight(), b.getRowBytes());
-                            Bitmap scaledBitmap = Bitmaps.createScaledBitmap(b, (int) (point.x / AndroidUtilities.density), (int) (point.y / AndroidUtilities.density), true);
-                            if (scaledBitmap != b) {
-                                b.recycle();
-                                b = scaledBitmap;
-                            }
-                            return new MessageThumb(key, new BitmapDrawable(b));
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
+///*
+//    public static MessageThumb generateMessageThumb(TLRPC.Message message) {
+//        TLRPC.PhotoSize photoSize = findPhotoCachedSize(message);
+//
+//        if (photoSize != null && photoSize.bytes != null && photoSize.bytes.length != 0) {
+//            File file = FileLoader.getPathToAttach(photoSize, true);
+//
+//            TLRPC.TL_photoSize newPhotoSize = new TLRPC.TL_photoSize();
+//            newPhotoSize.w = photoSize.w;
+//            newPhotoSize.h = photoSize.h;
+//            newPhotoSize.location = photoSize.location;
+//            newPhotoSize.size = photoSize.size;
+//            newPhotoSize.type = photoSize.type;
+//
+//            if (file.exists() && message.grouped_id == 0) {
+//                int h = photoSize.h;
+//                int w = photoSize.w;
+//                Point point = ChatMessageCell.getMessageSize(w, h);
+//                String key = String.format(Locale.US, "%d_%d@%d_%d_b", photoSize.location.volume_id, photoSize.location.local_id, (int) (point.x / AndroidUtilities.density), (int) (point.y / AndroidUtilities.density));
+//                if (!getInstance().isInMemCache(key, false)) {
+//                    Bitmap bitmap = ImageLoader.loadBitmap(file.getPath(), null, (int) (point.x / AndroidUtilities.density), (int) (point.y / AndroidUtilities.density), false);
+//                    if (bitmap != null) {
+//                        Utilities.blurBitmap(bitmap, 3, 1, bitmap.getWidth(), bitmap.getHeight(), bitmap.getRowBytes());
+//                        Bitmap scaledBitmap = Bitmaps.createScaledBitmap(bitmap, (int) (point.x / AndroidUtilities.density), (int) (point.y / AndroidUtilities.density), true);
+//                        if (scaledBitmap != bitmap) {
+//                            bitmap.recycle();
+//                            bitmap = scaledBitmap;
+//                        }
+//                        return new MessageThumb(key, new BitmapDrawable(bitmap));
+//                    }
+//                }
+//            }
+//        } else if (message.media instanceof TLRPC.TL_messageMediaDocument) {
+//            for (int a = 0, count = message.media.document.thumbs.size(); a < count; a++) {
+//                TLRPC.PhotoSize size = message.media.document.thumbs.get(a);
+//                if (size instanceof TLRPC.TL_photoStrippedSize) {
+//                    TLRPC.PhotoSize thumbSize = FileLoader.getClosestPhotoSizeWithSize(message.media.document.thumbs, 320);
+//                    int h = 0;
+//                    int w = 0;
+//                    if (thumbSize != null) {
+//                        h = thumbSize.h;
+//                        w = thumbSize.w;
+//                    } else {
+//                        for (int k = 0; k < message.media.document.attributes.size(); k++) {
+//                            if (message.media.document.attributes.get(k) instanceof TLRPC.TL_documentAttributeVideo) {
+//                                TLRPC.TL_documentAttributeVideo videoAttribute = (TLRPC.TL_documentAttributeVideo) message.media.document.attributes.get(k);
+//                                h = videoAttribute.h;
+//                                w = videoAttribute.w;
+//                                break;
+//                            }
+//                        }
+//                    }
+//
+//                    Point point = ChatMessageCell.getMessageSize(w, h);
+//                    String key = String.format(Locale.US, "%s_false@%d_%d_b", ImageLocation.getStippedKey(message, message, size), (int) (point.x / AndroidUtilities.density), (int) (point.y / AndroidUtilities.density));
+//                    if (!getInstance().memCache.contains(key)) {
+//                        Bitmap b = getStrippedPhotoBitmap(size.bytes, null);
+//                        if (b != null) {
+//                            Utilities.blurBitmap(b, 3, 1, b.getWidth(), b.getHeight(), b.getRowBytes());
+//                            Bitmap scaledBitmap = Bitmaps.createScaledBitmap(b, (int) (point.x / AndroidUtilities.density), (int) (point.y / AndroidUtilities.density), true);
+//                            if (scaledBitmap != b) {
+//                                b.recycle();
+//                                b = scaledBitmap;
+//                            }
+//                            return new MessageThumb(key, new BitmapDrawable(b));
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return null;
+//    }
+//*/
 
     public static class MessageThumb {
         BitmapDrawable drawable;

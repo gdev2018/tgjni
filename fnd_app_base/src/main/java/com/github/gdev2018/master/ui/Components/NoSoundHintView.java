@@ -19,7 +19,7 @@ import com.github.gdev2018.master.ImageReceiver;
 import com.github.gdev2018.master.LocaleController;
 import com.github.gdev2018.master.R;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
-import com.github.gdev2018.master.ui.Cells.ChatMessageCell;
+///*import com.github.gdev2018.master.ui.Cells.ChatMessageCell;*/
 
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -28,7 +28,7 @@ public class NoSoundHintView extends FrameLayout {
     private TextView textView;
     private ImageView imageView;
     private ImageView arrowImageView;
-    private ChatMessageCell messageCell;
+///*    private ChatMessageCell messageCell;*/
     private AnimatorSet animatorSet;
     private Runnable hideRunnable;
 
@@ -58,55 +58,57 @@ public class NoSoundHintView extends FrameLayout {
         addView(arrowImageView, LayoutHelper.createFrame(14, 6, Gravity.LEFT | Gravity.BOTTOM, 0, 0, 0, 0));
     }
 
-    public boolean showForMessageCell(ChatMessageCell cell) {
-        if (getTag() != null) {
-            return false;
-        }
-        ImageReceiver imageReceiver = cell.getPhotoImage();
-        int top = cell.getTop() + imageReceiver.getImageY();
-        int height = imageReceiver.getImageHeight();
-        int bottom = top + height;
-        View parentView = (View) cell.getParent();
-        int parentHeight = parentView.getMeasuredHeight();
-        if (top <= getMeasuredHeight() + AndroidUtilities.dp(10) || bottom > parentHeight + height / 4) {
-            return false;
-        }
-        int parentWidth = parentView.getMeasuredWidth();
-        setTranslationY(top - getMeasuredHeight());
-        int iconX = cell.getLeft() + cell.getNoSoundIconCenterX();
-        int left = getLeft();
-        if (iconX > parentView.getMeasuredWidth() / 2) {
-            int offset = parentWidth - getMeasuredWidth() - AndroidUtilities.dp(38);
-            setTranslationX(offset);
-            left += offset;
-        } else {
-            setTranslationX(0);
-        }
-        arrowImageView.setTranslationX(cell.getLeft() + cell.getNoSoundIconCenterX() - left - arrowImageView.getMeasuredWidth() / 2);
-        messageCell = cell;
-        if (animatorSet != null) {
-            animatorSet.cancel();
-            animatorSet = null;
-        }
-
-        setTag(1);
-        setVisibility(VISIBLE);
-        animatorSet = new AnimatorSet();
-        animatorSet.playTogether(
-                ObjectAnimator.ofFloat(this, "alpha", 0.0f, 1.0f)
-        );
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                animatorSet = null;
-                AndroidUtilities.runOnUIThread(hideRunnable = () -> hide(), 10000);
-            }
-        });
-        animatorSet.setDuration(300);
-        animatorSet.start();
-
-        return true;
-    }
+///*
+//    public boolean showForMessageCell(ChatMessageCell cell) {
+//        if (getTag() != null) {
+//            return false;
+//        }
+//        ImageReceiver imageReceiver = cell.getPhotoImage();
+//        int top = cell.getTop() + imageReceiver.getImageY();
+//        int height = imageReceiver.getImageHeight();
+//        int bottom = top + height;
+//        View parentView = (View) cell.getParent();
+//        int parentHeight = parentView.getMeasuredHeight();
+//        if (top <= getMeasuredHeight() + AndroidUtilities.dp(10) || bottom > parentHeight + height / 4) {
+//            return false;
+//        }
+//        int parentWidth = parentView.getMeasuredWidth();
+//        setTranslationY(top - getMeasuredHeight());
+//        int iconX = cell.getLeft() + cell.getNoSoundIconCenterX();
+//        int left = getLeft();
+//        if (iconX > parentView.getMeasuredWidth() / 2) {
+//            int offset = parentWidth - getMeasuredWidth() - AndroidUtilities.dp(38);
+//            setTranslationX(offset);
+//            left += offset;
+//        } else {
+//            setTranslationX(0);
+//        }
+//        arrowImageView.setTranslationX(cell.getLeft() + cell.getNoSoundIconCenterX() - left - arrowImageView.getMeasuredWidth() / 2);
+//        messageCell = cell;
+//        if (animatorSet != null) {
+//            animatorSet.cancel();
+//            animatorSet = null;
+//        }
+//
+//        setTag(1);
+//        setVisibility(VISIBLE);
+//        animatorSet = new AnimatorSet();
+//        animatorSet.playTogether(
+//                ObjectAnimator.ofFloat(this, "alpha", 0.0f, 1.0f)
+//        );
+//        animatorSet.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                animatorSet = null;
+//                AndroidUtilities.runOnUIThread(hideRunnable = () -> hide(), 10000);
+//            }
+//        });
+//        animatorSet.setDuration(300);
+//        animatorSet.start();
+//
+//        return true;
+//    }
+//*/
 
     public void hide() {
         if (getTag() == null) {
@@ -136,7 +138,7 @@ public class NoSoundHintView extends FrameLayout {
         animatorSet.start();
     }
 
-    public ChatMessageCell getMessageCell() {
-        return messageCell;
-    }
+///*    public ChatMessageCell getMessageCell() {
+//        return messageCell;
+//    }*/
 }

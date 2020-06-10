@@ -47,6 +47,7 @@ public class BaseApplication extends Application {
     public static volatile boolean unableGetCurrentNetwork;
     public static volatile Handler mApplicationHandler;
     public static SharedPreferences mGlobalMainSettings;
+
     public static volatile SharedPreferences mGlobalBroadcastingsPreferences;
     public static volatile SharedPreferences mGlobalMainPreferences;
     public static volatile SharedPreferences mGlobalEmojiPreferences;
@@ -109,9 +110,9 @@ public class BaseApplication extends Application {
 
 //        AndroidUtilities.runOnUIThread(BaseApplication::startPushService);
 
-        mGlobalBroadcastingsPreferences = mApplicationContext.getSharedPreferences("globalBroadcastings", Activity.MODE_PRIVATE);
-        mGlobalMainPreferences = mApplicationContext.getSharedPreferences("globalmainconfig", Activity.MODE_PRIVATE);
-        mGlobalEmojiPreferences = mApplicationContext.getSharedPreferences("globalemoji", Activity.MODE_PRIVATE);
+        mGlobalBroadcastingsPreferences = mApplicationContext.getSharedPreferences("Broadcastings", Activity.MODE_PRIVATE);
+        mGlobalMainPreferences = mApplicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+        mGlobalEmojiPreferences = mApplicationContext.getSharedPreferences("emoji", Activity.MODE_PRIVATE);
 
         // If Debug mode then show additional metrics
         if (BuildConfig.DEBUG) {

@@ -3,6 +3,9 @@
 package com.github.gdev2018.master.ui.Components;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -19,7 +22,7 @@ public class EmptyTextProgressView extends FrameLayout {
     private TextView textView;
     private RadialProgressView progressBar;
     private boolean inLayout;
-    private boolean showAtCenter;
+    private int showAtPos;
 
     public EmptyTextProgressView(Context context) {
         super(context);
@@ -62,12 +65,29 @@ public class EmptyTextProgressView extends FrameLayout {
         progressBar.setProgressColor(color);
     }
 
+    public void setTopImage(int resId) {
+        if (resId == 0) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        } else {
+            Drawable drawable = getContext().getResources().getDrawable(resId).mutate();
+            if (drawable != null) {
+                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_emptyListPlaceholder), PorterDuff.Mode.MULTIPLY));
+            }
+            textView.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+            textView.setCompoundDrawablePadding(AndroidUtilities.dp(1));
+        }
+    }
+
     public void setTextSize(int size) {
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
     }
 
     public void setShowAtCenter(boolean value) {
-        showAtCenter = value;
+        showAtPos = value ? 1 : 0;
+    }
+
+    public void setShowAtTop(boolean value) {
+        showAtPos = value ? 2 : 0;
     }
 
     @Override
@@ -85,10 +105,12 @@ public class EmptyTextProgressView extends FrameLayout {
 
             int x = (width - child.getMeasuredWidth()) / 2;
             int y;
-            if (showAtCenter) {
-                y = (height / 2 - child.getMeasuredHeight()) / 2;
+            if (showAtPos == 2) {
+                y = (AndroidUtilities.dp(100) - child.getMeasuredHeight()) / 2 + getPaddingTop();
+            } else if (showAtPos == 1) {
+                y = (height / 2 - child.getMeasuredHeight()) / 2 + getPaddingTop();
             } else {
-                y = (height - child.getMeasuredHeight()) / 2;
+                y = (height - child.getMeasuredHeight()) / 2 + getPaddingTop();
             }
             child.layout(x, y, x + child.getMeasuredWidth(), y + child.getMeasuredHeight());
         }

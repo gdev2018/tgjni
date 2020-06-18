@@ -110,7 +110,7 @@ import com.github.gdev2018.master.ui.Cells.CheckBoxCell;
 import com.github.gdev2018.master.ui.Components.AnimationProperties;
 import com.github.gdev2018.master.ui.Components.BackupImageView;
 import com.github.gdev2018.master.ui.Components.BaseAnimationProperties;
-import com.github.gdev2018.master.ui.Components.ChatAttachAlert;
+///*import com.github.gdev2018.master.ui.Components.ChatAttachAlert;*/
 import com.github.gdev2018.master.ui.Components.GestureDetector2;
 import com.github.gdev2018.master.ui.Components.PhotoViewerCaptionEnterView;
 import com.github.gdev2018.master.ui.Components.Tooltip;
@@ -285,7 +285,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private boolean isSingleLine;
     private TextView switchCaptionTextView;
     private AnimatorSet currentCaptionAnimation;
-    private ChatAttachAlert parentAlert;
+///*    private ChatAttachAlert parentAlert;*/
     private PhotoViewerCaptionEnterView captionEditText;
     private int sendPhotoType;
     private boolean isDocumentsPicker;
@@ -1900,9 +1900,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         updateMinMax(scale);
     }
 
-    public void setParentAlert(ChatAttachAlert alert) {
-        parentAlert = alert;
-    }
+///*    public void setParentAlert(ChatAttachAlert alert) {
+//        parentAlert = alert;
+//    }*/
 
     public void setParentActivity(final Activity activity) {
         currentAccount = BaseUserConfig.selectedAccount;
@@ -7973,7 +7973,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             currentThumb.release();
             currentThumb = null;
         }
-        parentAlert = null;
+///*        parentAlert = null;*/
         if (currentAnimation != null) {
             currentAnimation.setSecondParentView(null);
             currentAnimation = null;

@@ -55,6 +55,10 @@ public class Utilities {
         void run(boolean param);
     }
 
+    public interface StringCallback {
+        void run(String param);
+    }
+
     public interface SuccessCallback {
         void onSuccess();
     }

@@ -490,6 +490,17 @@ public class Utilities {
 
 
     // ************ time functions ************
+    public static String secondsToStringHMS(int pTime) {
+        final int hrs = pTime / 3660;
+        final int min = (pTime % 3660) / 60;
+        final int sec = (pTime % 3660) % 60;
+
+        final String strHrs = Integer.toString(hrs);
+        final String strMin = placeZeroIfNeeded(min);
+        final String strSec = placeZeroIfNeeded(sec);
+
+        return String.format("%s:%s", strHrs, strMin);
+    }
     public static String secondsToString(int pTime) {
         final int min = pTime / 60;
         final int sec = pTime % 60;

@@ -82,6 +82,7 @@ public class SharedConfig {
     public static boolean customTabs = true;
     public static boolean directShare = true;
     public static boolean inappCamera = true;
+    public static boolean subTitleDebug = false;
     public static boolean roundCamera16to9 = true;
     public static boolean noSoundHintShowed = false;
     public static boolean streamMedia = true;
@@ -725,6 +726,14 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("inappCamera", inappCamera);
+        editor.commit();
+    }
+
+    public static void toggleSubTitleDebug() {
+        subTitleDebug = !subTitleDebug;
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("subTitleDebug", subTitleDebug);
         editor.commit();
     }
 

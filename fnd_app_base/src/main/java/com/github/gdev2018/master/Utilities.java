@@ -490,6 +490,47 @@ public class Utilities {
 
 
     // ************ time functions ************
+    public static long getMilliSecExpense(Date startDate, Date endDate){
+        long expense = 0;
+        if (startDate != null && endDate != null) {
+            expense = startDate.getTime() - endDate.getTime();
+        }
+        return expense;
+    }
+    public static String getPrettyTimeExpense(Date startDate, Date endDate){
+        //milliseconds
+        long different = getMilliSecExpense(startDate, endDate);
+        return getPrettyTimeExpense(different);
+    }
+    public static String getPrettyTimeExpense(long timeInMillisec){
+        long secondsInMilli = 1000;
+        long minutesInMilli = secondsInMilli * 60;
+        long hoursInMilli = minutesInMilli * 60;
+        long daysInMilli = hoursInMilli * 24;
+
+        long elapsedDays = timeInMillisec / daysInMilli;
+        timeInMillisec = timeInMillisec % daysInMilli;
+
+        long elapsedHours = timeInMillisec / hoursInMilli;
+        timeInMillisec = timeInMillisec % hoursInMilli;
+
+        long elapsedMinutes = timeInMillisec / minutesInMilli;
+        timeInMillisec = timeInMillisec % minutesInMilli;
+
+        long elapsedSeconds = timeInMillisec / secondsInMilli;
+
+        if (elapsedDays == 0) {
+            if (elapsedHours == 0) {
+                return String.format("%d min %d sec%n", elapsedMinutes, elapsedSeconds);
+            } else {
+                return String.format("%d hrs %d min%n", elapsedHours, elapsedMinutes, elapsedSeconds);
+            }
+        } else {
+            return String.format("%d days %d hrs %d min%n", elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds);
+        }
+
+    }
+
     public static String secondsToStringHMS(int pTime) {
         final int hrs = pTime / 3660;
         final int min = (pTime % 3660) / 60;

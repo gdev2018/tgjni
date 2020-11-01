@@ -538,9 +538,9 @@ public class BaseFragment {
 //        return getAccountInstance().getNotificationCenter();
 //    }*/
 
-    public MediaController getMediaController() {
-        return MediaController.getInstance();
-    }
+///*    public MediaController getMediaController() {
+//        return MediaController.getInstance();
+//    }*/
 
 ///*    public BaseUserConfig getBaseUserConfig() {
 //        return getAccountInstance().getBaseUserConfig();

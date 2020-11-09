@@ -1,4 +1,5 @@
-apply plugin: 'com.novoda.bintray-release'  // 4public custom module in maven/jcenter
+//apply plugin: 'com.novoda.bintray-release'  // 4public custom module in maven/jcenter - https://github.com/novoda/bintray-release
+apply plugin: 'com.github.panpf.bintray-publish'  // https://github.com/panpf/bintray-publish (Fixed a bug that did not support gradle 6.+)
 apply plugin: 'com.android.library'
 
 android {
@@ -143,7 +144,7 @@ publish {
     groupId = 'com.github.gdev2018'
     repoName = 'tgjni'
     artifactId = 'fnd_app_base'
-    publishVersion = '1.3.6'
+    publishVersion = '1.3.7'
     desc = 'tgjni project - fnd_app_base module/package/artifact'
     licences = ['GPL-2.0']
     website = 'https://github.com/gdev2018/tgjni'

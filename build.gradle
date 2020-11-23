@@ -15,8 +15,9 @@ buildscript {
     dependencies {
 //        classpath 'com.android.tools.build:gradle:3.2.1'  //for AS_3.2
 //        classpath 'com.android.tools.build:gradle:3.5.3'  //for AS_3.4
-        classpath 'com.android.tools.build:gradle:4.2.0-alpha16'  //for AS_4.2
-        classpath 'com.google.gms:google-services:4.0.2'
+//        classpath 'com.android.tools.build:gradle:4.1.1'  //for AS_4.1
+        classpath 'com.android.tools.build:gradle:4.2.0-alpha15'  //for AS_4.2
+        classpath 'com.google.gms:google-services:4.3.4'
 
 //        classpath 'com.frogermcs.androiddevmetrics:androiddevmetrics-plugin:0.6'
 //        classpath 'org.jacoco:org.jacoco.core:0.8.1'

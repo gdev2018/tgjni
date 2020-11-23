@@ -3,8 +3,8 @@ apply plugin: 'com.github.panpf.bintray-publish'  // https://github.com/panpf/bi
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '29.0.3'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.2'
     ndkVersion '21.1.6352462'
 
     lintOptions {
@@ -33,11 +33,23 @@ android {
         }
     }
     defaultConfig {
-//        applicationId = "com.github.gdev2018.master"
+//        applicationId = "com.github.gdev2018.master"    //error - Library projects cannot set applicationId. applicationId is set to 'com.github.gdev2018.master' in default config.
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+
+        //https://commonsware.com/blog/2020/10/14/android-studio-4p1-library-modules-version-code.html
+            // Android Studio 4.1 — or, more accurately, version 4.1.0 of the Android Gradle Plugin — has a breaking change: it no longer adds VERSION_CODE (and, sometimes, VERSION_NAME), to BuildConfig.
+            // This was originally reported back in June, with Canary 4, but despite being a P1 ticket, it did not get resolved before AS 4.1 shipped. I found out about it from Stack Overflow. And, since it was mentioned in the release notes, this might not change.
+            // If you create a scrap AS 4.1 project, your app module will have typical versionCode and versionName properties:
+            // If you then add a library module to the same project, it too will come with the same versionCode and versionName lines… but they do not get reflected in the module’s BuildConfig:
+            // And the release notes suggest that versionCode and versionName will be removed from the Gradle DSL in the future.
+            // In the aforementioned extended explanation, Google echoed this recommendation: use your own custom fields:
+        buildConfigField 'int', 'VERSION_CODE', "1"
+        buildConfigField 'String', 'VERSION_NAME', "\"1.0\""
+        buildConfigField 'String', 'APPLICATION_ID', "\"com.github.gdev2018.master\""
+
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -144,7 +156,7 @@ publish {
     groupId = 'com.github.gdev2018'
     repoName = 'tgjni'
     artifactId = 'fnd_app_base'
-    publishVersion = '1.3.8'
+    publishVersion = '1.3.9'
     desc = 'tgjni project - fnd_app_base module/package/artifact'
     licences = ['GPL-2.0']
     website = 'https://github.com/gdev2018/tgjni'

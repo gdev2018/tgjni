@@ -98,11 +98,6 @@ import com.github.gdev2018.master.ui.Components.BackgroundGradientDrawable;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
 import com.google.android.gms.tasks.Task;
-///*
-//import com.microsoft.appcenter.AppCenter;
-//import com.microsoft.appcenter.crashes.Crashes;
-//import com.microsoft.appcenter.distribute.Distribute;
-//*/
 
 //import org.telegram.PhoneFormat.PhoneFormat;
 //import org.telegram.tgnet.ConnectionsManager;
@@ -175,9 +170,6 @@ import com.github.gdev2018.master.ui.Components.ForegroundDetector;
 import com.github.gdev2018.master.ui.Components.LayoutHelper;
 import com.github.gdev2018.master.ui.Components.PickerBottomLayout;
 import com.github.gdev2018.master.ui.Components.TypefaceSpan;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.crashes.Crashes;
-import com.microsoft.appcenter.distribute.Distribute;
 
 /**
  * Created by RET on 09.03.2018.
@@ -1994,32 +1986,12 @@ public class AndroidUtilities {
     }*/
 
     public static void startAppCenter(Activity context) {
-        try {
-            if (BaseBuildVars.DEBUG_VERSION) {
-                Distribute.setEnabledForDebuggableBuild(true);
-                AppCenter.start(context.getApplication(), BaseBuildVars.DEBUG_VERSION ? BaseBuildVars.APPCENTER_HASH_DEBUG : BaseBuildVars.APPCENTER_HASH, Distribute.class, Crashes.class);
-            } else {
-                AppCenter.start(context.getApplication(), BaseBuildVars.DEBUG_VERSION ? BaseBuildVars.APPCENTER_HASH_DEBUG : BaseBuildVars.APPCENTER_HASH, Crashes.class);
-            }
-            AppCenter.setUserId("uid=" + BaseUserConfig.getInstance(BaseUserConfig.selectedAccount).clientUserId);
-        } catch (Throwable e) {
-            FileLog.e(e);
-        }
+
     }
 
     private static long lastUpdateCheckTime;
     public static void checkForUpdates() {
-        try {
-            if (BaseBuildVars.DEBUG_VERSION) {
-                if (SystemClock.elapsedRealtime() - lastUpdateCheckTime < 60 * 60 * 1000) {
-                    return;
-                }
-                lastUpdateCheckTime = SystemClock.elapsedRealtime();
-                Distribute.checkForUpdate();
-            }
-        } catch (Throwable e) {
-            FileLog.e(e);
-        }
+
     }
 
     public static void addToClipboard(CharSequence str) {

@@ -107,15 +107,9 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         container.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 44, 0, 0));
 
         acceptButton = new FrameLayout(context);
-        acceptButton.setBackgroundResource(R.drawable.regbtn_states);
-        if (Build.VERSION.SDK_INT >= 21) {
-            StateListAnimator animator = new StateListAnimator();
-            animator.addState(new int[]{android.R.attr.state_pressed}, ObjectAnimator.ofFloat(acceptButton, "translationZ", AndroidUtilities.dp(2), AndroidUtilities.dp(4)).setDuration(200));
-            animator.addState(new int[]{}, ObjectAnimator.ofFloat(acceptButton, "translationZ", AndroidUtilities.dp(4), AndroidUtilities.dp(2)).setDuration(200));
-            acceptButton.setStateListAnimator(animator);
-        }
-        acceptButton.setPadding(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), 0);
-        addView(acceptButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 56, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 45));
+        acceptButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), 0xff50a8eb, 0xff439bde));
+        acceptButton.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
+        addView(acceptButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 42, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 45));
         acceptButton.setOnClickListener(view1 -> {
             if (!checkApkInstallPermissions(getContext())) {
                 return;

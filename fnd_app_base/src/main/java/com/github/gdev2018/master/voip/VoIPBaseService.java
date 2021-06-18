@@ -1086,7 +1086,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 			((SpannableString)answerTitle).setSpan(new ForegroundColorSpan(0xFF00AA00), 0, answerTitle.length(), 0);
 		}
 		PendingIntent answerPendingIntent=PendingIntent.getBroadcast(this, 0, answerIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-		builder.addAction(R.drawable.ic_call_white_24dp, answerTitle, answerPendingIntent);
+///*		builder.addAction(R.drawable.ic_call_white_24dp, answerTitle, answerPendingIntent);*/
 		builder.setPriority(Notification.PRIORITY_MAX);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 			builder.setShowWhen(false);

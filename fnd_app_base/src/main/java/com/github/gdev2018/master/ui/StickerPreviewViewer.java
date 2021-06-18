@@ -110,18 +110,18 @@ public class StickerPreviewViewer {
             if (delegate != null) {
                 if (delegate.needSend()) {
                     items.add(LocaleController.getString("SendStickerPreview", R.string.SendStickerPreview));
-                    icons.add(R.drawable.stickers_send);
+///*                    icons.add(R.drawable.stickers_send);*/
                     actions.add(0);
                 }
                 if (delegate.needOpen()) {
                     items.add(LocaleController.formatString("ViewPackPreview", R.string.ViewPackPreview));
-                    icons.add(R.drawable.stickers_pack);
+///*                    icons.add(R.drawable.stickers_pack);*/
                     actions.add(1);
                 }
             }
             if (!MessageObject.isMaskDocument(currentSticker) && (inFavs || DataQuery.getInstance(currentAccount).canAddStickerToFavorites())) {
                 items.add(inFavs ? LocaleController.getString("DeleteFromFavorites", R.string.DeleteFromFavorites) : LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
-                icons.add(inFavs ? R.drawable.stickers_unfavorite : R.drawable.stickers_favorite);
+///*                icons.add(inFavs ? R.drawable.stickers_unfavorite : R.drawable.stickers_favorite);*/
                 actions.add(2);
             }
             if (items.isEmpty()) {

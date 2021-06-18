@@ -341,29 +341,30 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     public void setDiceNumber(int number, boolean instant) {
-        int rawRes;
-        switch (number) {
-            case 1:
-                rawRes = R.raw.dice1;
-                break;
-            case 2:
-                rawRes = R.raw.dice2;
-                break;
-            case 3:
-                rawRes = R.raw.dice3;
-                break;
-            case 4:
-                rawRes = R.raw.dice4;
-                break;
-            case 5:
-                rawRes = R.raw.dice5;
-                break;
-            case 6:
-                rawRes = R.raw.dice6;
-                break;
-            default:
-                return;
-        }
+///*        int rawRes;*/
+        int rawRes = 1;
+///*        switch (number) {
+//            case 1:
+//                rawRes = R.raw.dice1;
+//                break;
+//            case 2:
+//                rawRes = R.raw.dice2;
+//                break;
+//            case 3:
+//                rawRes = R.raw.dice3;
+//                break;
+//            case 4:
+//                rawRes = R.raw.dice4;
+//                break;
+//            case 5:
+//                rawRes = R.raw.dice5;
+//                break;
+//            case 6:
+//                rawRes = R.raw.dice6;
+//                break;
+//            default:
+//                return;
+//        }*/
         String jsonString = readRes(rawRes);
         if (TextUtils.isEmpty(jsonString)) {
             return;

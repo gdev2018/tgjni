@@ -153,34 +153,20 @@ public class TermsOfServiceView extends FrameLayout {
         acceptTextView.setGravity(Gravity.CENTER);
         acceptTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         acceptTextView.setTextColor(0xffffffff);
-        acceptTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        acceptTextView.setBackgroundResource(R.drawable.regbtn_states);
-        if (Build.VERSION.SDK_INT >= 21) {
-            StateListAnimator animator = new StateListAnimator();
-            animator.addState(new int[]{android.R.attr.state_pressed}, ObjectAnimator.ofFloat(acceptTextView, "translationZ", AndroidUtilities.dp(2), AndroidUtilities.dp(4)).setDuration(200));
-            animator.addState(new int[]{}, ObjectAnimator.ofFloat(acceptTextView, "translationZ", AndroidUtilities.dp(4), AndroidUtilities.dp(2)).setDuration(200));
-            acceptTextView.setStateListAnimator(animator);
-        }
-        acceptTextView.setPadding(AndroidUtilities.dp(20), AndroidUtilities.dp(10), AndroidUtilities.dp(20), AndroidUtilities.dp(10));
-        addView(acceptTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.RIGHT | Gravity.BOTTOM, 16, 0, 16, 16));
-        acceptTextView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentTos.min_age_confirm != 0) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                    builder.setTitle(LocaleController.getString("TosAgeTitle", R.string.TosAgeTitle));
-                    builder.setPositiveButton(LocaleController.getString("Agree", R.string.Agree), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            accept();
-                        }
-                    });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                    builder.setMessage(LocaleController.formatString("TosAgeText", R.string.TosAgeText, LocaleController.formatPluralString("Years", currentTos.min_age_confirm)));
-                    builder.show();
-                } else {
-                    accept();
-                }
+        acceptTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        acceptTextView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), 0xff50a8eb, 0xff439bde));
+        acceptTextView.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
+        addView(acceptTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 42, Gravity.RIGHT | Gravity.BOTTOM, 16, 0, 16, 16));
+        acceptTextView.setOnClickListener(view -> {
+            if (currentTos.min_age_confirm != 0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle(LocaleController.getString("TosAgeTitle", R.string.TosAgeTitle));
+                builder.setPositiveButton(LocaleController.getString("Agree", R.string.Agree), (dialog, which) -> accept());
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setMessage(LocaleController.formatString("TosAgeText", R.string.TosAgeText, LocaleController.formatPluralString("Years", currentTos.min_age_confirm)));
+                builder.show();
+            } else {
+                accept();
             }
         });
     }

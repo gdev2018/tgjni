@@ -53,7 +53,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;   
 
 public class RecyclerListView extends RecyclerView {
 

@@ -41,14 +41,38 @@ public class SQLiteCursor {
 		return columnIntValue(preparedStatement.getStatementHandle(), columnIndex);
 	}
 
+	public Integer intValueNullable(int columnIndex) throws SQLiteException {
+		if (isNull(columnIndex)) {
+			return null;
+		} else {
+			return columnIntValue(preparedStatement.getStatementHandle(), columnIndex);
+		}
+	}
+
 	public double doubleValue(int columnIndex) throws SQLiteException {
 		checkRow();
 		return columnDoubleValue(preparedStatement.getStatementHandle(), columnIndex);
 	}
 
+	public Double doubleValueNullable(int columnIndex) throws SQLiteException {
+		if (isNull(columnIndex)) {
+			return null;
+		} else {
+			return columnDoubleValue(preparedStatement.getStatementHandle(), columnIndex);
+		}
+	}
+
 	public long longValue(int columnIndex) throws SQLiteException {
 		checkRow();
 		return columnLongValue(preparedStatement.getStatementHandle(), columnIndex);
+	}
+
+	public Long longValueNullable(int columnIndex) throws SQLiteException {
+		if (isNull(columnIndex)) {
+			return null;
+		} else {
+			return columnLongValue(preparedStatement.getStatementHandle(), columnIndex);
+		}
 	}
 
 	public String stringValue(int columnIndex) throws SQLiteException {

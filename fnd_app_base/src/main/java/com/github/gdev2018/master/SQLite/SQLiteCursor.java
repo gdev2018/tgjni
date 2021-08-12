@@ -36,6 +36,19 @@ public class SQLiteCursor {
 		return preparedStatement;
 	}
 
+	public boolean boolValue(int columnIndex) throws SQLiteException {
+		checkRow();
+		return columnIntValue(preparedStatement.getStatementHandle(), columnIndex) != 0;
+	}
+
+	public Boolean boolValueNullable(int columnIndex) throws SQLiteException {
+		if (isNull(columnIndex)) {
+			return null;
+		} else {
+			return columnIntValue(preparedStatement.getStatementHandle(), columnIndex) != 0;
+		}
+	}
+
 	public int intValue(int columnIndex) throws SQLiteException {
 		checkRow();
 		return columnIntValue(preparedStatement.getStatementHandle(), columnIndex);

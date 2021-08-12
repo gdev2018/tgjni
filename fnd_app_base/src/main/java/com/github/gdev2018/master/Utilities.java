@@ -725,4 +725,45 @@ public class Utilities {
         Map<String, Object> immutableMap = Collections.unmodifiableMap(new HashMap<String, Object>(realMap));
         return immutableMap;
     }
+
+    public static String[] getTranslitQuery(String query) {
+        String search1 = query.trim().toLowerCase();
+        if (search1.length() == 0) {
+            return null;
+        }
+        String search2 = LocaleController.getInstance().getTranslitString(search1);
+        if (search1.equals(search2) || search2.length() == 0) {
+            search2 = null;
+        }
+        String[] search = new String[1 + (search2 != null ? 1 : 0)];
+        search[0] = search1;
+        if (search2 != null) {
+            search[1] = search2;
+        }
+        return search;
+    }
+
+    public static boolean containsTranslitQuery(String entry, String query) {
+        if (entry == null || query == null) {
+            return false;
+        }
+        return containsTranslitQuery(entry, getTranslitQuery(query));
+    }
+
+    public static boolean containsTranslitQuery(String entry, String[] search) {
+        if (search == null) {
+            return false;
+        }
+        String name = entry.trim().toLowerCase();
+        String tName = LocaleController.getInstance().getTranslitString(name);
+        if (name.equals(tName)) {
+            tName = null;
+        }
+        for (String q : search) {
+            if (name.contains(q) || (tName != null && tName.contains(q))) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

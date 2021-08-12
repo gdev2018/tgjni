@@ -331,8 +331,8 @@ public class ConnectionsManager {
             native_setProxySettings(currentAccount, proxyAddress, proxyPort, proxyUsername, proxyPassword, proxySecret);
         }
 
-        native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, userId, enablePushConnection, BaseApplication.isNetworkOnline(), BaseApplication.getCurrentNetworkType());
-        checkConnection();
+///*        native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, userId, enablePushConnection, BaseApplication.isNetworkOnline(), BaseApplication.getCurrentNetworkType());
+//        checkConnection();*/
     }
 
     public static void setLangCode(String langCode) {

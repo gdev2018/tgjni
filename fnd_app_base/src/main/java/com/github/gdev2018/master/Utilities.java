@@ -718,6 +718,35 @@ public class Utilities {
         return reference.toString();
     }
 
+    /**
+     * <p>Checks if a String is whitespace, empty ("") or null.</p>
+     *
+     * <pre>
+     * StringUtils.isBlank(null)      = true
+     * StringUtils.isBlank("")        = true
+     * StringUtils.isBlank(" ")       = true
+     * StringUtils.isBlank("bob")     = false
+     * StringUtils.isBlank("  bob  ") = false
+     * </pre>
+     *
+     * @param str  the String to check, may be null
+     * @return <code>true</code> if the String is null, empty or whitespace
+     * @since 2.0
+     * source - https://commons.apache.org/proper/commons-lang/javadocs/api-2.6/src-html/org/apache/commons/lang/StringUtils.html#line.231
+     */
+    public static boolean isBlank(String str) {
+        int strLen;
+        if (str == null || (strLen = str.length()) == 0) {
+            return true;
+        }
+        for (int i = 0; i < strLen; i++) {
+            if ((Character.isWhitespace(str.charAt(i)) == false)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static Map<String, Object> getImmutableMap(Map<String, Object> realMap) {
         if (realMap == null) {
             throw new NullPointerException();

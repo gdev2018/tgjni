@@ -832,11 +832,11 @@ public class ImageLoader {
                     }
                 }
                 RLottieDrawable lottieDrawable;
-                if (dice) {
-                    lottieDrawable = new RLottieDrawable(R.raw.diceloop, w, h);
-                } else {
+///*                if (dice) {
+//                    lottieDrawable = new RLottieDrawable(R.raw.diceloop, w, h);
+//                } else {*/
                     lottieDrawable = new RLottieDrawable(cacheImage.finalFilePath, w, h, precache, limitFps, colors);
-                }
+///*                }*/
                 lottieDrawable.setAutoRepeat(autoRepeat);
                 onPostExecute(lottieDrawable);
             } else if (cacheImage.imageType == FileLoader.IMAGE_TYPE_ANIMATION) {

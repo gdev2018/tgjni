@@ -382,7 +382,7 @@ public class MessagesController implements NotificationCenter.NotificationCenter
 //            MessagesController messagesController = getInstance(currentAccount);
 //            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.FileDidUpload);
 //            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.FileDidFailUpload);
-//            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.fileDidLoad);
+//            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.fileLoaded);
 //            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.httpFileDidFailedLoad);
 //            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.messageReceivedByServer);
 //            NotificationCenter.getInstance(currentAccount).addObserver(messagesController, NotificationCenter.updateMessageMedia);

@@ -100,7 +100,7 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
 
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.fileDidLoad) {
+        if (id == NotificationCenter.fileLoaded) {
             String location = (String) args[0];
             if (fileName != null && fileName.equals(location)) {
                 showProgress(false);
@@ -123,7 +123,7 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileLoaded);
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.httpFileDidFailedLoad);
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.FileLoadProgressChanged);
         buttonsLayout.addView(radialProgressView, LayoutHelper.createFrame(36, 36));
@@ -132,7 +132,7 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
     @Override
     public void dismiss() {
         super.dismiss();
-        NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.fileLoaded);
         NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.httpFileDidFailedLoad);
         NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
     }

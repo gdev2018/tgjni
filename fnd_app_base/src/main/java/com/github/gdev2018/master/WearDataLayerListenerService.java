@@ -85,7 +85,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
 							final NotificationCenter.NotificationCenterDelegate listener = new NotificationCenter.NotificationCenterDelegate() {
 								@Override
 								public void didReceivedNotification(int id, int account, Object... args) {
-									if (id == NotificationCenter.fileDidLoad) {
+									if (id == NotificationCenter.fileLoaded) {
 										if (BaseBuildVars.LOGS_ENABLED) {
 											FileLog.d("file loaded: " + args[0] + " " + args[0].getClass().getName());
 										}
@@ -104,7 +104,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
 							AndroidUtilities.runOnUIThread(new Runnable() {
 								@Override
 								public void run() {
-									NotificationCenter.getInstance(currentAccount).addObserver(listener, NotificationCenter.fileDidLoad);
+									NotificationCenter.getInstance(currentAccount).addObserver(listener, NotificationCenter.fileLoaded);
 									FileLoader.getInstance(currentAccount).loadFile(user.photo.photo_small, user, null, 0, 1, 1);
 								}
 							});
@@ -115,7 +115,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
 							AndroidUtilities.runOnUIThread(new Runnable() {
 								@Override
 								public void run() {
-									NotificationCenter.getInstance(currentAccount).removeObserver(listener, NotificationCenter.fileDidLoad);
+									NotificationCenter.getInstance(currentAccount).removeObserver(listener, NotificationCenter.fileLoaded);
 								}
 							});
 						}

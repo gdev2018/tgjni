@@ -222,7 +222,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                         if (path != null) {
                             bitmap = ImageLoader.loadBitmap(path.getAbsolutePath(), null, 800, 800, true);
                         } else {
-                            NotificationCenter.getInstance(currentAccount).addObserver(ImageUpdater.this, NotificationCenter.fileDidLoad);
+                            NotificationCenter.getInstance(currentAccount).addObserver(ImageUpdater.this, NotificationCenter.fileLoaded);
 ///*                            NotificationCenter.getInstance(currentAccount).addObserver(ImageUpdater.this, NotificationCenter.httpFileDidFailedLoad);*/
                             uploadingImage = FileLoader.getAttachFileName(photoSize.location);
 ///*                            imageReceiver.setImage(photoSize, null, null, "jpg", null, 1);*/
@@ -451,16 +451,16 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     delegate = null;
                 }
             }
-        } else if (id == NotificationCenter.fileDidLoad/* || id == NotificationCenter.httpFileDidFailedLoad*/ || id == NotificationCenter.httpFileDidLoad || id == NotificationCenter.httpFileDidFailedLoad) {
+        } else if (id == NotificationCenter.fileLoaded/* || id == NotificationCenter.httpFileDidFailedLoad*/ || id == NotificationCenter.httpFileDidLoad || id == NotificationCenter.httpFileDidFailedLoad) {
             String path = (String) args[0];
             if (uploadingImage != null && path.equals(uploadingImage)) {
-                NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.fileDidLoad);
+                NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.fileLoaded);
 ///*                NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.httpFileDidFailedLoad);*/
                 NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.httpFileDidLoad);
                 NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.httpFileDidFailedLoad);
 
                 uploadingImage = null;
-                if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.httpFileDidLoad) {
+                if (id == NotificationCenter.fileLoaded || id == NotificationCenter.httpFileDidLoad) {
                     Bitmap bitmap = ImageLoader.loadBitmap(finalPath, null, 800, 800, true);
                     processBitmap(bitmap);
                 } else {

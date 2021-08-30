@@ -164,7 +164,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
     public void setVisibility(int visibility) {
         super.setVisibility(visibility);
         if (visibility == GONE) {
-            NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.fileLoaded);
 ///*            NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.httpFileDidFailedLoad);*/
             NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
         }
@@ -172,7 +172,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
 
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.fileDidLoad) {
+        if (id == NotificationCenter.fileLoaded) {
             String location = (String) args[0];
             if (fileName != null && fileName.equals(location)) {
                 showProgress(false);
@@ -305,7 +305,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         } else {
             acceptTextView.setText(LocaleController.getString("Update", R.string.Update).toUpperCase());
         }
-        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileLoaded);
 ///*        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.httpFileDidFailedLoad);*/
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.FileLoadProgressChanged);
     }

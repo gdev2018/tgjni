@@ -31,8 +31,8 @@ public class BaseBuildVars {
     public static String PLAYSTORE_APP_URL = "";
 
 //    static {
-//        if (ApplicationLoader.applicationContext != null) {
-//            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
+//        if (BaseApplication.mApplicationContext != null) {
+//            SharedPreferences sharedPreferences = BaseApplication.mApplicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
 //            LOGS_ENABLED = sharedPreferences.getBoolean("logsEnabled", DEBUG_VERSION);
 //        }
 //    }

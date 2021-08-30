@@ -275,7 +275,7 @@ public class DownloadController implements NotificationCenter.NotificationCenter
 
         AndroidUtilities.runOnUIThread(() -> {
 ///*            NotificationCenter.getInstance(currentAccount).addObserver(DownloadController.this, NotificationCenter.httpFileDidFailedLoad);*/
-            NotificationCenter.getInstance(currentAccount).addObserver(DownloadController.this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(currentAccount).addObserver(DownloadController.this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(currentAccount).addObserver(DownloadController.this, NotificationCenter.FileLoadProgressChanged);
             NotificationCenter.getInstance(currentAccount).addObserver(DownloadController.this, NotificationCenter.FileUploadProgressChanged);
             NotificationCenter.getInstance(currentAccount).addObserver(DownloadController.this, NotificationCenter.httpFileDidLoad);
@@ -881,7 +881,7 @@ public class DownloadController implements NotificationCenter.NotificationCenter
             listenerInProgress = false;
             processLaterArrays();
             checkDownloadFinished(fileName, canceled);
-        } else if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.httpFileDidLoad) {
+        } else if (id == NotificationCenter.fileLoaded || id == NotificationCenter.httpFileDidLoad) {
             listenerInProgress = true;
             String fileName = (String) args[0];
             ArrayList<MessageObject> messageObjects = loadingFileMessagesObservers.get(fileName);

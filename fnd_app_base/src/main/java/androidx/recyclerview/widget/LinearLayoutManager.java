@@ -23,7 +23,6 @@ import android.content.Context;
 import android.graphics.PointF;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +32,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 import androidx.core.os.TraceCompat;
 import androidx.core.view.ViewCompat;
+
+import com.github.gdev2018.master.BaseBuildVars;
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
 
     private static final String TAG = "LinearLayoutManager";
 
-    static final boolean DEBUG = false;
+    static final boolean DEBUG = BaseBuildVars.DEBUG_VERSION;
 
     public static final int HORIZONTAL = RecyclerView.HORIZONTAL;
 
@@ -701,9 +702,9 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             mAnchorInfo.reset();
         }
         mLastStackFromEnd = mStackFromEnd;
-        if (DEBUG) {
-            validateChildOrder();
-        }
+//        if (DEBUG) {
+//            validateChildOrder();
+//        }
     }
 
     @Override
@@ -964,12 +965,16 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         return fixOffset;
     }
 
+    public int getStarForFixGap() {
+        return mOrientationHelper.getStartAfterPadding();
+    }
+
     /**
      * @return The final offset amount for children
      */
     private int fixLayoutStartGap(int startOffset, RecyclerView.Recycler recycler,
             RecyclerView.State state, boolean canOffsetChildren) {
-        int gap = startOffset - mOrientationHelper.getStartAfterPadding();
+        int gap = startOffset - getStarForFixGap();
         int fixOffset = 0;
         if (gap > 0) {
             // check if we should fix this gap.
@@ -1391,9 +1396,6 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         }
         final int scrolled = absDelta > consumed ? layoutDirection * consumed : delta;
         mOrientationHelper.offsetChildren(-scrolled);
-        if (DEBUG) {
-            Log.d(TAG, "scroll req: " + delta + " scrolled: " + scrolled);
-        }
         mLayoutState.mLastScrollDelta = scrolled;
         return scrolled;
     }
@@ -1457,21 +1459,33 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         if (mShouldReverseLayout) {
             for (int i = childCount - 1; i >= 0; i--) {
                 View child = getChildAt(i);
-                if (mOrientationHelper.getDecoratedEnd(child) > limit
-                        || mOrientationHelper.getTransformedEndWithDecoration(child) > limit) {
-                    // stop here
-                    recycleChildren(recycler, childCount - 1, i);
-                    return;
+                if (child != null) {
+                    RecyclerView.ViewHolder holder = mRecyclerView.getChildViewHolder(child);
+                    if (holder == null || holder.shouldIgnore()) {
+                        continue;
+                    }
+                    if (mOrientationHelper.getDecoratedEnd(child) > limit
+                            || mOrientationHelper.getTransformedEndWithDecoration(child) > limit) {
+                        // stop here
+                        recycleChildren(recycler, childCount - 1, i);
+                        return;
+                    }
                 }
             }
         } else {
             for (int i = 0; i < childCount; i++) {
                 View child = getChildAt(i);
-                if (mOrientationHelper.getDecoratedEnd(child) > limit
-                        || mOrientationHelper.getTransformedEndWithDecoration(child) > limit) {
-                    // stop here
-                    recycleChildren(recycler, 0, i);
-                    return;
+                if (child != null) {
+                    RecyclerView.ViewHolder holder = mRecyclerView.getChildViewHolder(child);
+                    if (holder == null || holder.shouldIgnore()) {
+                        continue;
+                    }
+                    if (mOrientationHelper.getDecoratedEnd(child) > limit
+                            || mOrientationHelper.getTransformedEndWithDecoration(child) > limit) {
+                        // stop here
+                        recycleChildren(recycler, 0, i);
+                        return;
+                    }
                 }
             }
         }
@@ -1505,21 +1519,33 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         if (mShouldReverseLayout) {
             for (int i = 0; i < childCount; i++) {
                 View child = getChildAt(i);
-                if (mOrientationHelper.getDecoratedStart(child) < limit
-                        || mOrientationHelper.getTransformedStartWithDecoration(child) < limit) {
-                    // stop here
-                    recycleChildren(recycler, 0, i);
-                    return;
+                if (child != null) {
+                    RecyclerView.ViewHolder holder = mRecyclerView.getChildViewHolder(child);
+                    if (holder == null || holder.shouldIgnore()) {
+                        continue;
+                    }
+                    if (mOrientationHelper.getDecoratedStart(child) < limit
+                            || mOrientationHelper.getTransformedStartWithDecoration(child) < limit) {
+                        // stop here
+                        recycleChildren(recycler, 0, i);
+                        return;
+                    }
                 }
             }
         } else {
             for (int i = childCount - 1; i >= 0; i--) {
                 View child = getChildAt(i);
-                if (mOrientationHelper.getDecoratedStart(child) < limit
-                        || mOrientationHelper.getTransformedStartWithDecoration(child) < limit) {
-                    // stop here
-                    recycleChildren(recycler, childCount - 1, i);
-                    return;
+                if (child != null) {
+                    RecyclerView.ViewHolder holder = mRecyclerView.getChildViewHolder(child);
+                    if (holder == null || holder.shouldIgnore()) {
+                        continue;
+                    }
+                    if (mOrientationHelper.getDecoratedStart(child) < limit
+                            || mOrientationHelper.getTransformedStartWithDecoration(child) < limit) {
+                        // stop here
+                        recycleChildren(recycler, childCount - 1, i);
+                        return;
+                    }
                 }
             }
         }
@@ -1610,9 +1636,9 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
                 break;
             }
         }
-        if (DEBUG) {
-            validateChildOrder();
-        }
+//        if (DEBUG) {
+//            validateChildOrder();
+//        }
         return start - layoutState.mAvailable;
     }
 

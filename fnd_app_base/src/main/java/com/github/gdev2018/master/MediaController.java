@@ -1153,24 +1153,24 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             int channelId = (Integer) args[1];
             ArrayList<Integer> markAsDeletedMessages = (ArrayList<Integer>) args[0];
             if (playingMessageObject != null) {
-                if (channelId == playingMessageObject.messageOwner.to_id.channel_id) {
-                    if (markAsDeletedMessages.contains(playingMessageObject.getId())) {
-                        cleanupPlayer(true, true);
-                    }
-                }
+///*                if (channelId == playingMessageObject.messageOwner.to_id.channel_id) {
+//                    if (markAsDeletedMessages.contains(playingMessageObject.getId())) {
+//                        cleanupPlayer(true, true);
+//                    }
+//                }*/
             }
             if (voiceMessagesPlaylist != null && !voiceMessagesPlaylist.isEmpty()) {
                 MessageObject messageObject = voiceMessagesPlaylist.get(0);
-                if (channelId == messageObject.messageOwner.to_id.channel_id) {
-                    for (int a = 0; a < markAsDeletedMessages.size(); a++) {
-                        Integer key = markAsDeletedMessages.get(a);
-                        messageObject = voiceMessagesPlaylistMap.get(key);
-                        voiceMessagesPlaylistMap.remove(key);
-                        if (messageObject != null) {
-                            voiceMessagesPlaylist.remove(messageObject);
-                        }
-                    }
-                }
+///*                if (channelId == messageObject.messageOwner.to_id.channel_id) {
+//                    for (int a = 0; a < markAsDeletedMessages.size(); a++) {
+//                        Integer key = markAsDeletedMessages.get(a);
+//                        messageObject = voiceMessagesPlaylistMap.get(key);
+//                        voiceMessagesPlaylistMap.remove(key);
+//                        if (messageObject != null) {
+//                            voiceMessagesPlaylist.remove(messageObject);
+//                        }
+//                    }
+//                }*/
             }
         } else if (id == NotificationCenter.removeAllMessagesFromDialog) {
             long did = (Long) args[0];
@@ -2408,7 +2408,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         if (messageObject.isRoundVideo() || isVideo) {
             FileLoader.getInstance(messageObject.currentAccount).setLoadingVideoForPlayer(messageObject.getDocument(), true);
             playerWasReady = false;
-            boolean destroyAtEnd = !isVideo || messageObject.messageOwner.to_id.channel_id == 0 && messageObject.audioProgress <= 0.1f;
+            boolean destroyAtEnd = !isVideo/* || messageObject.messageOwner.to_id.channel_id == 0*/ && messageObject.audioProgress <= 0.1f;
             int[] playCount = isVideo && messageObject.getDuration() <= 30 ? new int[]{1} : null;
             playlist.clear();
             shuffledPlaylist.clear();
@@ -2751,7 +2751,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public void toggleShuffleMusic(int type) {
         boolean oldShuffle = SharedConfig.shuffleMusic;
-        SharedConfig.toggleShuffleMusic(type);
+///*        SharedConfig.toggleShuffleMusic(type);*/
         if (oldShuffle != SharedConfig.shuffleMusic) {
             if (SharedConfig.shuffleMusic) {
                 buildShuffledPlayList();

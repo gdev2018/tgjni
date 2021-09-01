@@ -62,24 +62,24 @@ public class MaxFileSizeCell extends FrameLayout {
             }
         };
         seekBarView.setReportChanges(true);
-        seekBarView.setDelegate(new SeekBarView.SeekBarViewDelegate() {
-            @Override
-            public void onSeekBarDrag(float progress) {
-                int size;
-                if (maxSize > 1024 * 1024 * 10) {
-                    int min = 1024 * 1024 * 100;
-                    if (progress <= 0.8f) {
-                        size = (int) (min * (progress / 0.8f));
-                    } else {
-                        size = (int) (min + (maxSize - min) * (progress - 0.8f) / 0.2f);
-                    }
-                } else {
-                    size = (int) (maxSize * progress);
-                }
-                sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(size)));
-                didChangedSizeValue(size);
-            }
-        });
+///*        seekBarView.setDelegate(new SeekBarView.SeekBarViewDelegate() {
+//            @Override
+//            public void onSeekBarDrag(float progress) {
+//                int size;
+//                if (maxSize > 1024 * 1024 * 10) {
+//                    int min = 1024 * 1024 * 100;
+//                    if (progress <= 0.8f) {
+//                        size = (int) (min * (progress / 0.8f));
+//                    } else {
+//                        size = (int) (min + (maxSize - min) * (progress - 0.8f) / 0.2f);
+//                    }
+//                } else {
+//                    size = (int) (maxSize * progress);
+//                }
+//                sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(size)));
+//                didChangedSizeValue(size);
+//            }
+//        });*/
         addView(seekBarView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 30, Gravity.TOP | Gravity.LEFT, 4, 40, 4, 0));
     }
 

@@ -111,7 +111,7 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
             if (fileName != null && fileName.equals(location)) {
                 showProgress(false);
             }
-        } else if (id == NotificationCenter.FileLoadProgressChanged) {
+        } else if (id == NotificationCenter.fileLoadProgressChanged) {
             String location = (String) args[0];
             if (fileName != null && fileName.equals(location)) {
                 Float loadProgress = (Float) args[1];
@@ -125,7 +125,7 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         super.onCreate(savedInstanceState);
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileLoaded);
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.httpFileDidFailedLoad);
-        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.FileLoadProgressChanged);
+        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileLoadProgressChanged);
         buttonsLayout.addView(radialProgressView, LayoutHelper.createFrame(36, 36));
     }
 
@@ -134,7 +134,7 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         super.dismiss();
         NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.fileLoaded);
         NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.httpFileDidFailedLoad);
-        NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
+        NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.fileLoadProgressChanged);
     }
 
     private void showProgress(final boolean show) {

@@ -407,8 +407,8 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             BaseUserConfig.getInstance(currentAccount).saveConfig(false);
             uploadingImage = FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE) + "/" + bigPhoto.location.volume_id + "_" + bigPhoto.location.local_id + ".jpg";
             if (uploadAfterSelect) {
-                NotificationCenter.getInstance(currentAccount).addObserver(ImageUpdater.this, NotificationCenter.FileDidUpload);
-                NotificationCenter.getInstance(currentAccount).addObserver(ImageUpdater.this, NotificationCenter.FileDidFailUpload);
+                NotificationCenter.getInstance(currentAccount).addObserver(ImageUpdater.this, NotificationCenter.fileUploaded);
+                NotificationCenter.getInstance(currentAccount).addObserver(ImageUpdater.this, NotificationCenter.fileUploadFailed);
                 FileLoader.getInstance(currentAccount).uploadFile(uploadingImage, false, true, ConnectionsManager.FileTypePhoto);
             }
             if (delegate != null) {
@@ -424,11 +424,11 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
 
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.FileDidUpload) {
+        if (id == NotificationCenter.fileUploaded) {
             String location = (String) args[0];
             if (uploadingImage != null && location.equals(uploadingImage)) {
-                NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.FileDidUpload);
-                NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.FileDidFailUpload);
+                NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.fileUploaded);
+                NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.fileUploadFailed);
                 if (delegate != null) {
                     delegate.didUploadPhoto((TLRPC.InputFile) args[1], bigPhoto, smallPhoto);
                 }
@@ -439,11 +439,11 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     delegate = null;
                 }
             }
-        } else if (id == NotificationCenter.FileDidFailUpload) {
+        } else if (id == NotificationCenter.fileUploadFailed) {
             String location = (String) args[0];
             if (uploadingImage != null && location.equals(uploadingImage)) {
-                NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.FileDidUpload);
-                NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.FileDidFailUpload);
+                NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.fileUploaded);
+                NotificationCenter.getInstance(currentAccount).removeObserver(ImageUpdater.this, NotificationCenter.fileUploadFailed);
                 uploadingImage = null;
                 if (clearAfterUpdate) {
                     imageReceiver.setImageBitmap((Drawable) null);

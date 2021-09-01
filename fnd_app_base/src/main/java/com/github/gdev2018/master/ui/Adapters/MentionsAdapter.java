@@ -676,10 +676,10 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
         if (foundType == 0) {
             final ArrayList<Integer> users = new ArrayList<>();
             for (int a = 0; a < Math.min(100, messageObjects.size()); a++) {
-                int from_id = messageObjects.get(a).messageOwner.from_id;
-                if (!users.contains(from_id)) {
-                    users.add(from_id);
-                }
+///*                int from_id = messageObjects.get(a).messageOwner.from_id;
+//                if (!users.contains(from_id)) {
+//                    users.add(from_id);
+//                }*/
             }
             final String usernameString = result.toString().toLowerCase();
             boolean hasSpace = usernameString.indexOf(' ') >= 0;
@@ -801,14 +801,14 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
                                         int currentUserId = BaseUserConfig.getInstance(currentAccount).getClientUserId();
                                         for (int a = 0; a < res.participants.size(); a++) {
                                             TLRPC.ChannelParticipant participant = res.participants.get(a);
-                                            if (searchResultUsernamesMap.indexOfKey(participant.user_id) >= 0 || !isSearchingMentions && participant.user_id == currentUserId) {
-                                                continue;
-                                            }
-                                            TLRPC.User user = messagesController.getUser(participant.user_id);
-                                            if (user == null) {
-                                                return;
-                                            }
-                                            searchResultUsernames.add(user);
+///*                                            if (searchResultUsernamesMap.indexOfKey(participant.user_id) >= 0 || !isSearchingMentions && participant.user_id == currentUserId) {
+//                                                continue;
+//                                            }*/
+///*                                            TLRPC.User user = messagesController.getUser(participant.user_id);
+//                                            if (user == null) {
+//                                                return;
+//                                            }
+//                                            searchResultUsernames.add(user);*/
                                         }
                                     }
                                 }

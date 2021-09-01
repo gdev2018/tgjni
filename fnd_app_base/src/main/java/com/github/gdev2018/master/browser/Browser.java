@@ -260,7 +260,7 @@ public class Browser {
                         browserPackageNames = new String[list.size()];
                         for (int a = 0; a < list.size(); a++) {
                             browserPackageNames[a] = list.get(a).activityInfo.packageName;
-                            if (BuildVars.LOGS_ENABLED) {
+                            if (BaseBuildVars.LOGS_ENABLED) {
                                 FileLog.d("default browser name = " + browserPackageNames[a]);
                             }
                         }
@@ -291,7 +291,7 @@ public class Browser {
                             }
                         }
                     }
-                    if (BuildVars.LOGS_ENABLED) {
+                    if (BaseBuildVars.LOGS_ENABLED) {
                         for (int a = 0; a < allActivities.size(); a++) {
                             FileLog.d("device has " + allActivities.get(a).activityInfo.packageName + " to open " + uri.toString());
                         }
@@ -324,8 +324,8 @@ public class Browser {
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             if (internalUri) {
-                ComponentName componentName = new ComponentName(context.getPackageName(), LaunchActivity.class.getName());
-                intent.setComponent(componentName);
+///*                ComponentName componentName = new ComponentName(context.getPackageName(), LaunchActivity.class.getName());
+//                intent.setComponent(componentName);*/
             }
             intent.putExtra(android.provider.Browser.EXTRA_CREATE_NEW_TAB, true);
             intent.putExtra(android.provider.Browser.EXTRA_APPLICATION_ID, context.getPackageName());

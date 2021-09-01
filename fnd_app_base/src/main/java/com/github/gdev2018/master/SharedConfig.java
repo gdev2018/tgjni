@@ -825,8 +825,8 @@ public class SharedConfig {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("direct_share", directShare);
         editor.commit();
-        ShortcutManagerCompat.removeAllDynamicShortcuts(BaseApplication.mApplicationContext);
-        MediaDataController.getInstance(BaseUserConfig.selectedAccount).buildShortcuts();
+///*        ShortcutManagerCompat.removeAllDynamicShortcuts(BaseApplication.mApplicationContext);
+//        MediaDataController.getInstance(BaseUserConfig.selectedAccount).buildShortcuts();*/
     }
 
     public static void toggleStreamMedia() {
@@ -1045,16 +1045,16 @@ public class SharedConfig {
     }
 
     public static int getChatSwipeAction(int currentAccount) {
-        if (chatSwipeAction >= 0) {
-            if (chatSwipeAction == SwipeGestureSettingsView.SWIPE_GESTURE_FOLDERS && MessagesController.getInstance(currentAccount).dialogFilters.isEmpty()) {
-                return SwipeGestureSettingsView.SWIPE_GESTURE_ARCHIVE;
-            }
+///*        if (chatSwipeAction >= 0) {*/
+///*            if (chatSwipeAction == SwipeGestureSettingsView.SWIPE_GESTURE_FOLDERS && MessagesController.getInstance(currentAccount).dialogFilters.isEmpty()) {
+//                return SwipeGestureSettingsView.SWIPE_GESTURE_ARCHIVE;
+//            }*/
             return chatSwipeAction;
-        } else if (!MessagesController.getInstance(currentAccount).dialogFilters.isEmpty()) {
-            return SwipeGestureSettingsView.SWIPE_GESTURE_FOLDERS;
-
-        }
-        return SwipeGestureSettingsView.SWIPE_GESTURE_ARCHIVE;
+///*        } else if (!MessagesController.getInstance(currentAccount).dialogFilters.isEmpty()) {
+//            return SwipeGestureSettingsView.SWIPE_GESTURE_FOLDERS;
+//
+//        }
+//        return SwipeGestureSettingsView.SWIPE_GESTURE_ARCHIVE;*/
     }
 
     public static void updateChatListSwipeSetting(int newAction) {

@@ -7,8 +7,9 @@ import android.text.TextPaint;
 import com.github.gdev2018.master.AndroidUtilities;
 
 public class URLSpanNoUnderlineBold extends URLSpanNoUnderline {
+
     public URLSpanNoUnderlineBold(String url) {
-        super(url);
+        super(url != null ? url.replace('\u202E', ' ') : url);
     }
 
     @Override

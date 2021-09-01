@@ -1516,7 +1516,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     break;
                 }
             }
-        } else if (id == NotificationCenter.FileLoadProgressChanged) {
+        } else if (id == NotificationCenter.fileLoadProgressChanged) {
             String location = (String) args[0];
             for (int a = 0; a < 3; a++) {
                 if (currentFileNames[a] != null && currentFileNames[a].equals(location)) {
@@ -1622,11 +1622,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     }
                     if (user != null || chat != null) {
                         ImageLocation location;
-                        if (user != null) {
-                            location = ImageLocation.getForUser(user, true);
-                        } else {
-                            location = ImageLocation.getForChat(chat, true);
-                        }
+///*                        if (user != null) {
+//                            location = ImageLocation.getForUser(user, true);
+//                        } else {
+//                            location = ImageLocation.getForChat(chat, true);
+//                        }*/
                         if (location != null) {
                             imagesArrLocations.add(0, location);
                             avatarsArr.add(0, new TLRPC.TL_photoEmpty());
@@ -5820,13 +5820,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         } else if (fileLocation != null) {
             avatarsDialogId = object.dialogId;
             if (imageLocation == null) {
-                if (avatarsDialogId > 0) {
-                    TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(avatarsDialogId);
-                    imageLocation = ImageLocation.getForUser(user, true);
-                } else {
-                    TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-avatarsDialogId);
-                    imageLocation = ImageLocation.getForChat(chat, true);
-                }
+///*                if (avatarsDialogId > 0) {
+//                    TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(avatarsDialogId);
+//                    imageLocation = ImageLocation.getForUser(user, true);
+//                } else {
+//                    TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-avatarsDialogId);
+//                    imageLocation = ImageLocation.getForChat(chat, true);
+//                }*/
             }
             if (imageLocation == null) {
                 return;
@@ -6019,10 +6019,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 bottomLayout.setTranslationY(AndroidUtilities.dp(48));
                 captionTextView.setTranslationY(AndroidUtilities.dp(48));
             } else {
-                masksItem.setVisibility(newMessageObject.hasPhotoStickers() && (int) newMessageObject.getDialogId() != 0 ? View.VISIBLE : View.GONE);
-                if (newMessageObject.isNewGif()) {
-                    menuItem.showSubItem(gallery_menu_savegif);
-                }
+///*                masksItem.setVisibility(newMessageObject.hasPhotoStickers() && (int) newMessageObject.getDialogId() != 0 ? View.VISIBLE : View.GONE);
+//                if (newMessageObject.isNewGif()) {
+//                    menuItem.showSubItem(gallery_menu_savegif);
+//                }*/
 ///*                if (newMessageObject.canDeleteMessage(parentChatActivity != null && parentChatActivity.isInScheduleMode(), null) && slideshowMessageId == 0) {
 //                    menuItem.showSubItem(gallery_menu_delete);
 //                } else {
@@ -6047,22 +6047,22 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     nameTextView.setText(nameOverride);
                 } else {
                     if (newMessageObject.isFromUser()) {
-                        TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(newMessageObject.messageOwner.from_id);
-                        if (user != null) {
-                            nameTextView.setText(UserObject.getUserName(user));
-                        } else {
-                            nameTextView.setText("");
-                        }
+///*                        TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(newMessageObject.messageOwner.from_id);
+//                        if (user != null) {
+//                            nameTextView.setText(UserObject.getUserName(user));
+//                        } else {
+//                            nameTextView.setText("");
+//                        }*/
                     } else {
-                        TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(newMessageObject.messageOwner.to_id.channel_id);
-                        if (ChatObject.isChannel(chat) && chat.megagroup && newMessageObject.isForwardedChannelPost()) {
-                            chat = MessagesController.getInstance(currentAccount).getChat(newMessageObject.messageOwner.fwd_from.channel_id);
-                        }
-                        if (chat != null) {
-                            nameTextView.setText(chat.title);
-                        } else {
-                            nameTextView.setText("");
-                        }
+///*                        TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(newMessageObject.messageOwner.to_id.channel_id);
+//                        if (ChatObject.isChannel(chat) && chat.megagroup && newMessageObject.isForwardedChannelPost()) {
+//                            chat = MessagesController.getInstance(currentAccount).getChat(newMessageObject.messageOwner.fwd_from.channel_id);
+//                        }
+//                        if (chat != null) {
+//                            nameTextView.setText(chat.title);
+//                        } else {
+//                            nameTextView.setText("");
+//                        }*/
                     }
                 }
                 long date;
@@ -7263,7 +7263,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, 1, 1));
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.fileLoadFailed);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.fileLoaded);
-        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.FileLoadProgressChanged);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.fileLoadProgressChanged);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.mediaCountDidLoad);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.mediaDidLoad);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.dialogPhotosLoaded);
@@ -7910,7 +7910,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private void removeObservers() {
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.fileLoadFailed);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.fileLoaded);
-        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.fileLoadProgressChanged);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.mediaCountDidLoad);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.mediaDidLoad);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.dialogPhotosLoaded);

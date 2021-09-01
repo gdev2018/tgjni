@@ -27,7 +27,7 @@ public class ChatLoadingCell extends FrameLayout {
         super(context);
 
         frameLayout = new FrameLayout(context);
-        frameLayout.setBackgroundResource(R.drawable.system_loader);
+///*        frameLayout.setBackgroundResource(R.drawable.system_loader);*/
         frameLayout.getBackground().setColorFilter(Theme.colorFilter);
         addView(frameLayout, LayoutHelper.createFrame(36, 36, Gravity.CENTER));
 

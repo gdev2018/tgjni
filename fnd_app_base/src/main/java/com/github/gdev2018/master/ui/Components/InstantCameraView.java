@@ -367,14 +367,14 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.recordProgressChanged);
-        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.FileDidUpload);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.fileUploaded);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.recordProgressChanged);
-        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.FileDidUpload);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.fileUploaded);
     }
 
     @Override
@@ -384,7 +384,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             progress = t / 60000.0f;
             recordedTime = t;
             invalidate();
-        } else if (id == NotificationCenter.FileDidUpload) {
+        } else if (id == NotificationCenter.fileUploaded) {
             final String location = (String) args[0];
             if (cameraFile != null && cameraFile.getAbsolutePath().equals(location)) {
                 file = (TLRPC.InputFile) args[1];

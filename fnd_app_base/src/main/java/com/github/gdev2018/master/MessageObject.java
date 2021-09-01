@@ -1769,8 +1769,8 @@ public class MessageObject {
             } else {
                 object = MessagesController.getInstance(currentAccount).getChat(-id);
             }
-            double vol = ChatObject.getParticipantVolume(action.participant) / 100.0;
-            messageText = replaceWithLink(LocaleController.formatString("ActionVolumeChanged", R.string.ActionVolumeChanged,  (int) (vol > 0 ? Math.max(vol, 1) : 0)), "un1", fromUser);
+///*            double vol = ChatObject.getParticipantVolume(action.participant) / 100.0;
+//            messageText = replaceWithLink(LocaleController.formatString("ActionVolumeChanged", R.string.ActionVolumeChanged,  (int) (vol > 0 ? Math.max(vol, 1) : 0)), "un1", fromUser);*/
             messageText = replaceWithLink(messageText, "un2", object);
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionChangeHistoryTTL) {
             TLRPC.TL_channelAdminLogEventActionChangeHistoryTTL action = (TLRPC.TL_channelAdminLogEventActionChangeHistoryTTL) event.action;
@@ -1953,6 +1953,7 @@ public class MessageObject {
         }
         TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(messageOwner.peer_id.channel_id != 0 ? messageOwner.peer_id.channel_id : messageOwner.peer_id.chat_id);
 ///*        return chat != null && chat.gigagroup || (!ChatObject.isActionBanned(chat, ChatObject.ACTION_SEND_STICKERS) || ChatObject.hasAdminRights(chat));*/
+        return false;
     }
 
     public void generateGameMessageText(TLRPC.User fromUser) {
@@ -3479,7 +3480,7 @@ public class MessageObject {
             name = name.replace('\n', ' ');
             SpannableStringBuilder builder = new SpannableStringBuilder(TextUtils.replace(source, new String[]{param}, new String[]{name}));
             URLSpanNoUnderlineBold span = new URLSpanNoUnderlineBold("" + id);
-            span.setObject(spanObject);
+///*            span.setObject(spanObject);*/
             builder.setSpan(span, start, start + name.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             return builder;
         }

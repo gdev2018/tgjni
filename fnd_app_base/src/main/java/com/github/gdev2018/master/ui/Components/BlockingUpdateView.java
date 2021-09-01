@@ -166,7 +166,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         if (visibility == GONE) {
             NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.fileLoaded);
 ///*            NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.httpFileDidFailedLoad);*/
-            NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
+            NotificationCenter.getInstance(accountNum).removeObserver(this, NotificationCenter.fileLoadProgressChanged);
         }
     }
 
@@ -183,7 +183,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
 //            if (fileName != null && fileName.equals(location)) {
 //                showProgress(false);
 //            }*/
-        } else if (id == NotificationCenter.FileLoadProgressChanged) {
+        } else if (id == NotificationCenter.fileLoadProgressChanged) {
             String location = (String) args[0];
             if (fileName != null && fileName.equals(location)) {
                 Float loadProgress = (Float) args[1];
@@ -307,6 +307,6 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         }
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileLoaded);
 ///*        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.httpFileDidFailedLoad);*/
-        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.FileLoadProgressChanged);
+        NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileLoadProgressChanged);
     }
 }

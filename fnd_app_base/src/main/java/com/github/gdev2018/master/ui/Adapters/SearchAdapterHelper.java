@@ -149,11 +149,11 @@ public class SearchAdapterHelper {
                             int currentUserId = BaseUserConfig.getInstance(currentAccount).getClientUserId();
                             for (int a = 0, N = res.participants.size(); a < N; a++) {
                                 TLRPC.ChannelParticipant participant = res.participants.get(a);
-                                if (!allowSelf && participant.user_id == currentUserId) {
-                                    groupSearch.remove(participant);
-                                    continue;
-                                }
-                                groupSearchMap.put(participant.user_id, participant);
+///*                                if (!allowSelf && participant.user_id == currentUserId) {
+//                                    groupSearch.remove(participant);
+//                                    continue;
+//                                }*/
+///*                                groupSearchMap.put(participant.user_id, participant);*/
                             }
                             if (localSearchResults != null) {
                                 mergeResults(localSearchResults);

@@ -408,8 +408,8 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             TLRPC.TL_message message = new TLRPC.TL_message();
             message.out = true;
             message.id = -Utilities.random.nextInt();
-            message.to_id = new TLRPC.TL_peerUser();
-            message.to_id.user_id = message.from_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
+///*            message.to_id = new TLRPC.TL_peerUser();
+//            message.to_id.user_id = message.from_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();*/
             message.date = (int) (System.currentTimeMillis() / 1000);
             message.message = "";
             message.media = new TLRPC.TL_messageMediaDocument();
@@ -447,7 +447,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
                 message.attachPath = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), Utilities.MD5(inlineResult.content.url) + "." + ImageLoader.getHttpUrlExtension(inlineResult.content.url, documentAttachType == DOCUMENT_ATTACH_TYPE_MUSIC ? "mp3" : "ogg")).getAbsolutePath();
             }
 
-            currentMessageObject = new MessageObject(currentAccount, message, false);
+///*            currentMessageObject = new MessageObject(currentAccount, message, false);*/
         }
     }
 
@@ -693,52 +693,52 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
         }
 
         if (!mediaWebpage) {
-            if (drawLinkImageView && !PhotoViewer.isShowingImage(inlineResult)) {
-                letterDrawable.setAlpha((int) (255 * (1.0f - linkImageView.getCurrentAlpha())));
-            } else {
-                letterDrawable.setAlpha(255);
-            }
-            if (documentAttachType == DOCUMENT_ATTACH_TYPE_AUDIO || documentAttachType == DOCUMENT_ATTACH_TYPE_MUSIC) {
-                radialProgress.setProgressColor(Theme.getColor(buttonPressed ? Theme.key_chat_inAudioSelectedProgress : Theme.key_chat_inAudioProgress));
-                radialProgress.draw(canvas);
-            } else if (inlineResult != null && inlineResult.type.equals("file")) {
-                int w = Theme.chat_inlineResultFile.getIntrinsicWidth();
-                int h = Theme.chat_inlineResultFile.getIntrinsicHeight();
-                int x = linkImageView.getImageX() + (AndroidUtilities.dp(52) - w) / 2;
-                int y = linkImageView.getImageY() + (AndroidUtilities.dp(52) - h) / 2;
-                canvas.drawRect(linkImageView.getImageX(), linkImageView.getImageY(), linkImageView.getImageX() + AndroidUtilities.dp(52), linkImageView.getImageY() + AndroidUtilities.dp(52), LetterDrawable.paint);
-                Theme.chat_inlineResultFile.setBounds(x, y, x + w, y + h);
-                Theme.chat_inlineResultFile.draw(canvas);
-            } else if (inlineResult != null && (inlineResult.type.equals("audio") || inlineResult.type.equals("voice"))) {
-                int w = Theme.chat_inlineResultAudio.getIntrinsicWidth();
-                int h = Theme.chat_inlineResultAudio.getIntrinsicHeight();
-                int x = linkImageView.getImageX() + (AndroidUtilities.dp(52) - w) / 2;
-                int y = linkImageView.getImageY() + (AndroidUtilities.dp(52) - h) / 2;
-                canvas.drawRect(linkImageView.getImageX(), linkImageView.getImageY(), linkImageView.getImageX() + AndroidUtilities.dp(52), linkImageView.getImageY() + AndroidUtilities.dp(52), LetterDrawable.paint);
-                Theme.chat_inlineResultAudio.setBounds(x, y, x + w, y + h);
-                Theme.chat_inlineResultAudio.draw(canvas);
-            } else if (inlineResult != null && (inlineResult.type.equals("venue") || inlineResult.type.equals("geo"))) {
-                int w = Theme.chat_inlineResultLocation.getIntrinsicWidth();
-                int h = Theme.chat_inlineResultLocation.getIntrinsicHeight();
-                int x = linkImageView.getImageX() + (AndroidUtilities.dp(52) - w) / 2;
-                int y = linkImageView.getImageY() + (AndroidUtilities.dp(52) - h) / 2;
-                canvas.drawRect(linkImageView.getImageX(), linkImageView.getImageY(), linkImageView.getImageX() + AndroidUtilities.dp(52), linkImageView.getImageY() + AndroidUtilities.dp(52), LetterDrawable.paint);
-                Theme.chat_inlineResultLocation.setBounds(x, y, x + w, y + h);
-                Theme.chat_inlineResultLocation.draw(canvas);
-            } else {
-                letterDrawable.draw(canvas);
-            }
-        } else {
-            if (inlineResult != null && (inlineResult.send_message instanceof TLRPC.TL_botInlineMessageMediaGeo || inlineResult.send_message instanceof TLRPC.TL_botInlineMessageMediaVenue)) {
-                int w = Theme.chat_inlineResultLocation.getIntrinsicWidth();
-                int h = Theme.chat_inlineResultLocation.getIntrinsicHeight();
-                int x = linkImageView.getImageX() + (linkImageView.getImageWidth() - w) / 2;
-                int y = linkImageView.getImageY() + (linkImageView.getImageHeight() - h) / 2;
-                canvas.drawRect(linkImageView.getImageX(), linkImageView.getImageY(), linkImageView.getImageX() + linkImageView.getImageWidth(), linkImageView.getImageY() + linkImageView.getImageHeight(), LetterDrawable.paint);
-                Theme.chat_inlineResultLocation.setBounds(x, y, x + w, y + h);
-                Theme.chat_inlineResultLocation.draw(canvas);
-            }
-        }
+///*            if (drawLinkImageView && !PhotoViewer.isShowingImage(inlineResult)) {
+//                letterDrawable.setAlpha((int) (255 * (1.0f - linkImageView.getCurrentAlpha())));
+//            } else {
+//                letterDrawable.setAlpha(255);
+//            }
+//            if (documentAttachType == DOCUMENT_ATTACH_TYPE_AUDIO || documentAttachType == DOCUMENT_ATTACH_TYPE_MUSIC) {
+//                radialProgress.setProgressColor(Theme.getColor(buttonPressed ? Theme.key_chat_inAudioSelectedProgress : Theme.key_chat_inAudioProgress));
+//                radialProgress.draw(canvas);
+//            } else if (inlineResult != null && inlineResult.type.equals("file")) {
+//                int w = Theme.chat_inlineResultFile.getIntrinsicWidth();
+//                int h = Theme.chat_inlineResultFile.getIntrinsicHeight();
+//                int x = linkImageView.getImageX() + (AndroidUtilities.dp(52) - w) / 2;
+//                int y = linkImageView.getImageY() + (AndroidUtilities.dp(52) - h) / 2;
+//                canvas.drawRect(linkImageView.getImageX(), linkImageView.getImageY(), linkImageView.getImageX() + AndroidUtilities.dp(52), linkImageView.getImageY() + AndroidUtilities.dp(52), LetterDrawable.paint);
+//                Theme.chat_inlineResultFile.setBounds(x, y, x + w, y + h);
+//                Theme.chat_inlineResultFile.draw(canvas);
+//            } else if (inlineResult != null && (inlineResult.type.equals("audio") || inlineResult.type.equals("voice"))) {
+//                int w = Theme.chat_inlineResultAudio.getIntrinsicWidth();
+//                int h = Theme.chat_inlineResultAudio.getIntrinsicHeight();
+//                int x = linkImageView.getImageX() + (AndroidUtilities.dp(52) - w) / 2;
+//                int y = linkImageView.getImageY() + (AndroidUtilities.dp(52) - h) / 2;
+//                canvas.drawRect(linkImageView.getImageX(), linkImageView.getImageY(), linkImageView.getImageX() + AndroidUtilities.dp(52), linkImageView.getImageY() + AndroidUtilities.dp(52), LetterDrawable.paint);
+//                Theme.chat_inlineResultAudio.setBounds(x, y, x + w, y + h);
+//                Theme.chat_inlineResultAudio.draw(canvas);
+//            } else if (inlineResult != null && (inlineResult.type.equals("venue") || inlineResult.type.equals("geo"))) {
+//                int w = Theme.chat_inlineResultLocation.getIntrinsicWidth();
+//                int h = Theme.chat_inlineResultLocation.getIntrinsicHeight();
+//                int x = linkImageView.getImageX() + (AndroidUtilities.dp(52) - w) / 2;
+//                int y = linkImageView.getImageY() + (AndroidUtilities.dp(52) - h) / 2;
+//                canvas.drawRect(linkImageView.getImageX(), linkImageView.getImageY(), linkImageView.getImageX() + AndroidUtilities.dp(52), linkImageView.getImageY() + AndroidUtilities.dp(52), LetterDrawable.paint);
+//                Theme.chat_inlineResultLocation.setBounds(x, y, x + w, y + h);
+//                Theme.chat_inlineResultLocation.draw(canvas);
+//            } else {
+//                letterDrawable.draw(canvas);
+//            }
+//        } else {
+//            if (inlineResult != null && (inlineResult.send_message instanceof TLRPC.TL_botInlineMessageMediaGeo || inlineResult.send_message instanceof TLRPC.TL_botInlineMessageMediaVenue)) {
+//                int w = Theme.chat_inlineResultLocation.getIntrinsicWidth();
+//                int h = Theme.chat_inlineResultLocation.getIntrinsicHeight();
+//                int x = linkImageView.getImageX() + (linkImageView.getImageWidth() - w) / 2;
+//                int y = linkImageView.getImageY() + (linkImageView.getImageHeight() - h) / 2;
+//                canvas.drawRect(linkImageView.getImageX(), linkImageView.getImageY(), linkImageView.getImageX() + linkImageView.getImageWidth(), linkImageView.getImageY() + linkImageView.getImageHeight(), LetterDrawable.paint);
+//                Theme.chat_inlineResultLocation.setBounds(x, y, x + w, y + h);
+//                Theme.chat_inlineResultLocation.draw(canvas);
+//            }
+//        }*/
         if (drawLinkImageView) {
             if (inlineResult != null) {
                 linkImageView.setVisible(!PhotoViewer.isShowingImage(inlineResult), false);

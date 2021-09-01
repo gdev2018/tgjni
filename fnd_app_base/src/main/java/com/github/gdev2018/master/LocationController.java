@@ -339,7 +339,7 @@ public class LocationController implements NotificationCenter.NotificationCenter
         info.did = did;
         info.mid = mid;
         info.period = period;
-        info.messageObject = new MessageObject(currentAccount, message, false);
+///*        info.messageObject = new MessageObject(currentAccount, message, false);*/
         info.stopTime = ConnectionsManager.getInstance(currentAccount).getCurrentTime() + period;
         final SharingLocationInfo old = sharingLocationsMap.get(did);
         sharingLocationsMap.put(did, info);
@@ -385,7 +385,9 @@ public class LocationController implements NotificationCenter.NotificationCenter
                     info.period = cursor.intValue(3);
                     NativeByteBuffer data = cursor.byteBufferValue(4);
                     if (data != null) {
-                        info.messageObject = new MessageObject(currentAccount, TLRPC.Message.TLdeserialize(data, data.readInt32(false), false), false);
+///*
+//                        info.messageObject = new MessageObject(currentAccount, TLRPC.Message.TLdeserialize(data, data.readInt32(false), false), false);
+//*/
                         MessagesStorage.addUsersAndChatsFromMessage(info.messageObject.messageOwner, usersToLoad, chatsToLoad);
                         data.reuse();
                     }

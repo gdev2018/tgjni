@@ -58,6 +58,8 @@ import android.widget.EdgeEffect;
 import android.widget.LinearLayout;
 import android.widget.OverScroller;
 
+import com.github.gdev2018.master.BaseBuildVars;
+import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.AndroidUtilities;
 
 import androidx.annotation.CallSuper;

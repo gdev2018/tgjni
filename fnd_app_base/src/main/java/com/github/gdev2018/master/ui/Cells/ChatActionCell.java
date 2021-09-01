@@ -111,18 +111,18 @@ public class ChatActionCell extends BaseCell {
         previousWidth = 0;
         if (currentMessageObject.type == 11) {
             int id = 0;
-            if (messageObject.messageOwner.to_id != null) {
-                if (messageObject.messageOwner.to_id.chat_id != 0) {
-                    id = messageObject.messageOwner.to_id.chat_id;
-                } else if (messageObject.messageOwner.to_id.channel_id != 0) {
-                    id = messageObject.messageOwner.to_id.channel_id;
-                } else {
-                    id = messageObject.messageOwner.to_id.user_id;
-                    if (id == BaseUserConfig.getInstance(currentAccount).getClientUserId()) {
-                        id = messageObject.messageOwner.from_id;
-                    }
-                }
-            }
+///*            if (messageObject.messageOwner.to_id != null) {
+//                if (messageObject.messageOwner.to_id.chat_id != 0) {
+//                    id = messageObject.messageOwner.to_id.chat_id;
+//                } else if (messageObject.messageOwner.to_id.channel_id != 0) {
+//                    id = messageObject.messageOwner.to_id.channel_id;
+//                } else {
+//                    id = messageObject.messageOwner.to_id.user_id;
+//                    if (id == BaseUserConfig.getInstance(currentAccount).getClientUserId()) {
+//                        id = messageObject.messageOwner.from_id;
+//                    }
+//                }
+//            }*/
             avatarDrawableDeprecated.setInfo(id, null, null, false);
             if (currentMessageObject.messageOwner.action instanceof TLRPC.TL_messageActionUserUpdatedPhoto) {
 ///*                imageReceiver.setImage(currentMessageObject.messageOwner.action.newUserPhoto.photo_small, "50_50", avatarDrawableDeprecated, null, currentMessageObject, 0);*/
@@ -222,7 +222,7 @@ public class ChatActionCell extends BaseCell {
                                     if (delegate != null) {
                                         String url = link[0].getURL();
                                         if (url.startsWith("game")) {
-                                            delegate.didPressedReplyMessage(this, currentMessageObject.messageOwner.reply_to_msg_id);
+//                                            delegate.didPressedReplyMessage(this, currentMessageObject.messageOwner.reply_to_msg_id);
                                             /*TLRPC.KeyboardButton gameButton = null;
                                             MessageObject messageObject = currentMessageObject.replyMessageObject;
                                             if (messageObject != null && messageObject.messageOwner.reply_markup != null) {

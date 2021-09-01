@@ -781,9 +781,9 @@ public class DialogCell extends BaseCell {
                         TLRPC.User fromUser = null;
                         TLRPC.Chat fromChat = null;
                         if (message.isFromUser()) {
-                            fromUser = MessagesController.getInstance(currentAccount).getUser(message.messageOwner.from_id);
+//                            fromUser = MessagesController.getInstance(currentAccount).getUser(message.messageOwner.from_id);
                         } else {
-                            fromChat = MessagesController.getInstance(currentAccount).getChat(message.messageOwner.to_id.channel_id);
+//                            fromChat = MessagesController.getInstance(currentAccount).getChat(message.messageOwner.to_id.channel_id);
                         }
                         if (dialogsType == 3 && UserObject.isUserSelf(user)) {
                             messageString = LocaleController.getString("SavedMessagesInfo", R.string.SavedMessagesInfo);
@@ -2038,13 +2038,13 @@ public class DialogCell extends BaseCell {
         if (user != null && isDialogCell && currentDialogFolderId == 0 && !MessagesController.isSupportUser(user) && !user.bot) {
             boolean isOnline = !user.self && (user.status != null && user.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime() || MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(user.id));
             if (isOnline || onlineProgress != 0) {
-                int top = avatarImage.getImageY2() - AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 6 : 8);
-                int left;
-                if (LocaleController.isRTL) {
-                    left = avatarImage.getImageX() + AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 10 : 6);
-                } else {
-                    left = avatarImage.getImageX2() - AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 10 : 6);
-                }
+///*                int top = avatarImage.getImageY2() - AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 6 : 8);
+//                int left;
+//                if (LocaleController.isRTL) {
+//                    left = avatarImage.getImageX() + AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 10 : 6);
+//                } else {
+//                    left = avatarImage.getImageX2() - AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 10 : 6);
+//                }*/
 
                 Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                 canvas.drawCircle(left, top, AndroidUtilities.dp(7) * onlineProgress, Theme.dialogs_onlineCirclePaint);
@@ -2291,11 +2291,11 @@ public class DialogCell extends BaseCell {
 //        }*/
         sb.append(". ");
         if (chat != null && !message.isOut() && message.isFromUser() && message.messageOwner.action == null) {
-            TLRPC.User fromUser = MessagesController.getInstance(currentAccount).getUser(message.messageOwner.from_id);
-            if (fromUser != null) {
-                sb.append(ContactsController.formatName(fromUser.first_name, fromUser.last_name));
-                sb.append(". ");
-            }
+///*            TLRPC.User fromUser = MessagesController.getInstance(currentAccount).getUser(message.messageOwner.from_id);
+//            if (fromUser != null) {
+//                sb.append(ContactsController.formatName(fromUser.first_name, fromUser.last_name));
+//                sb.append(". ");
+//            }*/
         }
         if (encryptedChat == null) {
             sb.append(message.messageText);

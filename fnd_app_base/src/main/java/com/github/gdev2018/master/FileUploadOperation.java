@@ -8,6 +8,7 @@
 
 package com.github.gdev2018.master;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -21,12 +22,14 @@ import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.RandomAccessFile;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class FileUploadOperation {
 
-    private class UploadCachedResult {
+    private static class UploadCachedResult {
         private long bytesOffset;
         private byte[] iv;
     }
@@ -41,6 +44,7 @@ public class FileUploadOperation {
     private static final int initialRequestsSlowNetworkCount = 1;
     private static final int maxUploadingKBytes = 1024 * 2;
     private static final int maxUploadingSlowNetworkKBytes = 32;
+    private static final int maxUploadParts = (int) (FileLoader.MAX_FILE_SIZE / 1024 / 512);
     private int maxRequestsCount;
     private int uploadChunkSize = 64 * 1024;
     private boolean slowNetwork;
@@ -64,6 +68,7 @@ public class FileUploadOperation {
     private boolean isEncrypted;
     private int fingerprint;
     private boolean isBigFile;
+    private boolean forceSmallFile;
     private String fileKey;
     private int estimatedSize;
     private int uploadStartTime;
@@ -76,11 +81,12 @@ public class FileUploadOperation {
     private long availableSize;
     private boolean uploadFirstPartLater;
     private SparseArray<UploadCachedResult> cachedResults = new SparseArray<>();
+    protected long lastProgressUpdateTime;
 
     public interface FileUploadOperationDelegate {
         void didFinishUploadingFile(FileUploadOperation operation, TLRPC.InputFile inputFile, TLRPC.InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv);
         void didFailedUploadingFile(FileUploadOperation operation);
-        void didChangedUploadProgress(FileUploadOperation operation, float progress);
+        void didChangedUploadProgress(FileUploadOperation operation, long uploadedSize, long totalSize);
     }
 
     public FileUploadOperation(int instance, String location, boolean encrypted, int estimated, int type) {
@@ -233,6 +239,10 @@ public class FileUploadOperation {
         }
     }
 
+    public void setForceSmallFile() {
+        forceSmallFile = true;
+    }
+
     private void startUploadRequest() {
         if (state != 1) {
             return;
@@ -251,16 +261,29 @@ public class FileUploadOperation {
                     throw new Exception("trying to upload internal file");
                 }
                 stream = new RandomAccessFile(cacheFile, "r");
+                boolean isInternalFile = false;
+                try {
+                    @SuppressLint("DiscouragedPrivateApi") Method getInt = FileDescriptor.class.getDeclaredMethod("getInt$");
+                    int fdint = (Integer) getInt.invoke(stream.getFD());
+                    if (AndroidUtilities.isInternalUri(fdint)) {
+                        isInternalFile = true;
+                    }
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+                if (isInternalFile) {
+                    throw new Exception("trying to upload internal file");
+                }
                 if (estimatedSize != 0) {
                     totalFileSize = estimatedSize;
                 } else {
                     totalFileSize = cacheFile.length();
                 }
-                if (totalFileSize > 10 * 1024 * 1024) {
+                if (!forceSmallFile && totalFileSize > 10 * 1024 * 1024) {
                     isBigFile = true;
                 }
 
-                uploadChunkSize = (int) Math.max(slowNetwork ? minUploadChunkSlowNetworkSize : minUploadChunkSize, (totalFileSize + 1024 * 3000 - 1) / (1024 * 3000));
+                uploadChunkSize = (int) Math.max(slowNetwork ? minUploadChunkSlowNetworkSize : minUploadChunkSize, (totalFileSize + 1024 * maxUploadParts - 1) / (1024 * maxUploadParts));
                 if (1024 % uploadChunkSize != 0) {
                     int chunkSize = 64;
                     while (uploadChunkSize > chunkSize) {
@@ -526,7 +549,7 @@ public class FileUploadOperation {
                 } else {
                     size = totalFileSize;
                 }
-                delegate.didChangedUploadProgress(FileUploadOperation.this, uploadedBytesCount / (float) size);
+                delegate.didChangedUploadProgress(FileUploadOperation.this, uploadedBytesCount, size);
                 currentUploadRequetsCount--;
                 if (isLastPart && currentUploadRequetsCount == 0 && state == 1) {
                     state = 3;
@@ -604,9 +627,6 @@ public class FileUploadOperation {
                     startUploadRequest();
                 }
             } else {
-                if (finalRequest != null) {
-                    FileLog.e("23123");
-                }
                 state = 4;
                 delegate.didFailedUploadingFile(FileUploadOperation.this);
                 cleanup();
@@ -615,7 +635,7 @@ public class FileUploadOperation {
             if (currentUploadRequetsCount < maxRequestsCount) {
                 startUploadRequest();
             }
-        }), 0, ConnectionsManager.DEFAULT_DATACENTER_ID, connectionType, true);
+        }), forceSmallFile ? ConnectionsManager.RequestFlagCanCompress : 0, ConnectionsManager.DEFAULT_DATACENTER_ID, connectionType, true);
         requestTokens.put(requestNumFinal, requestToken);
     }
 }

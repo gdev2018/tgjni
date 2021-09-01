@@ -1565,7 +1565,7 @@ public class DataQuery {
                 req.limit = 1;
                 req.q = query != null ? query : "";
                 if (user != null) {
-                    req.from_id = MessagesController.getInstance(currentAccount).getInputUser(user);
+///*                    req.from_id = MessagesController.getInstance(currentAccount).getInputUser(user);*/
                     req.flags |= 1;
                 }
                 req.filter = new TLRPC.TL_inputMessagesFilterEmpty();
@@ -1596,7 +1596,7 @@ public class DataQuery {
         req.q = query != null ? query : "";
         req.offset_id = max_id;
         if (user != null) {
-            req.from_id = MessagesController.getInstance(currentAccount).getInputUser(user);
+///*            req.from_id = MessagesController.getInstance(currentAccount).getInputUser(user);*/
             req.flags |= 1;
         }
         req.filter = new TLRPC.TL_inputMessagesFilterEmpty();
@@ -1629,9 +1629,9 @@ public class DataQuery {
                     for (int a = 0; a < Math.min(res.messages.size(), 20); a++) {
                         TLRPC.Message message = res.messages.get(a);
                         added = true;
-                        MessageObject messageObject = new MessageObject(currentAccount, message, false);
-                        searchResultMessages.add(messageObject);
-                        searchResultMessagesMap[queryWithDialogFinal == dialog_id ? 0 : 1].put(messageObject.getId(), messageObject);
+///*                        MessageObject messageObject = new MessageObject(currentAccount, message, false);
+//                        searchResultMessages.add(messageObject);
+//                        searchResultMessagesMap[queryWithDialogFinal == dialog_id ? 0 : 1].put(messageObject.getId(), messageObject);*/
                     }
                     messagesSearchEndReached[queryWithDialogFinal == dialog_id ? 0 : 1] = res.messages.size() != 21;
                     messagesSearchCount[queryWithDialogFinal == dialog_id ? 0 : 1] = res instanceof TLRPC.TL_messages_messagesSlice || res instanceof TLRPC.TL_messages_channelMessages ? res.count : res.messages.size();
@@ -1916,7 +1916,7 @@ public class DataQuery {
             final ArrayList<MessageObject> objects = new ArrayList<>();
             for (int a = 0; a < res.messages.size(); a++) {
                 TLRPC.Message message = res.messages.get(a);
-                objects.add(new MessageObject(currentAccount, message, usersDict, true));
+///*                objects.add(new MessageObject(currentAccount, message, usersDict, true));*/
             }
 
             AndroidUtilities.runOnUIThread(() -> {
@@ -2131,9 +2131,9 @@ public class DataQuery {
                     if (canAddMessageToMedia(message)) {
 
                         long messageId = message.id;
-                        if (message.to_id.channel_id != 0) {
-                            messageId |= ((long) message.to_id.channel_id) << 32;
-                        }
+///*                        if (message.to_id.channel_id != 0) {
+//                            messageId |= ((long) message.to_id.channel_id) << 32;
+//                        }*/
 
                         state2.requery();
                         NativeByteBuffer data = new NativeByteBuffer(message.getObjectSize());
@@ -2184,7 +2184,7 @@ public class DataQuery {
                         if (MessageObject.isMusicMessage(message)) {
                             message.id = cursor.intValue(1);
                             message.dialog_id = uid;
-                            arrayList.add(0, new MessageObject(currentAccount, message, false));
+///*                            arrayList.add(0, new MessageObject(currentAccount, message, false));*/
                         }
                     }
                 }
@@ -3098,27 +3098,27 @@ public class DataQuery {
         MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
             try {
                 long dialogId;
-                if (result.to_id.channel_id != 0) {
-                    dialogId = -result.to_id.channel_id;
-                } else if (result.to_id.chat_id != 0) {
-                    dialogId = -result.to_id.chat_id;
-                } else if (result.to_id.user_id != 0) {
-                    dialogId = result.to_id.user_id;
-                } else {
-                    return;
-                }
-                MessagesStorage.getInstance(currentAccount).getDatabase().beginTransaction();
-                SQLitePreparedStatement state = MessagesStorage.getInstance(currentAccount).getDatabase().executeFast("REPLACE INTO chat_pinned VALUES(?, ?, ?)");
-                NativeByteBuffer data = new NativeByteBuffer(result.getObjectSize());
-                result.serializeToStream(data);
-                state.requery();
-                state.bindLong(1, dialogId);
-                state.bindInteger(2, result.id);
-                state.bindByteBuffer(3, data);
-                state.step();
-                data.reuse();
-                state.dispose();
-                MessagesStorage.getInstance(currentAccount).getDatabase().commitTransaction();
+///*                if (result.to_id.channel_id != 0) {
+//                    dialogId = -result.to_id.channel_id;
+//                } else if (result.to_id.chat_id != 0) {
+//                    dialogId = -result.to_id.chat_id;
+//                } else if (result.to_id.user_id != 0) {
+//                    dialogId = result.to_id.user_id;
+//                } else {
+//                    return;
+//                }
+//                MessagesStorage.getInstance(currentAccount).getDatabase().beginTransaction();
+//                SQLitePreparedStatement state = MessagesStorage.getInstance(currentAccount).getDatabase().executeFast("REPLACE INTO chat_pinned VALUES(?, ?, ?)");
+//                NativeByteBuffer data = new NativeByteBuffer(result.getObjectSize());
+//                result.serializeToStream(data);
+//                state.requery();
+//                state.bindLong(1, dialogId);
+//                state.bindInteger(2, result.id);
+//                state.bindByteBuffer(3, data);
+//                state.step();
+//                data.reuse();
+//                state.dispose();
+//                MessagesStorage.getInstance(currentAccount).getDatabase().commitTransaction();*/
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -3136,15 +3136,15 @@ public class DataQuery {
             TLRPC.Chat chat = chats.get(a);
             chatsDict.put(chat.id, chat);
         }
-        if (returnValue) {
-            return new MessageObject(currentAccount, result, usersDict, chatsDict, false);
-        } else {
-            AndroidUtilities.runOnUIThread(() -> {
-                MessagesController.getInstance(currentAccount).putUsers(users, isCache);
-                MessagesController.getInstance(currentAccount).putChats(chats, isCache);
-                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.pinnedMessageDidLoad, new MessageObject(currentAccount, result, usersDict, chatsDict, false));
-            });
-        }
+///*        if (returnValue) {
+//            return new MessageObject(currentAccount, result, usersDict, chatsDict, false);
+//        } else {
+//            AndroidUtilities.runOnUIThread(() -> {
+//                MessagesController.getInstance(currentAccount).putUsers(users, isCache);
+//                MessagesController.getInstance(currentAccount).putChats(chats, isCache);
+//                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.pinnedMessageDidLoad, new MessageObject(currentAccount, result, usersDict, chatsDict, false));
+//            });
+//        }*/
         return null;
     }
 
@@ -3163,19 +3163,19 @@ public class DataQuery {
             final ArrayList<Long> replyMessages = new ArrayList<>();
             final LongSparseArray<ArrayList<MessageObject>> replyMessageRandomOwners = new LongSparseArray<>();
             for (int a = 0; a < messages.size(); a++) {
-                MessageObject messageObject = messages.get(a);
-                if (messageObject.isReply() && messageObject.replyMessageObject == null) {
-                    long id = messageObject.messageOwner.reply_to_random_id;
-                    ArrayList<MessageObject> messageObjects = replyMessageRandomOwners.get(id);
-                    if (messageObjects == null) {
-                        messageObjects = new ArrayList<>();
-                        replyMessageRandomOwners.put(id, messageObjects);
-                    }
-                    messageObjects.add(messageObject);
-                    if (!replyMessages.contains(id)) {
-                        replyMessages.add(id);
-                    }
-                }
+///*                MessageObject messageObject = messages.get(a);
+//                if (messageObject.isReply() && messageObject.replyMessageObject == null) {
+//                    long id = messageObject.messageOwner.reply_to_random_id;
+//                    ArrayList<MessageObject> messageObjects = replyMessageRandomOwners.get(id);
+//                    if (messageObjects == null) {
+//                        messageObjects = new ArrayList<>();
+//                        replyMessageRandomOwners.put(id, messageObjects);
+//                    }
+//                    messageObjects.add(messageObject);
+//                    if (!replyMessages.contains(id)) {
+//                        replyMessages.add(id);
+//                    }
+//                }*/
             }
             if (replyMessages.isEmpty()) {
                 return;
@@ -3198,15 +3198,15 @@ public class DataQuery {
                             ArrayList<MessageObject> arrayList = replyMessageRandomOwners.get(value);
                             replyMessageRandomOwners.remove(value);
                             if (arrayList != null) {
-                                MessageObject messageObject = new MessageObject(currentAccount, message, false);
-                                for (int b = 0; b < arrayList.size(); b++) {
-                                    MessageObject object = arrayList.get(b);
-                                    object.replyMessageObject = messageObject;
-                                    object.messageOwner.reply_to_msg_id = messageObject.getId();
-                                    if (object.isMegagroup()) {
-                                        object.replyMessageObject.messageOwner.flags |= TLRPC.MESSAGE_FLAG_MEGAGROUP;
-                                    }
-                                }
+///*                                MessageObject messageObject = new MessageObject(currentAccount, message, false);
+//                                for (int b = 0; b < arrayList.size(); b++) {
+//                                    MessageObject object = arrayList.get(b);
+//                                    object.replyMessageObject = messageObject;
+//                                    object.messageOwner.reply_to_msg_id = messageObject.getId();
+//                                    if (object.isMegagroup()) {
+//                                        object.replyMessageObject.messageOwner.flags |= TLRPC.MESSAGE_FLAG_MEGAGROUP;
+//                                    }
+//                                }*/
                             }
                         }
                     }
@@ -3215,7 +3215,7 @@ public class DataQuery {
                         for (int b = 0; b < replyMessageRandomOwners.size(); b++) {
                             ArrayList<MessageObject> arrayList = replyMessageRandomOwners.valueAt(b);
                             for (int a = 0; a < arrayList.size(); a++) {
-                                arrayList.get(a).messageOwner.reply_to_random_id = 0;
+///*                                arrayList.get(a).messageOwner.reply_to_random_id = 0;*/
                             }
                         }
                     }
@@ -3230,28 +3230,28 @@ public class DataQuery {
             final StringBuilder stringBuilder = new StringBuilder();
             int channelId = 0;
             for (int a = 0; a < messages.size(); a++) {
-                MessageObject messageObject = messages.get(a);
-                if (messageObject.getId() > 0 && messageObject.isReply() && messageObject.replyMessageObject == null) {
-                    int id = messageObject.messageOwner.reply_to_msg_id;
-                    long messageId = id;
-                    if (messageObject.messageOwner.to_id.channel_id != 0) {
-                        messageId |= ((long) messageObject.messageOwner.to_id.channel_id) << 32;
-                        channelId = messageObject.messageOwner.to_id.channel_id;
-                    }
-                    if (stringBuilder.length() > 0) {
-                        stringBuilder.append(',');
-                    }
-                    stringBuilder.append(messageId);
-                    ArrayList<MessageObject> messageObjects = replyMessageOwners.get(id);
-                    if (messageObjects == null) {
-                        messageObjects = new ArrayList<>();
-                        replyMessageOwners.put(id, messageObjects);
-                    }
-                    messageObjects.add(messageObject);
-                    if (!replyMessages.contains(id)) {
-                        replyMessages.add(id);
-                    }
-                }
+///*                MessageObject messageObject = messages.get(a);
+//                if (messageObject.getId() > 0 && messageObject.isReply() && messageObject.replyMessageObject == null) {
+//                    int id = messageObject.messageOwner.reply_to_msg_id;
+//                    long messageId = id;
+//                    if (messageObject.messageOwner.to_id.channel_id != 0) {
+//                        messageId |= ((long) messageObject.messageOwner.to_id.channel_id) << 32;
+//                        channelId = messageObject.messageOwner.to_id.channel_id;
+//                    }
+//                    if (stringBuilder.length() > 0) {
+//                        stringBuilder.append(',');
+//                    }
+//                    stringBuilder.append(messageId);
+//                    ArrayList<MessageObject> messageObjects = replyMessageOwners.get(id);
+//                    if (messageObjects == null) {
+//                        messageObjects = new ArrayList<>();
+//                        replyMessageOwners.put(id, messageObjects);
+//                    }
+//                    messageObjects.add(messageObject);
+//                    if (!replyMessages.contains(id)) {
+//                        replyMessages.add(id);
+//                    }
+//                }*/
             }
             if (replyMessages.isEmpty()) {
                 return;
@@ -3343,9 +3343,9 @@ public class DataQuery {
                             MessageObject messageObject = messageObjects.get(b);
                             state.requery();
                             long messageId = messageObject.getId();
-                            if (messageObject.messageOwner.to_id.channel_id != 0) {
-                                messageId |= ((long) messageObject.messageOwner.to_id.channel_id) << 32;
-                            }
+///*                            if (messageObject.messageOwner.to_id.channel_id != 0) {
+//                                messageId |= ((long) messageObject.messageOwner.to_id.channel_id) << 32;
+//                            }*/
                             state.bindByteBuffer(1, data);
                             state.bindLong(2, messageId);
                             state.step();
@@ -3379,24 +3379,24 @@ public class DataQuery {
             for (int a = 0; a < result.size(); a++) {
                 TLRPC.Message message = result.get(a);
                 ArrayList<MessageObject> arrayList = replyMessageOwners.get(message.id);
-                if (arrayList != null) {
-                    MessageObject messageObject = new MessageObject(currentAccount, message, usersDict, chatsDict, false);
-                    for (int b = 0; b < arrayList.size(); b++) {
-                        MessageObject m = arrayList.get(b);
-                        m.replyMessageObject = messageObject;
-                        if (m.messageOwner.action instanceof TLRPC.TL_messageActionPinMessage) {
-                            m.generatePinMessageText(null, null);
-                        } else if (m.messageOwner.action instanceof TLRPC.TL_messageActionGameScore) {
-                            m.generateGameMessageText(null);
-                        } else if (m.messageOwner.action instanceof TLRPC.TL_messageActionPaymentSent) {
-                            m.generatePaymentSentMessageText(null);
-                        }
-                        if (m.isMegagroup()) {
-                            m.replyMessageObject.messageOwner.flags |= TLRPC.MESSAGE_FLAG_MEGAGROUP;
-                        }
-                    }
-                    changed = true;
-                }
+///*                if (arrayList != null) {
+//                    MessageObject messageObject = new MessageObject(currentAccount, message, usersDict, chatsDict, false);
+//                    for (int b = 0; b < arrayList.size(); b++) {
+//                        MessageObject m = arrayList.get(b);
+//                        m.replyMessageObject = messageObject;
+//                        if (m.messageOwner.action instanceof TLRPC.TL_messageActionPinMessage) {
+//                            m.generatePinMessageText(null, null);
+//                        } else if (m.messageOwner.action instanceof TLRPC.TL_messageActionGameScore) {
+//                            m.generateGameMessageText(null);
+//                        } else if (m.messageOwner.action instanceof TLRPC.TL_messageActionPaymentSent) {
+//                            m.generatePaymentSentMessageText(null);
+//                        }
+//                        if (m.isMegagroup()) {
+//                            m.replyMessageObject.messageOwner.flags |= TLRPC.MESSAGE_FLAG_MEGAGROUP;
+//                        }
+//                    }
+//                    changed = true;
+//                }*/
             }
             if (changed) {
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.replyMessagesDidLoad, dialog_id);

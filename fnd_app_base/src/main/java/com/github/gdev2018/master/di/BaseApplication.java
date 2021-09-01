@@ -19,6 +19,7 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 
+import com.github.gdev2018.master.BaseBuildVars;
 import com.github.gdev2018.master.BuildConfig;
 import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.NativeLoader;

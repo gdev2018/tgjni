@@ -33,6 +33,7 @@ import androidx.annotation.Keep;
 import com.github.gdev2018.master.tgnet.TLObject;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.Components.AnimatedFileDrawable;
+import com.github.gdev2018.master.ui.Components.LoadingStickerDrawable;
 import com.github.gdev2018.master.ui.Components.RLottieDrawable;
 import com.github.gdev2018.master.ui.Components.RecyclableDrawable;
 

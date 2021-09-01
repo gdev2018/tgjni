@@ -125,23 +125,23 @@ public class SecretChatHelper {
         newMsg.action = new TLRPC.TL_messageEncryptedAction();
         newMsg.action.encryptedAction = decryptedMessage;
 ///*        newMsg.local_id = newMsg.id = BaseUserConfig.getInstance(currentAccount).getNewMessageId();*/
-        newMsg.from_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
-        newMsg.unread = true;
-        newMsg.out = true;
-        newMsg.flags = TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
-        newMsg.dialog_id = ((long) encryptedChat.id) << 32;
-        newMsg.to_id = new TLRPC.TL_peerUser();
-        newMsg.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
-        if (encryptedChat.participant_id == BaseUserConfig.getInstance(currentAccount).getClientUserId()) {
-            newMsg.to_id.user_id = encryptedChat.admin_id;
-        } else {
-            newMsg.to_id.user_id = encryptedChat.participant_id;
-        }
-        if (decryptedMessage instanceof TLRPC.TL_decryptedMessageActionScreenshotMessages || decryptedMessage instanceof TLRPC.TL_decryptedMessageActionSetMessageTTL) {
-            newMsg.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
-        } else {
-            newMsg.date = 0;
-        }
+///*        newMsg.from_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
+//        newMsg.unread = true;
+//        newMsg.out = true;
+//        newMsg.flags = TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
+//        newMsg.dialog_id = ((long) encryptedChat.id) << 32;
+//        newMsg.to_id = new TLRPC.TL_peerUser();*/
+///*        newMsg.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
+//        if (encryptedChat.participant_id == BaseUserConfig.getInstance(currentAccount).getClientUserId()) {
+//            newMsg.to_id.user_id = encryptedChat.admin_id;
+//        } else {
+//            newMsg.to_id.user_id = encryptedChat.participant_id;
+//        }
+//        if (decryptedMessage instanceof TLRPC.TL_decryptedMessageActionScreenshotMessages || decryptedMessage instanceof TLRPC.TL_decryptedMessageActionSetMessageTTL) {
+//            newMsg.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
+//        } else {
+//            newMsg.date = 0;
+//        }*/
         newMsg.random_id = SendMessagesHelper.getInstance(currentAccount).getNextRandomId();
         BaseUserConfig.getInstance(currentAccount).saveConfig(false);
 
@@ -424,12 +424,12 @@ public class SecretChatHelper {
             reqSend.action.ttl_seconds = encryptedChat.ttl;
             message = createServiceSecretMessage(encryptedChat, reqSend.action);
 
-            MessageObject newMsgObj = new MessageObject(currentAccount, message, false);
-            newMsgObj.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
-            ArrayList<MessageObject> objArr = new ArrayList<>();
-            objArr.add(newMsgObj);
-            MessagesController.getInstance(currentAccount).updateInterfaceWithMessages(message.dialog_id, objArr);
-            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload);
+///*            MessageObject newMsgObj = new MessageObject(currentAccount, message, false);
+//            newMsgObj.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
+//            ArrayList<MessageObject> objArr = new ArrayList<>();
+//            objArr.add(newMsgObj);
+//            MessagesController.getInstance(currentAccount).updateInterfaceWithMessages(message.dialog_id, objArr);
+//            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload);*/
         }
         reqSend.random_id = message.random_id;
 
@@ -453,12 +453,12 @@ public class SecretChatHelper {
             reqSend.action.random_ids = random_ids;
             message = createServiceSecretMessage(encryptedChat, reqSend.action);
 
-            MessageObject newMsgObj = new MessageObject(currentAccount, message, false);
-            newMsgObj.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
-            ArrayList<MessageObject> objArr = new ArrayList<>();
-            objArr.add(newMsgObj);
-            MessagesController.getInstance(currentAccount).updateInterfaceWithMessages(message.dialog_id, objArr);
-            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload);
+///*            MessageObject newMsgObj = new MessageObject(currentAccount, message, false);
+//            newMsgObj.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
+//            ArrayList<MessageObject> objArr = new ArrayList<>();
+//            objArr.add(newMsgObj);
+//            MessagesController.getInstance(currentAccount).updateInterfaceWithMessages(message.dialog_id, objArr);
+//            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload);*/
         }
         reqSend.random_id = message.random_id;
 
@@ -814,10 +814,10 @@ public class SecretChatHelper {
                 newMessage.date = date;
 ///*                newMessage.local_id = newMessage.id = BaseUserConfig.getInstance(currentAccount).getNewMessageId();*/
                 BaseUserConfig.getInstance(currentAccount).saveConfig(false);
-                newMessage.from_id = from_id;
-                newMessage.to_id = new TLRPC.TL_peerUser();
-                newMessage.random_id = decryptedMessage.random_id;
-                newMessage.to_id.user_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
+///*                newMessage.from_id = from_id;
+//                newMessage.to_id = new TLRPC.TL_peerUser();
+//                newMessage.random_id = decryptedMessage.random_id;
+//                newMessage.to_id.user_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();*/
                 newMessage.unread = true;
                 newMessage.flags = TLRPC.MESSAGE_FLAG_HAS_MEDIA | TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
                 if (decryptedMessage.via_bot_name != null && decryptedMessage.via_bot_name.length() > 0) {
@@ -830,7 +830,7 @@ public class SecretChatHelper {
                 }
                 newMessage.dialog_id = ((long) chat.id) << 32;
                 if (decryptedMessage.reply_to_random_id != 0) {
-                    newMessage.reply_to_random_id = decryptedMessage.reply_to_random_id;
+///*                    newMessage.reply_to_random_id = decryptedMessage.reply_to_random_id;*/
                     newMessage.flags |= TLRPC.MESSAGE_FLAG_REPLY;
                 }
                 if (decryptedMessage.media == null || decryptedMessage.media instanceof TLRPC.TL_decryptedMessageMediaEmpty) {
@@ -1068,9 +1068,9 @@ public class SecretChatHelper {
                     newMessage.unread = true;
                     newMessage.flags = TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
                     newMessage.date = date;
-                    newMessage.from_id = from_id;
-                    newMessage.to_id = new TLRPC.TL_peerUser();
-                    newMessage.to_id.user_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
+///*                    newMessage.from_id = from_id;
+//                    newMessage.to_id = new TLRPC.TL_peerUser();
+//                    newMessage.to_id.user_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();*/
                     newMessage.dialog_id = ((long) chat.id) << 32;
                     return newMessage;
                 } else if (serviceMessage.action instanceof TLRPC.TL_decryptedMessageActionFlushHistory) {
@@ -1278,20 +1278,20 @@ public class SecretChatHelper {
         newMsg.action.encryptedAction = new TLRPC.TL_decryptedMessageActionDeleteMessages();
         newMsg.action.encryptedAction.random_ids.add(random_id);
         newMsg.local_id = newMsg.id = mid;
-        newMsg.from_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
-        newMsg.unread = true;
-        newMsg.out = true;
-        newMsg.flags = TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
-        newMsg.dialog_id = ((long) encryptedChat.id) << 32;
-        newMsg.to_id = new TLRPC.TL_peerUser();
-        newMsg.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
-        newMsg.seq_in = seq_in;
-        newMsg.seq_out = seq_out;
-        if (encryptedChat.participant_id == BaseUserConfig.getInstance(currentAccount).getClientUserId()) {
-            newMsg.to_id.user_id = encryptedChat.admin_id;
-        } else {
-            newMsg.to_id.user_id = encryptedChat.participant_id;
-        }
+///*        newMsg.from_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
+//        newMsg.unread = true;
+//        newMsg.out = true;
+//        newMsg.flags = TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
+//        newMsg.dialog_id = ((long) encryptedChat.id) << 32;
+//        newMsg.to_id = new TLRPC.TL_peerUser();
+//        newMsg.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
+//        newMsg.seq_in = seq_in;
+//        newMsg.seq_out = seq_out;
+//        if (encryptedChat.participant_id == BaseUserConfig.getInstance(currentAccount).getClientUserId()) {
+//            newMsg.to_id.user_id = encryptedChat.admin_id;
+//        } else {
+//            newMsg.to_id.user_id = encryptedChat.participant_id;
+//        }*/
         newMsg.date = 0;
         newMsg.random_id = random_id;
         return newMsg;
@@ -1362,9 +1362,9 @@ public class SecretChatHelper {
                 AndroidUtilities.runOnUIThread(() -> {
                     for (int a = 0; a < messages.size(); a++) {
                         TLRPC.Message message = messages.get(a);
-                        MessageObject messageObject = new MessageObject(currentAccount, message, false);
-                        messageObject.resendAsIs = true;
-                        SendMessagesHelper.getInstance(currentAccount).retrySendMessage(messageObject, true);
+///*                        MessageObject messageObject = new MessageObject(currentAccount, message, false);
+//                        messageObject.resendAsIs = true;
+//                        SendMessagesHelper.getInstance(currentAccount).retrySendMessage(messageObject, true);*/
                     }
                 });
 

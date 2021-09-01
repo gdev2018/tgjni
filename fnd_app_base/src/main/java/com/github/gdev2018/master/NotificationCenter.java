@@ -107,10 +107,10 @@ public class NotificationCenter {
 
     public static final int didUpdateConnectionState = totalEvents++;
 
-    public static final int FileDidUpload = totalEvents++;
-    public static final int FileDidFailUpload = totalEvents++;
-    public static final int FileUploadProgressChanged = totalEvents++;
-    public static final int FileLoadProgressChanged = totalEvents++;
+    public static final int fileUploaded = totalEvents++;
+    public static final int fileUploadFailed = totalEvents++;
+    public static final int fileUploadProgressChanged = totalEvents++;
+    public static final int fileLoadProgressChanged = totalEvents++;
     public static final int fileLoaded = totalEvents++;
     public static final int fileLoadFailed = totalEvents++;
     public static final int filePreparingStarted = totalEvents++;

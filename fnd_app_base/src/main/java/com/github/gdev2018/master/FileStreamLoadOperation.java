@@ -69,7 +69,9 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
         } else if (document.mime_type.startsWith("audio")) {
             document.attributes.add(new TLRPC.TL_documentAttributeAudio());
         }
-        loadOperation = FileLoader.getInstance(currentAccount).loadStreamFile(this, document, parentObject, currentOffset = (int) dataSpec.position);
+///*
+//        loadOperation = FileLoader.getInstance(currentAccount).loadStreamFile(this, document, parentObject, currentOffset = (int) dataSpec.position);
+//*/
         bytesRemaining = dataSpec.length == C.LENGTH_UNSET ? document.size - dataSpec.position : dataSpec.length;
         if (bytesRemaining < 0) {
             throw new EOFException();
@@ -96,13 +98,13 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
                     readLength = (int) bytesRemaining;
                 }
                 while (availableLength == 0) {
-                    availableLength = loadOperation.getDownloadedLengthFromOffset(currentOffset, readLength);
-                    if (availableLength == 0) {
-                        FileLog.d("not found bytes " + offset);
-                        FileLoader.getInstance(currentAccount).loadStreamFile(this, document, parentObject, currentOffset);
-                        countDownLatch = new CountDownLatch(1);
-                        countDownLatch.await();
-                    }
+///*                    availableLength = loadOperation.getDownloadedLengthFromOffset(currentOffset, readLength);
+//                    if (availableLength == 0) {
+//                        FileLog.d("not found bytes " + offset);
+//                        FileLoader.getInstance(currentAccount).loadStreamFile(this, document, parentObject, currentOffset);
+//                        countDownLatch = new CountDownLatch(1);
+//                        countDownLatch.await();
+//                    }*/
                 }
                 file.readFully(buffer, offset, availableLength);
                 currentOffset += availableLength;

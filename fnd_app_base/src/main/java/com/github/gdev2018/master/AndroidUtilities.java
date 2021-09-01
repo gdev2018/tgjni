@@ -105,6 +105,7 @@ import com.github.gdev2018.master.browser.Browser;
 import com.github.gdev2018.master.ui.ActionBar.ActionBarLayout;
 import com.github.gdev2018.master.ui.Components.BackgroundGradientDrawable;
 import com.github.gdev2018.master.ui.Components.ForegroundColorSpanThemable;
+import com.github.gdev2018.master.ui.Components.HideViewAfterAnimation;
 import com.github.gdev2018.master.ui.Components.MotionBackgroundDrawable;
 import com.github.gdev2018.master.ui.Components.RecyclerListView;
 import com.github.gdev2018.master.ui.ThemePreviewActivity;

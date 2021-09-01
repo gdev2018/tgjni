@@ -19,7 +19,7 @@ public class BaseBuildVars {
     public static boolean LOGS_ENABLED = false;
     public static boolean USE_CLOUD_STRINGS = true;
     public static boolean CHECK_UPDATES = true;
-    public static boolean TON_WALLET_STANDALONE = false;
+    public static boolean NO_SCOPED_STORAGE = true/* || Build.VERSION.SDK_INT <= 28*/;
     public static int BUILD_VERSION = 0;
     public static String BUILD_VERSION_STRING = "0.0.0";
     public static int APP_ID = 0;
@@ -33,7 +33,23 @@ public class BaseBuildVars {
 //    static {
 //        if (BaseApplication.mApplicationContext != null) {
 //            SharedPreferences sharedPreferences = BaseApplication.mApplicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
-//            LOGS_ENABLED = sharedPreferences.getBoolean("logsEnabled", DEBUG_VERSION);
+//            LOGS_ENABLED = DEBUG_VERSION || sharedPreferences.getBoolean("logsEnabled", DEBUG_VERSION);
 //        }
 //    }
+
+    private static Boolean standaloneApp;
+    public static boolean isStandaloneApp() {
+        if (standaloneApp == null) {
+            standaloneApp = BaseApplication.mApplicationContext != null && "org.telegram.messenger.web".equals(BaseApplication.mApplicationContext.getPackageName());
+        }
+        return standaloneApp;
+    }
+
+    private static Boolean betaApp;
+    public static boolean isBetaApp() {
+        if (betaApp == null) {
+            betaApp = BaseApplication.mApplicationContext != null && "org.telegram.messenger.beta".equals(BaseApplication.mApplicationContext.getPackageName());
+        }
+        return betaApp;
+    }
 }

@@ -203,12 +203,13 @@ public class ImageLocation {
 //        if (stickerSet == null) {
 //            return null;
 //        }*/
-        ImageLocation imageLocation = getForPhoto(photoSize.location, photoSize.size, null, null, null, TYPE_SMALL, sticker.dc_id, stickerSet, photoSize.type);
-        if (MessageObject.isAnimatedStickerDocument(sticker, true)) {
-            imageLocation.imageType = FileLoader.IMAGE_TYPE_LOTTIE;
-        }
-        imageLocation.thumbVersion = thumbVersion;
-        return imageLocation;
+///*        ImageLocation imageLocation = getForPhoto(photoSize.location, photoSize.size, null, null, null, TYPE_SMALL, sticker.dc_id, stickerSet, photoSize.type);
+//        if (MessageObject.isAnimatedStickerDocument(sticker, true)) {
+//            imageLocation.imageType = FileLoader.IMAGE_TYPE_LOTTIE;
+//        }
+//        imageLocation.thumbVersion = thumbVersion;
+//        return imageLocation;*/
+        return null;
     }
 
     public static ImageLocation getForDocument(TLRPC.VideoSize videoSize, TLRPC.Document document) {

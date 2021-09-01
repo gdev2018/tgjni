@@ -1268,8 +1268,8 @@ public class PhotoFilterView extends FrameLayout {
 
                 ByteBuffer buffer = null;
                 try {
-                    buffer = ByteBuffer.allocateDirect(PGPhotoEnhanceSegments * PGPhotoEnhanceSegments * PGPhotoEnhanceHistogramBins * 4);
-                    Utilities.calcCDT(hsvBuffer, renderBufferWidth, renderBufferHeight, buffer);
+///*                    buffer = ByteBuffer.allocateDirect(PGPhotoEnhanceSegments * PGPhotoEnhanceSegments * PGPhotoEnhanceHistogramBins * 4);
+//                    Utilities.calcCDT(hsvBuffer, renderBufferWidth, renderBufferHeight, buffer);*/
                 } catch (Exception e) {
                     FileLog.e(e);
                 }

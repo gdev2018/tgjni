@@ -1555,7 +1555,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         for (HashMap.Entry<String, Integer> entry : Theme.getDefaultColors().entrySet()) {
                             result.append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
                         }
-                        currentFile = new File(ApplicationLoader.getFilesDirFixed(), "default_theme.attheme");
+                        currentFile = new File(BaseApplication.getFilesDirFixed(), "default_theme.attheme");
                         FileOutputStream stream = null;
                         try {
                             stream = new FileOutputStream(currentFile);

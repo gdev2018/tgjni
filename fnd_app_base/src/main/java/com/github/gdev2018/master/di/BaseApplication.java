@@ -168,14 +168,23 @@ public class BaseApplication extends Application {
 
 
 
+    private static void ensureCurrentNetworkGet(boolean force) {
+        if (force || currentNetworkInfo == null) {
+            try {
+                if (connectivityManager == null) {
+                    connectivityManager = (ConnectivityManager) BaseApplication.mApplicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+                }
+                currentNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            } catch (Throwable ignore) {
+
+            }
+        }
+    }
 
     public static boolean isRoaming() {
         try {
-            ConnectivityManager connectivityManager = (ConnectivityManager) BaseApplication.mApplicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-            if (netInfo != null) {
-                return netInfo.isRoaming();
-            }
+            ensureCurrentNetworkGet(false);
+            return currentNetworkInfo != null && currentNetworkInfo.isRoaming();
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -184,11 +193,12 @@ public class BaseApplication extends Application {
 
     public static boolean isConnectedOrConnectingToWiFi() {
         try {
-            ConnectivityManager connectivityManager = (ConnectivityManager) BaseApplication.mApplicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo netInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-            NetworkInfo.State state = netInfo.getState();
-            if (netInfo != null && (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.CONNECTING || state == NetworkInfo.State.SUSPENDED)) {
-                return true;
+            ensureCurrentNetworkGet(false);
+            if (currentNetworkInfo != null && (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI || currentNetworkInfo.getType() == ConnectivityManager.TYPE_ETHERNET)) {
+                NetworkInfo.State state = currentNetworkInfo.getState();
+                if (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.CONNECTING || state == NetworkInfo.State.SUSPENDED) {
+                    return true;
+                }
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -198,9 +208,8 @@ public class BaseApplication extends Application {
 
     public static boolean isConnectedToWiFi() {
         try {
-            ConnectivityManager connectivityManager = (ConnectivityManager) BaseApplication.mApplicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo netInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-            if (netInfo != null && netInfo.getState() == NetworkInfo.State.CONNECTED) {
+            ensureCurrentNetworkGet(false);
+            if (currentNetworkInfo != null && (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI || currentNetworkInfo.getType() == ConnectivityManager.TYPE_ETHERNET) && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
                 return true;
             }
         } catch (Exception e) {
@@ -209,22 +218,11 @@ public class BaseApplication extends Application {
         return false;
     }
 
-    public static int getCurrentNetworkType() {
-        if (isConnectedOrConnectingToWiFi()) {
-            return StatsController.TYPE_WIFI;
-        } else if (isRoaming()) {
-            return StatsController.TYPE_ROAMING;
-        } else {
-            return StatsController.TYPE_MOBILE;
-        }
-    }
-
     public static boolean isConnectionSlow() {
         try {
-            ConnectivityManager connectivityManager = (ConnectivityManager) BaseApplication.mApplicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-            if (netInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-                switch (netInfo.getSubtype()) {
+            ensureCurrentNetworkGet(false);
+            if (currentNetworkInfo != null && currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                switch (currentNetworkInfo.getSubtype()) {
                     case TelephonyManager.NETWORK_TYPE_1xRTT:
                     case TelephonyManager.NETWORK_TYPE_CDMA:
                     case TelephonyManager.NETWORK_TYPE_EDGE:
@@ -239,7 +237,65 @@ public class BaseApplication extends Application {
         return false;
     }
 
-    public static boolean isNetworkOnline() {
+    public static int getAutodownloadNetworkType() {
+        try {
+            ensureCurrentNetworkGet(false);
+            if (currentNetworkInfo == null) {
+                return StatsController.TYPE_MOBILE;
+            }
+            if (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI || currentNetworkInfo.getType() == ConnectivityManager.TYPE_ETHERNET) {
+                if (connectivityManager.isActiveNetworkMetered()) {
+                    return StatsController.TYPE_MOBILE;
+                } else {
+                    return StatsController.TYPE_WIFI;
+                }
+            }
+            if (currentNetworkInfo.isRoaming()) {
+                return StatsController.TYPE_ROAMING;
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return StatsController.TYPE_MOBILE;
+    }
+
+    public static int getCurrentNetworkType() {
+        if (isConnectedOrConnectingToWiFi()) {
+            return StatsController.TYPE_WIFI;
+        } else if (isRoaming()) {
+            return StatsController.TYPE_ROAMING;
+        } else {
+            return StatsController.TYPE_MOBILE;
+        }
+    }
+
+    public static boolean isNetworkOnlineFast() {
+        try {
+            ensureCurrentNetworkGet(false);
+            if (currentNetworkInfo == null) {
+                return true;
+            }
+            if (currentNetworkInfo.isConnectedOrConnecting() || currentNetworkInfo.isAvailable()) {
+                return true;
+            }
+
+            NetworkInfo netInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+                return true;
+            } else {
+                netInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isNetworkOnlineRealtime() {
         try {
             ConnectivityManager connectivityManager = (ConnectivityManager) BaseApplication.mApplicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
@@ -262,6 +318,17 @@ public class BaseApplication extends Application {
             return true;
         }
         return false;
+    }
+
+    public static boolean isNetworkOnline() {
+        boolean result = isNetworkOnlineRealtime();
+        if (BaseBuildVars.DEBUG_PRIVATE_VERSION) {
+            boolean result2 = isNetworkOnlineFast();
+            if (result != result2) {
+                FileLog.d("network online mismatch");
+            }
+        }
+        return result;
     }
 
 }

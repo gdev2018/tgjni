@@ -1485,7 +1485,7 @@ public class ThemeEditorView {
         };
         windowManager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
 
-        preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Context.MODE_PRIVATE);
+        preferences = BaseApplication.mApplicationContext.getSharedPreferences("themeconfig", Context.MODE_PRIVATE);
 
         int sidex = preferences.getInt("sidex", 1);
         int sidey = preferences.getInt("sidey", 0);

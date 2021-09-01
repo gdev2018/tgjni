@@ -228,7 +228,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                                 String wallpaperLink = line.substring(4);
                                 Uri uri = Uri.parse(wallpaperLink);
                                 themeInfo.slug = uri.getQueryParameter("slug");
-                                themeInfo.pathToWallpaper = new File(ApplicationLoader.getFilesDirFixed(), Utilities.MD5(wallpaperLink) + ".wp").getAbsolutePath();
+                                themeInfo.pathToWallpaper = new File(BaseApplication.getFilesDirFixed(), Utilities.MD5(wallpaperLink) + ".wp").getAbsolutePath();
 
                                 String mode = uri.getQueryParameter("mode");
                                 if (mode != null) {
@@ -855,7 +855,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+        for (int a = 0; a < BaseUserConfig.MAX_ACCOUNT_COUNT; a++) {
             NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.fileLoadFailed);
         }
@@ -864,7 +864,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+        for (int a = 0; a < BaseUserConfig.MAX_ACCOUNT_COUNT; a++) {
             NotificationCenter.getInstance(a).removeObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(a).removeObserver(this, NotificationCenter.fileLoadFailed);
         }

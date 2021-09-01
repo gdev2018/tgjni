@@ -572,7 +572,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                         colorWallpaper.pattern = selectedPattern;
                         link = colorWallpaper.getUrl();
                     } else {
-                        if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                        if (BaseBuildVars.DEBUG_PRIVATE_VERSION) {
                             Theme.ThemeAccent accent = Theme.getActiveTheme().getAccent(false);
                             if (accent != null) {
                                 WallpapersListActivity.ColorWallpaper colorWallpaper = new WallpapersListActivity.ColorWallpaper(accent.patternSlug, (int) accent.backgroundOverrideColor, (int) accent.backgroundGradientOverrideColor1, (int) accent.backgroundGradientOverrideColor2, (int) accent.backgroundGradientOverrideColor3, accent.backgroundRotation, accent.patternIntensity, accent.patternMotion, null);
@@ -729,7 +729,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
         } else {
             if (screenType == SCREEN_TYPE_CHANGE_BACKGROUND) {
                 actionBar2.setTitle(LocaleController.getString("BackgroundPreview", R.string.BackgroundPreview));
-                if (BuildVars.DEBUG_PRIVATE_VERSION && Theme.getActiveTheme().getAccent(false) != null || currentWallpaper instanceof WallpapersListActivity.ColorWallpaper && !Theme.DEFAULT_BACKGROUND_SLUG.equals(((WallpapersListActivity.ColorWallpaper) currentWallpaper).slug) || currentWallpaper instanceof TLRPC.TL_wallPaper) {
+                if (BaseBuildVars.DEBUG_PRIVATE_VERSION && Theme.getActiveTheme().getAccent(false) != null || currentWallpaper instanceof WallpapersListActivity.ColorWallpaper && !Theme.DEFAULT_BACKGROUND_SLUG.equals(((WallpapersListActivity.ColorWallpaper) currentWallpaper).slug) || currentWallpaper instanceof TLRPC.TL_wallPaper) {
                     ActionBarMenu menu2 = actionBar2.createMenu();
                     menu2.addItem(5, R.drawable.msg_share_filled);
                 }
@@ -997,7 +997,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     Theme.ThemeInfo theme = Theme.getActiveTheme();
                     String originalFileName = theme.generateWallpaperName(null, isBlurred);
                     String fileName = isBlurred ? theme.generateWallpaperName(null, false) : originalFileName;
-                    File toFile = new File(ApplicationLoader.getFilesDirFixed(), originalFileName);
+                    File toFile = new File(BaseApplication.getFilesDirFixed(), originalFileName);
                     if (currentWallpaper instanceof TLRPC.TL_wallPaper) {
                         if (originalBitmap != null) {
                             try {
@@ -1111,7 +1111,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     }
                     if (isBlurred) {
                         try {
-                            File blurredFile = new File(ApplicationLoader.getFilesDirFixed(), fileName);
+                            File blurredFile = new File(BaseApplication.getFilesDirFixed(), fileName);
                             FileOutputStream stream = new FileOutputStream(blurredFile);
                             blurredBitmap.compress(Bitmap.CompressFormat.JPEG, 87, stream);
                             stream.close();
@@ -3632,7 +3632,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 message.dialog_id = 1;
                 message.flags = 259;
                 message.from_id = new TLRPC.TL_peerUser();
-                message.from_id.user_id = UserConfig.getInstance(currentAccount).getClientUserId();
+                message.from_id.user_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
                 message.id = 1;
                 message.media = new TLRPC.TL_messageMediaEmpty();
                 message.out = true;
@@ -3657,7 +3657,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 message.media = new TLRPC.TL_messageMediaEmpty();
                 message.out = false;
                 message.peer_id = new TLRPC.TL_peerUser();
-                message.peer_id.user_id = UserConfig.getInstance(currentAccount).getClientUserId();
+                message.peer_id.user_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
                 messageObject = new MessageObject(currentAccount, message, true, false);
                 messageObject.eventId = 1;
                 messageObject.resetLayout();
@@ -3678,12 +3678,12 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 message.dialog_id = 1;
                 message.flags = 259;
                 message.from_id = new TLRPC.TL_peerUser();
-                message.from_id.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+                message.from_id.user_id = BaseUserConfig.getInstance(BaseUserConfig.selectedAccount).getClientUserId();
                 message.id = 1;
                 message.out = true;
                 message.peer_id = new TLRPC.TL_peerUser();
                 message.peer_id.user_id = 0;
-                MessageObject replyMessageObject = new MessageObject(UserConfig.selectedAccount, message, true, false);
+                MessageObject replyMessageObject = new MessageObject(BaseUserConfig.selectedAccount, message, true, false);
 
                 message = new TLRPC.TL_message();
                 String text = LocaleController.getString("NewThemePreviewLine3", R.string.NewThemePreviewLine3);
@@ -3704,13 +3704,13 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 message.dialog_id = 1;
                 message.flags = 259;
                 message.from_id = new TLRPC.TL_peerUser();
-                message.from_id.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+                message.from_id.user_id = BaseUserConfig.getInstance(BaseUserConfig.selectedAccount).getClientUserId();
                 message.id = 1;
                 message.media = new TLRPC.TL_messageMediaEmpty();
                 message.out = true;
                 message.peer_id = new TLRPC.TL_peerUser();
                 message.peer_id.user_id = 0;
-                MessageObject message1 = new MessageObject(UserConfig.selectedAccount, message, true, false);
+                MessageObject message1 = new MessageObject(BaseUserConfig.selectedAccount, message, true, false);
                 message1.resetLayout();
                 message1.eventId = 1;
                 messages.add(message1);
@@ -3727,8 +3727,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 message.media = new TLRPC.TL_messageMediaEmpty();
                 message.out = false;
                 message.peer_id = new TLRPC.TL_peerUser();
-                message.peer_id.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
-                MessageObject message2 = new MessageObject(UserConfig.selectedAccount, message, true, false);
+                message.peer_id.user_id = BaseUserConfig.getInstance(BaseUserConfig.selectedAccount).getClientUserId();
+                MessageObject message2 = new MessageObject(BaseUserConfig.selectedAccount, message, true, false);
                 message2.customReplyName = LocaleController.getString("NewThemePreviewName", R.string.NewThemePreviewName);
                 message2.eventId = 1;
                 message2.resetLayout();
@@ -3830,7 +3830,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     message.dialog_id = 1;
                     message.flags = 259;
                     message.from_id = new TLRPC.TL_peerUser();
-                    message.from_id.user_id = UserConfig.getInstance(currentAccount).getClientUserId();
+                    message.from_id.user_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
                     message.id = 1;
                     message.media = new TLRPC.TL_messageMediaEmpty();
                     message.out = true;
@@ -3844,7 +3844,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     message.dialog_id = 1;
                     message.flags = 259;
                     message.from_id = new TLRPC.TL_peerUser();
-                    message.from_id.user_id = UserConfig.getInstance(currentAccount).getClientUserId();
+                    message.from_id.user_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
                     message.id = 1;
                     message.media = new TLRPC.TL_messageMediaEmpty();
                     message.out = true;
@@ -3870,7 +3870,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     message.media.document.attributes.add(audio);
                     message.out = false;
                     message.peer_id = new TLRPC.TL_peerUser();
-                    message.peer_id.user_id = UserConfig.getInstance(currentAccount).getClientUserId();
+                    message.peer_id.user_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
                     messages.add(new MessageObject(currentAccount, message, true, false));
 
                     message = new TLRPC.TL_message();
@@ -3885,7 +3885,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     message.media = new TLRPC.TL_messageMediaEmpty();
                     message.out = false;
                     message.peer_id = new TLRPC.TL_peerUser();
-                    message.peer_id.user_id = UserConfig.getInstance(currentAccount).getClientUserId();
+                    message.peer_id.user_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
                     messageObject = new MessageObject(currentAccount, message, true, false);
                     messageObject.customReplyName = LocaleController.getString("ThemePreviewLine3Reply", R.string.ThemePreviewLine3Reply);
                     messageObject.replyMessageObject = replyMessageObject;
@@ -3896,7 +3896,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     message.dialog_id = 1;
                     message.flags = 259;
                     message.from_id = new TLRPC.TL_peerUser();
-                    message.from_id.user_id = UserConfig.getInstance(currentAccount).getClientUserId();
+                    message.from_id.user_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
                     message.id = 1;
                     message.media = new TLRPC.TL_messageMediaDocument();
                     message.media.flags |= 3;
@@ -3946,7 +3946,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     message.message = LocaleController.getString("ThemePreviewLine4", R.string.ThemePreviewLine4);
                     message.out = false;
                     message.peer_id = new TLRPC.TL_peerUser();
-                    message.peer_id.user_id = UserConfig.getInstance(currentAccount).getClientUserId();
+                    message.peer_id.user_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
                     messageObject = new MessageObject(currentAccount, message, true, false);
                     messageObject.useCustomPhoto = true;
                     messages.add(messageObject);

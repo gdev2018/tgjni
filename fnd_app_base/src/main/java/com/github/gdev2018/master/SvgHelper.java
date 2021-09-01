@@ -41,6 +41,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.SystemClock;
 
+import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -272,7 +273,7 @@ public class SvgHelper {
     }
 
     public static Bitmap getBitmap(int res, int width, int height, int color) {
-        try (InputStream stream = ApplicationLoader.applicationContext.getResources().openRawResource(res)) {
+        try (InputStream stream = BaseApplication.mApplicationContext.getResources().openRawResource(res)) {
             SAXParserFactory spf = SAXParserFactory.newInstance();
             SAXParser sp = spf.newSAXParser();
             XMLReader xr = sp.getXMLReader();
@@ -338,7 +339,7 @@ public class SvgHelper {
             XMLReader xr = sp.getXMLReader();
             SVGHandler handler = new SVGHandler(0, 0, color, true);
             xr.setContentHandler(handler);
-            xr.parse(new InputSource(ApplicationLoader.applicationContext.getResources().openRawResource(resId)));
+            xr.parse(new InputSource(BaseApplication.mApplicationContext.getResources().openRawResource(resId)));
             return handler.getDrawable();
         } catch (Exception e) {
             FileLog.e(e);

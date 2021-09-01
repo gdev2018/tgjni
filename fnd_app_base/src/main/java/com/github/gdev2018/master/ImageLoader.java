@@ -40,7 +40,7 @@ import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.ui.Components.AnimatedFileDrawable;
 import com.github.gdev2018.master.ui.Components.Point;
 import com.github.gdev2018.master.ui.Components.RLottieDrawable;
-import com.github.gdev2018.master.ui.Components.SvgHelper;
+import com.github.gdev2018.master.SvgHelper;
 import com.github.gdev2018.master.ui.Components.ThemePreviewDrawable;
 
 import java.io.ByteArrayOutputStream;

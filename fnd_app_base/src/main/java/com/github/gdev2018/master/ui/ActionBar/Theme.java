@@ -83,16 +83,19 @@ import com.github.gdev2018.master.tgnet.SerializedData;
 import com.github.gdev2018.master.tgnet.TLRPC;
 import com.github.gdev2018.master.time.SunDate;
 ///*import com.github.gdev2018.master.ui.Cells.ThemesHorizontalListCell;*/
+import com.github.gdev2018.master.ui.Cells.ThemesHorizontalListCell;
 import com.github.gdev2018.master.ui.Components.AudioVisualizerDrawable;
 import com.github.gdev2018.master.ui.Components.BackgroundGradientDrawable;
 import com.github.gdev2018.master.ui.Components.CombinedDrawable;
+import com.github.gdev2018.master.ui.Components.MotionBackgroundDrawable;
 import com.github.gdev2018.master.ui.Components.MsgClockDrawable;
 import com.github.gdev2018.master.ui.Components.PathAnimator;
 import com.github.gdev2018.master.ui.Components.RLottieDrawable;
 import com.github.gdev2018.master.ui.Components.RoundStatusDrawable;
 import com.github.gdev2018.master.ui.Components.ScamDrawable;
 import com.github.gdev2018.master.ui.Components.StatusDrawable;
-import com.github.gdev2018.master.ui.Components.SvgHelper;
+import com.github.gdev2018.master.SvgHelper;
+import com.github.gdev2018.master.ui.RoundVideoProgressShadow;
 ///*import com.github.gdev2018.master.ui.Components.ThemeEditorView;*/
 
 import java.io.File;
@@ -115,7 +118,7 @@ import java.util.concurrent.CountDownLatch;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
-import androidx.core.graphics.ColorUtils;key_chat_wallpaper_gradient_to
+import androidx.core.graphics.ColorUtils;
 
 public class Theme {
 
@@ -3175,7 +3178,7 @@ public class Theme {
     private static ThreadLocal<float[]> hsvTemp4Local = new ThreadLocal<>();
     private static ThreadLocal<float[]> hsvTemp5Local = new ThreadLocal<>();
 
-    private static FragmentContextViewWavesDrawable fragmentContextViewWavesDrawable;
+///*    private static FragmentContextViewWavesDrawable fragmentContextViewWavesDrawable;*/
     private static RoundVideoProgressShadow roundPlayDrawable;
 
     static {
@@ -5380,7 +5383,7 @@ public class Theme {
 
             if (!TextUtils.isEmpty(wallpaperLink[0])) {
                 String link = wallpaperLink[0];
-                themeInfo.pathToWallpaper = new File(BaseApplication.getFilesDirFixed(), Utilities.MD5(ling) + ".wp").getAbsolutePath();
+                themeInfo.pathToWallpaper = new File(BaseApplication.getFilesDirFixed(), Utilities.MD5(link) + ".wp").getAbsolutePath();
                 try {
                     Uri data = Uri.parse(link);
                     themeInfo.slug = data.getQueryParameter("slug");
@@ -8623,7 +8626,7 @@ public class Theme {
                     isCustomTheme = true;
                 } else if (themedWallpaperLink != null) {
                     try {
-                        File pathToWallpaper = new File(ApplicationLoader.getFilesDirFixed(), Utilities.MD5(themedWallpaperLink) + ".wp");
+                        File pathToWallpaper = new File(BaseApplication.getFilesDirFixed(), Utilities.MD5(themedWallpaperLink) + ".wp");
                         Bitmap bitmap = loadScreenSizedBitmap(new FileInputStream(pathToWallpaper), 0);
                         if (bitmap != null) {
                             themedWallpaper = wallpaper = new BitmapDrawable(bitmap);
@@ -8662,7 +8665,7 @@ public class Theme {
                                 MotionBackgroundDrawable motionBackgroundDrawable = new MotionBackgroundDrawable(overrideWallpaper.color, overrideWallpaper.gradientColor1, overrideWallpaper.gradientColor2, overrideWallpaper.gradientColor3, false);
                                 motionBackgroundDrawable.setPhase(previousPhase);
                                 if (isPatternWallpaper) {
-                                    File toFile = new File(ApplicationLoader.getFilesDirFixed(), overrideWallpaper.fileName);
+                                    File toFile = new File(BaseApplication.getFilesDirFixed(), overrideWallpaper.fileName);
                                     if (toFile.exists()) {
                                         motionBackgroundDrawable.setPatternBitmap((int) (overrideWallpaper.intensity * 100), loadScreenSizedBitmap(new FileInputStream(toFile), 0));
                                         isCustomTheme = true;
@@ -8689,7 +8692,7 @@ public class Theme {
                                 wallpaper = new ColorDrawable(selectedColor);
                             }
                         } else {
-                            File toFile = new File(ApplicationLoader.getFilesDirFixed(), overrideWallpaper.fileName);
+                            File toFile = new File(BaseApplication.getFilesDirFixed(), overrideWallpaper.fileName);
                             if (toFile.exists()) {
                                 Bitmap bitmap = loadScreenSizedBitmap(new FileInputStream(toFile), 0);
                                 if (bitmap != null) {

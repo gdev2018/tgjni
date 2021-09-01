@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.github.gdev2018.master.di.BaseApplication;
 
-//import org.liveseyinc.plabor.BuildVars;
+//import org.liveseyinc.plabor.BaseBuildVars;
 //import org.liveseyinc.plabor.LocalAndroidUtilities;
 
 ///*import com.google.android.gms.common.ConnectionResult;

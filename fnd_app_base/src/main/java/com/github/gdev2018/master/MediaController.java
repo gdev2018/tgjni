@@ -1357,7 +1357,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                                 raisedToTop = 0;
                                 countLess = 0;
                                 timeSinceRaise = System.currentTimeMillis();
-                                if (BuildVars.LOGS_ENABLED && BuildVars.DEBUG_PRIVATE_VERSION) {
+                                if (BaseBuildVars.LOGS_ENABLED && BaseBuildVars.DEBUG_PRIVATE_VERSION) {
                                     FileLog.e("motion detected");
                                 }
                             }
@@ -1373,13 +1373,13 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                         }
                     }
                 }*/
-                /*if (BuildVars.LOGS_ENABLED && BuildVars.DEBUG_PRIVATE_VERSION) {
+                /*if (BaseBuildVars.LOGS_ENABLED && BaseBuildVars.DEBUG_PRIVATE_VERSION) {
                     FileLog.e("raise2 to top = " + raisedToTop + " to back = " + raisedToBack + " val = " + val + " countLess = " + countLess);
                 }*/
             }
             previousAccValue = val;
             accelerometerVertical = gravityFast[1] > 2.5f && Math.abs(gravityFast[2]) < 4.0f && Math.abs(gravityFast[0]) > 1.5f;
-            /*if (BuildVars.LOGS_ENABLED && BuildVars.DEBUG_PRIVATE_VERSION) {
+            /*if (BaseBuildVars.LOGS_ENABLED && BaseBuildVars.DEBUG_PRIVATE_VERSION) {
                 FileLog.d(accelerometerVertical + "    val = " + val + " acc (" + linearAcceleration[0] + ", " + linearAcceleration[1] + ", " + linearAcceleration[2] + ") grav (" + gravityFast[0] + ", " + gravityFast[1] + ", " + gravityFast[2] + ")");
             }*/
         }

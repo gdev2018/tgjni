@@ -1267,7 +1267,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         if (TextUtils.isEmpty(selectedBackgroundSlug) || !Theme.DEFAULT_BACKGROUND_SLUG.equals(selectedBackgroundSlug) && object == null) {
             if (!Theme.COLOR_BACKGROUND_SLUG.equals(selectedBackgroundSlug) && selectedColor != 0) {
                 if (themeInfo.overrideWallpaper != null) {
-                    addedColorWallpaper = new ColorWallpaper(selectedBackgroundSlug, selectedColor, selectedGradientColor1, selectedGradientColor2, selectedGradientColor3, selectedGradientRotation, selectedIntensity, selectedBackgroundMotion, new File(ApplicationLoader.getFilesDirFixed(), themeInfo.overrideWallpaper.fileName));
+                    addedColorWallpaper = new ColorWallpaper(selectedBackgroundSlug, selectedColor, selectedGradientColor1, selectedGradientColor2, selectedGradientColor3, selectedGradientRotation, selectedIntensity, selectedBackgroundMotion, new File(BaseApplication.getFilesDirFixed(), themeInfo.overrideWallpaper.fileName));
                     addedColorWallpaper.pattern = pattern;
                     wallPapers.add(0, addedColorWallpaper);
                 }
@@ -1281,7 +1281,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 wallPapers.add(0, addedColorWallpaper);
             } else {
                 if (themeInfo.overrideWallpaper != null && !allWallPapersDict.containsKey(selectedBackgroundSlug)) {
-                    addedFileWallpaper = new FileWallpaper(selectedBackgroundSlug, new File(ApplicationLoader.getFilesDirFixed(), themeInfo.overrideWallpaper.fileName), new File(ApplicationLoader.getFilesDirFixed(), themeInfo.overrideWallpaper.originalFileName));
+                    addedFileWallpaper = new FileWallpaper(selectedBackgroundSlug, new File(BaseApplication.getFilesDirFixed(), themeInfo.overrideWallpaper.fileName), new File(BaseApplication.getFilesDirFixed(), themeInfo.overrideWallpaper.originalFileName));
                     wallPapers.add(themeWallpaper != null ? 1 : 0, addedFileWallpaper);
                 }
             }
@@ -1355,7 +1355,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         if (getParentActivity() == null) {
             return;
         }
-        WindowManager manager = (WindowManager) ApplicationLoader.applicationContext.getSystemService(Activity.WINDOW_SERVICE);
+        WindowManager manager = (WindowManager) BaseApplication.mApplicationContext.getSystemService(Activity.WINDOW_SERVICE);
         int rotation = manager.getDefaultDisplay().getRotation();
 
         if (AndroidUtilities.isTablet()) {

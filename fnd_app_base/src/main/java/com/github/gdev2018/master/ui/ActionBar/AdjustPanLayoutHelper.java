@@ -1,80 +1,299 @@
 package com.github.gdev2018.master.ui.ActionBar;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
+import android.view.ContextThemeWrapper;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.animation.Interpolator;
+import android.widget.FrameLayout;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.BaseUserConfig;
+import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.SharedConfig;
+import com.github.gdev2018.master.ui.Components.CubicBezierInterpolator;
+
+import java.util.ArrayList;
 
 
 public class AdjustPanLayoutHelper {
+    public static final Interpolator DEFAULT_INTERPOLATOR = new CubicBezierInterpolator(0.19919472913616398, 0.010644531250000006, 0.27920937042459737, 0.91025390625);
 
-    private int[] loc = new int[2];
-    private final static int FRAMES_WITHOUT_MOVE_LIMIT = 5;
-    private View parentView;
-    private int framesWithoutMovement;
-    private int prevMovement;
-    private boolean wasMovement;
+///*    public final static Interpolator keyboardInterpolator = ChatListItemAnimator.DEFAULT_INTERPOLATOR;*/
+    public final static Interpolator keyboardInterpolator = DEFAULT_INTERPOLATOR;
+    public final static long keyboardDuration = 250;
 
-    public AdjustPanLayoutHelper(View parent) {
-        parentView = parent;
-        parentView.getViewTreeObserver().addOnGlobalLayoutListener(this::onUpdate);
-        parentView.getViewTreeObserver().addOnScrollChangedListener(this::onUpdate);
-        parentView.getViewTreeObserver().addOnGlobalFocusChangeListener((oldFocus, newFocus) -> onUpdate());
+    private final View parent;
+    private View resizableViewToSet;
+
+    private ViewGroup contentView;
+    private View resizableView;
+    private boolean animationInProgress;
+    private boolean needDelay;
+    private Runnable delayedAnimationRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (animator != null && !animator.isRunning()) {
+                animator.start();
+            }
+        }
+    };
+
+    int previousHeight = -1;
+    int previousContentHeight = -1;
+    int previousStartOffset = -1;
+
+    View parentForListener;
+    ValueAnimator animator;
+
+    int notificationsIndex;
+
+    ArrayList<View> viewsToHeightSet = new ArrayList<>();
+    protected float keyboardSize;
+
+    boolean checkHierarchyHeight;
+
+    ViewTreeObserver.OnPreDrawListener onPreDrawListener = new ViewTreeObserver.OnPreDrawListener() {
+        @Override
+        public boolean onPreDraw() {
+            if (!SharedConfig.smoothKeyboard) {
+                onDetach();
+                return true;
+            }
+            int contentHeight = parent.getHeight();
+            if (contentHeight - startOffset() == previousHeight - previousStartOffset || contentHeight == previousHeight || animator != null) {
+                if (animator == null) {
+                    previousHeight = contentHeight;
+                    previousContentHeight = contentView.getHeight();
+                    previousStartOffset = startOffset();
+                }
+                return true;
+            }
+
+            if (!heightAnimationEnabled() || Math.abs(previousHeight - contentHeight) < AndroidUtilities.dp(20)) {
+                previousHeight = contentHeight;
+                previousContentHeight = contentView.getHeight();
+                previousStartOffset = startOffset();
+                return true;
+            }
+
+            if (previousHeight != -1 && previousContentHeight == contentView.getHeight()) {
+                boolean isKeyboardVisible = contentHeight < contentView.getBottom();
+                animateHeight(previousHeight, contentHeight, isKeyboardVisible);
+                previousHeight = contentHeight;
+                previousContentHeight = contentView.getHeight();
+                previousStartOffset = startOffset();
+                return false;
+            }
+
+            previousHeight = contentHeight;
+            previousContentHeight = contentView.getHeight();
+            previousStartOffset = startOffset();
+            return false;
+        }
+    };
+
+    private void animateHeight(int previousHeight, int contentHeight, boolean isKeyboardVisible) {
+        if (animator != null) {
+            animator.cancel();
+        }
+
+        int startOffset = startOffset();
+        getViewsToSetHeight(parent);
+        int additionalContentHeight = 0;
+        if (checkHierarchyHeight) {
+            ViewParent viewParent = parent.getParent();
+            if (viewParent instanceof View) {
+                additionalContentHeight = ((View) viewParent).getHeight() - contentHeight;
+            }
+        }
+        setViewHeight(Math.max(previousHeight, contentHeight + additionalContentHeight));
+        resizableView.requestLayout();
+
+        onTransitionStart(isKeyboardVisible, contentHeight);
+
+        float dy = contentHeight - previousHeight;
+        float from;
+        float to;
+        keyboardSize = Math.abs(dy);
+
+        if (contentHeight > previousHeight) {
+            dy -= startOffset;
+            parent.setTranslationY(-dy);
+            onPanTranslationUpdate(dy, 1f, isKeyboardVisible);
+            from = -dy;
+            to = 0;
+            animator = ValueAnimator.ofFloat(1f, 0);
+        } else {
+            parent.setTranslationY(previousStartOffset);
+            onPanTranslationUpdate(-previousStartOffset, 0f, isKeyboardVisible);
+            to = -previousStartOffset;
+            from = dy;
+            animator = ValueAnimator.ofFloat(0, 1f);
+        }
+        animator.addUpdateListener(animation -> {
+            float v = (float) animation.getAnimatedValue();
+            float y = (int) (from * v + to * (1f - v));
+            parent.setTranslationY(y);
+            onPanTranslationUpdate(-y, v, isKeyboardVisible);
+        });
+        animationInProgress = true;
+        int selectedAccount = BaseUserConfig.selectedAccount;
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animationInProgress = false;
+                NotificationCenter.getInstance(selectedAccount).onAnimationFinish(notificationsIndex);
+                animator = null;
+                setViewHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+                viewsToHeightSet.clear();
+                resizableView.requestLayout();
+                onPanTranslationUpdate(0, isKeyboardVisible ? 1f : 0f, isKeyboardVisible);
+                parent.setTranslationY(0);
+                onTransitionEnd();
+            }
+        });
+        animator.setDuration(keyboardDuration);
+        animator.setInterpolator(keyboardInterpolator);
+
+        notificationsIndex = NotificationCenter.getInstance(selectedAccount).setAnimationInProgress(notificationsIndex, null);
+        if (needDelay) {
+            needDelay = false;
+            AndroidUtilities.runOnUIThread(delayedAnimationRunnable, 100);
+        } else {
+            animator.start();
+        }
     }
 
-    private void onUpdate() {
+    private void setViewHeight(int height) {
+        for (int i = 0; i < viewsToHeightSet.size(); i++) {
+            viewsToHeightSet.get(i).getLayoutParams().height = height;
+            viewsToHeightSet.get(i).requestLayout();
+        }
+    }
+
+    protected int startOffset() {
+        return 0;
+    }
+
+    private void getViewsToSetHeight(View parent) {
+        viewsToHeightSet.clear();
+        View v = parent;
+        while (v != null) {
+            viewsToHeightSet.add(v);
+            if (v == resizableView) {
+                return;
+            }
+            if (v.getParent() instanceof View) {
+                v = (View) v.getParent();
+            } else {
+                v = null;
+            }
+        }
+    }
+
+    public AdjustPanLayoutHelper(View parent) {
+        this.parent = parent;
+        onAttach();
+    }
+
+    public void onAttach() {
         if (!SharedConfig.smoothKeyboard) {
             return;
         }
-        //prevMovement = Integer.MAX_VALUE;
-        framesWithoutMovement = 0;
-        wasMovement = false;
-        parentView.invalidate();
-    }
-
-    public void update() {
-        if (parentView.getVisibility() != View.VISIBLE || parentView.getParent() == null) {
-            return;
+        onDetach();
+        Context context = parent.getContext();
+        Activity activity = getActivity(context);
+        if (activity != null) {
+            ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
+            contentView = decorView.findViewById(Window.ID_ANDROID_CONTENT);
         }
-        if (!AndroidUtilities.usingHardwareInput && SharedConfig.smoothKeyboard) {
-            parentView.getLocationInWindow(loc);
-            if (loc[1] <= 0) {
-                loc[1] -= parentView.getTranslationY();
-                if (Build.VERSION.SDK_INT < 21) {
-                    loc[1] -= AndroidUtilities.statusBarHeight;
-                }
-            } else {
-                loc[1] = 0;
-            }
-            if (loc[1] != prevMovement) {
-                if (!wasMovement) {
-                    onTransitionStart();
-                }
-                wasMovement = true;
-                onPanTranslationUpdate(-loc[1]);
-                framesWithoutMovement = 0;
-                prevMovement = loc[1];
-            } else {
-                framesWithoutMovement++;
-            }
-            if (framesWithoutMovement < FRAMES_WITHOUT_MOVE_LIMIT) {
-                parentView.invalidate();
-            } else if (wasMovement) {
-                onTransitionEnd();
-            }
+        resizableView = findResizableView(parent);
+        if (resizableView != null) {
+            parentForListener = resizableView;
+            resizableView.getViewTreeObserver().addOnPreDrawListener(onPreDrawListener);
         }
     }
 
-    protected void onPanTranslationUpdate(int y) {
+    private Activity getActivity(Context context) {
+        if (context instanceof Activity) {
+            return (Activity) context;
+        } else if (context instanceof ContextThemeWrapper) {
+            return getActivity(((ContextThemeWrapper) context).getBaseContext());
+        }
+        return null;
+    }
+
+    private View findResizableView(View parent) {
+        if (resizableViewToSet != null) {
+            return resizableViewToSet;
+        }
+        View view = parent;
+        while (view != null) {
+            if (view.getParent() instanceof DrawerLayoutContainer) {
+                return view;
+            }
+            if (view.getParent() instanceof View) {
+                view = (View) view.getParent();
+            } else {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    public void onDetach() {
+        if (animator != null) {
+            animator.cancel();
+        }
+        if (parentForListener != null) {
+            parentForListener.getViewTreeObserver().removeOnPreDrawListener(onPreDrawListener);
+            parentForListener = null;
+        }
+    }
+
+    protected boolean heightAnimationEnabled() {
+        return true;
+    }
+
+    protected void onPanTranslationUpdate(float y, float progress, boolean keyboardVisible) {
 
     }
 
-    protected void onTransitionStart() {
+    protected void onTransitionStart(boolean keyboardVisible, int contentHeight) {
 
     }
 
     protected void onTransitionEnd() {
 
+    }
+
+    public void setResizableView(FrameLayout windowView) {
+        resizableViewToSet = windowView;
+    }
+
+    public boolean animationInProgress() {
+        return animationInProgress;
+    }
+
+    public void setCheckHierarchyHeight(boolean checkHierarchyHeight) {
+        this.checkHierarchyHeight = checkHierarchyHeight;
+    }
+
+    public void delayAnimation() {
+        needDelay = true;
+    }
+
+    public void runDelayedAnimation() {
+        AndroidUtilities.cancelRunOnUIThread(delayedAnimationRunnable);
+        delayedAnimationRunnable.run();
     }
 }

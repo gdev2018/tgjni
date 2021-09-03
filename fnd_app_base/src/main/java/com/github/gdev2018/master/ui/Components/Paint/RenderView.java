@@ -2,6 +2,7 @@ package com.github.gdev2018.master.ui.Components.Paint;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
@@ -12,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
 
+import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.BaseBuildVars;
 import com.github.gdev2018.master.DispatchQueue;
 import com.github.gdev2018.master.FileLog;
@@ -30,6 +32,7 @@ public class RenderView extends TextureView {
     public interface RenderViewDelegate {
         void onBeganDrawing();
         void onFinishedDrawing(boolean moved);
+        void onFirstDraw();
         boolean shouldDraw();
     }
 
@@ -42,7 +45,8 @@ public class RenderView extends TextureView {
     private Input input;
     private Bitmap bitmap;
     private boolean transformedBitmap;
-    private int orientation;
+
+    private boolean firstDrawSent;
 
     private float weight;
     private int color;
@@ -50,11 +54,11 @@ public class RenderView extends TextureView {
 
     private boolean shuttingDown;
 
-    public RenderView(Context context, Painting paint, Bitmap b, int rotation) {
+    public RenderView(Context context, Painting paint, Bitmap b) {
         super(context);
+        setOpaque(false);
 
         bitmap = b;
-        orientation = rotation;
         painting = paint;
         painting.setRenderView(this);
 
@@ -85,12 +89,9 @@ public class RenderView extends TextureView {
                 internal.setBufferSize(width, height);
                 updateTransform();
                 internal.requestRender();
-                internal.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (internal != null) {
-                            internal.requestRender();
-                        }
+                internal.postRunnable(() -> {
+                    if (internal != null) {
+                        internal.requestRender();
                     }
                 });
             }
@@ -101,12 +102,9 @@ public class RenderView extends TextureView {
                     return true;
                 }
                 if (!shuttingDown) {
-                    painting.onPause(new Runnable() {
-                        @Override
-                        public void run() {
-                            internal.shutdown();
-                            internal = null;
-                        }
+                    painting.onPause(() -> {
+                        internal.shutdown();
+                        internal = null;
                     });
                 }
 
@@ -122,7 +120,7 @@ public class RenderView extends TextureView {
         input = new Input(this);
         painting.setDelegate(new Painting.PaintingDelegate() {
             @Override
-            public void contentChanged(RectF rect) {
+            public void contentChanged() {
                 if (internal != null) {
                     internal.scheduleRedraw();
                 }
@@ -145,21 +143,21 @@ public class RenderView extends TextureView {
         });
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    public void redraw() {
+        if (internal == null) {
+            return;
+        }
+        internal.requestRender();
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouch(MotionEvent event) {
         if (event.getPointerCount() > 1) {
             return false;
         }
-
-        if (internal == null || !internal.initialized || !internal.ready)
+        if (internal == null || !internal.initialized || !internal.ready) {
             return true;
-
-        input.process(event);
+        }
+///*        input.process(event, getScaleX());*/
         return true;
     }
 
@@ -224,9 +222,9 @@ public class RenderView extends TextureView {
 
         input.setMatrix(matrix);
 
-        float proj[] = GLMatrix.LoadOrtho(0.0f, internal.bufferWidth, 0.0f, internal.bufferHeight, -1.0f, 1.0f);
-        float effectiveProjection[] = GLMatrix.LoadGraphicsMatrix(matrix);
-        float finalProjection[] = GLMatrix.MultiplyMat4f(proj, effectiveProjection);
+        float[] proj = GLMatrix.LoadOrtho(0.0f, internal.bufferWidth, 0.0f, internal.bufferHeight, -1.0f, 1.0f);
+        float[] effectiveProjection = GLMatrix.LoadGraphicsMatrix(matrix);
+        float[] finalProjection = GLMatrix.MultiplyMat4f(proj, effectiveProjection);
         painting.setRenderProjection(finalProjection);
     }
 
@@ -250,13 +248,10 @@ public class RenderView extends TextureView {
         shuttingDown = true;
 
         if (internal != null) {
-            performInContext(new Runnable() {
-                @Override
-                public void run() {
-                    painting.cleanResources(transformedBitmap);
-                    internal.shutdown();
-                    internal = null;
-                }
+            performInContext(() -> {
+                painting.cleanResources(transformedBitmap);
+                internal.shutdown();
+                internal = null;
             });
         }
 
@@ -264,12 +259,11 @@ public class RenderView extends TextureView {
     }
 
     private class CanvasInternal extends DispatchQueue {
-        private final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
-        private final int EGL_OPENGL_ES2_BIT = 4;
+        private static final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
+        private static final int EGL_OPENGL_ES2_BIT = 4;
         private SurfaceTexture surfaceTexture;
         private EGL10 egl10;
         private EGLDisplay eglDisplay;
-        private EGLConfig eglConfig;
         private EGLContext eglContext;
         private EGLSurface eglSurface;
         private boolean initialized;
@@ -329,6 +323,7 @@ public class RenderView extends TextureView {
                     EGL10.EGL_STENCIL_SIZE, 0,
                     EGL10.EGL_NONE
             };
+            EGLConfig eglConfig;
             if (!egl10.eglChooseConfig(eglDisplay, configSpec, configs, 1, configsCount)) {
                 if (BaseBuildVars.LOGS_ENABLED) {
                     FileLog.e("eglChooseConfig failed " + GLUtils.getEGLErrorString(egl10.eglGetError()));
@@ -394,21 +389,16 @@ public class RenderView extends TextureView {
         private Bitmap createBitmap(Bitmap bitmap, float scale) {
             Matrix matrix = new Matrix();
             matrix.setScale(scale, scale);
-            matrix.postRotate(orientation);
             return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         }
 
         private void checkBitmap() {
             Size paintingSize = painting.getSize();
-
-            if (bitmap.getWidth() != paintingSize.width || bitmap.getHeight() != paintingSize.height || orientation != 0) {
-                float bitmapWidth = bitmap.getWidth();
-                if (orientation % 360 == 90 || orientation % 360 == 270)
-                    bitmapWidth = bitmap.getHeight();
-
-                float scale = paintingSize.width / bitmapWidth;
-                bitmap = createBitmap(bitmap, scale);
-                orientation = 0;
+            if (bitmap.getWidth() != paintingSize.width || bitmap.getHeight() != paintingSize.height) {
+                Bitmap b = Bitmap.createBitmap((int) paintingSize.width, (int) paintingSize.height, Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(b);
+                canvas.drawBitmap(bitmap, null, new RectF(0, 0, paintingSize.width, paintingSize.height), null);
+                bitmap = b;
                 transformedBitmap = true;
             }
         }
@@ -438,7 +428,7 @@ public class RenderView extends TextureView {
                 GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
                 GLES20.glViewport(0, 0, bufferWidth, bufferHeight);
 
-                GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+                GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
                 GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
                 painting.render();
@@ -446,14 +436,13 @@ public class RenderView extends TextureView {
                 GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
                 egl10.eglSwapBuffers(eglDisplay, eglSurface);
+                if (!firstDrawSent) {
+                    firstDrawSent = true;
+                    AndroidUtilities.runOnUIThread(() -> delegate.onFirstDraw());
+                }
 
                 if (!ready) {
-                    queue.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            ready = true;
-                        }
-                    }, 200);
+                    queue.postRunnable(() -> ready = true, 200);
                 }
             }
         };
@@ -464,12 +453,7 @@ public class RenderView extends TextureView {
         }
 
         public void requestRender() {
-            postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    drawRunnable.run();
-                }
-            });
+            postRunnable(() -> drawRunnable.run());
         }
 
         public void scheduleRedraw() {
@@ -478,12 +462,9 @@ public class RenderView extends TextureView {
                 scheduledRunnable = null;
             }
 
-            scheduledRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    scheduledRunnable = null;
-                    drawRunnable.run();
-                }
+            scheduledRunnable = () -> {
+                scheduledRunnable = null;
+                drawRunnable.run();
             };
 
             postRunnable(scheduledRunnable, 1);
@@ -506,14 +487,11 @@ public class RenderView extends TextureView {
         }
 
         public void shutdown() {
-            postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    finish();
-                    Looper looper = Looper.myLooper();
-                    if (looper != null) {
-                        looper.quit();
-                    }
+            postRunnable(() -> {
+                finish();
+                Looper looper = Looper.myLooper();
+                if (looper != null) {
+                    looper.quit();
                 }
             });
         }
@@ -523,15 +501,14 @@ public class RenderView extends TextureView {
                 return null;
             }
             final CountDownLatch countDownLatch = new CountDownLatch(1);
-            final Bitmap object[] = new Bitmap[1];
+            final Bitmap[] object = new Bitmap[1];
             try {
-                postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        Painting.PaintingData data = painting.getPaintingData(new RectF(0, 0, painting.getSize().width, painting.getSize().height), false);
+                postRunnable(() -> {
+                    Painting.PaintingData data = painting.getPaintingData(new RectF(0, 0, painting.getSize().width, painting.getSize().height), false);
+                    if (data != null) {
                         object[0] = data.bitmap;
-                        countDownLatch.countDown();
                     }
+                    countDownLatch.countDown();
                 });
                 countDownLatch.await();
             } catch (Exception e) {
@@ -550,16 +527,13 @@ public class RenderView extends TextureView {
             return;
         }
 
-        internal.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                if (internal == null || !internal.initialized) {
-                    return;
-                }
-
-                internal.setCurrentContext();
-                action.run();
+        internal.postRunnable(() -> {
+            if (internal == null || !internal.initialized) {
+                return;
             }
+
+            internal.setCurrentContext();
+            action.run();
         });
     }
 }

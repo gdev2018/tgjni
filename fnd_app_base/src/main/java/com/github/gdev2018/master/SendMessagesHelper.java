@@ -1717,18 +1717,18 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
                 } else if (type == 7) {
                     boolean http = false;
                     TLRPC.InputMedia uploadedDocument;
-                    if (originalPath != null && originalPath.length() > 0 && originalPath.startsWith("http") && params != null) {
-                        http = true;
-///*                        TLRPC.TL_inputMediaGifExternal gifExternal = new TLRPC.TL_inputMediaGifExternal();
+///*                    if (originalPath != null && originalPath.length() > 0 && originalPath.startsWith("http") && params != null) {
+//                        http = true;
+//                        TLRPC.TL_inputMediaGifExternal gifExternal = new TLRPC.TL_inputMediaGifExternal();
 //                        String args[] = params.get("url").split("\\|");
 //                        if (args.length == 2) {
 //                            gifExternal.url = args[0];
 //                            gifExternal.q = args[1];
 //                        }
-//                        uploadedDocument = gifExternal;*/
-                    } else {
+//                        uploadedDocument = gifExternal;
+//                    } else {*/
                         uploadedDocument = new TLRPC.TL_inputMediaUploadedDocument();
-                    }
+///*                    }*/
                     uploadedDocument.mime_type = document.mime_type;
                     uploadedDocument.attributes = document.attributes;
 
@@ -2169,1184 +2169,1184 @@ public class SendMessagesHelper implements NotificationCenter.NotificationCenter
     }
 
     private void sendMessage(String message, String caption, TLRPC.MessageMedia location, TLRPC.TL_photo photo, VideoEditedInfo videoEditedInfo, TLRPC.User user, TLRPC.TL_document document, TLRPC.TL_game game, TLRPC.TL_messageMediaPoll poll, long peer, String path, MessageObject reply_to_msg, TLRPC.WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<TLRPC.MessageEntity> entities, TLRPC.ReplyMarkup replyMarkup, HashMap<String, String> params, int ttl, Object parentObject) {
-        if (user != null && user.phone == null) {
-            return;
-        }
-        if (peer == 0) {
-            return;
-        }
-        if (message == null && caption == null) {
-            caption = "";
-        }
-
-        String originalPath = null;
-        if (params != null && params.containsKey("originalPath")) {
-            originalPath = params.get("originalPath");
-        }
-
-        TLRPC.Message newMsg = null;
-        MessageObject newMsgObj = null;
-        DelayedMessage delayedMessage = null;
-        int type = -1;
-        int lower_id = (int) peer;
-        int high_id = (int) (peer >> 32);
-        boolean isChannel = false;
-        TLRPC.EncryptedChat encryptedChat = null;
-        TLRPC.InputPeer sendToPeer = lower_id != 0 ? MessagesController.getInstance(currentAccount).getInputPeer(lower_id) : null;
-        ArrayList<TLRPC.InputUser> sendToPeers = null;
-        if (lower_id == 0) {
-            encryptedChat = MessagesController.getInstance(currentAccount).getEncryptedChat(high_id);
-            if (encryptedChat == null) {
-                if (retryMessageObject != null) {
-                    MessagesStorage.getInstance(currentAccount).markMessageAsSendError(retryMessageObject.messageOwner);
-                    retryMessageObject.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SEND_ERROR;
-                    NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.messageSendError, retryMessageObject.getId());
-                    processSentMessage(retryMessageObject.getId());
-                }
-                return;
-            }
-        } else if (sendToPeer instanceof TLRPC.TL_inputPeerChannel) {
-            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(sendToPeer.channel_id);
-            isChannel = chat != null && !chat.megagroup;
-        }
-
-        try {
-            if (retryMessageObject != null) {
-                newMsg = retryMessageObject.messageOwner;
-                if (retryMessageObject.isForwarded()) {
-                    type = 4;
-                } else {
-                    if (retryMessageObject.type == 0) {
-                        if (retryMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
-                            //game = retryMessageObject.messageOwner.media.game;
-                        } else {
-                            message = newMsg.message;
-                        }
-                        type = 0;
-                    } else if (retryMessageObject.type == 4) {
-                        location = newMsg.media;
-                        type = 1;
-                    } else if (retryMessageObject.type == 1) {
-                        photo = (TLRPC.TL_photo) newMsg.media.photo;
-                        type = 2;
-                    } else if (retryMessageObject.type == 3 || retryMessageObject.type == 5 || videoEditedInfo != null) {
-                        type = 3;
-                        document = (TLRPC.TL_document) newMsg.media.document;
-                    } else if (retryMessageObject.type == 12) {
-                        user = new TLRPC.TL_userRequest_old2();
-                        user.phone = newMsg.media.phone_number;
-                        user.first_name = newMsg.media.first_name;
-                        user.last_name = newMsg.media.last_name;
-///*                        user.restriction_reason = newMsg.media.vcard;*/
-                        user.id = newMsg.media.user_id;
-                        type = 6;
-                    } else if (retryMessageObject.type == 8 || retryMessageObject.type == 9 || retryMessageObject.type == 13 || retryMessageObject.type == 14) {
-                        document = (TLRPC.TL_document) newMsg.media.document;
-                        type = 7;
-                    } else if (retryMessageObject.type == 2) {
-                        document = (TLRPC.TL_document) newMsg.media.document;
-                        type = 8;
-                    } else if (retryMessageObject.type == MessageObject.TYPE_POLL) {
-                        poll = (TLRPC.TL_messageMediaPoll) newMsg.media;
-                        type = 10;
-                    }
-                    if (params != null && params.containsKey("query_id")) {
-                        type = 9;
-                    }
-                    if (newMsg.media.ttl_seconds > 0) {
-                        ttl = newMsg.media.ttl_seconds;
-                    }
-                }
-            } else {
-                if (message != null) {
-                    if (encryptedChat != null) {
-                        newMsg = new TLRPC.TL_message_secret();
-                    } else {
-                        newMsg = new TLRPC.TL_message();
-                    }
-                    if (encryptedChat != null && webPage instanceof TLRPC.TL_webPagePending) {
-                        if (webPage.url != null) {
-                            TLRPC.WebPage newWebPage = new TLRPC.TL_webPageUrlPending();
-                            newWebPage.url = webPage.url;
-                            webPage = newWebPage;
-                        } else {
-                            webPage = null;
-                        }
-                    }
-                    if (webPage == null) {
-                        newMsg.media = new TLRPC.TL_messageMediaEmpty();
-                    } else {
-                        newMsg.media = new TLRPC.TL_messageMediaWebPage();
-                        newMsg.media.webpage = webPage;
-                    }
-                    if (params != null && params.containsKey("query_id")) {
-                        type = 9;
-                    } else {
-                        type = 0;
-                    }
-                    newMsg.message = message;
-                } else if (poll != null) {
-                    if (encryptedChat != null) {
-                        newMsg = new TLRPC.TL_message_secret();
-                    } else {
-                        newMsg = new TLRPC.TL_message();
-                    }
-                    newMsg.media = poll;
-                    type = 10;
-                } else if (location != null) {
-                    if (encryptedChat != null) {
-                        newMsg = new TLRPC.TL_message_secret();
-                    } else {
-                        newMsg = new TLRPC.TL_message();
-                    }
-                    newMsg.media = location;
-                    if (params != null && params.containsKey("query_id")) {
-                        type = 9;
-                    } else {
-                        type = 1;
-                    }
-                } else if (photo != null) {
-                    if (encryptedChat != null) {
-                        newMsg = new TLRPC.TL_message_secret();
-                    } else {
-                        newMsg = new TLRPC.TL_message();
-                    }
-                    newMsg.media = new TLRPC.TL_messageMediaPhoto();
-                    newMsg.media.flags |= 3;
-                    if (entities != null) {
-                        newMsg.entities = entities;
-                    }
-                    if (ttl != 0) {
-                        newMsg.ttl = newMsg.media.ttl_seconds = ttl;
-                        newMsg.media.flags |= 4;
-                    }
-                    newMsg.media.photo = photo;
-                    if (params != null && params.containsKey("query_id")) {
-                        type = 9;
-                    } else {
-                        type = 2;
-                    }
-                    if (path != null && path.length() > 0 && path.startsWith("http")) {
-                        newMsg.attachPath = path;
-                    } else {
-                        TLRPC.FileLocation location1 = photo.sizes.get(photo.sizes.size() - 1).location;
-                        newMsg.attachPath = FileLoader.getPathToAttach(location1, true).toString();
-                    }
-                } else if (game != null) {
-                    newMsg = new TLRPC.TL_message();
-                    newMsg.media = new TLRPC.TL_messageMediaGame();
-                    newMsg.media.game = game;
-                    if (params != null && params.containsKey("query_id")) {
-                        type = 9;
-                    }
-                } else if (user != null) {
-                    if (encryptedChat != null) {
-                        newMsg = new TLRPC.TL_message_secret();
-                    } else {
-                        newMsg = new TLRPC.TL_message();
-                    }
-                    newMsg.media = new TLRPC.TL_messageMediaContact();
-                    newMsg.media.phone_number = user.phone;
-                    newMsg.media.first_name = user.first_name;
-                    newMsg.media.last_name = user.last_name;
-                    newMsg.media.user_id = user.id;
-///*                    if (user.restriction_reason != null && user.restriction_reason.startsWith("BEGIN:VCARD")) {
-//                        newMsg.media.vcard = user.restriction_reason;
-//                    } else {
-//                        newMsg.media.vcard = "";
-//                    }*/
-                    if (newMsg.media.first_name == null) {
-                        user.first_name = newMsg.media.first_name = "";
-                    }
-                    if (newMsg.media.last_name == null) {
-                        user.last_name = newMsg.media.last_name = "";
-                    }
-                    if (params != null && params.containsKey("query_id")) {
-                        type = 9;
-                    } else {
-                        type = 6;
-                    }
-                } else if (document != null) {
-                    if (encryptedChat != null) {
-                        newMsg = new TLRPC.TL_message_secret();
-                    } else {
-                        newMsg = new TLRPC.TL_message();
-                    }
-                    newMsg.media = new TLRPC.TL_messageMediaDocument();
-                    newMsg.media.flags |= 3;
-                    if (ttl != 0) {
-                        newMsg.ttl = newMsg.media.ttl_seconds = ttl;
-                        newMsg.media.flags |= 4;
-                    }
-                    newMsg.media.document = document;
-                    if (params != null && params.containsKey("query_id")) {
-                        type = 9;
-                    } else if (MessageObject.isVideoDocument(document) || MessageObject.isRoundVideoDocument(document) || videoEditedInfo != null) {
-                        type = 3;
-                    } else if (MessageObject.isVoiceDocument(document)) {
-                        type = 8;
-                    } else {
-                        type = 7;
-                    }
-                    if (videoEditedInfo != null) {
-                        String ve = videoEditedInfo.getString();
-                        if (params == null) {
-                            params = new HashMap<>();
-                        }
-                        params.put("ve", ve);
-                    }
-                    if (encryptedChat != null && document.dc_id > 0 && !MessageObject.isStickerDocument(document)) {
-                        newMsg.attachPath = FileLoader.getPathToAttach(document).toString();
-                    } else {
-                        newMsg.attachPath = path;
-                    }
-                    if (encryptedChat != null && MessageObject.isStickerDocument(document)) {
-                        for (int a = 0; a < document.attributes.size(); a++) {
-                            TLRPC.DocumentAttribute attribute = document.attributes.get(a);
-                            if (attribute instanceof TLRPC.TL_documentAttributeSticker) {
-                                document.attributes.remove(a);
-                                TLRPC.TL_documentAttributeSticker_layer55 attributeSticker = new TLRPC.TL_documentAttributeSticker_layer55();
-                                document.attributes.add(attributeSticker);
-                                attributeSticker.alt = attribute.alt;
-                                if (attribute.stickerset != null) {
-                                    String name;
-                                    if (attribute.stickerset instanceof TLRPC.TL_inputStickerSetShortName) {
-                                        name = attribute.stickerset.short_name;
-                                    } else {
-                                        name = DataQuery.getInstance(currentAccount).getStickerSetName(attribute.stickerset.id);
-                                    }
-                                    if (!TextUtils.isEmpty(name)) {
-                                        attributeSticker.stickerset = new TLRPC.TL_inputStickerSetShortName();
-                                        attributeSticker.stickerset.short_name = name;
-                                    } else {
-                                        attributeSticker.stickerset = new TLRPC.TL_inputStickerSetEmpty();
-                                    }
-                                } else {
-                                    attributeSticker.stickerset = new TLRPC.TL_inputStickerSetEmpty();
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (entities != null && !entities.isEmpty()) {
-                    newMsg.entities = entities;
-                    newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_ENTITIES;
-                }
-                if (caption != null) {
-                    newMsg.message = caption;
-                } else if (newMsg.message == null) {
-                    newMsg.message = "";
-                }
-                if (newMsg.attachPath == null) {
-                    newMsg.attachPath = "";
-                }
-///*                newMsg.local_id = newMsg.id = BaseUserConfig.getInstance(currentAccount).getNewMessageId();*/
-                newMsg.out = true;
-///*                if (isChannel && sendToPeer != null) {
-//                    newMsg.from_id = -sendToPeer.channel_id;
-//                } else {
-//                    newMsg.from_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
-//                    newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
-//                }*/
-                BaseUserConfig.getInstance(currentAccount).saveConfig(false);
-            }
-            if (newMsg.random_id == 0) {
-                newMsg.random_id = getNextRandomId();
-            }
-            if (params != null && params.containsKey("bot")) {
-                if (encryptedChat != null) {
-                    newMsg.via_bot_name = params.get("bot_name");
-                    if (newMsg.via_bot_name == null) {
-                        newMsg.via_bot_name = "";
-                    }
-                } else {
-                    newMsg.via_bot_id = Utilities.parseInt(params.get("bot"));
-                }
-                newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_BOT_ID;
-            }
-            newMsg.params = params;
-            if (retryMessageObject == null || !retryMessageObject.resendAsIs) {
-                newMsg.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
-                if (sendToPeer instanceof TLRPC.TL_inputPeerChannel) {
-                    if (isChannel) {
-                        newMsg.views = 1;
-                        newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_VIEWS;
-                    }
-                    TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(sendToPeer.channel_id);
-                    if (chat != null) {
-                        if (chat.megagroup) {
-///*                            newMsg.flags |= TLRPC.MESSAGE_FLAG_MEGAGROUP;*/
-                            newMsg.unread = true;
-                        } else {
-                            newMsg.post = true;
-                            if (chat.signatures) {
-///*                                newMsg.from_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();*/
-                            }
-                        }
-                    }
-                } else {
-                    newMsg.unread = true;
-                }
-            }
-            newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_MEDIA;
-            newMsg.dialog_id = peer;
-            if (reply_to_msg != null) {
-///*                if (encryptedChat != null && reply_to_msg.messageOwner.random_id != 0) {
-//                    newMsg.reply_to_random_id = reply_to_msg.messageOwner.random_id;
-//                    newMsg.flags |= TLRPC.MESSAGE_FLAG_REPLY;
-//                } else {
-//                    newMsg.flags |= TLRPC.MESSAGE_FLAG_REPLY;
+//        if (user != null && user.phone == null) {
+//            return;
+//        }
+//        if (peer == 0) {
+//            return;
+//        }
+//        if (message == null && caption == null) {
+//            caption = "";
+//        }
+//
+//        String originalPath = null;
+//        if (params != null && params.containsKey("originalPath")) {
+//            originalPath = params.get("originalPath");
+//        }
+//
+//        TLRPC.Message newMsg = null;
+//        MessageObject newMsgObj = null;
+//        DelayedMessage delayedMessage = null;
+//        int type = -1;
+//        int lower_id = (int) peer;
+//        int high_id = (int) (peer >> 32);
+//        boolean isChannel = false;
+//        TLRPC.EncryptedChat encryptedChat = null;
+//        TLRPC.InputPeer sendToPeer = lower_id != 0 ? MessagesController.getInstance(currentAccount).getInputPeer(lower_id) : null;
+//        ArrayList<TLRPC.InputUser> sendToPeers = null;
+//        if (lower_id == 0) {
+//            encryptedChat = MessagesController.getInstance(currentAccount).getEncryptedChat(high_id);
+//            if (encryptedChat == null) {
+//                if (retryMessageObject != null) {
+//                    MessagesStorage.getInstance(currentAccount).markMessageAsSendError(retryMessageObject.messageOwner);
+//                    retryMessageObject.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SEND_ERROR;
+//                    NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.messageSendError, retryMessageObject.getId());
+//                    processSentMessage(retryMessageObject.getId());
 //                }
-//                newMsg.reply_to_msg_id = reply_to_msg.getId();*/
-            }
-            if (replyMarkup != null && encryptedChat == null) {
-                newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_MARKUP;
-                newMsg.reply_markup = replyMarkup;
-            }
-            if (lower_id != 0) {
-///*                if (high_id == 1) {
-//                    if (currentChatInfo == null) {
-//                        MessagesStorage.getInstance(currentAccount).markMessageAsSendError(newMsg);
-//                        NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.messageSendError, newMsg.id);
-//                        processSentMessage(newMsg.id);
-//                        return;
-//                    }
-//                    sendToPeers = new ArrayList<>();
-//                    for (TLRPC.ChatParticipant participant : currentChatInfo.participants.participants) {
-//                        TLRPC.User sendToUser = MessagesController.getInstance(currentAccount).getUser(participant.user_id);
-//                        TLRPC.InputUser peerUser = MessagesController.getInstance(currentAccount).getInputUser(sendToUser);
-//                        if (peerUser != null) {
-//                            sendToPeers.add(peerUser);
-//                        }
-//                    }
-//                    newMsg.to_id = new TLRPC.TL_peerChat();
-//                    newMsg.to_id.chat_id = lower_id;
-//                } else {
-//                    newMsg.to_id = MessagesController.getInstance(currentAccount).getPeer(lower_id);
-//                    if (lower_id > 0) {
-//                        TLRPC.User sendToUser = MessagesController.getInstance(currentAccount).getUser(lower_id);
-//                        if (sendToUser == null) {
-//                            processSentMessage(newMsg.id);
-//                            return;
-//                        }
-//                        if (sendToUser.bot) {
-//                            newMsg.unread = false;
-//                        }
-//                    }
-//                }*/
-            } else {
-///*                newMsg.to_id = new TLRPC.TL_peerUser();*/
-                if (encryptedChat.participant_id == BaseUserConfig.getInstance(currentAccount).getClientUserId()) {
-///*                    newMsg.to_id.user_id = encryptedChat.admin_id;*/
-                } else {
-///*                    newMsg.to_id.user_id = encryptedChat.participant_id;*/
-                }
-                if (ttl != 0) {
-                    newMsg.ttl = ttl;
-                } else {
-                    newMsg.ttl = encryptedChat.ttl;
-                    if (newMsg.ttl != 0 && newMsg.media != null) {
-                        newMsg.media.ttl_seconds = newMsg.ttl;
-                        newMsg.media.flags |= 4;
-                    }
-                }
-                if (newMsg.ttl != 0 && newMsg.media.document != null) {
-                    if (MessageObject.isVoiceMessage(newMsg)) {
-                        int duration = 0;
-                        for (int a = 0; a < newMsg.media.document.attributes.size(); a++) {
-                            TLRPC.DocumentAttribute attribute = newMsg.media.document.attributes.get(a);
-                            if (attribute instanceof TLRPC.TL_documentAttributeAudio) {
-                                duration = attribute.duration;
-                                break;
-                            }
-                        }
-                        newMsg.ttl = Math.max(newMsg.ttl, duration + 1);
-                    } else if (MessageObject.isVideoMessage(newMsg) || MessageObject.isRoundVideoMessage(newMsg)) {
-                        int duration = 0;
-                        for (int a = 0; a < newMsg.media.document.attributes.size(); a++) {
-                            TLRPC.DocumentAttribute attribute = newMsg.media.document.attributes.get(a);
-                            if (attribute instanceof TLRPC.TL_documentAttributeVideo) {
-                                duration = attribute.duration;
-                                break;
-                            }
-                        }
-                        newMsg.ttl = Math.max(newMsg.ttl, duration + 1);
-                    }
-                }
-            }
-            if (high_id != 1 && (MessageObject.isVoiceMessage(newMsg) || MessageObject.isRoundVideoMessage(newMsg))) {
-                newMsg.media_unread = true;
-            }
-
-            newMsg.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
-///*            newMsgObj = new MessageObject(currentAccount, newMsg, true);
-//            newMsgObj.replyMessageObject = reply_to_msg;
-//            if (!newMsgObj.isForwarded() && (newMsgObj.type == 3 || videoEditedInfo != null || newMsgObj.type == 2) && !TextUtils.isEmpty(newMsg.attachPath)) {
-//                newMsgObj.attachPathExists = true;
+//                return;
 //            }
-//            if (newMsgObj.videoEditedInfo != null && videoEditedInfo == null) {
-//                videoEditedInfo = newMsgObj.videoEditedInfo;
-//            }*/
-
-            long groupId = 0;
-            boolean isFinalGroupMedia = false;
-            if (params != null) {
-                String groupIdStr = params.get("groupId");
-                if (groupIdStr != null) {
-                    groupId = Utilities.parseLong(groupIdStr);
-                    newMsg.grouped_id = groupId;
-                    newMsg.flags |= 131072;
-                }
-                isFinalGroupMedia = params.get("final") != null;
-            }
-
-            if (groupId == 0) {
-                ArrayList<MessageObject> objArr = new ArrayList<>();
-                objArr.add(newMsgObj);
-                ArrayList<TLRPC.Message> arr = new ArrayList<>();
-                arr.add(newMsg);
-                MessagesStorage.getInstance(currentAccount).putMessages(arr, false, true, false, 0);
-                MessagesController.getInstance(currentAccount).updateInterfaceWithMessages(peer, objArr);
-                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload);
-            } else {
-                String key = "group_" + groupId;
-                ArrayList<DelayedMessage> arrayList = delayedMessages.get(key);
-                if (arrayList != null) {
-                    delayedMessage = arrayList.get(0);
-                }
-                if (delayedMessage == null) {
-                    delayedMessage = new DelayedMessage(peer);
-                    delayedMessage.initForGroup(groupId);
-                    delayedMessage.encryptedChat = encryptedChat;
-                }
-                delayedMessage.performMediaUpload = false;
-                delayedMessage.location = null;
-                delayedMessage.videoEditedInfo = null;
-                delayedMessage.httpLocation = null;
-                if (isFinalGroupMedia) {
-                    delayedMessage.finalGroupMessage = newMsg.id;
-                }
-            }
-
-            if (BaseBuildVars.LOGS_ENABLED) {
-                if (sendToPeer != null) {
-                    FileLog.d("send message user_id = " + sendToPeer.user_id + " chat_id = " + sendToPeer.chat_id + " channel_id = " + sendToPeer.channel_id + " access_hash = " + sendToPeer.access_hash);
-                }
-            }
-
-            boolean performMediaUpload = false;
-
-            if (type == 0 || type == 9 && message != null && encryptedChat != null) {
-                if (encryptedChat == null) {
-                    if (sendToPeers != null) {
-///*                        TLRPC.TL_messages_sendBroadcast reqSend = new TLRPC.TL_messages_sendBroadcast();
-//                        ArrayList<Long> random_ids = new ArrayList<>();
-//                        for (int a = 0; a < sendToPeers.size(); a++) {
-//                            random_ids.add(Utilities.random.nextLong());
-//                        }
-//                        reqSend.message = message;
-//                        reqSend.contacts = sendToPeers;
-//                        reqSend.media = new TLRPC.TL_inputMediaEmpty();
-//                        reqSend.random_id = random_ids;
-//                        performSendMessageRequest(reqSend, newMsgObj, null, null, parentObject);*/
-                    } else {
-                        TLRPC.TL_messages_sendMessage reqSend = new TLRPC.TL_messages_sendMessage();
-                        reqSend.message = message;
-                        reqSend.clear_draft = retryMessageObject == null;
-///*                        if (newMsg.to_id instanceof TLRPC.TL_peerChannel) {
-//                            reqSend.silent = MessagesController.getNotificationsSettings(currentAccount).getBoolean("silent_" + peer, false);
-//                        }*/
-///*                        reqSend.peer = sendToPeer;
-//                        reqSend.random_id = newMsg.random_id;
-//                        if (newMsg.reply_to_msg_id != 0) {
-//                            reqSend.flags |= 1;
-//                            reqSend.reply_to_msg_id = newMsg.reply_to_msg_id;
-//                        }
-//                        if (!searchLinks) {
-//                            reqSend.no_webpage = true;
-//                        }
-//                        if (entities != null && !entities.isEmpty()) {
-//                            reqSend.entities = entities;
-//                            reqSend.flags |= 8;
-//                        }
-//                        performSendMessageRequest(reqSend, newMsgObj, null, null, parentObject);
-//                        if (retryMessageObject == null) {
-//                            DataQuery.getInstance(currentAccount).cleanDraft(peer, false);
-//                        }*/
-                    }
-                } else {
-                    TLRPC.TL_decryptedMessage reqSend;
-                    if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 73) {
-                        reqSend = new TLRPC.TL_decryptedMessage();
-                    } else {
-                        reqSend = new TLRPC.TL_decryptedMessage_layer45();
-                    }
-                    reqSend.ttl = newMsg.ttl;
-                    if (entities != null && !entities.isEmpty()) {
-                        reqSend.entities = entities;
-                        reqSend.flags |= TLRPC.MESSAGE_FLAG_HAS_ENTITIES;
-                    }
-///*                    if (newMsg.reply_to_random_id != 0) {
-//                        reqSend.reply_to_random_id = newMsg.reply_to_random_id;
-//                        reqSend.flags |= TLRPC.MESSAGE_FLAG_REPLY;
-//                    }*/
-                    if (params != null && params.get("bot_name") != null) {
-                        reqSend.via_bot_name = params.get("bot_name");
-                        reqSend.flags |= TLRPC.MESSAGE_FLAG_HAS_BOT_ID;
-                    }
-                    reqSend.random_id = newMsg.random_id;
-                    reqSend.message = message;
-                    if (webPage != null && webPage.url != null) {
-                        reqSend.media = new TLRPC.TL_decryptedMessageMediaWebPage();
-                        reqSend.media.url = webPage.url;
-                        reqSend.flags |= TLRPC.MESSAGE_FLAG_HAS_MEDIA;
-                    } else {
-                        reqSend.media = new TLRPC.TL_decryptedMessageMediaEmpty();
-                    }
-                    SecretChatHelper.getInstance(currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
-                    if (retryMessageObject == null) {
-                        DataQuery.getInstance(currentAccount).cleanDraft(peer, false);
-                    }
-                }
-            } else if (type >= 1 && type <= 3 || type >= 5 && type <= 8 || type == 9 && encryptedChat != null || type == 10) {
-                if (encryptedChat == null) {
-                    TLRPC.InputMedia inputMedia = null;
-                    if (type == 1) {
-                        if (location instanceof TLRPC.TL_messageMediaVenue) {
-                            inputMedia = new TLRPC.TL_inputMediaVenue();
-                            inputMedia.address = location.address;
-                            inputMedia.title = location.title;
-                            inputMedia.provider = location.provider;
-                            inputMedia.venue_id = location.venue_id;
-                            inputMedia.venue_type = "";
-                        } else if (location instanceof TLRPC.TL_messageMediaGeoLive) {
-                            inputMedia = new TLRPC.TL_inputMediaGeoLive();
-                            inputMedia.period = location.period;
-                            inputMedia.flags |= 2;
-                        } else {
-                            inputMedia = new TLRPC.TL_inputMediaGeoPoint();
-                        }
-                        inputMedia.geo_point = new TLRPC.TL_inputGeoPoint();
-                        inputMedia.geo_point.lat = location.geo.lat;
-                        inputMedia.geo_point._long = location.geo._long;
-                    } else if (type == 2 || type == 9 && photo != null) {
-                        TLRPC.TL_inputMediaUploadedPhoto uploadedPhoto = new TLRPC.TL_inputMediaUploadedPhoto();
-                        if (ttl != 0) {
-                            newMsg.ttl = uploadedPhoto.ttl_seconds = ttl;
-                            uploadedPhoto.flags |= 2;
-                        }
-                        if (params != null) {
-                            String masks = params.get("masks");
-                            if (masks != null) {
-                                SerializedData serializedData = new SerializedData(Utilities.hexToBytes(masks));
-                                int count = serializedData.readInt32(false);
-                                for (int a = 0; a < count; a++) {
-                                    uploadedPhoto.stickers.add(TLRPC.InputDocument.TLdeserialize(serializedData, serializedData.readInt32(false), false));
-                                }
-                                uploadedPhoto.flags |= 1;
-                                serializedData.cleanup();
-                            }
-                        }
-                        if (photo.access_hash == 0) {
-                            inputMedia = uploadedPhoto;
-                            performMediaUpload = true;
-                        } else {
-                            TLRPC.TL_inputMediaPhoto media = new TLRPC.TL_inputMediaPhoto();
-                            media.id = new TLRPC.TL_inputPhoto();
-                            media.id.id = photo.id;
-                            media.id.access_hash = photo.access_hash;
-                            media.id.file_reference = photo.file_reference;
-                            if (media.id.file_reference == null) {
-                                media.id.file_reference = new byte[0];
-                            }
-                            inputMedia = media;
-                        }
-                        if (delayedMessage == null) {
-                            delayedMessage = new DelayedMessage(peer);
-                            delayedMessage.type = 0;
-                            delayedMessage.obj = newMsgObj;
-                            delayedMessage.originalPath = originalPath;
-                        }
-                        delayedMessage.inputUploadMedia = uploadedPhoto;
-                        delayedMessage.performMediaUpload = performMediaUpload;
-                        if (path != null && path.length() > 0 && path.startsWith("http")) {
-                            delayedMessage.httpLocation = path;
-                        } else {
-                            delayedMessage.location = photo.sizes.get(photo.sizes.size() - 1).location;
-                        }
-                    } else if (type == 3) {
-                        TLRPC.TL_inputMediaUploadedDocument uploadedDocument = new TLRPC.TL_inputMediaUploadedDocument();
-                        uploadedDocument.mime_type = document.mime_type;
-                        uploadedDocument.attributes = document.attributes;
-                        if (!MessageObject.isRoundVideoDocument(document) && (videoEditedInfo == null || !videoEditedInfo.muted && !videoEditedInfo.roundVideo)) {
-                            uploadedDocument.nosound_video = true;
-                            if (BaseBuildVars.DEBUG_VERSION) {
-                                FileLog.d("nosound_video = true");
-                            }
-                        }
-                        if (ttl != 0) {
-                            newMsg.ttl = uploadedDocument.ttl_seconds = ttl;
-                            uploadedDocument.flags |= 2;
-                        }
-                        if (document.access_hash == 0) {
-                            inputMedia = uploadedDocument;
-                            performMediaUpload = true;
-                        } else {
-                            TLRPC.TL_inputMediaDocument media = new TLRPC.TL_inputMediaDocument();
-                            media.id = new TLRPC.TL_inputDocument();
-                            media.id.id = document.id;
-                            media.id.access_hash = document.access_hash;
-                            media.id.file_reference = document.file_reference;
-                            if (media.id.file_reference == null) {
-                                media.id.file_reference = new byte[0];
-                            }
-                            inputMedia = media;
-                        }
-                        if (delayedMessage == null) {
-                            delayedMessage = new DelayedMessage(peer);
-                            delayedMessage.type = 1;
-                            delayedMessage.obj = newMsgObj;
-                            delayedMessage.originalPath = originalPath;
-                            delayedMessage.parentObject = parentObject;
-                        }
-                        delayedMessage.inputUploadMedia = uploadedDocument;
-                        delayedMessage.performMediaUpload = performMediaUpload;
-                        if (!document.thumbs.isEmpty()) {
-                            delayedMessage.location = document.thumbs.get(0).location;
-                        }
-                        delayedMessage.videoEditedInfo = videoEditedInfo;
-                    } else if (type == 6) {
-                        inputMedia = new TLRPC.TL_inputMediaContact();
-                        inputMedia.phone_number = user.phone;
-                        inputMedia.first_name = user.first_name;
-                        inputMedia.last_name = user.last_name;
-///*                        if (user.restriction_reason != null && user.restriction_reason.startsWith("BEGIN:VCARD")) {
-//                            inputMedia.vcard = user.restriction_reason;
+//        } else if (sendToPeer instanceof TLRPC.TL_inputPeerChannel) {
+//            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(sendToPeer.channel_id);
+//            isChannel = chat != null && !chat.megagroup;
+//        }
+//
+//        try {
+//            if (retryMessageObject != null) {
+//                newMsg = retryMessageObject.messageOwner;
+//                if (retryMessageObject.isForwarded()) {
+//                    type = 4;
+//                } else {
+//                    if (retryMessageObject.type == 0) {
+//                        if (retryMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
+//                            //game = retryMessageObject.messageOwner.media.game;
 //                        } else {
-//                            inputMedia.vcard = "";
-//                        }*/
-                    } else if (type == 7 || type == 9) {
-                        boolean http = false;
-                        TLRPC.InputMedia uploadedMedia;
-                        if (originalPath != null || path != null || document.access_hash == 0) {
-                            if (encryptedChat == null && !TextUtils.isEmpty(originalPath) && originalPath.startsWith("http") && params != null) {
-///*                                TLRPC.TL_inputMediaGifExternal gifExternal = new TLRPC.TL_inputMediaGifExternal();
-//                                String args[] = params.get("url").split("\\|");
-//                                if (args.length == 2) {
-//                                    gifExternal.url = args[0];
-//                                    gifExternal.q = args[1];
-//                                }
-//                                http = true;
-//                                uploadedMedia = gifExternal;*/
-                            } else {
-                                uploadedMedia = new TLRPC.TL_inputMediaUploadedDocument();
-                                if (ttl != 0) {
-                                    newMsg.ttl = uploadedMedia.ttl_seconds = ttl;
-                                    uploadedMedia.flags |= 2;
-                                }
-                                if (!TextUtils.isEmpty(path) && path.toLowerCase().endsWith("mp4") && (params == null || params.containsKey("forceDocument"))) {
-                                    uploadedMedia.nosound_video = true;
-                                }
-                            }
-                            uploadedMedia.mime_type = document.mime_type;
-                            uploadedMedia.attributes = document.attributes;
-                        } else {
-                            uploadedMedia = null;
-                        }
-
-                        if (document.access_hash == 0) {
-                            inputMedia = uploadedMedia;
-                            performMediaUpload = uploadedMedia instanceof TLRPC.TL_inputMediaUploadedDocument;
-                        } else {
-                            TLRPC.TL_inputMediaDocument media = new TLRPC.TL_inputMediaDocument();
-                            media.id = new TLRPC.TL_inputDocument();
-                            media.id.id = document.id;
-                            media.id.access_hash = document.access_hash;
-                            media.id.file_reference = document.file_reference;
-                            if (media.id.file_reference == null) {
-                                media.id.file_reference = new byte[0];
-                            }
-                            inputMedia = media;
-                        }
-                        if (!http && uploadedMedia != null) {
-                            delayedMessage = new DelayedMessage(peer);
-                            delayedMessage.originalPath = originalPath;
-                            delayedMessage.type = 2;
-                            delayedMessage.obj = newMsgObj;
-                            if (!document.thumbs.isEmpty()) {
-                                delayedMessage.location = document.thumbs.get(0).location;
-                            }
-                            delayedMessage.parentObject = parentObject;
-                            delayedMessage.inputUploadMedia = uploadedMedia;
-                            delayedMessage.performMediaUpload = performMediaUpload;
-                        }
-                    } else if (type == 8) {
-                        TLRPC.TL_inputMediaUploadedDocument uploadedDocument = new TLRPC.TL_inputMediaUploadedDocument();
-                        uploadedDocument.mime_type = document.mime_type;
-                        uploadedDocument.attributes = document.attributes;
-                        if (ttl != 0) {
-                            newMsg.ttl = uploadedDocument.ttl_seconds = ttl;
-                            uploadedDocument.flags |= 2;
-                        }
-
-                        if (document.access_hash == 0) {
-                            inputMedia = uploadedDocument;
-                            performMediaUpload = true;
-                        } else {
-                            TLRPC.TL_inputMediaDocument media = new TLRPC.TL_inputMediaDocument();
-                            media.id = new TLRPC.TL_inputDocument();
-                            media.id.id = document.id;
-                            media.id.access_hash = document.access_hash;
-                            media.id.file_reference = document.file_reference;
-                            if (media.id.file_reference == null) {
-                                media.id.file_reference = new byte[0];
-                            }
-                            inputMedia = media;
-                        }
-                        delayedMessage = new DelayedMessage(peer);
-                        delayedMessage.type = 3;
-                        delayedMessage.obj = newMsgObj;
-                        delayedMessage.parentObject = parentObject;
-                        delayedMessage.inputUploadMedia = uploadedDocument;
-                        delayedMessage.performMediaUpload = performMediaUpload;
-                    } else if (type == 10) {
-                        TLRPC.TL_inputMediaPoll inputMediaPoll = new TLRPC.TL_inputMediaPoll();
-                        inputMediaPoll.poll = poll.poll;
-                        inputMedia = inputMediaPoll;
-                    }
-
-                    TLObject reqSend;
-
-                    if (sendToPeers != null) {
-///*                        TLRPC.TL_messages_sendBroadcast request = new TLRPC.TL_messages_sendBroadcast();
-//                        ArrayList<Long> random_ids = new ArrayList<>();
-//                        for (int a = 0; a < sendToPeers.size(); a++) {
-//                            random_ids.add(Utilities.random.nextLong());
+//                            message = newMsg.message;
 //                        }
-//                        request.contacts = sendToPeers;
+//                        type = 0;
+//                    } else if (retryMessageObject.type == 4) {
+//                        location = newMsg.media;
+//                        type = 1;
+//                    } else if (retryMessageObject.type == 1) {
+//                        photo = (TLRPC.TL_photo) newMsg.media.photo;
+//                        type = 2;
+//                    } else if (retryMessageObject.type == 3 || retryMessageObject.type == 5 || videoEditedInfo != null) {
+//                        type = 3;
+//                        document = (TLRPC.TL_document) newMsg.media.document;
+//                    } else if (retryMessageObject.type == 12) {
+//                        user = new TLRPC.TL_userRequest_old2();
+//                        user.phone = newMsg.media.phone_number;
+//                        user.first_name = newMsg.media.first_name;
+//                        user.last_name = newMsg.media.last_name;
+/////*                        user.restriction_reason = newMsg.media.vcard;*/
+//                        user.id = newMsg.media.user_id;
+//                        type = 6;
+//                    } else if (retryMessageObject.type == 8 || retryMessageObject.type == 9 || retryMessageObject.type == 13 || retryMessageObject.type == 14) {
+//                        document = (TLRPC.TL_document) newMsg.media.document;
+//                        type = 7;
+//                    } else if (retryMessageObject.type == 2) {
+//                        document = (TLRPC.TL_document) newMsg.media.document;
+//                        type = 8;
+//                    } else if (retryMessageObject.type == MessageObject.TYPE_POLL) {
+//                        poll = (TLRPC.TL_messageMediaPoll) newMsg.media;
+//                        type = 10;
+//                    }
+//                    if (params != null && params.containsKey("query_id")) {
+//                        type = 9;
+//                    }
+//                    if (newMsg.media.ttl_seconds > 0) {
+//                        ttl = newMsg.media.ttl_seconds;
+//                    }
+//                }
+//            } else {
+//                if (message != null) {
+//                    if (encryptedChat != null) {
+//                        newMsg = new TLRPC.TL_message_secret();
+//                    } else {
+//                        newMsg = new TLRPC.TL_message();
+//                    }
+//                    if (encryptedChat != null && webPage instanceof TLRPC.TL_webPagePending) {
+//                        if (webPage.url != null) {
+//                            TLRPC.WebPage newWebPage = new TLRPC.TL_webPageUrlPending();
+//                            newWebPage.url = webPage.url;
+//                            webPage = newWebPage;
+//                        } else {
+//                            webPage = null;
+//                        }
+//                    }
+//                    if (webPage == null) {
+//                        newMsg.media = new TLRPC.TL_messageMediaEmpty();
+//                    } else {
+//                        newMsg.media = new TLRPC.TL_messageMediaWebPage();
+//                        newMsg.media.webpage = webPage;
+//                    }
+//                    if (params != null && params.containsKey("query_id")) {
+//                        type = 9;
+//                    } else {
+//                        type = 0;
+//                    }
+//                    newMsg.message = message;
+//                } else if (poll != null) {
+//                    if (encryptedChat != null) {
+//                        newMsg = new TLRPC.TL_message_secret();
+//                    } else {
+//                        newMsg = new TLRPC.TL_message();
+//                    }
+//                    newMsg.media = poll;
+//                    type = 10;
+//                } else if (location != null) {
+//                    if (encryptedChat != null) {
+//                        newMsg = new TLRPC.TL_message_secret();
+//                    } else {
+//                        newMsg = new TLRPC.TL_message();
+//                    }
+//                    newMsg.media = location;
+//                    if (params != null && params.containsKey("query_id")) {
+//                        type = 9;
+//                    } else {
+//                        type = 1;
+//                    }
+//                } else if (photo != null) {
+//                    if (encryptedChat != null) {
+//                        newMsg = new TLRPC.TL_message_secret();
+//                    } else {
+//                        newMsg = new TLRPC.TL_message();
+//                    }
+//                    newMsg.media = new TLRPC.TL_messageMediaPhoto();
+//                    newMsg.media.flags |= 3;
+//                    if (entities != null) {
+//                        newMsg.entities = entities;
+//                    }
+//                    if (ttl != 0) {
+//                        newMsg.ttl = newMsg.media.ttl_seconds = ttl;
+//                        newMsg.media.flags |= 4;
+//                    }
+//                    newMsg.media.photo = photo;
+//                    if (params != null && params.containsKey("query_id")) {
+//                        type = 9;
+//                    } else {
+//                        type = 2;
+//                    }
+//                    if (path != null && path.length() > 0 && path.startsWith("http")) {
+//                        newMsg.attachPath = path;
+//                    } else {
+//                        TLRPC.FileLocation location1 = photo.sizes.get(photo.sizes.size() - 1).location;
+//                        newMsg.attachPath = FileLoader.getPathToAttach(location1, true).toString();
+//                    }
+//                } else if (game != null) {
+//                    newMsg = new TLRPC.TL_message();
+//                    newMsg.media = new TLRPC.TL_messageMediaGame();
+//                    newMsg.media.game = game;
+//                    if (params != null && params.containsKey("query_id")) {
+//                        type = 9;
+//                    }
+//                } else if (user != null) {
+//                    if (encryptedChat != null) {
+//                        newMsg = new TLRPC.TL_message_secret();
+//                    } else {
+//                        newMsg = new TLRPC.TL_message();
+//                    }
+//                    newMsg.media = new TLRPC.TL_messageMediaContact();
+//                    newMsg.media.phone_number = user.phone;
+//                    newMsg.media.first_name = user.first_name;
+//                    newMsg.media.last_name = user.last_name;
+//                    newMsg.media.user_id = user.id;
+/////*                    if (user.restriction_reason != null && user.restriction_reason.startsWith("BEGIN:VCARD")) {
+////                        newMsg.media.vcard = user.restriction_reason;
+////                    } else {
+////                        newMsg.media.vcard = "";
+////                    }*/
+//                    if (newMsg.media.first_name == null) {
+//                        user.first_name = newMsg.media.first_name = "";
+//                    }
+//                    if (newMsg.media.last_name == null) {
+//                        user.last_name = newMsg.media.last_name = "";
+//                    }
+//                    if (params != null && params.containsKey("query_id")) {
+//                        type = 9;
+//                    } else {
+//                        type = 6;
+//                    }
+//                } else if (document != null) {
+//                    if (encryptedChat != null) {
+//                        newMsg = new TLRPC.TL_message_secret();
+//                    } else {
+//                        newMsg = new TLRPC.TL_message();
+//                    }
+//                    newMsg.media = new TLRPC.TL_messageMediaDocument();
+//                    newMsg.media.flags |= 3;
+//                    if (ttl != 0) {
+//                        newMsg.ttl = newMsg.media.ttl_seconds = ttl;
+//                        newMsg.media.flags |= 4;
+//                    }
+//                    newMsg.media.document = document;
+//                    if (params != null && params.containsKey("query_id")) {
+//                        type = 9;
+//                    } else if (MessageObject.isVideoDocument(document) || MessageObject.isRoundVideoDocument(document) || videoEditedInfo != null) {
+//                        type = 3;
+//                    } else if (MessageObject.isVoiceDocument(document)) {
+//                        type = 8;
+//                    } else {
+//                        type = 7;
+//                    }
+//                    if (videoEditedInfo != null) {
+//                        String ve = videoEditedInfo.getString();
+//                        if (params == null) {
+//                            params = new HashMap<>();
+//                        }
+//                        params.put("ve", ve);
+//                    }
+//                    if (encryptedChat != null && document.dc_id > 0 && !MessageObject.isStickerDocument(document)) {
+//                        newMsg.attachPath = FileLoader.getPathToAttach(document).toString();
+//                    } else {
+//                        newMsg.attachPath = path;
+//                    }
+//                    if (encryptedChat != null && MessageObject.isStickerDocument(document)) {
+//                        for (int a = 0; a < document.attributes.size(); a++) {
+//                            TLRPC.DocumentAttribute attribute = document.attributes.get(a);
+//                            if (attribute instanceof TLRPC.TL_documentAttributeSticker) {
+//                                document.attributes.remove(a);
+//                                TLRPC.TL_documentAttributeSticker_layer55 attributeSticker = new TLRPC.TL_documentAttributeSticker_layer55();
+//                                document.attributes.add(attributeSticker);
+//                                attributeSticker.alt = attribute.alt;
+//                                if (attribute.stickerset != null) {
+//                                    String name;
+//                                    if (attribute.stickerset instanceof TLRPC.TL_inputStickerSetShortName) {
+//                                        name = attribute.stickerset.short_name;
+//                                    } else {
+//                                        name = DataQuery.getInstance(currentAccount).getStickerSetName(attribute.stickerset.id);
+//                                    }
+//                                    if (!TextUtils.isEmpty(name)) {
+//                                        attributeSticker.stickerset = new TLRPC.TL_inputStickerSetShortName();
+//                                        attributeSticker.stickerset.short_name = name;
+//                                    } else {
+//                                        attributeSticker.stickerset = new TLRPC.TL_inputStickerSetEmpty();
+//                                    }
+//                                } else {
+//                                    attributeSticker.stickerset = new TLRPC.TL_inputStickerSetEmpty();
+//                                }
+//                                break;
+//                            }
+//                        }
+//                    }
+//                }
+//                if (entities != null && !entities.isEmpty()) {
+//                    newMsg.entities = entities;
+//                    newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_ENTITIES;
+//                }
+//                if (caption != null) {
+//                    newMsg.message = caption;
+//                } else if (newMsg.message == null) {
+//                    newMsg.message = "";
+//                }
+//                if (newMsg.attachPath == null) {
+//                    newMsg.attachPath = "";
+//                }
+/////*                newMsg.local_id = newMsg.id = BaseUserConfig.getInstance(currentAccount).getNewMessageId();*/
+//                newMsg.out = true;
+/////*                if (isChannel && sendToPeer != null) {
+////                    newMsg.from_id = -sendToPeer.channel_id;
+////                } else {
+////                    newMsg.from_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();
+////                    newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
+////                }*/
+//                BaseUserConfig.getInstance(currentAccount).saveConfig(false);
+//            }
+//            if (newMsg.random_id == 0) {
+//                newMsg.random_id = getNextRandomId();
+//            }
+//            if (params != null && params.containsKey("bot")) {
+//                if (encryptedChat != null) {
+//                    newMsg.via_bot_name = params.get("bot_name");
+//                    if (newMsg.via_bot_name == null) {
+//                        newMsg.via_bot_name = "";
+//                    }
+//                } else {
+//                    newMsg.via_bot_id = Utilities.parseInt(params.get("bot"));
+//                }
+//                newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_BOT_ID;
+//            }
+//            newMsg.params = params;
+//            if (retryMessageObject == null || !retryMessageObject.resendAsIs) {
+//                newMsg.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
+//                if (sendToPeer instanceof TLRPC.TL_inputPeerChannel) {
+//                    if (isChannel) {
+//                        newMsg.views = 1;
+//                        newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_VIEWS;
+//                    }
+//                    TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(sendToPeer.channel_id);
+//                    if (chat != null) {
+//                        if (chat.megagroup) {
+/////*                            newMsg.flags |= TLRPC.MESSAGE_FLAG_MEGAGROUP;*/
+//                            newMsg.unread = true;
+//                        } else {
+//                            newMsg.post = true;
+//                            if (chat.signatures) {
+/////*                                newMsg.from_id = BaseUserConfig.getInstance(currentAccount).getClientUserId();*/
+//                            }
+//                        }
+//                    }
+//                } else {
+//                    newMsg.unread = true;
+//                }
+//            }
+//            newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_MEDIA;
+//            newMsg.dialog_id = peer;
+//            if (reply_to_msg != null) {
+/////*                if (encryptedChat != null && reply_to_msg.messageOwner.random_id != 0) {
+////                    newMsg.reply_to_random_id = reply_to_msg.messageOwner.random_id;
+////                    newMsg.flags |= TLRPC.MESSAGE_FLAG_REPLY;
+////                } else {
+////                    newMsg.flags |= TLRPC.MESSAGE_FLAG_REPLY;
+////                }
+////                newMsg.reply_to_msg_id = reply_to_msg.getId();*/
+//            }
+//            if (replyMarkup != null && encryptedChat == null) {
+//                newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_MARKUP;
+//                newMsg.reply_markup = replyMarkup;
+//            }
+//            if (lower_id != 0) {
+/////*                if (high_id == 1) {
+////                    if (currentChatInfo == null) {
+////                        MessagesStorage.getInstance(currentAccount).markMessageAsSendError(newMsg);
+////                        NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.messageSendError, newMsg.id);
+////                        processSentMessage(newMsg.id);
+////                        return;
+////                    }
+////                    sendToPeers = new ArrayList<>();
+////                    for (TLRPC.ChatParticipant participant : currentChatInfo.participants.participants) {
+////                        TLRPC.User sendToUser = MessagesController.getInstance(currentAccount).getUser(participant.user_id);
+////                        TLRPC.InputUser peerUser = MessagesController.getInstance(currentAccount).getInputUser(sendToUser);
+////                        if (peerUser != null) {
+////                            sendToPeers.add(peerUser);
+////                        }
+////                    }
+////                    newMsg.to_id = new TLRPC.TL_peerChat();
+////                    newMsg.to_id.chat_id = lower_id;
+////                } else {
+////                    newMsg.to_id = MessagesController.getInstance(currentAccount).getPeer(lower_id);
+////                    if (lower_id > 0) {
+////                        TLRPC.User sendToUser = MessagesController.getInstance(currentAccount).getUser(lower_id);
+////                        if (sendToUser == null) {
+////                            processSentMessage(newMsg.id);
+////                            return;
+////                        }
+////                        if (sendToUser.bot) {
+////                            newMsg.unread = false;
+////                        }
+////                    }
+////                }*/
+//            } else {
+/////*                newMsg.to_id = new TLRPC.TL_peerUser();*/
+//                if (encryptedChat.participant_id == BaseUserConfig.getInstance(currentAccount).getClientUserId()) {
+/////*                    newMsg.to_id.user_id = encryptedChat.admin_id;*/
+//                } else {
+/////*                    newMsg.to_id.user_id = encryptedChat.participant_id;*/
+//                }
+//                if (ttl != 0) {
+//                    newMsg.ttl = ttl;
+//                } else {
+//                    newMsg.ttl = encryptedChat.ttl;
+//                    if (newMsg.ttl != 0 && newMsg.media != null) {
+//                        newMsg.media.ttl_seconds = newMsg.ttl;
+//                        newMsg.media.flags |= 4;
+//                    }
+//                }
+//                if (newMsg.ttl != 0 && newMsg.media.document != null) {
+//                    if (MessageObject.isVoiceMessage(newMsg)) {
+//                        int duration = 0;
+//                        for (int a = 0; a < newMsg.media.document.attributes.size(); a++) {
+//                            TLRPC.DocumentAttribute attribute = newMsg.media.document.attributes.get(a);
+//                            if (attribute instanceof TLRPC.TL_documentAttributeAudio) {
+//                                duration = attribute.duration;
+//                                break;
+//                            }
+//                        }
+//                        newMsg.ttl = Math.max(newMsg.ttl, duration + 1);
+//                    } else if (MessageObject.isVideoMessage(newMsg) || MessageObject.isRoundVideoMessage(newMsg)) {
+//                        int duration = 0;
+//                        for (int a = 0; a < newMsg.media.document.attributes.size(); a++) {
+//                            TLRPC.DocumentAttribute attribute = newMsg.media.document.attributes.get(a);
+//                            if (attribute instanceof TLRPC.TL_documentAttributeVideo) {
+//                                duration = attribute.duration;
+//                                break;
+//                            }
+//                        }
+//                        newMsg.ttl = Math.max(newMsg.ttl, duration + 1);
+//                    }
+//                }
+//            }
+//            if (high_id != 1 && (MessageObject.isVoiceMessage(newMsg) || MessageObject.isRoundVideoMessage(newMsg))) {
+//                newMsg.media_unread = true;
+//            }
+//
+//            newMsg.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
+/////*            newMsgObj = new MessageObject(currentAccount, newMsg, true);
+////            newMsgObj.replyMessageObject = reply_to_msg;
+////            if (!newMsgObj.isForwarded() && (newMsgObj.type == 3 || videoEditedInfo != null || newMsgObj.type == 2) && !TextUtils.isEmpty(newMsg.attachPath)) {
+////                newMsgObj.attachPathExists = true;
+////            }
+////            if (newMsgObj.videoEditedInfo != null && videoEditedInfo == null) {
+////                videoEditedInfo = newMsgObj.videoEditedInfo;
+////            }*/
+//
+//            long groupId = 0;
+//            boolean isFinalGroupMedia = false;
+//            if (params != null) {
+//                String groupIdStr = params.get("groupId");
+//                if (groupIdStr != null) {
+//                    groupId = Utilities.parseLong(groupIdStr);
+//                    newMsg.grouped_id = groupId;
+//                    newMsg.flags |= 131072;
+//                }
+//                isFinalGroupMedia = params.get("final") != null;
+//            }
+//
+//            if (groupId == 0) {
+//                ArrayList<MessageObject> objArr = new ArrayList<>();
+//                objArr.add(newMsgObj);
+//                ArrayList<TLRPC.Message> arr = new ArrayList<>();
+//                arr.add(newMsg);
+//                MessagesStorage.getInstance(currentAccount).putMessages(arr, false, true, false, 0);
+//                MessagesController.getInstance(currentAccount).updateInterfaceWithMessages(peer, objArr);
+//                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload);
+//            } else {
+//                String key = "group_" + groupId;
+//                ArrayList<DelayedMessage> arrayList = delayedMessages.get(key);
+//                if (arrayList != null) {
+//                    delayedMessage = arrayList.get(0);
+//                }
+//                if (delayedMessage == null) {
+//                    delayedMessage = new DelayedMessage(peer);
+//                    delayedMessage.initForGroup(groupId);
+//                    delayedMessage.encryptedChat = encryptedChat;
+//                }
+//                delayedMessage.performMediaUpload = false;
+//                delayedMessage.location = null;
+//                delayedMessage.videoEditedInfo = null;
+//                delayedMessage.httpLocation = null;
+//                if (isFinalGroupMedia) {
+//                    delayedMessage.finalGroupMessage = newMsg.id;
+//                }
+//            }
+//
+//            if (BaseBuildVars.LOGS_ENABLED) {
+//                if (sendToPeer != null) {
+//                    FileLog.d("send message user_id = " + sendToPeer.user_id + " chat_id = " + sendToPeer.chat_id + " channel_id = " + sendToPeer.channel_id + " access_hash = " + sendToPeer.access_hash);
+//                }
+//            }
+//
+//            boolean performMediaUpload = false;
+//
+//            if (type == 0 || type == 9 && message != null && encryptedChat != null) {
+//                if (encryptedChat == null) {
+//                    if (sendToPeers != null) {
+/////*                        TLRPC.TL_messages_sendBroadcast reqSend = new TLRPC.TL_messages_sendBroadcast();
+////                        ArrayList<Long> random_ids = new ArrayList<>();
+////                        for (int a = 0; a < sendToPeers.size(); a++) {
+////                            random_ids.add(Utilities.random.nextLong());
+////                        }
+////                        reqSend.message = message;
+////                        reqSend.contacts = sendToPeers;
+////                        reqSend.media = new TLRPC.TL_inputMediaEmpty();
+////                        reqSend.random_id = random_ids;
+////                        performSendMessageRequest(reqSend, newMsgObj, null, null, parentObject);*/
+//                    } else {
+//                        TLRPC.TL_messages_sendMessage reqSend = new TLRPC.TL_messages_sendMessage();
+//                        reqSend.message = message;
+//                        reqSend.clear_draft = retryMessageObject == null;
+/////*                        if (newMsg.to_id instanceof TLRPC.TL_peerChannel) {
+////                            reqSend.silent = MessagesController.getNotificationsSettings(currentAccount).getBoolean("silent_" + peer, false);
+////                        }*/
+/////*                        reqSend.peer = sendToPeer;
+////                        reqSend.random_id = newMsg.random_id;
+////                        if (newMsg.reply_to_msg_id != 0) {
+////                            reqSend.flags |= 1;
+////                            reqSend.reply_to_msg_id = newMsg.reply_to_msg_id;
+////                        }
+////                        if (!searchLinks) {
+////                            reqSend.no_webpage = true;
+////                        }
+////                        if (entities != null && !entities.isEmpty()) {
+////                            reqSend.entities = entities;
+////                            reqSend.flags |= 8;
+////                        }
+////                        performSendMessageRequest(reqSend, newMsgObj, null, null, parentObject);
+////                        if (retryMessageObject == null) {
+////                            DataQuery.getInstance(currentAccount).cleanDraft(peer, false);
+////                        }*/
+//                    }
+//                } else {
+//                    TLRPC.TL_decryptedMessage reqSend;
+//                    if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 73) {
+//                        reqSend = new TLRPC.TL_decryptedMessage();
+//                    } else {
+//                        reqSend = new TLRPC.TL_decryptedMessage_layer45();
+//                    }
+//                    reqSend.ttl = newMsg.ttl;
+//                    if (entities != null && !entities.isEmpty()) {
+//                        reqSend.entities = entities;
+//                        reqSend.flags |= TLRPC.MESSAGE_FLAG_HAS_ENTITIES;
+//                    }
+/////*                    if (newMsg.reply_to_random_id != 0) {
+////                        reqSend.reply_to_random_id = newMsg.reply_to_random_id;
+////                        reqSend.flags |= TLRPC.MESSAGE_FLAG_REPLY;
+////                    }*/
+//                    if (params != null && params.get("bot_name") != null) {
+//                        reqSend.via_bot_name = params.get("bot_name");
+//                        reqSend.flags |= TLRPC.MESSAGE_FLAG_HAS_BOT_ID;
+//                    }
+//                    reqSend.random_id = newMsg.random_id;
+//                    reqSend.message = message;
+//                    if (webPage != null && webPage.url != null) {
+//                        reqSend.media = new TLRPC.TL_decryptedMessageMediaWebPage();
+//                        reqSend.media.url = webPage.url;
+//                        reqSend.flags |= TLRPC.MESSAGE_FLAG_HAS_MEDIA;
+//                    } else {
+//                        reqSend.media = new TLRPC.TL_decryptedMessageMediaEmpty();
+//                    }
+//                    SecretChatHelper.getInstance(currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
+//                    if (retryMessageObject == null) {
+//                        DataQuery.getInstance(currentAccount).cleanDraft(peer, false);
+//                    }
+//                }
+//            } else if (type >= 1 && type <= 3 || type >= 5 && type <= 8 || type == 9 && encryptedChat != null || type == 10) {
+//                if (encryptedChat == null) {
+//                    TLRPC.InputMedia inputMedia = null;
+//                    if (type == 1) {
+//                        if (location instanceof TLRPC.TL_messageMediaVenue) {
+//                            inputMedia = new TLRPC.TL_inputMediaVenue();
+//                            inputMedia.address = location.address;
+//                            inputMedia.title = location.title;
+//                            inputMedia.provider = location.provider;
+//                            inputMedia.venue_id = location.venue_id;
+//                            inputMedia.venue_type = "";
+//                        } else if (location instanceof TLRPC.TL_messageMediaGeoLive) {
+//                            inputMedia = new TLRPC.TL_inputMediaGeoLive();
+//                            inputMedia.period = location.period;
+//                            inputMedia.flags |= 2;
+//                        } else {
+//                            inputMedia = new TLRPC.TL_inputMediaGeoPoint();
+//                        }
+//                        inputMedia.geo_point = new TLRPC.TL_inputGeoPoint();
+//                        inputMedia.geo_point.lat = location.geo.lat;
+//                        inputMedia.geo_point._long = location.geo._long;
+//                    } else if (type == 2 || type == 9 && photo != null) {
+//                        TLRPC.TL_inputMediaUploadedPhoto uploadedPhoto = new TLRPC.TL_inputMediaUploadedPhoto();
+//                        if (ttl != 0) {
+//                            newMsg.ttl = uploadedPhoto.ttl_seconds = ttl;
+//                            uploadedPhoto.flags |= 2;
+//                        }
+//                        if (params != null) {
+//                            String masks = params.get("masks");
+//                            if (masks != null) {
+//                                SerializedData serializedData = new SerializedData(Utilities.hexToBytes(masks));
+//                                int count = serializedData.readInt32(false);
+//                                for (int a = 0; a < count; a++) {
+//                                    uploadedPhoto.stickers.add(TLRPC.InputDocument.TLdeserialize(serializedData, serializedData.readInt32(false), false));
+//                                }
+//                                uploadedPhoto.flags |= 1;
+//                                serializedData.cleanup();
+//                            }
+//                        }
+//                        if (photo.access_hash == 0) {
+//                            inputMedia = uploadedPhoto;
+//                            performMediaUpload = true;
+//                        } else {
+//                            TLRPC.TL_inputMediaPhoto media = new TLRPC.TL_inputMediaPhoto();
+//                            media.id = new TLRPC.TL_inputPhoto();
+//                            media.id.id = photo.id;
+//                            media.id.access_hash = photo.access_hash;
+//                            media.id.file_reference = photo.file_reference;
+//                            if (media.id.file_reference == null) {
+//                                media.id.file_reference = new byte[0];
+//                            }
+//                            inputMedia = media;
+//                        }
+//                        if (delayedMessage == null) {
+//                            delayedMessage = new DelayedMessage(peer);
+//                            delayedMessage.type = 0;
+//                            delayedMessage.obj = newMsgObj;
+//                            delayedMessage.originalPath = originalPath;
+//                        }
+//                        delayedMessage.inputUploadMedia = uploadedPhoto;
+//                        delayedMessage.performMediaUpload = performMediaUpload;
+//                        if (path != null && path.length() > 0 && path.startsWith("http")) {
+//                            delayedMessage.httpLocation = path;
+//                        } else {
+//                            delayedMessage.location = photo.sizes.get(photo.sizes.size() - 1).location;
+//                        }
+//                    } else if (type == 3) {
+//                        TLRPC.TL_inputMediaUploadedDocument uploadedDocument = new TLRPC.TL_inputMediaUploadedDocument();
+//                        uploadedDocument.mime_type = document.mime_type;
+//                        uploadedDocument.attributes = document.attributes;
+//                        if (!MessageObject.isRoundVideoDocument(document) && (videoEditedInfo == null || !videoEditedInfo.muted && !videoEditedInfo.roundVideo)) {
+//                            uploadedDocument.nosound_video = true;
+//                            if (BaseBuildVars.DEBUG_VERSION) {
+//                                FileLog.d("nosound_video = true");
+//                            }
+//                        }
+//                        if (ttl != 0) {
+//                            newMsg.ttl = uploadedDocument.ttl_seconds = ttl;
+//                            uploadedDocument.flags |= 2;
+//                        }
+//                        if (document.access_hash == 0) {
+//                            inputMedia = uploadedDocument;
+//                            performMediaUpload = true;
+//                        } else {
+//                            TLRPC.TL_inputMediaDocument media = new TLRPC.TL_inputMediaDocument();
+//                            media.id = new TLRPC.TL_inputDocument();
+//                            media.id.id = document.id;
+//                            media.id.access_hash = document.access_hash;
+//                            media.id.file_reference = document.file_reference;
+//                            if (media.id.file_reference == null) {
+//                                media.id.file_reference = new byte[0];
+//                            }
+//                            inputMedia = media;
+//                        }
+//                        if (delayedMessage == null) {
+//                            delayedMessage = new DelayedMessage(peer);
+//                            delayedMessage.type = 1;
+//                            delayedMessage.obj = newMsgObj;
+//                            delayedMessage.originalPath = originalPath;
+//                            delayedMessage.parentObject = parentObject;
+//                        }
+//                        delayedMessage.inputUploadMedia = uploadedDocument;
+//                        delayedMessage.performMediaUpload = performMediaUpload;
+//                        if (!document.thumbs.isEmpty()) {
+//                            delayedMessage.location = document.thumbs.get(0).location;
+//                        }
+//                        delayedMessage.videoEditedInfo = videoEditedInfo;
+//                    } else if (type == 6) {
+//                        inputMedia = new TLRPC.TL_inputMediaContact();
+//                        inputMedia.phone_number = user.phone;
+//                        inputMedia.first_name = user.first_name;
+//                        inputMedia.last_name = user.last_name;
+/////*                        if (user.restriction_reason != null && user.restriction_reason.startsWith("BEGIN:VCARD")) {
+////                            inputMedia.vcard = user.restriction_reason;
+////                        } else {
+////                            inputMedia.vcard = "";
+////                        }*/
+//                    } else if (type == 7 || type == 9) {
+//                        boolean http = false;
+//                        TLRPC.InputMedia uploadedMedia;
+/////*                        if (originalPath != null || path != null || document.access_hash == 0) {
+////                            if (encryptedChat == null && !TextUtils.isEmpty(originalPath) && originalPath.startsWith("http") && params != null) {
+////                                TLRPC.TL_inputMediaGifExternal gifExternal = new TLRPC.TL_inputMediaGifExternal();
+////                                String args[] = params.get("url").split("\\|");
+////                                if (args.length == 2) {
+////                                    gifExternal.url = args[0];
+////                                    gifExternal.q = args[1];
+////                                }
+////                                http = true;
+////                                uploadedMedia = gifExternal;
+////                            } else {
+////                                uploadedMedia = new TLRPC.TL_inputMediaUploadedDocument();
+////                                if (ttl != 0) {
+////                                    newMsg.ttl = uploadedMedia.ttl_seconds = ttl;
+////                                    uploadedMedia.flags |= 2;
+////                                }
+////                                if (!TextUtils.isEmpty(path) && path.toLowerCase().endsWith("mp4") && (params == null || params.containsKey("forceDocument"))) {
+////                                    uploadedMedia.nosound_video = true;
+////                                }
+////                            }
+////                            uploadedMedia.mime_type = document.mime_type;
+////                            uploadedMedia.attributes = document.attributes;*/
+//                        } else {
+//                            uploadedMedia = null;
+//                        }
+//
+//                        if (document.access_hash == 0) {
+//                            inputMedia = uploadedMedia;
+//                            performMediaUpload = uploadedMedia instanceof TLRPC.TL_inputMediaUploadedDocument;
+//                        } else {
+//                            TLRPC.TL_inputMediaDocument media = new TLRPC.TL_inputMediaDocument();
+//                            media.id = new TLRPC.TL_inputDocument();
+//                            media.id.id = document.id;
+//                            media.id.access_hash = document.access_hash;
+//                            media.id.file_reference = document.file_reference;
+//                            if (media.id.file_reference == null) {
+//                                media.id.file_reference = new byte[0];
+//                            }
+//                            inputMedia = media;
+//                        }
+//                        if (!http && uploadedMedia != null) {
+//                            delayedMessage = new DelayedMessage(peer);
+//                            delayedMessage.originalPath = originalPath;
+//                            delayedMessage.type = 2;
+//                            delayedMessage.obj = newMsgObj;
+//                            if (!document.thumbs.isEmpty()) {
+//                                delayedMessage.location = document.thumbs.get(0).location;
+//                            }
+//                            delayedMessage.parentObject = parentObject;
+//                            delayedMessage.inputUploadMedia = uploadedMedia;
+//                            delayedMessage.performMediaUpload = performMediaUpload;
+//                        }
+//                    } else if (type == 8) {
+//                        TLRPC.TL_inputMediaUploadedDocument uploadedDocument = new TLRPC.TL_inputMediaUploadedDocument();
+//                        uploadedDocument.mime_type = document.mime_type;
+//                        uploadedDocument.attributes = document.attributes;
+//                        if (ttl != 0) {
+//                            newMsg.ttl = uploadedDocument.ttl_seconds = ttl;
+//                            uploadedDocument.flags |= 2;
+//                        }
+//
+//                        if (document.access_hash == 0) {
+//                            inputMedia = uploadedDocument;
+//                            performMediaUpload = true;
+//                        } else {
+//                            TLRPC.TL_inputMediaDocument media = new TLRPC.TL_inputMediaDocument();
+//                            media.id = new TLRPC.TL_inputDocument();
+//                            media.id.id = document.id;
+//                            media.id.access_hash = document.access_hash;
+//                            media.id.file_reference = document.file_reference;
+//                            if (media.id.file_reference == null) {
+//                                media.id.file_reference = new byte[0];
+//                            }
+//                            inputMedia = media;
+//                        }
+//                        delayedMessage = new DelayedMessage(peer);
+//                        delayedMessage.type = 3;
+//                        delayedMessage.obj = newMsgObj;
+//                        delayedMessage.parentObject = parentObject;
+//                        delayedMessage.inputUploadMedia = uploadedDocument;
+//                        delayedMessage.performMediaUpload = performMediaUpload;
+//                    } else if (type == 10) {
+//                        TLRPC.TL_inputMediaPoll inputMediaPoll = new TLRPC.TL_inputMediaPoll();
+//                        inputMediaPoll.poll = poll.poll;
+//                        inputMedia = inputMediaPoll;
+//                    }
+//
+//                    TLObject reqSend;
+//
+//                    if (sendToPeers != null) {
+/////*                        TLRPC.TL_messages_sendBroadcast request = new TLRPC.TL_messages_sendBroadcast();
+////                        ArrayList<Long> random_ids = new ArrayList<>();
+////                        for (int a = 0; a < sendToPeers.size(); a++) {
+////                            random_ids.add(Utilities.random.nextLong());
+////                        }
+////                        request.contacts = sendToPeers;
+////                        request.media = inputMedia;
+////                        request.random_id = random_ids;
+////                        request.message = "";
+////                        if (delayedMessage != null) {
+////                            delayedMessage.sendRequest = request;
+////                        }
+////                        reqSend = request;
+////                        if (retryMessageObject == null) {
+////                            DataQuery.getInstance(currentAccount).cleanDraft(peer, false);
+////                        }*/
+//                    } else if (groupId != 0) {
+//                        TLRPC.TL_messages_sendMultiMedia request;
+//                        if (delayedMessage.sendRequest != null) {
+//                            request = (TLRPC.TL_messages_sendMultiMedia) delayedMessage.sendRequest;
+//                        } else {
+//                            request = new TLRPC.TL_messages_sendMultiMedia();
+//                            request.peer = sendToPeer;
+/////*                            if (newMsg.to_id instanceof TLRPC.TL_peerChannel) {
+////                                request.silent = MessagesController.getNotificationsSettings(currentAccount).getBoolean("silent_" + peer, false);
+////                            }*/
+/////*                            if (newMsg.reply_to_msg_id != 0) {
+////                                request.flags |= 1;
+////                                request.reply_to_msg_id = newMsg.reply_to_msg_id;
+////                            }*/
+//                            delayedMessage.sendRequest = request;
+//                        }
+//                        delayedMessage.messageObjects.add(newMsgObj);
+//                        delayedMessage.parentObjects.add(parentObject);
+//                        delayedMessage.locations.add(delayedMessage.location);
+//                        delayedMessage.videoEditedInfos.add(delayedMessage.videoEditedInfo);
+//                        delayedMessage.httpLocations.add(delayedMessage.httpLocation);
+//                        delayedMessage.inputMedias.add(delayedMessage.inputUploadMedia);
+//                        delayedMessage.messages.add(newMsg);
+//                        delayedMessage.originalPaths.add(originalPath);
+//                        TLRPC.TL_inputSingleMedia inputSingleMedia = new TLRPC.TL_inputSingleMedia();
+//                        inputSingleMedia.random_id = newMsg.random_id;
+//                        inputSingleMedia.media = inputMedia;
+//                        inputSingleMedia.message = caption;
+//                        if (entities != null && !entities.isEmpty()) {
+//                            inputSingleMedia.entities = entities;
+//                            inputSingleMedia.flags |= 1;
+//                        }
+//                        request.multi_media.add(inputSingleMedia);
+//                        reqSend = request;
+//                    } else {
+//                        TLRPC.TL_messages_sendMedia request = new TLRPC.TL_messages_sendMedia();
+//                        request.peer = sendToPeer;
+/////*                        if (newMsg.to_id instanceof TLRPC.TL_peerChannel) {
+////                            request.silent = MessagesController.getNotificationsSettings(currentAccount).getBoolean("silent_" + peer, false);
+////                        }
+////                        if (newMsg.reply_to_msg_id != 0) {
+////                            request.flags |= 1;
+////                            request.reply_to_msg_id = newMsg.reply_to_msg_id;
+////                        }*/
+//                        request.random_id = newMsg.random_id;
 //                        request.media = inputMedia;
-//                        request.random_id = random_ids;
-//                        request.message = "";
+//                        request.message = caption;
+//                        if (entities != null && !entities.isEmpty()) {
+//                            request.entities = entities;
+//                            request.flags |= 8;
+//                        }
+//
 //                        if (delayedMessage != null) {
 //                            delayedMessage.sendRequest = request;
 //                        }
 //                        reqSend = request;
-//                        if (retryMessageObject == null) {
-//                            DataQuery.getInstance(currentAccount).cleanDraft(peer, false);
-//                        }*/
-                    } else if (groupId != 0) {
-                        TLRPC.TL_messages_sendMultiMedia request;
-                        if (delayedMessage.sendRequest != null) {
-                            request = (TLRPC.TL_messages_sendMultiMedia) delayedMessage.sendRequest;
-                        } else {
-                            request = new TLRPC.TL_messages_sendMultiMedia();
-                            request.peer = sendToPeer;
-///*                            if (newMsg.to_id instanceof TLRPC.TL_peerChannel) {
-//                                request.silent = MessagesController.getNotificationsSettings(currentAccount).getBoolean("silent_" + peer, false);
-//                            }*/
-///*                            if (newMsg.reply_to_msg_id != 0) {
-//                                request.flags |= 1;
-//                                request.reply_to_msg_id = newMsg.reply_to_msg_id;
-//                            }*/
-                            delayedMessage.sendRequest = request;
-                        }
-                        delayedMessage.messageObjects.add(newMsgObj);
-                        delayedMessage.parentObjects.add(parentObject);
-                        delayedMessage.locations.add(delayedMessage.location);
-                        delayedMessage.videoEditedInfos.add(delayedMessage.videoEditedInfo);
-                        delayedMessage.httpLocations.add(delayedMessage.httpLocation);
-                        delayedMessage.inputMedias.add(delayedMessage.inputUploadMedia);
-                        delayedMessage.messages.add(newMsg);
-                        delayedMessage.originalPaths.add(originalPath);
-                        TLRPC.TL_inputSingleMedia inputSingleMedia = new TLRPC.TL_inputSingleMedia();
-                        inputSingleMedia.random_id = newMsg.random_id;
-                        inputSingleMedia.media = inputMedia;
-                        inputSingleMedia.message = caption;
-                        if (entities != null && !entities.isEmpty()) {
-                            inputSingleMedia.entities = entities;
-                            inputSingleMedia.flags |= 1;
-                        }
-                        request.multi_media.add(inputSingleMedia);
-                        reqSend = request;
-                    } else {
-                        TLRPC.TL_messages_sendMedia request = new TLRPC.TL_messages_sendMedia();
-                        request.peer = sendToPeer;
-///*                        if (newMsg.to_id instanceof TLRPC.TL_peerChannel) {
-//                            request.silent = MessagesController.getNotificationsSettings(currentAccount).getBoolean("silent_" + peer, false);
-//                        }
-//                        if (newMsg.reply_to_msg_id != 0) {
-//                            request.flags |= 1;
-//                            request.reply_to_msg_id = newMsg.reply_to_msg_id;
-//                        }*/
-                        request.random_id = newMsg.random_id;
-                        request.media = inputMedia;
-                        request.message = caption;
-                        if (entities != null && !entities.isEmpty()) {
-                            request.entities = entities;
-                            request.flags |= 8;
-                        }
-
-                        if (delayedMessage != null) {
-                            delayedMessage.sendRequest = request;
-                        }
-                        reqSend = request;
-                    }
-                    if (groupId != 0) {
-                        performSendDelayedMessage(delayedMessage);
-                    } else if (type == 1) {
-///*                        performSendMessageRequest(reqSend, newMsgObj, null, delayedMessage, parentObject);*/
-                    } else if (type == 2) {
-///*                        if (performMediaUpload) {
+//                    }
+//                    if (groupId != 0) {
+//                        performSendDelayedMessage(delayedMessage);
+//                    } else if (type == 1) {
+/////*                        performSendMessageRequest(reqSend, newMsgObj, null, delayedMessage, parentObject);*/
+//                    } else if (type == 2) {
+/////*                        if (performMediaUpload) {
+////                            performSendDelayedMessage(delayedMessage);
+////                        } else {
+////                            performSendMessageRequest(reqSend, newMsgObj, originalPath, null, true, delayedMessage, parentObject);
+////                        }*/
+//                    } else if (type == 3) {
+//                        if (performMediaUpload) {
 //                            performSendDelayedMessage(delayedMessage);
 //                        } else {
-//                            performSendMessageRequest(reqSend, newMsgObj, originalPath, null, true, delayedMessage, parentObject);
-//                        }*/
-                    } else if (type == 3) {
-                        if (performMediaUpload) {
-                            performSendDelayedMessage(delayedMessage);
-                        } else {
-///*                            performSendMessageRequest(reqSend, newMsgObj, originalPath, delayedMessage, parentObject);*/
-                        }
-                    } else if (type == 6) {
-///*                        performSendMessageRequest(reqSend, newMsgObj, originalPath, delayedMessage, parentObject);*/
-                    } else if (type == 7) {
-                        if (performMediaUpload && delayedMessage != null) {
-                            performSendDelayedMessage(delayedMessage);
-                        } else {
-///*                            performSendMessageRequest(reqSend, newMsgObj, originalPath, delayedMessage, parentObject);*/
-                        }
-                    } else if (type == 8) {
-                        if (performMediaUpload) {
-                            performSendDelayedMessage(delayedMessage);
-                        } else {
-///*                            performSendMessageRequest(reqSend, newMsgObj, originalPath, delayedMessage, parentObject);*/
-                        }
-                    } else if (type == 10) {
-///*                        performSendMessageRequest(reqSend, newMsgObj, originalPath, delayedMessage, parentObject);*/
-                    }
-                } else {
-                    TLRPC.TL_decryptedMessage reqSend;
-                    if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 73) {
-                        reqSend = new TLRPC.TL_decryptedMessage();
-                        if (groupId != 0) {
-                            reqSend.grouped_id = groupId;
-                            reqSend.flags |= 131072;
-                        }
-                    } else {
-                        reqSend = new TLRPC.TL_decryptedMessage_layer45();
-                    }
-                    reqSend.ttl = newMsg.ttl;
-                    if (entities != null && !entities.isEmpty()) {
-                        reqSend.entities = entities;
-                        reqSend.flags |= TLRPC.MESSAGE_FLAG_HAS_ENTITIES;
-                    }
-///*                    if (newMsg.reply_to_random_id != 0) {
-//                        reqSend.reply_to_random_id = newMsg.reply_to_random_id;
-//                        reqSend.flags |= TLRPC.MESSAGE_FLAG_REPLY;
-//                    }*/
-                    reqSend.flags |= TLRPC.MESSAGE_FLAG_HAS_MEDIA;
-                    if (params != null && params.get("bot_name") != null) {
-                        reqSend.via_bot_name = params.get("bot_name");
-                        reqSend.flags |= TLRPC.MESSAGE_FLAG_HAS_BOT_ID;
-                    }
-                    reqSend.random_id = newMsg.random_id;
-                    reqSend.message = "";
-                    if (type == 1) {
-                        if (location instanceof TLRPC.TL_messageMediaVenue) {
-                            reqSend.media = new TLRPC.TL_decryptedMessageMediaVenue();
-                            reqSend.media.address = location.address;
-                            reqSend.media.title = location.title;
-                            reqSend.media.provider = location.provider;
-                            reqSend.media.venue_id = location.venue_id;
-                        } else {
-                            reqSend.media = new TLRPC.TL_decryptedMessageMediaGeoPoint();
-                        }
-                        reqSend.media.lat = location.geo.lat;
-                        reqSend.media._long = location.geo._long;
-                        SecretChatHelper.getInstance(currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
-                    } else if (type == 2 || type == 9 && photo != null) {
-                        TLRPC.PhotoSize small = photo.sizes.get(0);
-                        TLRPC.PhotoSize big = photo.sizes.get(photo.sizes.size() - 1);
-                        ImageLoader.fillPhotoSizeWithBytes(small);
-                        reqSend.media = new TLRPC.TL_decryptedMessageMediaPhoto();
-                        reqSend.media.caption = caption;
-                        if (small.bytes != null) {
-                            ((TLRPC.TL_decryptedMessageMediaPhoto) reqSend.media).thumb = small.bytes;
-                        } else {
-                            ((TLRPC.TL_decryptedMessageMediaPhoto) reqSend.media).thumb = new byte[0];
-                        }
-                        reqSend.media.thumb_h = small.h;
-                        reqSend.media.thumb_w = small.w;
-                        reqSend.media.w = big.w;
-                        reqSend.media.h = big.h;
-                        reqSend.media.size = big.size;
-                        if (big.location.key == null || groupId != 0) {
-                            if (delayedMessage == null) {
-                                delayedMessage = new DelayedMessage(peer);
-                                delayedMessage.encryptedChat = encryptedChat;
-                                delayedMessage.type = 0;
-                                delayedMessage.originalPath = originalPath;
-                                delayedMessage.sendEncryptedRequest = reqSend;
-                                delayedMessage.obj = newMsgObj;
-                                if (params != null && params.containsKey("parentObject")) {
-                                    delayedMessage.parentObject = params.get("parentObject");
-                                } else {
-                                    delayedMessage.parentObject = parentObject;
-                                }
-                                delayedMessage.performMediaUpload = true;
-                            }
-                            if (!TextUtils.isEmpty(path) && path.startsWith("http")) {
-                                delayedMessage.httpLocation = path;
-                            } else {
-                                delayedMessage.location = photo.sizes.get(photo.sizes.size() - 1).location;
-                            }
-                            if (groupId == 0) {
-                                performSendDelayedMessage(delayedMessage);
-                            }
-                        } else {
-                            TLRPC.TL_inputEncryptedFile encryptedFile = new TLRPC.TL_inputEncryptedFile();
-                            encryptedFile.id = big.location.volume_id;
-                            encryptedFile.access_hash = big.location.secret;
-                            reqSend.media.key = big.location.key;
-                            reqSend.media.iv = big.location.iv;
-                            SecretChatHelper.getInstance(currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, encryptedFile, null, newMsgObj);
-                        }
-                    } else if (type == 3) {
-                        TLRPC.PhotoSize thumb = getThumbForSecretChat(document.thumbs);
-                        ImageLoader.fillPhotoSizeWithBytes(thumb);
-                        if (MessageObject.isNewGifDocument(document) || MessageObject.isRoundVideoDocument(document)) {
-                            reqSend.media = new TLRPC.TL_decryptedMessageMediaDocument();
-                            reqSend.media.attributes = document.attributes;
-                            if (thumb != null && thumb.bytes != null) {
-                                ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = thumb.bytes;
-                            } else {
-                                ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = new byte[0];
-                            }
-                        } else {
-                            reqSend.media = new TLRPC.TL_decryptedMessageMediaVideo();
-                            if (thumb != null && thumb.bytes != null) {
-                                ((TLRPC.TL_decryptedMessageMediaVideo) reqSend.media).thumb = thumb.bytes;
-                            } else {
-                                ((TLRPC.TL_decryptedMessageMediaVideo) reqSend.media).thumb = new byte[0];
-                            }
-                        }
-                        reqSend.media.caption = caption;
-                        reqSend.media.mime_type = "video/mp4";
-                        reqSend.media.size = document.size;
-                        for (int a = 0; a < document.attributes.size(); a++) {
-                            TLRPC.DocumentAttribute attribute = document.attributes.get(a);
-                            if (attribute instanceof TLRPC.TL_documentAttributeVideo) {
-                                reqSend.media.w = attribute.w;
-                                reqSend.media.h = attribute.h;
-                                reqSend.media.duration = attribute.duration;
-                                break;
-                            }
-                        }
-                        reqSend.media.thumb_h = thumb.h;
-                        reqSend.media.thumb_w = thumb.w;
-                        if (document.key == null || groupId != 0) {
-                            if (delayedMessage == null) {
-                                delayedMessage = new DelayedMessage(peer);
-                                delayedMessage.encryptedChat = encryptedChat;
-                                delayedMessage.type = 1;
-                                delayedMessage.sendEncryptedRequest = reqSend;
-                                delayedMessage.originalPath = originalPath;
-                                delayedMessage.obj = newMsgObj;
-                                if (params != null && params.containsKey("parentObject")) {
-                                    delayedMessage.parentObject = params.get("parentObject");
-                                } else {
-                                    delayedMessage.parentObject = parentObject;
-                                }
-                                delayedMessage.performMediaUpload = true;
-                            }
-                            delayedMessage.videoEditedInfo = videoEditedInfo;
-                            if (groupId == 0) {
-                                performSendDelayedMessage(delayedMessage);
-                            }
-                        } else {
-                            TLRPC.TL_inputEncryptedFile encryptedFile = new TLRPC.TL_inputEncryptedFile();
-                            encryptedFile.id = document.id;
-                            encryptedFile.access_hash = document.access_hash;
-                            reqSend.media.key = document.key;
-                            reqSend.media.iv = document.iv;
-                            SecretChatHelper.getInstance(currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, encryptedFile, null, newMsgObj);
-                        }
-                    } else if (type == 6) {
-                        reqSend.media = new TLRPC.TL_decryptedMessageMediaContact();
-                        reqSend.media.phone_number = user.phone;
-                        reqSend.media.first_name = user.first_name;
-                        reqSend.media.last_name = user.last_name;
-                        reqSend.media.user_id = user.id;
-                        SecretChatHelper.getInstance(currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
-                    } else if (type == 7 || type == 9 && document != null) {
-                        if (MessageObject.isStickerDocument(document)) {
-                            reqSend.media = new TLRPC.TL_decryptedMessageMediaExternalDocument();
-                            reqSend.media.id = document.id;
-                            reqSend.media.date = document.date;
-                            reqSend.media.access_hash = document.access_hash;
-                            reqSend.media.mime_type = document.mime_type;
-                            reqSend.media.size = document.size;
-                            reqSend.media.dc_id = document.dc_id;
-                            reqSend.media.attributes = document.attributes;
-                            TLRPC.PhotoSize thumb = getThumbForSecretChat(document.thumbs);
-                            if (thumb != null) {
-                                ((TLRPC.TL_decryptedMessageMediaExternalDocument) reqSend.media).thumb = thumb;
-                            } else {
-                                ((TLRPC.TL_decryptedMessageMediaExternalDocument) reqSend.media).thumb = new TLRPC.TL_photoSizeEmpty();
-                                ((TLRPC.TL_decryptedMessageMediaExternalDocument) reqSend.media).thumb.type = "s";
-                            }
-                            SecretChatHelper.getInstance(currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
-                        } else {
-                            reqSend.media = new TLRPC.TL_decryptedMessageMediaDocument();
-                            reqSend.media.attributes = document.attributes;
-                            reqSend.media.caption = caption;
-                            TLRPC.PhotoSize thumb = getThumbForSecretChat(document.thumbs);
-                            if (thumb != null) {
-                                ImageLoader.fillPhotoSizeWithBytes(thumb);
-                                ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = thumb.bytes;
-                                reqSend.media.thumb_h = thumb.h;
-                                reqSend.media.thumb_w = thumb.w;
-                            } else {
-                                ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = new byte[0];
-                                reqSend.media.thumb_h = 0;
-                                reqSend.media.thumb_w = 0;
-                            }
-                            reqSend.media.size = document.size;
-                            reqSend.media.mime_type = document.mime_type;
-
-                            if (document.key == null) {
-                                delayedMessage = new DelayedMessage(peer);
-                                delayedMessage.originalPath = originalPath;
-                                delayedMessage.sendEncryptedRequest = reqSend;
-                                delayedMessage.type = 2;
-                                delayedMessage.obj = newMsgObj;
-                                if (params != null && params.containsKey("parentObject")) {
-                                    delayedMessage.parentObject = params.get("parentObject");
-                                } else {
-                                    delayedMessage.parentObject = parentObject;
-                                }
-                                delayedMessage.encryptedChat = encryptedChat;
-                                delayedMessage.performMediaUpload = true;
-                                if (path != null && path.length() > 0 && path.startsWith("http")) {
-                                    delayedMessage.httpLocation = path;
-                                }
-                                performSendDelayedMessage(delayedMessage);
-                            } else {
-                                TLRPC.TL_inputEncryptedFile encryptedFile = new TLRPC.TL_inputEncryptedFile();
-                                encryptedFile.id = document.id;
-                                encryptedFile.access_hash = document.access_hash;
-                                reqSend.media.key = document.key;
-                                reqSend.media.iv = document.iv;
-                                SecretChatHelper.getInstance(currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, encryptedFile, null, newMsgObj);
-                            }
-                        }
-                    } else if (type == 8) {
-                        delayedMessage = new DelayedMessage(peer);
-                        delayedMessage.encryptedChat = encryptedChat;
-                        delayedMessage.sendEncryptedRequest = reqSend;
-                        delayedMessage.obj = newMsgObj;
-                        delayedMessage.type = 3;
-                        delayedMessage.parentObject = parentObject;
-                        delayedMessage.performMediaUpload = true;
-
-                        reqSend.media = new TLRPC.TL_decryptedMessageMediaDocument();
-                        reqSend.media.attributes = document.attributes;
-                        reqSend.media.caption = caption;
-                        TLRPC.PhotoSize thumb = getThumbForSecretChat(document.thumbs);
-                        if (thumb != null) {
-                            ImageLoader.fillPhotoSizeWithBytes(thumb);
-                            ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = thumb.bytes;
-                            reqSend.media.thumb_h = thumb.h;
-                            reqSend.media.thumb_w = thumb.w;
-                        } else {
-                            ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = new byte[0];
-                            reqSend.media.thumb_h = 0;
-                            reqSend.media.thumb_w = 0;
-                        }
-                        reqSend.media.mime_type = document.mime_type;
-                        reqSend.media.size = document.size;
-                        delayedMessage.originalPath = originalPath;
-                        performSendDelayedMessage(delayedMessage);
-                    }
-                    if (groupId != 0) {
-                        TLRPC.TL_messages_sendEncryptedMultiMedia request;
-                        if (delayedMessage.sendEncryptedRequest != null) {
-                            request = (TLRPC.TL_messages_sendEncryptedMultiMedia) delayedMessage.sendEncryptedRequest;
-                        } else {
-                            request = new TLRPC.TL_messages_sendEncryptedMultiMedia();
-                            delayedMessage.sendEncryptedRequest = request;
-                        }
-                        delayedMessage.messageObjects.add(newMsgObj);
-                        delayedMessage.messages.add(newMsg);
-                        delayedMessage.originalPaths.add(originalPath);
-                        delayedMessage.performMediaUpload = true;
-                        request.messages.add(reqSend);
-                        TLRPC.TL_inputEncryptedFile encryptedFile = new TLRPC.TL_inputEncryptedFile();
-                        encryptedFile.id = type == 3 ? 1 : 0;
-                        request.files.add(encryptedFile);
-                        performSendDelayedMessage(delayedMessage);
-                    }
-                    if (retryMessageObject == null) {
-                        DataQuery.getInstance(currentAccount).cleanDraft(peer, false);
-                    }
-                }
-            } else if (type == 4) {
-                TLRPC.TL_messages_forwardMessages reqSend = new TLRPC.TL_messages_forwardMessages();
-                reqSend.to_peer = sendToPeer;
-                reqSend.with_my_score = retryMessageObject.messageOwner.with_my_score;
-                if (retryMessageObject.messageOwner.ttl != 0) {
-                    TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-retryMessageObject.messageOwner.ttl);
-                    reqSend.from_peer = new TLRPC.TL_inputPeerChannel();
-                    reqSend.from_peer.channel_id = -retryMessageObject.messageOwner.ttl;
-                    if (chat != null) {
-                        reqSend.from_peer.access_hash = chat.access_hash;
-                    }
-                } else {
-                    reqSend.from_peer = new TLRPC.TL_inputPeerEmpty();
-                }
-///*                if (retryMessageObject.messageOwner.to_id instanceof TLRPC.TL_peerChannel) {
-//                    reqSend.silent = MessagesController.getNotificationsSettings(currentAccount).getBoolean("silent_" + peer, false);
-//                }*/
-                reqSend.random_id.add(newMsg.random_id);
-                if (retryMessageObject.getId() >= 0) {
-                    reqSend.id.add(retryMessageObject.getId());
-                } else {
-                    if (retryMessageObject.messageOwner.fwd_msg_id != 0) {
-                        reqSend.id.add(retryMessageObject.messageOwner.fwd_msg_id);
-                    } else if (retryMessageObject.messageOwner.fwd_from != null) {
-                        reqSend.id.add(retryMessageObject.messageOwner.fwd_from.channel_post);
-                    }
-                }
-                performSendMessageRequest(reqSend, newMsgObj, null, null, parentObject);
-            } else if (type == 9) {
-                TLRPC.TL_messages_sendInlineBotResult reqSend = new TLRPC.TL_messages_sendInlineBotResult();
-                reqSend.peer = sendToPeer;
-                reqSend.random_id = newMsg.random_id;
-//                if (newMsg.reply_to_msg_id != 0) {
-//                    reqSend.flags |= 1;
-/////*                    reqSend.reply_to_msg_id = newMsg.reply_to_msg_id;*/
+/////*                            performSendMessageRequest(reqSend, newMsgObj, originalPath, delayedMessage, parentObject);*/
+//                        }
+//                    } else if (type == 6) {
+/////*                        performSendMessageRequest(reqSend, newMsgObj, originalPath, delayedMessage, parentObject);*/
+//                    } else if (type == 7) {
+//                        if (performMediaUpload && delayedMessage != null) {
+//                            performSendDelayedMessage(delayedMessage);
+//                        } else {
+/////*                            performSendMessageRequest(reqSend, newMsgObj, originalPath, delayedMessage, parentObject);*/
+//                        }
+//                    } else if (type == 8) {
+//                        if (performMediaUpload) {
+//                            performSendDelayedMessage(delayedMessage);
+//                        } else {
+/////*                            performSendMessageRequest(reqSend, newMsgObj, originalPath, delayedMessage, parentObject);*/
+//                        }
+//                    } else if (type == 10) {
+/////*                        performSendMessageRequest(reqSend, newMsgObj, originalPath, delayedMessage, parentObject);*/
+//                    }
+//                } else {
+//                    TLRPC.TL_decryptedMessage reqSend;
+//                    if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 73) {
+//                        reqSend = new TLRPC.TL_decryptedMessage();
+//                        if (groupId != 0) {
+//                            reqSend.grouped_id = groupId;
+//                            reqSend.flags |= 131072;
+//                        }
+//                    } else {
+//                        reqSend = new TLRPC.TL_decryptedMessage_layer45();
+//                    }
+//                    reqSend.ttl = newMsg.ttl;
+//                    if (entities != null && !entities.isEmpty()) {
+//                        reqSend.entities = entities;
+//                        reqSend.flags |= TLRPC.MESSAGE_FLAG_HAS_ENTITIES;
+//                    }
+/////*                    if (newMsg.reply_to_random_id != 0) {
+////                        reqSend.reply_to_random_id = newMsg.reply_to_random_id;
+////                        reqSend.flags |= TLRPC.MESSAGE_FLAG_REPLY;
+////                    }*/
+//                    reqSend.flags |= TLRPC.MESSAGE_FLAG_HAS_MEDIA;
+//                    if (params != null && params.get("bot_name") != null) {
+//                        reqSend.via_bot_name = params.get("bot_name");
+//                        reqSend.flags |= TLRPC.MESSAGE_FLAG_HAS_BOT_ID;
+//                    }
+//                    reqSend.random_id = newMsg.random_id;
+//                    reqSend.message = "";
+//                    if (type == 1) {
+//                        if (location instanceof TLRPC.TL_messageMediaVenue) {
+//                            reqSend.media = new TLRPC.TL_decryptedMessageMediaVenue();
+//                            reqSend.media.address = location.address;
+//                            reqSend.media.title = location.title;
+//                            reqSend.media.provider = location.provider;
+//                            reqSend.media.venue_id = location.venue_id;
+//                        } else {
+//                            reqSend.media = new TLRPC.TL_decryptedMessageMediaGeoPoint();
+//                        }
+//                        reqSend.media.lat = location.geo.lat;
+//                        reqSend.media._long = location.geo._long;
+//                        SecretChatHelper.getInstance(currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
+//                    } else if (type == 2 || type == 9 && photo != null) {
+//                        TLRPC.PhotoSize small = photo.sizes.get(0);
+//                        TLRPC.PhotoSize big = photo.sizes.get(photo.sizes.size() - 1);
+//                        ImageLoader.fillPhotoSizeWithBytes(small);
+//                        reqSend.media = new TLRPC.TL_decryptedMessageMediaPhoto();
+//                        reqSend.media.caption = caption;
+//                        if (small.bytes != null) {
+//                            ((TLRPC.TL_decryptedMessageMediaPhoto) reqSend.media).thumb = small.bytes;
+//                        } else {
+//                            ((TLRPC.TL_decryptedMessageMediaPhoto) reqSend.media).thumb = new byte[0];
+//                        }
+//                        reqSend.media.thumb_h = small.h;
+//                        reqSend.media.thumb_w = small.w;
+//                        reqSend.media.w = big.w;
+//                        reqSend.media.h = big.h;
+//                        reqSend.media.size = big.size;
+//                        if (big.location.key == null || groupId != 0) {
+//                            if (delayedMessage == null) {
+//                                delayedMessage = new DelayedMessage(peer);
+//                                delayedMessage.encryptedChat = encryptedChat;
+//                                delayedMessage.type = 0;
+//                                delayedMessage.originalPath = originalPath;
+//                                delayedMessage.sendEncryptedRequest = reqSend;
+//                                delayedMessage.obj = newMsgObj;
+//                                if (params != null && params.containsKey("parentObject")) {
+//                                    delayedMessage.parentObject = params.get("parentObject");
+//                                } else {
+//                                    delayedMessage.parentObject = parentObject;
+//                                }
+//                                delayedMessage.performMediaUpload = true;
+//                            }
+//                            if (!TextUtils.isEmpty(path) && path.startsWith("http")) {
+//                                delayedMessage.httpLocation = path;
+//                            } else {
+//                                delayedMessage.location = photo.sizes.get(photo.sizes.size() - 1).location;
+//                            }
+//                            if (groupId == 0) {
+//                                performSendDelayedMessage(delayedMessage);
+//                            }
+//                        } else {
+//                            TLRPC.TL_inputEncryptedFile encryptedFile = new TLRPC.TL_inputEncryptedFile();
+//                            encryptedFile.id = big.location.volume_id;
+//                            encryptedFile.access_hash = big.location.secret;
+//                            reqSend.media.key = big.location.key;
+//                            reqSend.media.iv = big.location.iv;
+//                            SecretChatHelper.getInstance(currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, encryptedFile, null, newMsgObj);
+//                        }
+//                    } else if (type == 3) {
+//                        TLRPC.PhotoSize thumb = getThumbForSecretChat(document.thumbs);
+//                        ImageLoader.fillPhotoSizeWithBytes(thumb);
+//                        if (MessageObject.isNewGifDocument(document) || MessageObject.isRoundVideoDocument(document)) {
+//                            reqSend.media = new TLRPC.TL_decryptedMessageMediaDocument();
+//                            reqSend.media.attributes = document.attributes;
+//                            if (thumb != null && thumb.bytes != null) {
+//                                ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = thumb.bytes;
+//                            } else {
+//                                ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = new byte[0];
+//                            }
+//                        } else {
+//                            reqSend.media = new TLRPC.TL_decryptedMessageMediaVideo();
+//                            if (thumb != null && thumb.bytes != null) {
+//                                ((TLRPC.TL_decryptedMessageMediaVideo) reqSend.media).thumb = thumb.bytes;
+//                            } else {
+//                                ((TLRPC.TL_decryptedMessageMediaVideo) reqSend.media).thumb = new byte[0];
+//                            }
+//                        }
+//                        reqSend.media.caption = caption;
+//                        reqSend.media.mime_type = "video/mp4";
+//                        reqSend.media.size = document.size;
+//                        for (int a = 0; a < document.attributes.size(); a++) {
+//                            TLRPC.DocumentAttribute attribute = document.attributes.get(a);
+//                            if (attribute instanceof TLRPC.TL_documentAttributeVideo) {
+//                                reqSend.media.w = attribute.w;
+//                                reqSend.media.h = attribute.h;
+//                                reqSend.media.duration = attribute.duration;
+//                                break;
+//                            }
+//                        }
+//                        reqSend.media.thumb_h = thumb.h;
+//                        reqSend.media.thumb_w = thumb.w;
+//                        if (document.key == null || groupId != 0) {
+//                            if (delayedMessage == null) {
+//                                delayedMessage = new DelayedMessage(peer);
+//                                delayedMessage.encryptedChat = encryptedChat;
+//                                delayedMessage.type = 1;
+//                                delayedMessage.sendEncryptedRequest = reqSend;
+//                                delayedMessage.originalPath = originalPath;
+//                                delayedMessage.obj = newMsgObj;
+//                                if (params != null && params.containsKey("parentObject")) {
+//                                    delayedMessage.parentObject = params.get("parentObject");
+//                                } else {
+//                                    delayedMessage.parentObject = parentObject;
+//                                }
+//                                delayedMessage.performMediaUpload = true;
+//                            }
+//                            delayedMessage.videoEditedInfo = videoEditedInfo;
+//                            if (groupId == 0) {
+//                                performSendDelayedMessage(delayedMessage);
+//                            }
+//                        } else {
+//                            TLRPC.TL_inputEncryptedFile encryptedFile = new TLRPC.TL_inputEncryptedFile();
+//                            encryptedFile.id = document.id;
+//                            encryptedFile.access_hash = document.access_hash;
+//                            reqSend.media.key = document.key;
+//                            reqSend.media.iv = document.iv;
+//                            SecretChatHelper.getInstance(currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, encryptedFile, null, newMsgObj);
+//                        }
+//                    } else if (type == 6) {
+//                        reqSend.media = new TLRPC.TL_decryptedMessageMediaContact();
+//                        reqSend.media.phone_number = user.phone;
+//                        reqSend.media.first_name = user.first_name;
+//                        reqSend.media.last_name = user.last_name;
+//                        reqSend.media.user_id = user.id;
+//                        SecretChatHelper.getInstance(currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
+//                    } else if (type == 7 || type == 9 && document != null) {
+//                        if (MessageObject.isStickerDocument(document)) {
+//                            reqSend.media = new TLRPC.TL_decryptedMessageMediaExternalDocument();
+//                            reqSend.media.id = document.id;
+//                            reqSend.media.date = document.date;
+//                            reqSend.media.access_hash = document.access_hash;
+//                            reqSend.media.mime_type = document.mime_type;
+//                            reqSend.media.size = document.size;
+//                            reqSend.media.dc_id = document.dc_id;
+//                            reqSend.media.attributes = document.attributes;
+//                            TLRPC.PhotoSize thumb = getThumbForSecretChat(document.thumbs);
+//                            if (thumb != null) {
+//                                ((TLRPC.TL_decryptedMessageMediaExternalDocument) reqSend.media).thumb = thumb;
+//                            } else {
+//                                ((TLRPC.TL_decryptedMessageMediaExternalDocument) reqSend.media).thumb = new TLRPC.TL_photoSizeEmpty();
+//                                ((TLRPC.TL_decryptedMessageMediaExternalDocument) reqSend.media).thumb.type = "s";
+//                            }
+//                            SecretChatHelper.getInstance(currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
+//                        } else {
+//                            reqSend.media = new TLRPC.TL_decryptedMessageMediaDocument();
+//                            reqSend.media.attributes = document.attributes;
+//                            reqSend.media.caption = caption;
+//                            TLRPC.PhotoSize thumb = getThumbForSecretChat(document.thumbs);
+//                            if (thumb != null) {
+//                                ImageLoader.fillPhotoSizeWithBytes(thumb);
+//                                ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = thumb.bytes;
+//                                reqSend.media.thumb_h = thumb.h;
+//                                reqSend.media.thumb_w = thumb.w;
+//                            } else {
+//                                ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = new byte[0];
+//                                reqSend.media.thumb_h = 0;
+//                                reqSend.media.thumb_w = 0;
+//                            }
+//                            reqSend.media.size = document.size;
+//                            reqSend.media.mime_type = document.mime_type;
+//
+//                            if (document.key == null) {
+//                                delayedMessage = new DelayedMessage(peer);
+//                                delayedMessage.originalPath = originalPath;
+//                                delayedMessage.sendEncryptedRequest = reqSend;
+//                                delayedMessage.type = 2;
+//                                delayedMessage.obj = newMsgObj;
+//                                if (params != null && params.containsKey("parentObject")) {
+//                                    delayedMessage.parentObject = params.get("parentObject");
+//                                } else {
+//                                    delayedMessage.parentObject = parentObject;
+//                                }
+//                                delayedMessage.encryptedChat = encryptedChat;
+//                                delayedMessage.performMediaUpload = true;
+//                                if (path != null && path.length() > 0 && path.startsWith("http")) {
+//                                    delayedMessage.httpLocation = path;
+//                                }
+//                                performSendDelayedMessage(delayedMessage);
+//                            } else {
+//                                TLRPC.TL_inputEncryptedFile encryptedFile = new TLRPC.TL_inputEncryptedFile();
+//                                encryptedFile.id = document.id;
+//                                encryptedFile.access_hash = document.access_hash;
+//                                reqSend.media.key = document.key;
+//                                reqSend.media.iv = document.iv;
+//                                SecretChatHelper.getInstance(currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, encryptedFile, null, newMsgObj);
+//                            }
+//                        }
+//                    } else if (type == 8) {
+//                        delayedMessage = new DelayedMessage(peer);
+//                        delayedMessage.encryptedChat = encryptedChat;
+//                        delayedMessage.sendEncryptedRequest = reqSend;
+//                        delayedMessage.obj = newMsgObj;
+//                        delayedMessage.type = 3;
+//                        delayedMessage.parentObject = parentObject;
+//                        delayedMessage.performMediaUpload = true;
+//
+//                        reqSend.media = new TLRPC.TL_decryptedMessageMediaDocument();
+//                        reqSend.media.attributes = document.attributes;
+//                        reqSend.media.caption = caption;
+//                        TLRPC.PhotoSize thumb = getThumbForSecretChat(document.thumbs);
+//                        if (thumb != null) {
+//                            ImageLoader.fillPhotoSizeWithBytes(thumb);
+//                            ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = thumb.bytes;
+//                            reqSend.media.thumb_h = thumb.h;
+//                            reqSend.media.thumb_w = thumb.w;
+//                        } else {
+//                            ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = new byte[0];
+//                            reqSend.media.thumb_h = 0;
+//                            reqSend.media.thumb_w = 0;
+//                        }
+//                        reqSend.media.mime_type = document.mime_type;
+//                        reqSend.media.size = document.size;
+//                        delayedMessage.originalPath = originalPath;
+//                        performSendDelayedMessage(delayedMessage);
+//                    }
+//                    if (groupId != 0) {
+//                        TLRPC.TL_messages_sendEncryptedMultiMedia request;
+//                        if (delayedMessage.sendEncryptedRequest != null) {
+//                            request = (TLRPC.TL_messages_sendEncryptedMultiMedia) delayedMessage.sendEncryptedRequest;
+//                        } else {
+//                            request = new TLRPC.TL_messages_sendEncryptedMultiMedia();
+//                            delayedMessage.sendEncryptedRequest = request;
+//                        }
+//                        delayedMessage.messageObjects.add(newMsgObj);
+//                        delayedMessage.messages.add(newMsg);
+//                        delayedMessage.originalPaths.add(originalPath);
+//                        delayedMessage.performMediaUpload = true;
+//                        request.messages.add(reqSend);
+//                        TLRPC.TL_inputEncryptedFile encryptedFile = new TLRPC.TL_inputEncryptedFile();
+//                        encryptedFile.id = type == 3 ? 1 : 0;
+//                        request.files.add(encryptedFile);
+//                        performSendDelayedMessage(delayedMessage);
+//                    }
+//                    if (retryMessageObject == null) {
+//                        DataQuery.getInstance(currentAccount).cleanDraft(peer, false);
+//                    }
 //                }
-///*                if (newMsg.to_id instanceof TLRPC.TL_peerChannel) {
-//                    reqSend.silent = MessagesController.getNotificationsSettings(currentAccount).getBoolean("silent_" + peer, false);
-//                }*/
-                reqSend.query_id = Utilities.parseLong(params.get("query_id"));
-                reqSend.id = params.get("id");
-                if (retryMessageObject == null) {
-                    reqSend.clear_draft = true;
-                    DataQuery.getInstance(currentAccount).cleanDraft(peer, false);
-                }
-                performSendMessageRequest(reqSend, newMsgObj, null, null, parentObject);
-            }
-        } catch (Exception e) {
-            FileLog.e(e);
-            MessagesStorage.getInstance(currentAccount).markMessageAsSendError(newMsg);
-            if (newMsgObj != null) {
-                newMsgObj.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SEND_ERROR;
-            }
-            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.messageSendError, newMsg.id);
-            processSentMessage(newMsg.id);
-        }
+//            } else if (type == 4) {
+//                TLRPC.TL_messages_forwardMessages reqSend = new TLRPC.TL_messages_forwardMessages();
+//                reqSend.to_peer = sendToPeer;
+//                reqSend.with_my_score = retryMessageObject.messageOwner.with_my_score;
+//                if (retryMessageObject.messageOwner.ttl != 0) {
+//                    TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-retryMessageObject.messageOwner.ttl);
+//                    reqSend.from_peer = new TLRPC.TL_inputPeerChannel();
+//                    reqSend.from_peer.channel_id = -retryMessageObject.messageOwner.ttl;
+//                    if (chat != null) {
+//                        reqSend.from_peer.access_hash = chat.access_hash;
+//                    }
+//                } else {
+//                    reqSend.from_peer = new TLRPC.TL_inputPeerEmpty();
+//                }
+/////*                if (retryMessageObject.messageOwner.to_id instanceof TLRPC.TL_peerChannel) {
+////                    reqSend.silent = MessagesController.getNotificationsSettings(currentAccount).getBoolean("silent_" + peer, false);
+////                }*/
+//                reqSend.random_id.add(newMsg.random_id);
+//                if (retryMessageObject.getId() >= 0) {
+//                    reqSend.id.add(retryMessageObject.getId());
+//                } else {
+//                    if (retryMessageObject.messageOwner.fwd_msg_id != 0) {
+//                        reqSend.id.add(retryMessageObject.messageOwner.fwd_msg_id);
+//                    } else if (retryMessageObject.messageOwner.fwd_from != null) {
+//                        reqSend.id.add(retryMessageObject.messageOwner.fwd_from.channel_post);
+//                    }
+//                }
+//                performSendMessageRequest(reqSend, newMsgObj, null, null, parentObject);
+//            } else if (type == 9) {
+//                TLRPC.TL_messages_sendInlineBotResult reqSend = new TLRPC.TL_messages_sendInlineBotResult();
+//                reqSend.peer = sendToPeer;
+//                reqSend.random_id = newMsg.random_id;
+////                if (newMsg.reply_to_msg_id != 0) {
+////                    reqSend.flags |= 1;
+///////*                    reqSend.reply_to_msg_id = newMsg.reply_to_msg_id;*/
+////                }
+/////*                if (newMsg.to_id instanceof TLRPC.TL_peerChannel) {
+////                    reqSend.silent = MessagesController.getNotificationsSettings(currentAccount).getBoolean("silent_" + peer, false);
+////                }*/
+//                reqSend.query_id = Utilities.parseLong(params.get("query_id"));
+//                reqSend.id = params.get("id");
+//                if (retryMessageObject == null) {
+//                    reqSend.clear_draft = true;
+//                    DataQuery.getInstance(currentAccount).cleanDraft(peer, false);
+//                }
+//                performSendMessageRequest(reqSend, newMsgObj, null, null, parentObject);
+//            }
+//        } catch (Exception e) {
+//            FileLog.e(e);
+//            MessagesStorage.getInstance(currentAccount).markMessageAsSendError(newMsg);
+//            if (newMsgObj != null) {
+//                newMsgObj.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SEND_ERROR;
+//            }
+//            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.messageSendError, newMsg.id);
+//            processSentMessage(newMsg.id);
+//        }
     }
 
     private void performSendDelayedMessage(final DelayedMessage message) {

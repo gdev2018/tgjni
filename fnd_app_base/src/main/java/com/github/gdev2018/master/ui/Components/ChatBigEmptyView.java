@@ -38,7 +38,7 @@ public class ChatBigEmptyView extends LinearLayout {
         super(context);
 
         setBackgroundResource(R.drawable.system);
-        getBackground().setColorFilter(Theme.colorFilter);
+///*        getBackground().setColorFilter(Theme.colorFilter);*/
         setPadding(AndroidUtilities.dp(16), AndroidUtilities.dp(12), AndroidUtilities.dp(16), AndroidUtilities.dp(12));
         setOrientation(LinearLayout.VERTICAL);
 

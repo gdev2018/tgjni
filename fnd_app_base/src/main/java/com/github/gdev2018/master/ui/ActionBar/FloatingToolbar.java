@@ -58,7 +58,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.BaseUserConfig;
 import com.github.gdev2018.master.LocaleController;
+import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.R;
 
 import java.util.ArrayList;
@@ -347,14 +349,18 @@ public final class FloatingToolbar {
             mDismissAnimation = createExitAnimation(mContentContainer, 150, new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mPopupWindow.dismiss();
-                    mContentContainer.removeAllViews();
+                    NotificationCenter.getInstance(BaseUserConfig.selectedAccount).doOnIdle(() -> {
+                        mPopupWindow.dismiss();
+                        mContentContainer.removeAllViews();
+                    });
                 }
             });
             mHideAnimation = createExitAnimation(mContentContainer, 0, new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mPopupWindow.dismiss();
+                    NotificationCenter.getInstance(BaseUserConfig.selectedAccount).doOnIdle(() -> {
+                        mPopupWindow.dismiss();
+                    });
                 }
             });
         }

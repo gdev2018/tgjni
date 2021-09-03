@@ -21,6 +21,7 @@ import android.os.SystemClock;
 import android.view.View;
 
 import com.github.gdev2018.master.AndroidUtilities;
+import com.github.gdev2018.master.NotificationCenter;
 import com.github.gdev2018.master.Utilities;
 
 import java.lang.ref.WeakReference;
@@ -59,6 +60,8 @@ public class MotionBackgroundDrawable extends Drawable {
     private Canvas gradientCanvas;
     private Canvas gradientFromCanvas;
 
+    private boolean postInvalidateParent;
+
     private Bitmap patternBitmap;
     private BitmapShader bitmapShader;
     private BitmapShader gradientShader;
@@ -73,7 +76,9 @@ public class MotionBackgroundDrawable extends Drawable {
 
     private boolean rotatingPreview;
 
-    private Rect patternBounds = new Rect();
+    private Runnable updateAnimationRunnable = this::updateAnimation;
+
+    private android.graphics.Rect patternBounds = new android.graphics.Rect();
 
     private int roundRadius;
 
@@ -81,7 +86,6 @@ public class MotionBackgroundDrawable extends Drawable {
         super();
         init();
     }
-
 
     public MotionBackgroundDrawable(int c1, int c2, int c3, int c4, boolean preview) {
         super();
@@ -115,6 +119,10 @@ public class MotionBackgroundDrawable extends Drawable {
         bitmapShader = new BitmapShader(currentBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
         paint.setShader(bitmapShader);
         invalidateParent();
+    }
+
+    public BitmapShader getBitmapShader() {
+        return bitmapShader;
     }
 
     public Bitmap getBitmap() {
@@ -169,6 +177,10 @@ public class MotionBackgroundDrawable extends Drawable {
 
     public int getPhase() {
         return phase;
+    }
+
+    public void setPostInvalidateParent(boolean value) {
+        postInvalidateParent = value;
     }
 
     public void rotatePreview(boolean back) {
@@ -259,6 +271,12 @@ public class MotionBackgroundDrawable extends Drawable {
         if (parentView != null && parentView.get() != null) {
             parentView.get().invalidate();
         }
+        if (postInvalidateParent) {
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.invalidateMotionBackground);
+            updateAnimation();
+            AndroidUtilities.cancelRunOnUIThread(updateAnimationRunnable);
+            AndroidUtilities.runOnUIThread(updateAnimationRunnable, 16);
+        }
     }
 
     public boolean hasPattern() {
@@ -326,7 +344,7 @@ public class MotionBackgroundDrawable extends Drawable {
 
     @Override
     public void draw(Canvas canvas) {
-        Rect bounds = getBounds();
+        android.graphics.Rect bounds = getBounds();
         canvas.save();
         float tr = patternBitmap != null ? bounds.top : translationY;
         int bitmapWidth = currentBitmap.getWidth();
@@ -417,12 +435,19 @@ public class MotionBackgroundDrawable extends Drawable {
         }
         canvas.restore();
 
+        updateAnimation();
+    }
+
+    private void updateAnimation() {
         long newTime = SystemClock.elapsedRealtime();
         long dt = newTime - lastUpdateTime;
         if (dt > 20) {
             dt = 17;
         }
         lastUpdateTime = newTime;
+        if (dt <= 1) {
+            return;
+        }
 
         if (posAnimationProgress < 1.0f) {
             float progress;
@@ -496,7 +521,7 @@ public class MotionBackgroundDrawable extends Drawable {
                 }
             }
 
-            if (rotatingPreview) {
+            if (postInvalidateParent || rotatingPreview) {
                 Utilities.generateGradient(currentBitmap, true, phase, progress, currentBitmap.getWidth(), currentBitmap.getHeight(), currentBitmap.getRowBytes(), colors);
             } else {
                 if (progress != 1f) {

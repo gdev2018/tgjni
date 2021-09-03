@@ -165,7 +165,7 @@ public class Emoji {
             final Bitmap finalBitmap = bitmap;
             AndroidUtilities.runOnUIThread(() -> {
                 emojiBmp[page][page2] = finalBitmap;
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiDidLoad);
+///*                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiDidLoad);*/
             });
         } catch (Throwable x) {
             if (BaseBuildVars.LOGS_ENABLED) {

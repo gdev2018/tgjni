@@ -17,6 +17,7 @@ import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.Bitmaps;
 import com.github.gdev2018.master.DocumentObject;
 import com.github.gdev2018.master.R;
+import com.github.gdev2018.master.SvgHelper;
 import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 

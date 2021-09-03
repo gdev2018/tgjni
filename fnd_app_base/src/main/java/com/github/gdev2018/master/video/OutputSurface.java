@@ -20,8 +20,12 @@ import android.graphics.SurfaceTexture;
 import android.opengl.GLES20;
 import android.view.Surface;
 
+import com.github.gdev2018.master.MediaController;
+import com.github.gdev2018.master.VideoEditedInfo;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -42,31 +46,9 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
     private final Object mFrameSyncObject = new Object();
     private boolean mFrameAvailable;
     private TextureRenderer mTextureRender;
-    private int mWidth;
-    private int mHeight;
-    private int rotateRender = 0;
-    private ByteBuffer mPixelBuf;
 
-    public OutputSurface(int width, int height, int rotate) {
-        if (width <= 0 || height <= 0) {
-            throw new IllegalArgumentException();
-        }
-        mWidth = width;
-        mHeight = height;
-        rotateRender = rotate;
-        mPixelBuf = ByteBuffer.allocateDirect(mWidth * mHeight * 4);
-        mPixelBuf.order(ByteOrder.LITTLE_ENDIAN);
-        eglSetup(width, height);
-        makeCurrent();
-        setup();
-    }
-
-    public OutputSurface() {
-        setup();
-    }
-
-    private void setup() {
-        mTextureRender = new TextureRenderer(rotateRender);
+    public OutputSurface(MediaController.SavedFilterState savedFilterState, String imagePath, String paintPath, ArrayList<VideoEditedInfo.MediaEntity> mediaEntities, MediaController.CropState cropState, int w, int h, int rotation, float fps, boolean photo) {
+        mTextureRender = new TextureRenderer(savedFilterState, imagePath, paintPath, mediaEntities, cropState, w, h, rotation, fps, photo);
         mTextureRender.surfaceCreated();
         mSurfaceTexture = new SurfaceTexture(mTextureRender.getTextureId());
         mSurfaceTexture.setOnFrameAvailableListener(this);
@@ -129,6 +111,9 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
             mEGL.eglDestroySurface(mEGLDisplay, mEGLSurface);
             mEGL.eglDestroyContext(mEGLDisplay, mEGLContext);
         }
+        if (mTextureRender != null) {
+            mTextureRender.release();
+        }
         mSurface.release();
         mEGLDisplay = null;
         mEGLContext = null;
@@ -168,12 +153,11 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
             }
             mFrameAvailable = false;
         }
-        mTextureRender.checkGlError("before updateTexImage");
         mSurfaceTexture.updateTexImage();
     }
 
-    public void drawImage(boolean invert) {
-        mTextureRender.drawFrame(mSurfaceTexture, invert);
+    public void drawImage() {
+        mTextureRender.drawFrame(mSurfaceTexture);
     }
 
     @Override
@@ -185,12 +169,6 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
             mFrameAvailable = true;
             mFrameSyncObject.notifyAll();
         }
-    }
-
-    public ByteBuffer getFrame() {
-        mPixelBuf.rewind();
-        GLES20.glReadPixels(0, 0, mWidth, mHeight, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, mPixelBuf);
-        return mPixelBuf;
     }
 
     private void checkEglError(String msg) {

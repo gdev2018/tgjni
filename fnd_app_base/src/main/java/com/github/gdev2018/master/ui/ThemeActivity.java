@@ -795,7 +795,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 } else if (id == edit_theme) {
                     Theme.ThemeInfo currentTheme = Theme.getCurrentTheme();
                     Theme.ThemeAccent accent = currentTheme.getAccent(false);
-                    presentFragment(new org.telegram.ui.ThemePreviewActivity(currentTheme, false, org.telegram.ui.ThemePreviewActivity.SCREEN_TYPE_ACCENT_COLOR, accent.id >= 100, currentType == THEME_TYPE_NIGHT));
+                    presentFragment(new com.github.gdev2018.master.ui.ThemePreviewActivity(currentTheme, false, com.github.gdev2018.master.ui.ThemePreviewActivity.SCREEN_TYPE_ACCENT_COLOR, accent.id >= 100, currentType == THEME_TYPE_NIGHT));
                 } else if (id == reset_settings) {
                     if (getParentActivity() == null) {
                         return;
@@ -1749,7 +1749,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     accentsListView.setOnItemClickListener((view1, position) -> {
                         Theme.ThemeInfo currentTheme = currentType == THEME_TYPE_NIGHT ? Theme.getCurrentNightTheme() : Theme.getCurrentTheme();
                         if (position == accentsAdapter.getItemCount() - 1) {
-                            presentFragment(new org.telegram.ui.ThemePreviewActivity(currentTheme, false, org.telegram.ui.ThemePreviewActivity.SCREEN_TYPE_ACCENT_COLOR, false, currentType == THEME_TYPE_NIGHT));
+                            presentFragment(new com.github.gdev2018.master.ui.ThemePreviewActivity(currentTheme, false, com.github.gdev2018.master.ui.ThemePreviewActivity.SCREEN_TYPE_ACCENT_COLOR, false, currentType == THEME_TYPE_NIGHT));
                         } else {
                             Theme.ThemeAccent accent = accentsAdapter.themeAccents.get(position);
 
@@ -1760,7 +1760,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                             if (currentTheme.currentAccentId != accent.id) {
                                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentTheme, currentType == THEME_TYPE_NIGHT, null, accent.id);
                             } else {
-                                presentFragment(new org.telegram.ui.ThemePreviewActivity(currentTheme, false, org.telegram.ui.ThemePreviewActivity.SCREEN_TYPE_ACCENT_COLOR, accent.id >= 100, currentType == THEME_TYPE_NIGHT));
+                                presentFragment(new com.github.gdev2018.master.ui.ThemePreviewActivity(currentTheme, false, com.github.gdev2018.master.ui.ThemePreviewActivity.SCREEN_TYPE_ACCENT_COLOR, accent.id >= 100, currentType == THEME_TYPE_NIGHT));
                             }
                         }
 

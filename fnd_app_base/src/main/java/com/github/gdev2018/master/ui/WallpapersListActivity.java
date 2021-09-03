@@ -414,7 +414,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.wallpapersDidLoad);
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetNewWallpapper);
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.wallpapersNeedReload);
-            getMessagesStorage().getWallpapers();
+///*            getMessagesStorage().getWallpapers();*/
         } else {
             boolean darkTheme = Theme.isCurrentThemeNight();
             int[][] defaultColors = darkTheme ? defaultColorsDark : defaultColorsLight;
@@ -427,7 +427,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             }
             if (currentType == TYPE_COLOR && patterns.isEmpty()) {
                 NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.wallpapersDidLoad);
-                getMessagesStorage().getWallpapers();
+///*                getMessagesStorage().getWallpapers();*/
             }
         }
         return super.onFragmentCreate();
@@ -505,7 +505,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                             if (object instanceof ColorWallpaper) {
                                 ColorWallpaper colorWallpaper = (ColorWallpaper) object;
                                 if (colorWallpaper.parentWallpaper != null && colorWallpaper.parentWallpaper.id < 0) {
-                                    getMessagesStorage().deleteWallpaper(colorWallpaper.parentWallpaper.id);
+///*                                    getMessagesStorage().deleteWallpaper(colorWallpaper.parentWallpaper.id);*/
                                     localWallPapers.remove(colorWallpaper);
                                     localDict.remove(colorWallpaper.getHash());
                                 } else {
@@ -559,7 +559,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     if (button != null) {
                         button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
                     }
-                } else if (id == forward) {
+                } /*else if (id == forward) {
                     Bundle args = new Bundle();
                     args.putBoolean("onlySelect", true);
                     args.putInt("dialogsType", 3);
@@ -627,7 +627,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                         }
                     });
                     presentFragment(fragment);
-                }
+                }*/
             }
         });
 
@@ -1021,7 +1021,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             }
             if (wallPapersToDelete != null) {
                 for (int a = 0, N = wallPapersToDelete.size(); a < N; a++) {
-                    getMessagesStorage().deleteWallpaper(wallPapersToDelete.get(a).id);
+///*                    getMessagesStorage().deleteWallpaper(wallPapersToDelete.get(a).id);*/
                 }
             }
             selectedBackgroundSlug = Theme.getSelectedBackgroundSlug();
@@ -1035,7 +1035,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 actionBar.closeSearchField();
             }
         } else if (id == NotificationCenter.wallpapersNeedReload) {
-            getMessagesStorage().getWallpapers();
+///*            getMessagesStorage().getWallpapers();*/
         }
     }
 
@@ -1100,7 +1100,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     }
                 }
                 fillWallpapersWithCustom();
-                getMessagesStorage().putWallpapers(res.wallpapers, 1);
+///*                getMessagesStorage().putWallpapers(res.wallpapers, 1);*/
             }
             if (progressDialog != null) {
                 progressDialog.dismiss();
@@ -1514,7 +1514,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                         TLRPC.TL_contacts_resolvedPeer res = (TLRPC.TL_contacts_resolvedPeer) response;
                         MessagesController.getInstance(currentAccount).putUsers(res.users, false);
                         MessagesController.getInstance(currentAccount).putChats(res.chats, false);
-                        getMessagesStorage().putUsersAndChats(res.users, res.chats, true, true);
+///*                        getMessagesStorage().putUsersAndChats(res.users, res.chats, true, true);*/
                         String str = lastSearchImageString;
                         lastSearchImageString = null;
                         searchImages(str, "", false);

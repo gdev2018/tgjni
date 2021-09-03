@@ -737,8 +737,8 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
 //                canvas.drawRect(linkImageView.getImageX(), linkImageView.getImageY(), linkImageView.getImageX() + linkImageView.getImageWidth(), linkImageView.getImageY() + linkImageView.getImageHeight(), LetterDrawable.paint);
 //                Theme.chat_inlineResultLocation.setBounds(x, y, x + w, y + h);
 //                Theme.chat_inlineResultLocation.draw(canvas);
-//            }
-//        }*/
+//            }*/
+        }
         if (drawLinkImageView) {
             if (inlineResult != null) {
                 linkImageView.setVisible(!PhotoViewer.isShowingImage(inlineResult), false);

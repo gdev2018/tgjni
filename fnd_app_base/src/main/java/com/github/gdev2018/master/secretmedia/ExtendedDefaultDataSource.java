@@ -49,21 +49,14 @@ public final class ExtendedDefaultDataSource implements DataSource {
     // Lazily initialized.
     private @Nullable
     DataSource fileDataSource;
-    private @Nullable
-    DataSource assetDataSource;
-    private @Nullable
-    DataSource contentDataSource;
-    private @Nullable
-    DataSource encryptedFileDataSource;
-    private @Nullable
-    DataSource rtmpDataSource;
-    private @Nullable
-    DataSource dataSchemeDataSource;
-    private @Nullable
-    DataSource rawResourceDataSource;
+    private @Nullable DataSource assetDataSource;
+    private @Nullable DataSource contentDataSource;
+    private @Nullable DataSource encryptedFileDataSource;
+    private @Nullable DataSource rtmpDataSource;
+    private @Nullable DataSource dataSchemeDataSource;
+    private @Nullable DataSource rawResourceDataSource;
 
-    private @Nullable
-    DataSource dataSource;
+    private @Nullable DataSource dataSource;
 
     /**
      * Constructs a new instance, optionally configured to follow cross-protocol redirects.
@@ -176,8 +169,6 @@ public final class ExtendedDefaultDataSource implements DataSource {
                 listener,
                 new DefaultHttpDataSource(
                         userAgent,
-                        /* contentTypePredicate= */ null,
-                        listener,
                         connectTimeoutMillis,
                         readTimeoutMillis,
                         allowCrossProtocolRedirects,
@@ -201,6 +192,7 @@ public final class ExtendedDefaultDataSource implements DataSource {
         this(context, baseDataSource);
         if (listener != null) {
             transferListeners.add(listener);
+            baseDataSource.addTransferListener(listener);
         }
     }
 

@@ -105,7 +105,9 @@ public class WearDataLayerListenerService extends WearableListenerService {
 								@Override
 								public void run() {
 									NotificationCenter.getInstance(currentAccount).addObserver(listener, NotificationCenter.fileLoaded);
-									FileLoader.getInstance(currentAccount).loadFile(user.photo.photo_small, user, null, 0, 1, 1);
+///*
+//									FileLoader.getInstance(currentAccount).loadFile(user.photo.photo_small, user, null, 0, 1, 1);
+//*/
 								}
 							});
 							try {

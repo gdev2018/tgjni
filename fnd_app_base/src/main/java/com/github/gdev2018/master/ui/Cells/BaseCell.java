@@ -28,10 +28,11 @@ public abstract class BaseCell extends ViewGroup {
             if (checkingForLongPress && getParent() != null && currentPressCount == pressCount) {
                 checkingForLongPress = false;
                 performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                onLongPress();
-                MotionEvent event = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
-                onTouchEvent(event);
-                event.recycle();
+                if (onLongPress()) {
+                    MotionEvent event = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
+                    onTouchEvent(event);
+                    event.recycle();
+                }
             }
         }
     }
@@ -44,6 +45,7 @@ public abstract class BaseCell extends ViewGroup {
     public BaseCell(Context context) {
         super(context);
         setWillNotDraw(false);
+        setFocusable(true);
     }
 
     public static void setDrawableBounds(Drawable drawable, int x, int y) {
@@ -57,6 +59,12 @@ public abstract class BaseCell extends ViewGroup {
     public static void setDrawableBounds(Drawable drawable, int x, int y, int w, int h) {
         if (drawable != null) {
             drawable.setBounds(x, y, x + w, y + h);
+        }
+    }
+
+    public static void setDrawableBounds(Drawable drawable, float x, float y, int w, int h) {
+        if (drawable != null) {
+            drawable.setBounds((int) x, (int) y, (int) x + w, (int) y + h);
         }
     }
 
@@ -86,7 +94,7 @@ public abstract class BaseCell extends ViewGroup {
         return false;
     }
 
-    protected void onLongPress() {
-
+    protected boolean onLongPress() {
+        return true;
     }
 }

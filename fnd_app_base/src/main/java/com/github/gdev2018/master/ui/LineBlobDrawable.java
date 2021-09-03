@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 
+import com.github.gdev2018.master.ui.Components.BlobDrawable;
+
 import java.util.Random;
 
 public class LineBlobDrawable {

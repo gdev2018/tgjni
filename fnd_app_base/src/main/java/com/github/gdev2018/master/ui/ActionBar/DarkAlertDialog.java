@@ -31,3 +31,4 @@ public class DarkAlertDialog extends AlertDialog {
 		}
 	}
 }
+

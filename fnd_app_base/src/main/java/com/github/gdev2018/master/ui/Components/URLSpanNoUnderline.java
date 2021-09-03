@@ -8,10 +8,12 @@ import android.text.style.URLSpan;
 import android.view.View;
 
 import com.github.gdev2018.master.browser.Browser;
+import com.github.gdev2018.master.tgnet.TLObject;
 
 public class URLSpanNoUnderline extends URLSpan {
 
     private TextStyleSpan.TextStyleRun style;
+    private TLObject object;
 
     public URLSpanNoUnderline(String url) {
         this(url, null);
@@ -42,5 +44,13 @@ public class URLSpanNoUnderline extends URLSpan {
             style.applyStyle(p);
         }
         p.setUnderlineText(l == c);
+    }
+
+    public void setObject(TLObject spanObject) {
+        this.object = spanObject;
+    }
+
+    public TLObject getObject() {
+        return object;
     }
 }

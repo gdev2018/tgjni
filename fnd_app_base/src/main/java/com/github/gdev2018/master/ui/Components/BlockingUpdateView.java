@@ -298,7 +298,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
             setVisibility(VISIBLE);
         }
         SpannableStringBuilder builder = new SpannableStringBuilder(update.text);
-        MessageObject.addEntitiesToText(builder, update.entities, false, 0, false, false, false);
+///*        MessageObject.addEntitiesToText(builder, update.entities, false, 0, false, false, false);*/
         textView.setText(builder);
         if (update.document instanceof TLRPC.TL_document) {
             acceptTextView.setText(LocaleController.getString("Update", R.string.Update).toUpperCase() + String.format(Locale.US, " (%1$s)", AndroidUtilities.formatFileSize(update.document.size)));

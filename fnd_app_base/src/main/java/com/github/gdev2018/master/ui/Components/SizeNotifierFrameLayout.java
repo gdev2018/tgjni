@@ -23,10 +23,10 @@ import android.widget.FrameLayout;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.ui.ActionBar.ActionBar;
 import com.github.gdev2018.master.ui.ActionBar.ActionBarLayout;
-import com.github.gdev2018.master.ui.ActionBar.AdjustPanFrameLayout;
+import com.github.gdev2018.master.ui.ActionBar.AdjustPanLayoutHelper;
 import com.github.gdev2018.master.ui.ActionBar.Theme;
 
-public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
+public class SizeNotifierFrameLayout extends FrameLayout {
 
     private Rect rect = new Rect();
     private Drawable backgroundDrawable;
@@ -37,42 +37,55 @@ public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
     private WallpaperParallaxEffect parallaxEffect;
     private float translationX;
     private float translationY;
+    private float bgAngle;
     private float parallaxScale = 1.0f;
     private int backgroundTranslationY;
     private boolean paused = true;
     private Drawable oldBackgroundDrawable;
     private ActionBarLayout parentLayout;
-    private boolean useSmoothKeyboard;
+    protected AdjustPanLayoutHelper adjustPanLayoutHelper;
+    private int emojiHeight;
+    private float emojiOffset;
+    private boolean animationInProgress;
+    private boolean skipBackgroundDrawing;
 
     public interface SizeNotifierFrameLayoutDelegate {
         void onSizeChanged(int keyboardHeight, boolean isWidthGreater);
     }
 
-    public SizeNotifierFrameLayout(Context context, boolean smoothKeyboard) {
-        this(context, smoothKeyboard, null);
+    public SizeNotifierFrameLayout(Context context) {
+        this(context, null);
     }
 
-    public SizeNotifierFrameLayout(Context context, boolean smoothKeyboard, ActionBarLayout layout) {
+    public SizeNotifierFrameLayout(Context context, ActionBarLayout layout) {
         super(context);
         setWillNotDraw(false);
-        useSmoothKeyboard = smoothKeyboard;
         parentLayout = layout;
+        adjustPanLayoutHelper = createAdjustPanLayoutHelper();
     }
 
     public void setBackgroundImage(Drawable bitmap, boolean motion) {
+        if (backgroundDrawable == bitmap) {
+            return;
+        }
+        if (bitmap instanceof MotionBackgroundDrawable) {
+            MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) bitmap;
+            motionBackgroundDrawable.setParentView(this);
+        }
         backgroundDrawable = bitmap;
         if (motion) {
-            if (parallaxEffect == null) {
-                parallaxEffect = new WallpaperParallaxEffect(getContext());
-                parallaxEffect.setCallback((offsetX, offsetY) -> {
-                    translationX = offsetX;
-                    translationY = offsetY;
-                    invalidate();
-                });
-                if (getMeasuredWidth() != 0 && getMeasuredHeight() != 0) {
-                    parallaxScale = parallaxEffect.getScale(getMeasuredWidth(), getMeasuredHeight());
-                }
-            }
+///*            if (parallaxEffect == null) {
+//                parallaxEffect = new WallpaperParallaxEffect(getContext());
+//                parallaxEffect.setCallback((offsetX, offsetY, angle) -> {
+//                    translationX = offsetX;
+//                    translationY = offsetY;
+//                    bgAngle = angle;
+//                    invalidate();
+//                });
+//                if (getMeasuredWidth() != 0 && getMeasuredHeight() != 0) {
+//                    parallaxScale = parallaxEffect.getScale(getMeasuredWidth(), getMeasuredHeight());
+//                }
+//            }*/
             if (!paused) {
                 parallaxEffect.setEnabled(true);
             }
@@ -155,21 +168,65 @@ public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
         backgroundTranslationY = translation;
     }
 
+    public int getBackgroundTranslationY() {
+        if (backgroundDrawable instanceof MotionBackgroundDrawable) {
+            if (animationInProgress) {
+                return (int) emojiOffset;
+            } else if (emojiHeight != 0) {
+                return emojiHeight;
+            }
+            return backgroundTranslationY;
+        }
+        return 0;
+    }
+
+    public int getBackgroundSizeY() {
+        int offset = 0;
+        if (backgroundDrawable instanceof MotionBackgroundDrawable) {
+            MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) backgroundDrawable;
+            if (!motionBackgroundDrawable.hasPattern()) {
+                if (animationInProgress) {
+                    offset = (int) emojiOffset;
+                } else if (emojiHeight != 0) {
+                    offset = emojiHeight;
+                } else {
+                    offset = backgroundTranslationY;
+                }
+            } else {
+                offset = backgroundTranslationY != 0 ? 0 : -keyboardHeight;
+            }
+        }
+        return getMeasuredHeight() - offset;
+    }
+
     public int getHeightWithKeyboard() {
         return keyboardHeight + getMeasuredHeight();
     }
 
+    public void setEmojiKeyboardHeight(int height) {
+        emojiHeight = height;
+    }
+
+    public void setEmojiOffset(boolean animInProgress, float offset) {
+        emojiOffset = offset;
+        animationInProgress = animInProgress;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
-        if (backgroundDrawable == null) {
+        if (backgroundDrawable == null || skipBackgroundDrawing) {
             super.onDraw(canvas);
             return;
         }
-        int kbHeight = useSmoothKeyboard ? 0 : keyboardHeight;
+        //int kbHeight = SharedConfig.smoothKeyboard ? 0 : keyboardHeight;
         Drawable newDrawable = Theme.getCachedWallpaperNonBlocking();
         if (newDrawable != backgroundDrawable && newDrawable != null) {
             if (Theme.isAnimatingColor()) {
                 oldBackgroundDrawable = backgroundDrawable;
+            }
+            if (newDrawable instanceof MotionBackgroundDrawable) {
+                MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) newDrawable;
+                motionBackgroundDrawable.setParentView(this);
             }
             backgroundDrawable = newDrawable;
         }
@@ -184,12 +241,47 @@ public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
             } else {
                 drawable.setAlpha(255);
             }
-            if (drawable instanceof ColorDrawable) {
+            if (drawable instanceof MotionBackgroundDrawable) {
+                MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) drawable;
+                if (motionBackgroundDrawable.hasPattern()) {
+                    int actionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + (Build.VERSION.SDK_INT >= 21 && occupyStatusBar ? AndroidUtilities.statusBarHeight : 0);
+                    int viewHeight = getRootView().getMeasuredHeight() - actionBarHeight;
+                    float scaleX = (float) getMeasuredWidth() / (float) drawable.getIntrinsicWidth();
+                    float scaleY = (float) (viewHeight) / (float) drawable.getIntrinsicHeight();
+                    float scale = Math.max(scaleX, scaleY);
+                    int width = (int) Math.ceil(drawable.getIntrinsicWidth() * scale * parallaxScale);
+                    int height = (int) Math.ceil(drawable.getIntrinsicHeight() * scale * parallaxScale);
+                    int x = (getMeasuredWidth() - width) / 2 + (int) translationX;
+                    int y = backgroundTranslationY + (viewHeight - height) / 2 + actionBarHeight + (int) translationY;
+                    canvas.save();
+                    canvas.clipRect(0, actionBarHeight, width, getMeasuredHeight() - bottomClip);
+                    drawable.setBounds(x, y, x + width, y + height);
+                    drawable.draw(canvas);
+                    canvas.restore();
+                } else {
+                    if (bottomClip != 0) {
+                        canvas.save();
+                        canvas.clipRect(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight() - bottomClip);
+                    }
+                    motionBackgroundDrawable.setTranslationY(backgroundTranslationY);
+                    int bottom = getMeasuredHeight() - backgroundTranslationY;
+                    if (animationInProgress) {
+                        bottom -= emojiOffset;
+                    } else if (emojiHeight != 0) {
+                        bottom -= emojiHeight;
+                    }
+                    drawable.setBounds(0, 0, getMeasuredWidth(), bottom);
+                    drawable.draw(canvas);
+                    if (bottomClip != 0) {
+                        canvas.restore();
+                    }
+                }
+            } else if (drawable instanceof ColorDrawable) {
                 if (bottomClip != 0) {
                     canvas.save();
                     canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - bottomClip);
                 }
-                drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                drawable.setBounds(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight());
                 drawable.draw(canvas);
                 if (bottomClip != 0) {
                     canvas.restore();
@@ -197,9 +289,9 @@ public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
             } else if (drawable instanceof GradientDrawable) {
                 if (bottomClip != 0) {
                     canvas.save();
-                    canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - bottomClip);
+                    canvas.clipRect(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight() - bottomClip);
                 }
-                drawable.setBounds(0, backgroundTranslationY, getMeasuredWidth(), backgroundTranslationY + getMeasuredHeight() + kbHeight);
+                drawable.setBounds(0, backgroundTranslationY, getMeasuredWidth(), backgroundTranslationY + getRootView().getMeasuredHeight());
                 drawable.draw(canvas);
                 if (bottomClip != 0) {
                     canvas.restore();
@@ -210,19 +302,19 @@ public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
                     canvas.save();
                     float scale = 2.0f / AndroidUtilities.density;
                     canvas.scale(scale, scale);
-                    drawable.setBounds(0, 0, (int) Math.ceil(getMeasuredWidth() / scale), (int) Math.ceil(getMeasuredHeight() / scale));
+                    drawable.setBounds(0, 0, (int) Math.ceil(getMeasuredWidth() / scale), (int) Math.ceil(getRootView().getMeasuredHeight() / scale));
                     drawable.draw(canvas);
                     canvas.restore();
                 } else {
                     int actionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + (Build.VERSION.SDK_INT >= 21 && occupyStatusBar ? AndroidUtilities.statusBarHeight : 0);
-                    int viewHeight = getMeasuredHeight() - actionBarHeight;
+                    int viewHeight = getRootView().getMeasuredHeight() - actionBarHeight;
                     float scaleX = (float) getMeasuredWidth() / (float) drawable.getIntrinsicWidth();
-                    float scaleY = (float) (viewHeight + kbHeight) / (float) drawable.getIntrinsicHeight();
+                    float scaleY = (float) (viewHeight) / (float) drawable.getIntrinsicHeight();
                     float scale = Math.max(scaleX, scaleY);
                     int width = (int) Math.ceil(drawable.getIntrinsicWidth() * scale * parallaxScale);
                     int height = (int) Math.ceil(drawable.getIntrinsicHeight() * scale * parallaxScale);
                     int x = (getMeasuredWidth() - width) / 2 + (int) translationX;
-                    int y = backgroundTranslationY + (viewHeight - height + kbHeight) / 2 + actionBarHeight + (int) translationY;
+                    int y = backgroundTranslationY + (viewHeight - height) / 2 + actionBarHeight + (int) translationY;
                     canvas.save();
                     canvas.clipRect(0, actionBarHeight, width, getMeasuredHeight() - bottomClip);
                     drawable.setBounds(x, y, x + width, y + height);
@@ -239,5 +331,14 @@ public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
 
     protected boolean isActionBarVisible() {
         return true;
+    }
+
+    protected AdjustPanLayoutHelper createAdjustPanLayoutHelper() {
+        return null;
+    }
+
+    public void setSkipBackgroundDrawing(boolean skipBackgroundDrawing) {
+        this.skipBackgroundDrawing = skipBackgroundDrawing;
+        invalidate();
     }
 }

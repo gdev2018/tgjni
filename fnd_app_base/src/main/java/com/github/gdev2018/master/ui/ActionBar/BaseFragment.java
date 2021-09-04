@@ -601,7 +601,7 @@ public abstract class BaseFragment {
 //        return MediaController.getInstance();
 //    }
 //
-//    public UserConfig getUserConfig() {
+//    public BaseUserConfig getUserConfig() {
 //        return getAccountInstance().getUserConfig();
 //    }*/
 

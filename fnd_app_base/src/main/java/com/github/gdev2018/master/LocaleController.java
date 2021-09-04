@@ -760,7 +760,7 @@ public class LocaleController {
             }
             HashMap<String, String> stringMap = new HashMap<>();
             XmlPullParser parser = Xml.newPullParser();
-            //AndroidUtilities.copyFile(file, new File(ApplicationLoader.applicationContext.getExternalFilesDir(null), "locale10.xml"));
+            //AndroidUtilities.copyFile(file, new File(BaseApplication.mApplicationContext.getExternalFilesDir(null), "locale10.xml"));
             stream = new FileInputStream(file);
             parser.setInput(stream, "UTF-8");
             int eventType = parser.getEventType();

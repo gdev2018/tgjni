@@ -45,6 +45,7 @@ import com.github.gdev2018.master.FileLog;
 import com.github.gdev2018.master.MediaController;
 import com.github.gdev2018.master.Utilities;
 import com.github.gdev2018.master.VideoEditedInfo;
+import com.github.gdev2018.master.di.BaseApplication;
 import com.github.gdev2018.master.ui.Components.FilterShaders;
 import com.github.gdev2018.master.ui.Components.Paint.Views.EditTextOutline;
 import com.github.gdev2018.master.ui.Components.RLottieDrawable;

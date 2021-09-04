@@ -416,7 +416,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.wallpapersNeedReload);
 ///*            getMessagesStorage().getWallpapers();*/
         } else {
-            boolean darkTheme = Theme.isCurrentThemeNight();
+            boolean darkTheme = Theme.isCurrentThemeDark();
             int[][] defaultColors = darkTheme ? defaultColorsDark : defaultColorsLight;
             for (int a = 0; a < defaultColors.length; a++) {
                 if (defaultColors[a].length == 1) {
@@ -559,75 +559,75 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     if (button != null) {
                         button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
                     }
-                } /*else if (id == forward) {
+                } else if (id == forward) {
                     Bundle args = new Bundle();
                     args.putBoolean("onlySelect", true);
                     args.putInt("dialogsType", 3);
-                    DialogsActivity fragment = new DialogsActivity(args);
-                    fragment.setDelegate((fragment1, dids, message, param) -> {
-                        StringBuilder fmessage = new StringBuilder();
-                        for (int b = 0; b < selectedWallPapers.size(); b++) {
-                            Object object = selectedWallPapers.valueAt(b);
-                            String link;
-                            if (object instanceof TLRPC.TL_wallPaper) {
-                                link = AndroidUtilities.getWallPaperUrl(object);
-                            } else if (object instanceof ColorWallpaper) {
-                                link = ((ColorWallpaper) object).getUrl();
-                            } else {
-                                continue;
-                            }
-                            if (!TextUtils.isEmpty(link)) {
-                                if (fmessage.length() > 0) {
-                                    fmessage.append('\n');
-                                }
-                                fmessage.append(link);
-                            }
-                        }
-                        selectedWallPapers.clear();
-                        actionBar.hideActionMode();
-                        actionBar.closeSearchField();
-
-                        if (dids.size() > 1 || dids.get(0) == BaseUserConfig.getInstance(currentAccount).getClientUserId() || message != null) {
-                            updateRowsSelection();
-                            for (int a = 0; a < dids.size(); a++) {
-                                long did = dids.get(a);
-                                if (message != null) {
-                                    SendMessagesHelper.getInstance(currentAccount).sendMessage(message.toString(), did, null, null, null, true, null, null, null, true, 0, null);
-                                }
-                                if (!TextUtils.isEmpty(fmessage)) {
-                                    SendMessagesHelper.getInstance(currentAccount).sendMessage(fmessage.toString(), did, null, null, null, true, null, null, null, true, 0, null);
-                                }
-                            }
-                            fragment1.finishFragment();
-                        } else {
-                            long did = dids.get(0);
-                            int lower_part = (int) did;
-                            int high_part = (int) (did >> 32);
-                            Bundle args1 = new Bundle();
-                            args1.putBoolean("scrollToTopOnResume", true);
-                            if (lower_part != 0) {
-                                if (lower_part > 0) {
-                                    args1.putInt("user_id", lower_part);
-                                } else if (lower_part < 0) {
-                                    args1.putInt("chat_id", -lower_part);
-                                }
-                            } else {
-                                args1.putInt("enc_id", high_part);
-                            }
-                            if (lower_part != 0) {
-                                if (!MessagesController.getInstance(currentAccount).checkCanOpenChat(args1, fragment1)) {
-                                    return;
-                                }
-                            }
-                            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.closeChats);
-
-                            ChatActivity chatActivity = new ChatActivity(args1);
-                            presentFragment(chatActivity, true);
-                            SendMessagesHelper.getInstance(currentAccount).sendMessage(fmessage.toString(), did, null, null, null, true, null, null, null, true, 0, null);
-                        }
-                    });
-                    presentFragment(fragment);
-                }*/
+///*                    DialogsActivity fragment = new DialogsActivity(args);*/
+///*                    fragment.setDelegate((fragment1, dids, message, param) -> {
+//                        StringBuilder fmessage = new StringBuilder();
+//                        for (int b = 0; b < selectedWallPapers.size(); b++) {
+//                            Object object = selectedWallPapers.valueAt(b);
+//                            String link;
+//                            if (object instanceof TLRPC.TL_wallPaper) {
+//                                link = AndroidUtilities.getWallPaperUrl(object);
+//                            } else if (object instanceof ColorWallpaper) {
+//                                link = ((ColorWallpaper) object).getUrl();
+//                            } else {
+//                                continue;
+//                            }
+//                            if (!TextUtils.isEmpty(link)) {
+//                                if (fmessage.length() > 0) {
+//                                    fmessage.append('\n');
+//                                }
+//                                fmessage.append(link);
+//                            }
+//                        }
+//                        selectedWallPapers.clear();
+//                        actionBar.hideActionMode();
+//                        actionBar.closeSearchField();
+//
+//                        if (dids.size() > 1 || dids.get(0) == BaseUserConfig.getInstance(currentAccount).getClientUserId() || message != null) {
+//                            updateRowsSelection();
+//                            for (int a = 0; a < dids.size(); a++) {
+//                                long did = dids.get(a);
+//                                if (message != null) {
+//                                    SendMessagesHelper.getInstance(currentAccount).sendMessage(message.toString(), did, null, null, null, true, null, null, null, true, 0, null);
+//                                }
+//                                if (!TextUtils.isEmpty(fmessage)) {
+//                                    SendMessagesHelper.getInstance(currentAccount).sendMessage(fmessage.toString(), did, null, null, null, true, null, null, null, true, 0, null);
+//                                }
+//                            }
+//                            fragment1.finishFragment();
+//                        } else {
+//                            long did = dids.get(0);
+//                            int lower_part = (int) did;
+//                            int high_part = (int) (did >> 32);
+//                            Bundle args1 = new Bundle();
+//                            args1.putBoolean("scrollToTopOnResume", true);
+//                            if (lower_part != 0) {
+//                                if (lower_part > 0) {
+//                                    args1.putInt("user_id", lower_part);
+//                                } else if (lower_part < 0) {
+//                                    args1.putInt("chat_id", -lower_part);
+//                                }
+//                            } else {
+//                                args1.putInt("enc_id", high_part);
+//                            }
+//                            if (lower_part != 0) {
+//                                if (!MessagesController.getInstance(currentAccount).checkCanOpenChat(args1, fragment1)) {
+//                                    return;
+//                                }
+//                            }
+//                            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.closeChats);
+//
+//                            ChatActivity chatActivity = new ChatActivity(args1);
+//                            presentFragment(chatActivity, true);
+//                            SendMessagesHelper.getInstance(currentAccount).sendMessage(fmessage.toString(), did, null, null, null, true, null, null, null, true, 0, null);
+//                        }
+//                    });
+//                    presentFragment(fragment);*/
+                }
             }
         });
 
@@ -695,7 +695,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
 
             @Override
             public void onDraw(Canvas c) {
-                RecyclerView.ViewHolder holder;
+                ViewHolder holder;
                 if (getAdapter() == listAdapter && resetInfoRow != -1) {
                     holder = findViewHolderForAdapterPosition(resetInfoRow);
                 } else {
@@ -991,6 +991,9 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     }
                     allWallPapersDict.put(wallPaper.slug, wallPaper);
                     if (currentType != TYPE_COLOR && (!wallPaper.pattern || wallPaper.settings != null && wallPaper.settings.background_color != 0)) {
+                        if (!Theme.isCurrentThemeDark() && wallPaper.settings != null && wallPaper.settings.intensity < 0) {
+                            continue;
+                        }
                         wallPapers.add(wallPaper);
                     }
                 } else if (wallPaper.settings.background_color != 0) {
@@ -1015,6 +1018,9 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                         }
                         localWallPapers.add(colorWallpaper);
                         localDict.put(hash, colorWallpaper);
+                    }
+                    if (!Theme.isCurrentThemeDark() && wallPaper.settings != null && wallPaper.settings.intensity < 0) {
+                        continue;
                     }
                     wallPapers.add(colorWallpaper);
                 }
@@ -1083,9 +1089,15 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                             patternsDict.put(wallPaper.document.id, wallPaper);
                         }
                         if (currentType != TYPE_COLOR && (!wallPaper.pattern || wallPaper.settings != null && wallPaper.settings.background_color != 0)) {
+                            if (!Theme.isCurrentThemeDark() && wallPaper.settings != null && wallPaper.settings.intensity < 0) {
+                                continue;
+                            }
                             wallPapers.add(wallPaper);
                         }
                     } else if (wallPaper.settings.background_color != 0) {
+                        if (!Theme.isCurrentThemeDark() && wallPaper.settings != null && wallPaper.settings.intensity < 0) {
+                            continue;
+                        }
                         ColorWallpaper colorWallpaper;
                         if (wallPaper.settings.second_background_color != 0 && wallPaper.settings.third_background_color != 0) {
                             colorWallpaper = new ColorWallpaper(null, wallPaper.settings.background_color, wallPaper.settings.second_background_color, wallPaper.settings.third_background_color, wallPaper.settings.fourth_background_color);
@@ -1174,11 +1186,11 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             Theme.OverrideWallpaperInfo info = Theme.getActiveTheme().overrideWallpaper;
             if (wallPaper.settings == null || wallPaper.settings != null &&
                     (selectedColor != Theme.getWallpaperColor(wallPaper.settings.background_color) ||
-                    selectedGradientColor1 != Theme.getWallpaperColor(wallPaper.settings.second_background_color) ||
-                    selectedGradientColor2 != Theme.getWallpaperColor(wallPaper.settings.third_background_color) ||
-                    selectedGradientColor3 != Theme.getWallpaperColor(wallPaper.settings.fourth_background_color) ||
-                    (selectedGradientColor1 != 0 && selectedGradientColor2 == 0 && selectedGradientRotation != AndroidUtilities.getWallpaperRotation(wallPaper.settings.rotation, false)) &&
-                    Math.abs(Theme.getThemeIntensity(wallPaper.settings.intensity / 100.0f) - selectedIntensity) > 0.001f)) {
+                            selectedGradientColor1 != Theme.getWallpaperColor(wallPaper.settings.second_background_color) ||
+                            selectedGradientColor2 != Theme.getWallpaperColor(wallPaper.settings.third_background_color) ||
+                            selectedGradientColor3 != Theme.getWallpaperColor(wallPaper.settings.fourth_background_color) ||
+                            (selectedGradientColor1 != 0 && selectedGradientColor2 == 0 && selectedGradientRotation != AndroidUtilities.getWallpaperRotation(wallPaper.settings.rotation, false)) &&
+                                    Math.abs(Theme.getThemeIntensity(wallPaper.settings.intensity / 100.0f) - selectedIntensity) > 0.001f)) {
                 pattern = wallPaper;
                 object = null;
                 slugFinal = "";
@@ -1833,12 +1845,12 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                             Theme.OverrideWallpaperInfo info = Theme.getActiveTheme().overrideWallpaper;
                             if (!selectedBackgroundSlug.equals(wallPaper.slug) ||
                                     selectedBackgroundSlug.equals(wallPaper.slug) && wallPaper.settings != null &&
-                                    (selectedColor != Theme.getWallpaperColor(wallPaper.settings.background_color) ||
-                                    selectedGradientColor1 != Theme.getWallpaperColor(wallPaper.settings.second_background_color) ||
-                                    selectedGradientColor2 != Theme.getWallpaperColor(wallPaper.settings.third_background_color) ||
-                                    selectedGradientColor3 != Theme.getWallpaperColor(wallPaper.settings.fourth_background_color) ||
-                                    (selectedGradientColor1 != 0 && selectedGradientColor2 == 0 && selectedGradientRotation != AndroidUtilities.getWallpaperRotation(wallPaper.settings.rotation, false)) &&
-                                    wallPaper.pattern && Math.abs(Theme.getThemeIntensity(wallPaper.settings.intensity / 100.0f) - selectedIntensity) > 0.001f)) {
+                                            (selectedColor != Theme.getWallpaperColor(wallPaper.settings.background_color) ||
+                                                    selectedGradientColor1 != Theme.getWallpaperColor(wallPaper.settings.second_background_color) ||
+                                                    selectedGradientColor2 != Theme.getWallpaperColor(wallPaper.settings.third_background_color) ||
+                                                    selectedGradientColor3 != Theme.getWallpaperColor(wallPaper.settings.fourth_background_color) ||
+                                                    (selectedGradientColor1 != 0 && selectedGradientColor2 == 0 && selectedGradientRotation != AndroidUtilities.getWallpaperRotation(wallPaper.settings.rotation, false)) &&
+                                                            wallPaper.pattern && Math.abs(Theme.getThemeIntensity(wallPaper.settings.intensity / 100.0f) - selectedIntensity) > 0.001f)) {
                                 selectedWallpaper = null;
                             } else {
                                 selectedWallpaper = wallPaper;

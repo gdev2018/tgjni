@@ -159,6 +159,7 @@ import com.github.gdev2018.master.ui.Components.FadingTextViewLayout;
 import com.github.gdev2018.master.ui.Components.FilterShaders;
 import com.github.gdev2018.master.ui.Components.FloatSeekBarAccessibilityDelegate;
 import com.github.gdev2018.master.ui.Components.GestureDetector2;
+import com.github.gdev2018.master.ui.Components.HideViewAfterAnimation;
 import com.github.gdev2018.master.ui.Components.PaintingOverlay;
 import com.github.gdev2018.master.ui.Components.PhotoViewerCaptionEnterView;
 import com.github.gdev2018.master.ui.Components.PhotoViewerWebView;
@@ -4548,6 +4549,14 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     checkProgress(0, false, true);
                 }
             }
+
+            @Override
+            public boolean validGroupId(long groupId) {
+///*                if (placeProvider != null) {
+//                    return placeProvider.validateGroupId(groupId);
+//                }*/
+                return true;
+            }
         });
 
         for (int a = 0; a < 3; a++) {
@@ -7810,12 +7819,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (!TextUtils.isEmpty(entry.filterPath)) {
                     bitmap = ImageLoader.loadBitmap(entry.filterPath, null, thumbSize, thumbSize, true);
                 } else {
-                    if (sendPhotoType == SELECT_TYPE_AVATAR) {
-                        orientation = new int[1];
-                        bitmap = SendMessagesHelper.createVideoThumbnailAtTime(entry.getPath(), avatarStartTime / 1000, orientation, true);
-                    } else {
-                        bitmap = SendMessagesHelper.createVideoThumbnailAtTime(entry.getPath(), (long) (videoTimelineView.getLeftProgress() * videoPlayer.getDuration() * 1000L));
-                    }
+///*                    if (sendPhotoType == SELECT_TYPE_AVATAR) {
+//                        orientation = new int[1];
+//                        bitmap = SendMessagesHelper.createVideoThumbnailAtTime(entry.getPath(), avatarStartTime / 1000, orientation, true);
+//                    } else {
+//                        bitmap = SendMessagesHelper.createVideoThumbnailAtTime(entry.getPath(), (long) (videoTimelineView.getLeftProgress() * videoPlayer.getDuration() * 1000L));
+//                    }*/
                 }
             } else {
                 bitmap = centerImage.getBitmap();
@@ -7997,18 +8006,18 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
 
             boolean recycleCropped;
-            Bitmap croppedBitmap;
+            Bitmap croppedBitmap = null;
             if (isCurrentVideo) {
                 Bitmap originalBitmap;
-                if (entry.filterPath == null) {
-                    originalBitmap = SendMessagesHelper.createVideoThumbnailAtTime(entry.getPath(), (long) (videoTimelineView.getLeftProgress() * videoPlayer.getDuration() * 1000L));
-                } else {
-                    originalBitmap = ImageLoader.loadBitmap(entry.filterPath, null, thumbSize, thumbSize, true);
-                }
-                croppedBitmap = entry.cropState != null ? createCroppedBitmap(originalBitmap, entry.cropState, null, true) : originalBitmap;
-                if (entry.cropState != null) {
-                    originalBitmap.recycle();
-                }
+///*                if (entry.filterPath == null) {
+//                    originalBitmap = SendMessagesHelper.createVideoThumbnailAtTime(entry.getPath(), (long) (videoTimelineView.getLeftProgress() * videoPlayer.getDuration() * 1000L));
+//                } else {
+//                    originalBitmap = ImageLoader.loadBitmap(entry.filterPath, null, thumbSize, thumbSize, true);
+//                }*/
+///*                croppedBitmap = entry.cropState != null ? createCroppedBitmap(originalBitmap, entry.cropState, null, true) : originalBitmap;
+//                if (entry.cropState != null) {
+//                    originalBitmap.recycle();
+//                }*/
                 recycleCropped = true;
             } else {
                 orientation = new int[]{centerImage.getOrientation()};
@@ -8028,13 +8037,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
             }
             if (!isCurrentVideo) {
-                if (hasAnimatedMediaEntities()) {
-                    size = ImageLoader.scaleAndSaveImage(croppedBitmap, Bitmap.CompressFormat.JPEG, AndroidUtilities.getPhotoSize(), AndroidUtilities.getPhotoSize(), 87, false, 101, 101);
-                    entry.imagePath = currentImagePath = FileLoader.getPathToAttach(size, true).toString();
-                } else {
-                    File f = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), SharedConfig.getLastLocalId() + "_temp.jpg");
-                    mergeImages(entry.imagePath = f.getAbsolutePath(), null, croppedBitmap, paintBitmap, AndroidUtilities.getPhotoSize(), false);
-                }
+///*                if (hasAnimatedMediaEntities()) {
+//                    size = ImageLoader.scaleAndSaveImage(croppedBitmap, Bitmap.CompressFormat.JPEG, AndroidUtilities.getPhotoSize(), AndroidUtilities.getPhotoSize(), 87, false, 101, 101);
+//                    entry.imagePath = currentImagePath = FileLoader.getPathToAttach(size, true).toString();
+//                } else {
+//                    File f = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), SharedConfig.getLastLocalId() + "_temp.jpg");
+//                    mergeImages(entry.imagePath = f.getAbsolutePath(), null, croppedBitmap, paintBitmap, AndroidUtilities.getPhotoSize(), false);
+//                }*/
             }
             File f = new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), SharedConfig.getLastLocalId() + "_temp.jpg");
             mergeImages(entry.thumbPath = f.getAbsolutePath(), null, croppedBitmap, paintBitmap, thumbSize, false);
@@ -10130,12 +10139,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     nameTextView.setText("");
                     dateTextView.setText("");
                 }
-                String restrictionReason = MessagesController.getRestrictionReason(newMessageObject.messageOwner.restriction_reason);
-                if (!TextUtils.isEmpty(restrictionReason)) {
-                    caption = restrictionReason;
-                } else {
-                    caption = newMessageObject.caption;
-                }
+///*                String restrictionReason = MessagesController.getRestrictionReason(newMessageObject.messageOwner.restriction_reason);
+//                if (!TextUtils.isEmpty(restrictionReason)) {
+//                    caption = restrictionReason;
+//                } else {
+//                    caption = newMessageObject.caption;
+//                }*/
             }
 
             if (currentAnimation != null) {
@@ -11467,49 +11476,53 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 messageObject = null;
             }
 
-            if (messageObject != null) {
-                String restrictionReason = MessagesController.getRestrictionReason(messageObject.messageOwner.restriction_reason);
-                if (!TextUtils.isEmpty(restrictionReason)) {
-                    imageReceiver.setImageBitmap(parentActivity.getResources().getDrawable(R.drawable.photoview_placeholder));
-                    return;
-                } else if (messageObject.isVideo()) {
-                    if (messageObject.photoThumbs != null && !messageObject.photoThumbs.isEmpty()) {
-                        ImageReceiver.BitmapHolder placeHolder = null;
-                        if (currentThumb != null && imageReceiver == centerImage) {
-                            placeHolder = currentThumb;
-                        }
-                        TLRPC.PhotoSize thumbLocation = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 320);
-                        imageReceiver.setNeedsQualityThumb(thumbLocation.w < 100 && thumbLocation.h < 100);
-                        imageReceiver.setImage(null, null, placeHolder == null ? ImageLocation.getForObject(thumbLocation, messageObject.photoThumbsObject) : null, "b", placeHolder != null ? new BitmapDrawable(placeHolder.bitmap) : null, 0, null, messageObject, 1);
-                        if (currentThumb != null) {
-                            imageReceiver.setOrientation(currentThumb.orientation, false);
-                        }
-                    } else {
-                        imageReceiver.setImageBitmap(parentActivity.getResources().getDrawable(R.drawable.photoview_placeholder));
-                    }
-                    return;
-                } else if (currentAnimation != null) {
-                    currentAnimation.addSecondParentView(containerView);
-                    imageReceiver.setImageBitmap(currentAnimation);
-                    return;
-                } /*else if (sharedMediaType == MediaDataController.MEDIA_FILE) {
-                    if (messageObject.canPreviewDocument()) {
-                        TLRPC.Document document = messageObject.getDocument();
-                        imageReceiver.setNeedsQualityThumb(true);
-                        ImageReceiver.BitmapHolder placeHolder = null;
-                        if (currentThumb != null && imageReceiver == centerImage) {
-                            placeHolder = currentThumb;
-                        }
-                        TLRPC.PhotoSize thumbLocation = messageObject != null ? FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 100) : null;
-                        int size = (int) (2048 / AndroidUtilities.density);
-                        imageReceiver.setImage(ImageLocation.getForDocument(document), String.format(Locale.US, "%d_%d", size, size), placeHolder == null ? ImageLocation.getForDocument(thumbLocation, document) : null, "b", placeHolder != null ? new BitmapDrawable(placeHolder.bitmap) : null, document.size, null, messageObject, 0);
-                    } else {
-                        OtherDocumentPlaceholderDrawable drawable = new OtherDocumentPlaceholderDrawable(parentActivity, containerView, messageObject);
-                        imageReceiver.setImageBitmap(drawable);
-                    }
-                    return;
-                }*/
-            }
+///*
+//            if (messageObject != null) {
+//                String restrictionReason = MessagesController.getRestrictionReason(messageObject.messageOwner.restriction_reason);
+//                if (!TextUtils.isEmpty(restrictionReason)) {
+//                    imageReceiver.setImageBitmap(parentActivity.getResources().getDrawable(R.drawable.photoview_placeholder));
+//                    return;
+//                } else if (messageObject.isVideo()) {
+//                    if (messageObject.photoThumbs != null && !messageObject.photoThumbs.isEmpty()) {
+//                        ImageReceiver.BitmapHolder placeHolder = null;
+//                        if (currentThumb != null && imageReceiver == centerImage) {
+//                            placeHolder = currentThumb;
+//                        }
+//                        TLRPC.PhotoSize thumbLocation = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 320);
+//                        imageReceiver.setNeedsQualityThumb(thumbLocation.w < 100 && thumbLocation.h < 100);
+//                        imageReceiver.setImage(null, null, placeHolder == null ? ImageLocation.getForObject(thumbLocation, messageObject.photoThumbsObject) : null, "b", placeHolder != null ? new BitmapDrawable(placeHolder.bitmap) : null, 0, null, messageObject, 1);
+//                        if (currentThumb != null) {
+//                            imageReceiver.setOrientation(currentThumb.orientation, false);
+//                        }
+//                    } else {
+//                        imageReceiver.setImageBitmap(parentActivity.getResources().getDrawable(R.drawable.photoview_placeholder));
+//                    }
+//                    return;
+//                } else if (currentAnimation != null) {
+//                    currentAnimation.addSecondParentView(containerView);
+//                    imageReceiver.setImageBitmap(currentAnimation);
+//                    return;
+//                } */
+///*else if (sharedMediaType == MediaDataController.MEDIA_FILE) {
+//                    if (messageObject.canPreviewDocument()) {
+//                        TLRPC.Document document = messageObject.getDocument();
+//                        imageReceiver.setNeedsQualityThumb(true);
+//                        ImageReceiver.BitmapHolder placeHolder = null;
+//                        if (currentThumb != null && imageReceiver == centerImage) {
+//                            placeHolder = currentThumb;
+//                        }
+//                        TLRPC.PhotoSize thumbLocation = messageObject != null ? FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 100) : null;
+//                        int size = (int) (2048 / AndroidUtilities.density);
+//                        imageReceiver.setImage(ImageLocation.getForDocument(document), String.format(Locale.US, "%d_%d", size, size), placeHolder == null ? ImageLocation.getForDocument(thumbLocation, document) : null, "b", placeHolder != null ? new BitmapDrawable(placeHolder.bitmap) : null, document.size, null, messageObject, 0);
+//                    } else {
+//                        OtherDocumentPlaceholderDrawable drawable = new OtherDocumentPlaceholderDrawable(parentActivity, containerView, messageObject);
+//                        imageReceiver.setImageBitmap(drawable);
+//                    }
+//                    return;
+//                }*//*
+//
+//            }
+//*/
             int[] size = new int[1];
             ImageLocation imageLocation = getImageLocation(index, size);
             TLObject fileLocation = getFileLocation(index, size);
@@ -11971,11 +11984,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             } else {
                 windowLayoutParams.flags = WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
             }
-            if (chatActivity != null && chatActivity.getCurrentEncryptedChat() != null) {
-                windowLayoutParams.flags |= WindowManager.LayoutParams.FLAG_SECURE;
-            } else {
-                windowLayoutParams.flags &=~ WindowManager.LayoutParams.FLAG_SECURE;
-            }
+///*            if (chatActivity != null && chatActivity.getCurrentEncryptedChat() != null) {
+//                windowLayoutParams.flags |= WindowManager.LayoutParams.FLAG_SECURE;
+//            } else {
+//                windowLayoutParams.flags &=~ WindowManager.LayoutParams.FLAG_SECURE;
+//            }*/
             windowLayoutParams.softInputMode = (useSmoothKeyboard ? WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN : WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE) | WindowManager.LayoutParams.SOFT_INPUT_IS_FORWARD_NAVIGATION;
             windowView.setFocusable(false);
             containerView.setFocusable(false);

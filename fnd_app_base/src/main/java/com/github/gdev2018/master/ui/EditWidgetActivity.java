@@ -45,7 +45,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-///*import com.github.gdev2018.master.AccountInstance;*/
+///*import com.github.gdev2018.master.BaseAccountInstance;*/
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.ChatObject;
 ///*import com.github.gdev2018.master.ChatsWidgetProvider;*/
@@ -745,7 +745,7 @@ public class EditWidgetActivity extends BaseFragment {
 
     @Override
     public boolean onFragmentCreate() {
-///*        DialogsActivity.loadDialogs(AccountInstance.getInstance(currentAccount));
+///*        DialogsActivity.loadDialogs(BaseAccountInstance.getInstance(currentAccount));
 //        getMediaDataController().loadHints(true);*/
         return super.onFragmentCreate();
     }

@@ -2028,7 +2028,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     req.limit = 20;
                     req.filter = playlistGlobalSearchParams.filter == null ? new TLRPC.TL_inputMessagesFilterEmpty() : playlistGlobalSearchParams.filter.filter;
 ///*
-//                    req.peer = AccountInstance.getInstance(currentAccount).getMessagesController().getInputPeer(playlistGlobalSearchParams.dialogId);
+//                    req.peer = BaseAccountInstance.getInstance(currentAccount).getMessagesController().getInputPeer(playlistGlobalSearchParams.dialogId);
 //*/
                     MessageObject lastMessage = playlist.get(playlist.size() - 1);
                     req.offset_id = lastMessage.getId();
@@ -2108,12 +2108,12 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         if (!playlistEndReached[0]) {
             loadingPlaylist = true;
 ///*
-//            AccountInstance.getInstance(playingMessageObject.currentAccount).getMediaDataController().loadMedia(playingMessageObject.getDialogId(), 50, playlistMaxId[0], MediaDataController.MEDIA_MUSIC, 1, playlistClassGuid);
+//            BaseAccountInstance.getInstance(playingMessageObject.currentAccount).getMediaDataController().loadMedia(playingMessageObject.getDialogId(), 50, playlistMaxId[0], MediaDataController.MEDIA_MUSIC, 1, playlistClassGuid);
 //*/
         } else if (playlistMergeDialogId != 0 && !playlistEndReached[1]) {
             loadingPlaylist = true;
 ///*
-//            AccountInstance.getInstance(playingMessageObject.currentAccount).getMediaDataController().loadMedia(playlistMergeDialogId, 50, playlistMaxId[0], MediaDataController.MEDIA_MUSIC, 1, playlistClassGuid);
+//            BaseAccountInstance.getInstance(playingMessageObject.currentAccount).getMediaDataController().loadMedia(playlistMergeDialogId, 50, playlistMaxId[0], MediaDataController.MEDIA_MUSIC, 1, playlistClassGuid);
 //*/
         }
     }
@@ -2740,7 +2740,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
 ///*
-//    public void playEmojiSound(AccountInstance accountInstance, String emoji, MessagesController.EmojiSound sound, boolean loadOnly) {
+//    public void playEmojiSound(BaseAccountInstance accountInstance, String emoji, MessagesController.EmojiSound sound, boolean loadOnly) {
 //        if (sound == null) {
 //            return;
 //        }
@@ -3656,7 +3656,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 ///*
 //    private static class MediaLoader implements NotificationCenter.NotificationCenterDelegate {
 //
-//        private AccountInstance currentAccount;
+//        private BaseAccountInstance currentAccount;
 //        private AlertDialog progressDialog;
 //        private ArrayList<MessageObject> messageObjects;
 //        private HashMap<String, MessageObject> loadingMessageObjects = new HashMap<>();
@@ -3668,7 +3668,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 //        private MessagesStorage.IntCallback onFinishRunnable;
 //        private boolean isMusic;
 //
-//        public MediaLoader(Context context, AccountInstance accountInstance, ArrayList<MessageObject> messages, MessagesStorage.IntCallback onFinish) {
+//        public MediaLoader(Context context, BaseAccountInstance accountInstance, ArrayList<MessageObject> messages, MessagesStorage.IntCallback onFinish) {
 //            currentAccount = accountInstance;
 //            messageObjects = messages;
 //            onFinishRunnable = onFinish;
@@ -3893,7 +3893,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 //*/
 
 ///*
-//    public static void saveFilesFromMessages(Context context, AccountInstance accountInstance, ArrayList<MessageObject> messageObjects, final MessagesStorage.IntCallback onSaved) {
+//    public static void saveFilesFromMessages(Context context, BaseAccountInstance accountInstance, ArrayList<MessageObject> messageObjects, final MessagesStorage.IntCallback onSaved) {
 //        if (messageObjects == null || messageObjects.isEmpty()) {
 //            return;
 //        }

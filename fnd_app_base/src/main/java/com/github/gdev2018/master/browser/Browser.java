@@ -234,8 +234,8 @@ public class Browser {
                 }
             }
             String host = uri.getHost() != null ? uri.getHost().toLowerCase() : "";
-///*            if (AccountInstance.getInstance(currentAccount).getMessagesController().autologinDomains.contains(host)) {
-//                String token = "autologin_token=" + URLEncoder.encode(AccountInstance.getInstance(BaseUserConfig.selectedAccount).getMessagesController().autologinToken, "UTF-8");
+///*            if (BaseAccountInstance.getInstance(currentAccount).getMessagesController().autologinDomains.contains(host)) {
+//                String token = "autologin_token=" + URLEncoder.encode(BaseAccountInstance.getInstance(BaseUserConfig.selectedAccount).getMessagesController().autologinToken, "UTF-8");
 //                String url = uri.toString();
 //                int idx = url.indexOf("://");
 //                String path = idx >= 0 ? url.substring(idx + 3) : url;

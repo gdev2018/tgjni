@@ -1340,8 +1340,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
 //            return;
 //        }*/
         if (id == 1) {
-            if (BaseUserConfig.selectedAccount != currentAccount) {
-///*                parentActivity.switchToAccount(currentAccount, true);
+///*             if (BaseUserConfig.selectedAccount != currentAccount) {
+//                parentActivity.switchToAccount(currentAccount, true);
 //            }
 //            Bundle args = new Bundle();
 //            args.putBoolean("onlySelect", true);

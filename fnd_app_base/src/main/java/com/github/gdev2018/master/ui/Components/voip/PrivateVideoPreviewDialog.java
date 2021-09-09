@@ -45,7 +45,7 @@ import com.github.gdev2018.master.ui.Components.LayoutHelper;
 import com.github.gdev2018.master.ui.Components.MotionBackgroundDrawable;
 import com.github.gdev2018.master.ui.Components.RLottieDrawable;
 import com.github.gdev2018.master.ui.Components.RLottieImageView;
-import com.github.gdev2018.master.ui.LaunchActivity;
+///*import com.github.gdev2018.master.ui.LaunchActivity;*/
 ///*import org.webrtc.RendererCommon;*/
 
 import java.io.File;
@@ -62,7 +62,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
     private LinearLayout titlesLayout;
     private RLottieImageView micIconView;
     private TextView[] titles;
-    private VoIPTextureView textureView;
+///*    private VoIPTextureView textureView;*/
     private int currentTexturePage = 1;
     private int visibleCameraPage = 1;
     private boolean cameraReady;
@@ -126,14 +126,14 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
             }
         });
 
-        textureView = new VoIPTextureView(context, false, false);
+///*        textureView = new VoIPTextureView(context, false, false);*/
 ///*        textureView.renderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);*/
-        textureView.scaleType = VoIPTextureView.SCALE_TYPE_FIT;
-        textureView.clipToTexture = true;
-        textureView.renderer.setAlpha(0);
-        textureView.renderer.setRotateTextureWitchScreen(true);
-        textureView.renderer.setUseCameraRotation(true);
-        addView(textureView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+///*        textureView.scaleType = VoIPTextureView.SCALE_TYPE_FIT;
+//        textureView.clipToTexture = true;
+//        textureView.renderer.setAlpha(0);
+//        textureView.renderer.setRotateTextureWitchScreen(true);
+//        textureView.renderer.setUseCameraRotation(true);
+//        addView(textureView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));*/
 
         ActionBar actionBar = new ActionBar(context);
         actionBar.setBackButtonDrawable(new BackDrawable(false));
@@ -219,7 +219,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
             }
             if (currentPage == 0 && needScreencast) {
                 MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-                ((Activity) getContext()).startActivityForResult(mediaProjectionManager.createScreenCaptureIntent(), LaunchActivity.SCREEN_CAPTURE_REQUEST_CODE);
+///*                ((Activity) getContext()).startActivityForResult(mediaProjectionManager.createScreenCaptureIntent(), LaunchActivity.SCREEN_CAPTURE_REQUEST_CODE);*/
             } else {
                 dismiss(false, true);
             }
@@ -258,8 +258,8 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
 
         VoIPService service = VoIPService.getSharedInstance();
         if (service != null) {
-            textureView.renderer.setMirror(service.isFrontFaceCamera());
-///*            textureView.renderer.init(VideoCapturerDevice.getEglBase().getEglBaseContext(), new RendererCommon.RendererEvents() {
+///*            textureView.renderer.setMirror(service.isFrontFaceCamera());
+//            textureView.renderer.init(VideoCapturerDevice.getEglBase().getEglBaseContext(), new RendererCommon.RendererEvents() {
 //                @Override
 //                public void onFirstFrameRendered() {
 //
@@ -269,8 +269,8 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
 //                public void onFrameResolutionChanged(int videoWidth, int videoHeight, int rotation) {
 //
 //                }
-//            });*/
-            service.setLocalSink(textureView.renderer, false);
+//            });
+//            service.setLocalSink(textureView.renderer, false);*/
         }
         viewPager.setCurrentItem(needScreencast ? 1 : 0);
 
@@ -335,16 +335,16 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
         }
         titlesLayout.setTranslationX(tx);
         positiveButton.invalidate();
-        if (needScreencast && currentPage == 0 && pageOffset <= 0) {
-            textureView.setVisibility(INVISIBLE);
-        } else {
-            textureView.setVisibility(VISIBLE);
-            if (currentPage + (needScreencast ? 0 : 1) == currentTexturePage) {
-                textureView.setTranslationX(-pageOffset * getMeasuredWidth());
-            } else {
-                textureView.setTranslationX((1.0f - pageOffset) * getMeasuredWidth());
-            }
-        }
+///*        if (needScreencast && currentPage == 0 && pageOffset <= 0) {
+//            textureView.setVisibility(INVISIBLE);
+//        } else {
+//            textureView.setVisibility(VISIBLE);
+//            if (currentPage + (needScreencast ? 0 : 1) == currentTexturePage) {
+//                textureView.setTranslationX(-pageOffset * getMeasuredWidth());
+//            } else {
+//                textureView.setTranslationX((1.0f - pageOffset) * getMeasuredWidth());
+//            }
+//        }*/
     }
 
     @Override
@@ -370,13 +370,13 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
         if (currentTexturePage == visibleCameraPage || service == null) {
             return;
         }
-        boolean currentFrontface = service.isFrontFaceCamera();
-        if (currentTexturePage == 1 && !currentFrontface || currentTexturePage == 2 && currentFrontface) {
-            saveLastCameraBitmap();
-            cameraReady = false;
-            VoIPService.getSharedInstance().switchCamera();
-            textureView.setAlpha(0.0f);
-        }
+///*        boolean currentFrontface = service.isFrontFaceCamera();
+//        if (currentTexturePage == 1 && !currentFrontface || currentTexturePage == 2 && currentFrontface) {
+//            saveLastCameraBitmap();
+//            cameraReady = false;
+//            VoIPService.getSharedInstance().switchCamera();
+//            textureView.setAlpha(0.0f);
+//        }*/
         visibleCameraPage = currentTexturePage;
     }
 
@@ -384,40 +384,42 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
         if (!cameraReady) {
             return;
         }
-        try {
-            Bitmap bitmap = textureView.renderer.getBitmap();
-            if (bitmap != null) {
-                Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), textureView.renderer.getMatrix(), true);
-                bitmap.recycle();
-                bitmap = newBitmap;
-                Bitmap lastBitmap = Bitmap.createScaledBitmap(bitmap, 80, (int) (bitmap.getHeight() / (bitmap.getWidth() / 80.0f)), true);
-                if (lastBitmap != null) {
-                    if (lastBitmap != bitmap) {
-                        bitmap.recycle();
-                    }
-                    Utilities.blurBitmap(lastBitmap, 7, 1, lastBitmap.getWidth(), lastBitmap.getHeight(), lastBitmap.getRowBytes());
-                    File file = new File(BaseApplication.getFilesDirFixed(), "cthumb" + visibleCameraPage + ".jpg");
-                    FileOutputStream stream = new FileOutputStream(file);
-                    lastBitmap.compress(Bitmap.CompressFormat.JPEG, 87, stream);
-                    View view = viewPager.findViewWithTag(visibleCameraPage - (needScreencast ? 0 : 1));
-                    if (view instanceof ImageView) {
-                        ((ImageView) view).setImageBitmap(lastBitmap);
-                    }
-                }
-
-            }
-        } catch (Throwable ignore) {
-
-        }
+///*
+//        try {
+//            Bitmap bitmap = textureView.renderer.getBitmap();
+//            if (bitmap != null) {
+//                Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), textureView.renderer.getMatrix(), true);
+//                bitmap.recycle();
+//                bitmap = newBitmap;
+//                Bitmap lastBitmap = Bitmap.createScaledBitmap(bitmap, 80, (int) (bitmap.getHeight() / (bitmap.getWidth() / 80.0f)), true);
+//                if (lastBitmap != null) {
+//                    if (lastBitmap != bitmap) {
+//                        bitmap.recycle();
+//                    }
+//                    Utilities.blurBitmap(lastBitmap, 7, 1, lastBitmap.getWidth(), lastBitmap.getHeight(), lastBitmap.getRowBytes());
+//                    File file = new File(BaseApplication.getFilesDirFixed(), "cthumb" + visibleCameraPage + ".jpg");
+//                    FileOutputStream stream = new FileOutputStream(file);
+//                    lastBitmap.compress(Bitmap.CompressFormat.JPEG, 87, stream);
+//                    View view = viewPager.findViewWithTag(visibleCameraPage - (needScreencast ? 0 : 1));
+//                    if (view instanceof ImageView) {
+//                        ((ImageView) view).setImageBitmap(lastBitmap);
+//                    }
+//                }
+//
+//            }
+//        } catch (Throwable ignore) {
+//
+//        }
+//*/
     }
 
-    @Override
-    public void onCameraFirstFrameAvailable() {
-        if (!cameraReady) {
-            cameraReady = true;
-            textureView.animate().alpha(1f).setDuration(250);
-        }
-    }
+///*    @Override
+//    public void onCameraFirstFrameAvailable() {
+//        if (!cameraReady) {
+//            cameraReady = true;
+//            textureView.animate().alpha(1f).setDuration(250);
+//        }
+//    }*/
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -488,14 +490,14 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
         }
     }
 
-    @Override
-    public void onCameraSwitch(boolean isFrontFace) {
-        update();
-    }
+///*    @Override
+//    public void onCameraSwitch(boolean isFrontFace) {
+//        update();
+//    }*/
 
     public void update() {
         if (VoIPService.getSharedInstance() != null) {
-            textureView.renderer.setMirror(VoIPService.getSharedInstance().isFrontFaceCamera());
+///*            textureView.renderer.setMirror(VoIPService.getSharedInstance().isFrontFaceCamera());*/
         }
     }
 

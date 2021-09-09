@@ -25,7 +25,7 @@ import android.widget.ImageView;
 
 import androidx.core.graphics.ColorUtils;
 
-import com.github.gdev2018.master.AccountInstance;
+import com.github.gdev2018.master.BaseAccountInstance;
 import com.github.gdev2018.master.AndroidUtilities;
 import com.github.gdev2018.master.ChatObject;
 import com.github.gdev2018.master.ImageLocation;
@@ -46,7 +46,7 @@ import com.github.gdev2018.master.ui.Components.LayoutHelper;
 import com.github.gdev2018.master.ui.Components.RLottieDrawable;
 import com.github.gdev2018.master.ui.Components.RLottieImageView;
 import com.github.gdev2018.master.ui.Components.RadialProgressView;
-import com.github.gdev2018.master.ui.Components.WaveDrawable;
+///*import com.github.gdev2018.master.ui.Components.WaveDrawable;*/
 
 import java.util.ArrayList;
 
@@ -77,7 +77,7 @@ public class GroupCallUserCell extends FrameLayout {
     private boolean lastRaisedHand;
     private int lastMuteColor;
 
-    private AccountInstance accountInstance;
+    private BaseAccountInstance accountInstance;
 
     private boolean needDivider;
     private boolean currentIconGray;
@@ -184,7 +184,7 @@ public class GroupCallUserCell extends FrameLayout {
     }
 
     public void setUploadProgress(float progress, boolean animated) {
-        avatarProgressView.setProgress(progress);
+///*        avatarProgressView.setProgress(progress);*/
         if (progress < 1f) {
             AndroidUtilities.updateViewVisibilityAnimated(avatarProgressView, true, 1f, animated);
         } else {
@@ -276,7 +276,7 @@ public class GroupCallUserCell extends FrameLayout {
         };
         avatarProgressView.setSize(AndroidUtilities.dp(26));
         avatarProgressView.setProgressColor(0xffffffff);
-        avatarProgressView.setNoProgress(false);
+///*        avatarProgressView.setNoProgress(false);*/
         addView(avatarProgressView, LayoutHelper.createFrame(46, 46, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 11, 6, LocaleController.isRTL ? 11 : 0, 0));
         AndroidUtilities.updateViewVisibilityAnimated(avatarProgressView, false, 1f, false);
 
@@ -446,7 +446,7 @@ public class GroupCallUserCell extends FrameLayout {
         return avatarImageView.getImageReceiver().hasNotThumb();
     }
 
-    public void setData(AccountInstance account, TLRPC.TL_groupCallParticipant groupCallParticipant, ChatObject.Call call, int self, TLRPC.FileLocation uploadingAvatar, boolean animated) {
+    public void setData(BaseAccountInstance account, TLRPC.TL_groupCallParticipant groupCallParticipant, ChatObject.Call call, int self, TLRPC.FileLocation uploadingAvatar, boolean animated) {
         currentCall = call;
         accountInstance = account;
         selfId = self;
@@ -914,8 +914,8 @@ public class GroupCallUserCell extends FrameLayout {
             blobDrawable2.maxRadius = maxRadius;
             blobDrawable.generateBlob();
             blobDrawable2.generateBlob();
-            blobDrawable.paint.setColor(ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_voipgroup_speakingText), (int) (255 * WaveDrawable.CIRCLE_ALPHA_2)));
-            blobDrawable2.paint.setColor(ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_voipgroup_speakingText), (int) (255 * WaveDrawable.CIRCLE_ALPHA_2)));
+///*            blobDrawable.paint.setColor(ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_voipgroup_speakingText), (int) (255 * WaveDrawable.CIRCLE_ALPHA_2)));
+//            blobDrawable2.paint.setColor(ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_voipgroup_speakingText), (int) (255 * WaveDrawable.CIRCLE_ALPHA_2)));*/
         }
 
         public void update() {
@@ -970,7 +970,9 @@ public class GroupCallUserCell extends FrameLayout {
 
                     if (invalidateColor) {
                         int color = ColorUtils.blendARGB(Theme.getColor(Theme.key_voipgroup_speakingText), isMuted == 2 ? Theme.getColor(Theme.key_voipgroup_mutedByAdminIcon) : Theme.getColor(Theme.key_voipgroup_listeningText), progressToMuted);
-                        blobDrawable.paint.setColor(ColorUtils.setAlphaComponent(color, (int) (255 * WaveDrawable.CIRCLE_ALPHA_2)));
+///*
+//                        blobDrawable.paint.setColor(ColorUtils.setAlphaComponent(color, (int) (255 * WaveDrawable.CIRCLE_ALPHA_2)));
+//*/
                     }
                 }
 

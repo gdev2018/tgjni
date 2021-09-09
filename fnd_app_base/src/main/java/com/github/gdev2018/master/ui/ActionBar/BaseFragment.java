@@ -541,8 +541,8 @@ public abstract class BaseFragment {
         return new ArrayList<>();
     }
 
-///*    public AccountInstance getAccountInstance() {
-//        return AccountInstance.getInstance(currentAccount);
+///*    public BaseAccountInstance getAccountInstance() {
+//        return BaseAccountInstance.getInstance(currentAccount);
 //    }
 //
 //    public MessagesController getMessagesController() {

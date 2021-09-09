@@ -90,7 +90,7 @@ public class GroupCallInvitedCell extends FrameLayout {
         nameTextView.setText(lastName);
 
         avatarImageView.getImageReceiver().setCurrentAccount(account);
-        avatarImageView.setForUserOrChat(currentUser, avatarDrawable);
+///*        avatarImageView.setForUserOrChat(currentUser, avatarDrawable);*/
     }
 
     public void setDrawDivider(boolean draw) {

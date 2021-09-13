@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class AudioVisualizerDrawable {
 
-    private final CircleBezierDrawable[] drawables;
+///*    private final CircleBezierDrawable[] drawables;*/
 
     private final int[] tmpWaveform = new int[3];
     private final float[] animateTo = new float[8];
@@ -34,14 +34,14 @@ public class AudioVisualizerDrawable {
 
 
     public AudioVisualizerDrawable() {
-        drawables = new CircleBezierDrawable[2];
-        for (int i = 0; i < 2; i++) {
-            CircleBezierDrawable drawable = drawables[i] = new CircleBezierDrawable(6);
-            drawable.idleStateDiff = 0;
-            drawable.radius = AndroidUtilities.dp(24);
-            drawable.radiusDiff = 0;
-            drawable.randomK = 1f;
-        }
+///*        drawables = new CircleBezierDrawable[2];
+//        for (int i = 0; i < 2; i++) {
+//            CircleBezierDrawable drawable = drawables[i] = new CircleBezierDrawable(6);
+//            drawable.idleStateDiff = 0;
+//            drawable.radius = AndroidUtilities.dp(24);
+//            drawable.radiusDiff = 0;
+//            drawable.randomK = 1f;
+//        }*/
         p1 = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
 
@@ -156,12 +156,12 @@ public class AudioVisualizerDrawable {
         for (int i = 0; i < 3; i++) {
             tmpWaveform[i] = (int) (current[i] * WAVE_RADIUS);
         }
-        drawables[0].setAdditionals(tmpWaveform);
+///*        drawables[0].setAdditionals(tmpWaveform);*/
 
         for (int i = 0; i < 3; i++) {
             tmpWaveform[i] = (int) (current[i + 3] * WAVE_RADIUS);
         }
-        drawables[1].setAdditionals(tmpWaveform);
+///*        drawables[1].setAdditionals(tmpWaveform);*/
         float radius = AndroidUtilities.dp(22) +
                 AndroidUtilities.dp(4) * radiusProgress +
                 IDLE_RADIUS * enterProgress;
@@ -169,7 +169,7 @@ public class AudioVisualizerDrawable {
         if (radius > AndroidUtilities.dp(26)) {
             radius = AndroidUtilities.dp(26);
         }
-        drawables[0].radius = drawables[1].radius = radius;
+///*        drawables[0].radius = drawables[1].radius = radius;*/
 
         canvas.save();
         rotation += 0.6;
@@ -177,13 +177,13 @@ public class AudioVisualizerDrawable {
         canvas.save();
         float s = 1f + 0.04f * idleScale;
         canvas.scale(s, s, cx, cy);
-        drawables[0].draw(cx, cy, canvas, p1);
+///*        drawables[0].draw(cx, cy, canvas, p1);*/
         canvas.restore();
 
         canvas.rotate(60, cx, cy);
         s = 1f + 0.04f * (1f - idleScale);
         canvas.scale(s, s, cx, cy);
-        drawables[1].draw(cx, cy, canvas, p1);
+///*        drawables[1].draw(cx, cy, canvas, p1);*/
         canvas.restore();
     }
 

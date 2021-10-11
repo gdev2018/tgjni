@@ -1359,6 +1359,12 @@ public class AndroidUtilities {
                         if (assetPath.contains("medium")) {
                             builder.setWeight(700);
                         }
+                        if (assetPath.contains("thin")) {
+                            builder.setWeight(100);
+                        }
+                        if (assetPath.contains("regular")) {
+                            builder.setWeight(400);
+                        }
                         if (assetPath.contains("italic")) {
                             builder.setItalic(true);
                         }

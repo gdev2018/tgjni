@@ -63,7 +63,7 @@ public class MessagesStorage {
     private CountDownLatch openSync = new CountDownLatch(1);
 
     private int currentAccount;
-    private static volatile MessagesStorage Instance[] = new MessagesStorage[BaseUserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile MessagesStorage[] Instance = new MessagesStorage[BaseUserConfig.MAX_ACCOUNT_COUNT];
     private final static int LAST_DB_VERSION = 56;
 
     public static MessagesStorage getInstance(int num) {

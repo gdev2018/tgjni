@@ -54,7 +54,7 @@ public class LocationController implements NotificationCenter.NotificationCenter
     private final static double eps = 0.0001;
 
     private int currentAccount;
-    private static volatile LocationController Instance[] = new LocationController[BaseUserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile LocationController[] Instance = new LocationController[BaseUserConfig.MAX_ACCOUNT_COUNT];
 
     public static LocationController getInstance(int num) {
         LocationController localInstance = Instance[num];

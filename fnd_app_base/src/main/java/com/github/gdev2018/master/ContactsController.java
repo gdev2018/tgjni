@@ -161,7 +161,7 @@ public class ContactsController {
     private int completedRequestsCount;
 
     private int currentAccount;
-    private static volatile ContactsController Instance[] = new ContactsController[BaseUserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile ContactsController[] Instance = new ContactsController[BaseUserConfig.MAX_ACCOUNT_COUNT];
     public static ContactsController getInstance(int num) {
         ContactsController localInstance = Instance[num];
         if (localInstance == null) {

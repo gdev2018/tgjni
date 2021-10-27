@@ -48,7 +48,7 @@ public class FileRefController {
     private long lastCleanupTime = SystemClock.elapsedRealtime();
 
     private int currentAccount;
-    private static volatile FileRefController Instance[] = new FileRefController[BaseUserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile FileRefController[] Instance = new FileRefController[BaseUserConfig.MAX_ACCOUNT_COUNT];
     private ArrayList<Waiter> wallpaperWaiters = new ArrayList<>();
     private ArrayList<Waiter> savedGifsWaiters = new ArrayList<>();
     private ArrayList<Waiter> recentStickersWaiter = new ArrayList<>();

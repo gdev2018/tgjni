@@ -130,7 +130,7 @@ public class NotificationsController {
     }
 
     private int currentAccount;
-    private static volatile NotificationsController Instance[] = new NotificationsController[BaseUserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile NotificationsController[] Instance = new NotificationsController[BaseUserConfig.MAX_ACCOUNT_COUNT];
 
     public static NotificationsController getInstance(int num) {
         NotificationsController localInstance = Instance[num];

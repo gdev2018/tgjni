@@ -73,7 +73,7 @@ public class SecretChatHelper {
     private boolean startingSecretChat = false;
 
     private int currentAccount;
-    private static volatile SecretChatHelper Instance[] = new SecretChatHelper[BaseUserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile SecretChatHelper[] Instance = new SecretChatHelper[BaseUserConfig.MAX_ACCOUNT_COUNT];
 
     public static SecretChatHelper getInstance(int num) {
         SecretChatHelper localInstance = Instance[num];

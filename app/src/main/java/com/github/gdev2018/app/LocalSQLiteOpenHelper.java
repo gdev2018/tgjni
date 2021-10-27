@@ -28,7 +28,7 @@ public class LocalSQLiteOpenHelper {
     private File walCacheFile;
     private File shmCacheFile;
 
-    private static volatile LocalSQLiteOpenHelper Instance[] = new LocalSQLiteOpenHelper[1];
+    private static volatile LocalSQLiteOpenHelper[] Instance = new LocalSQLiteOpenHelper[1];
     private final static int LAST_DB_VERSION = 10;
 
     public static LocalSQLiteOpenHelper getInstance(int num) {

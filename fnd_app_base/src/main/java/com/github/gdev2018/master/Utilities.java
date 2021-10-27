@@ -509,11 +509,13 @@ public class Utilities {
         }
         return expense;
     }
+
     public static String getPrettyTimeExpense(Date startDate, Date endDate){
         //milliseconds
         long different = getMilliSecExpense(startDate, endDate);
         return getPrettyTimeExpense(different);
     }
+
     public static String getPrettyTimeExpense(long timeInMillisec){
         long secondsInMilli = 1000;
         long minutesInMilli = secondsInMilli * 60;
@@ -533,14 +535,17 @@ public class Utilities {
 
         if (elapsedDays == 0) {
             if (elapsedHours == 0) {
-                return String.format("%d min %d sec%n", elapsedMinutes, elapsedSeconds);
+                if (elapsedMinutes == 0) {
+                    return String.format("%d sec%n", elapsedSeconds);
+                } else {
+                    return String.format("%d min %d sec%n", elapsedMinutes, elapsedSeconds);
+                }
             } else {
                 return String.format("%d hrs %d min%n", elapsedHours, elapsedMinutes, elapsedSeconds);
             }
         } else {
             return String.format("%d days %d hrs %d min%n", elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds);
         }
-
     }
 
     public static String secondsToStringHMS(int pTime) {
@@ -554,6 +559,7 @@ public class Utilities {
 
         return String.format("%s:%s", strHrs, strMin);
     }
+
     public static String secondsToString(int pTime) {
         final int min = pTime / 60;
         final int sec = pTime % 60;
@@ -562,12 +568,15 @@ public class Utilities {
         final String strSec = placeZeroIfNeeded(sec);
         return String.format("%s:%s",strMin,strSec);
     }
+
     private static String placeZeroIfNeeded(int number) {
         return (number >=10)? Integer.toString(number):String.format("0%s",Integer.toString(number));
     }
+
     private static String timeDescription(String pDescription,int pTime) {
         return putTimeInXX(pDescription,secondsToString(pTime));
     }
+
     private static String putTimeInXX(String inputDescription,String pTime) {
         return inputDescription.replace("XX",pTime);
     }

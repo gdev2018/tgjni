@@ -502,84 +502,136 @@ public class Utilities {
 
 
     // ************ time functions ************
-    public static long getMilliSecExpense(Date startDate, Date endDate){
+    public static long getMilliSecExpense(Date startDate, Date endDate) {
         long expense = 0;
         if (startDate != null && endDate != null) {
-            expense = startDate.getTime() - endDate.getTime();
+            expense = endDate.getTime() - startDate.getTime();
         }
         return expense;
     }
 
-    public static String getPrettyTimeExpense(Date startDate, Date endDate){
-        //milliseconds
-        long different = getMilliSecExpense(startDate, endDate);
-        return getPrettyTimeExpense(different);
+//    public static String getPrettyTimeExpense(Date startDate, Date endDate) {
+//        //milliseconds
+//        long different = getMilliSecExpense(startDate, endDate);
+//        return getPrettyTimeExpense(different);
+//    }
+
+//    public static String getPrettyTimeExpense(long timeInMillisec) {
+//        long secondsInMilli = 1000;
+//        long minutesInMilli = secondsInMilli * 60;
+//        long hoursInMilli = minutesInMilli * 60;
+//        long daysInMilli = hoursInMilli * 24;
+//
+//        long elapsedDays = timeInMillisec / daysInMilli;
+//        timeInMillisec = timeInMillisec % daysInMilli;
+//
+//        long elapsedHours = timeInMillisec / hoursInMilli;
+//        timeInMillisec = timeInMillisec % hoursInMilli;
+//
+//        long elapsedMinutes = timeInMillisec / minutesInMilli;
+//        timeInMillisec = timeInMillisec % minutesInMilli;
+//
+//        long elapsedSeconds = timeInMillisec / secondsInMilli;
+//
+//        if (elapsedDays == 0) {
+//            if (elapsedHours == 0) {
+//                if (elapsedMinutes == 0) {
+//                    return String.format("%d sec%n", elapsedSeconds);
+//                } else {
+//                    return String.format("%d min %d sec%n", elapsedMinutes, elapsedSeconds);
+//                }
+//            } else {
+//                return String.format("%d hrs %d min%n", elapsedHours, elapsedMinutes, elapsedSeconds);
+//            }
+//        } else {
+//            return String.format("%d days %d hrs %d min%n", elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds);
+//        }
+//    }
+
+    public static String durationInMillis(Date start, Date end) {
+        return durationInMillis(getMilliSecExpense(start, end));
     }
 
-    public static String getPrettyTimeExpense(long timeInMillisec){
-        long secondsInMilli = 1000;
-        long minutesInMilli = secondsInMilli * 60;
-        long hoursInMilli = minutesInMilli * 60;
-        long daysInMilli = hoursInMilli * 24;
+    public static String durationInMillis(long durationInMillis) {
+        return durationInMillis(durationInMillis, "HH:mm:ss.SSS");
+    }
 
-        long elapsedDays = timeInMillisec / daysInMilli;
-        timeInMillisec = timeInMillisec % daysInMilli;
+    public static String durationInMillis(long durationInMillis, String format) {
+        return durationInMillis(durationInMillis, format);
+    }
 
-        long elapsedHours = timeInMillisec / hoursInMilli;
-        timeInMillisec = timeInMillisec % hoursInMilli;
+    public static String durationInMillis(long durationInMillis, String format) {
+        long millis = durationInMillis % 1000;
+        long second = (durationInMillis / 1000) % 60;
+        long minute = (durationInMillis / (1000 * 60)) % 60;
+        long hour = (durationInMillis / (1000 * 60 * 60)) % 24;
+        long day = (durationInMillis / (1000 * 60 * 60 * 24));
 
-        long elapsedMinutes = timeInMillisec / minutesInMilli;
-        timeInMillisec = timeInMillisec % minutesInMilli;
-
-        long elapsedSeconds = timeInMillisec / secondsInMilli;
-
-        if (elapsedDays == 0) {
-            if (elapsedHours == 0) {
-                if (elapsedMinutes == 0) {
-                    return String.format("%d sec%n", elapsedSeconds);
+        String msg = String.format("%02d:%02d:%02d", hour, minute, second);
+        switch (format) {
+            case "PRETTY_TIME_EXPENSE":
+                if (day == 0) {
+                    if (hour == 0) {
+                        if (minute == 0) {
+                            msg = String.format("%d sec%n", second);
+                        } else {
+                            msg = String.format("%d min %d sec%n", minute, second);
+                        }
+                    } else {
+                        msg = String.format("%d hrs %d min%n", hour, minute);
+                    }
                 } else {
-                    return String.format("%d min %d sec%n", elapsedMinutes, elapsedSeconds);
+                    msg = String.format("%d days %d hrs %d min%n", day, hour, minute);
                 }
-            } else {
-                return String.format("%d hrs %d min%n", elapsedHours, elapsedMinutes, elapsedSeconds);
-            }
-        } else {
-            return String.format("%d days %d hrs %d min%n", elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds);
+                break;
+            case "HH:mm:ss.SSS":
+                msg = String.format("%02d:%02d:%02d.%03d", hour, minute, second, millis);
+                break;
+            case "HH:mm:ss":
+                msg = String.format("%02d:%02d:%02d", hour, minute, second);
+                break;
+            case "HH:mm":
+                msg = String.format("%02d:%02d", hour, minute);
+                break;
+            case "mm:ss":
+                msg = String.format("%02d:%02d", minute, second);
+                break;
         }
+        return msg;
     }
 
-    public static String secondsToStringHMS(int pTime) {
-        final int hrs = pTime / 3660;
-        final int min = (pTime % 3660) / 60;
-        final int sec = (pTime % 3660) % 60;
-
-        final String strHrs = Integer.toString(hrs);
-        final String strMin = placeZeroIfNeeded(min);
-        final String strSec = placeZeroIfNeeded(sec);
-
-        return String.format("%s:%s", strHrs, strMin);
-    }
-
-    public static String secondsToString(int pTime) {
-        final int min = pTime / 60;
-        final int sec = pTime % 60;
-
-        final String strMin = placeZeroIfNeeded(min);
-        final String strSec = placeZeroIfNeeded(sec);
-        return String.format("%s:%s",strMin,strSec);
-    }
-
-    private static String placeZeroIfNeeded(int number) {
-        return (number >=10)? Integer.toString(number):String.format("0%s",Integer.toString(number));
-    }
-
-    private static String timeDescription(String pDescription,int pTime) {
-        return putTimeInXX(pDescription,secondsToString(pTime));
-    }
-
-    private static String putTimeInXX(String inputDescription,String pTime) {
-        return inputDescription.replace("XX",pTime);
-    }
+//    public static String secondsToStringHMS(int pTime) {
+//        final int hrs = pTime / 3660;
+//        final int min = (pTime % 3660) / 60;
+//        final int sec = (pTime % 3660) % 60;
+//
+//        final String strHrs = Integer.toString(hrs);
+//        final String strMin = placeZeroIfNeeded(min);
+//        final String strSec = placeZeroIfNeeded(sec);
+//
+//        return String.format("%s:%s", strHrs, strMin);
+//    }
+//
+//    public static String secondsToString(int pTime) {
+//        final int min = pTime / 60;
+//        final int sec = pTime % 60;
+//
+//        final String strMin = placeZeroIfNeeded(min);
+//        final String strSec = placeZeroIfNeeded(sec);
+//        return String.format("%s:%s", strMin, strSec);
+//    }
+//
+//    private static String placeZeroIfNeeded(int number) {
+//        return (number >=10) ? Integer.toString(number) : String.format("0%s", Integer.toString(number));
+//    }
+//
+//    private static String timeDescription(String pDescription, int pTime) {
+//        return putTimeInXX(pDescription, secondsToString(pTime));
+//    }
+//
+//    private static String putTimeInXX(String inputDescription, String pTime) {
+//        return inputDescription.replace("XX", pTime);
+//    }
 
     public static String dateToString(Date date, String pattern) {
         if (date == null) {
@@ -674,13 +726,13 @@ public class Utilities {
      * @param context Context to get resources and device specific display metrics
      * @return A float value to represent px equivalent to dp depending on device density
      */
-    public static float convertDpToPixel(float dp, Context context){
+    public static float convertDpToPixel(float dp, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return px;
     }
-    public static float convertDpToPixel(float dp){
+    public static float convertDpToPixel(float dp) {
         return convertDpToPixel (dp, BaseApplication.mApplicationContext);
     }
 
@@ -691,13 +743,13 @@ public class Utilities {
      * @param context Context to get resources and device specific display metrics
      * @return A float value to represent dp equivalent to px value
      */
-    public static float convertPixelsToDp(float px, Context context){
+    public static float convertPixelsToDp(float px, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         float dp = px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return dp;
     }
-    public static float convertPixelsToDp(float px){
+    public static float convertPixelsToDp(float px) {
         return convertDpToPixel (px, BaseApplication.mApplicationContext);
     }
 

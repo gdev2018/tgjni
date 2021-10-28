@@ -26,25 +26,25 @@ public class ActivityUtils {
 
     // time functions
 
-    public String secondsToString(int pTime) {
-        final int min = pTime / 60;
-        final int sec = pTime % 60;
-
-        final String strMin = placeZeroIfNeeded(min);
-        final String strSec = placeZeroIfNeeded(sec);
-        return String.format("%s:%s",strMin,strSec);
-    }
-
-    private String placeZeroIfNeeded(int number) {
-        return (number >=10)? Integer.toString(number):String.format("0%s",Integer.toString(number));
-    }
-
-    private String timeDescription(String pDescription,int pTime) {
-        return putTimeInXX(pDescription,secondsToString(pTime));
-    }
-
-    private String putTimeInXX(String inputDescription,String pTime) {
-        return inputDescription.replace("XX",pTime);
-    }
+//    public String secondsToString(int pTime) {
+//        final int min = pTime / 60;
+//        final int sec = pTime % 60;
+//
+//        final String strMin = placeZeroIfNeeded(min);
+//        final String strSec = placeZeroIfNeeded(sec);
+//        return String.format("%s:%s",strMin,strSec);
+//    }
+//
+//    private String placeZeroIfNeeded(int number) {
+//        return (number >=10)? Integer.toString(number):String.format("0%s",Integer.toString(number));
+//    }
+//
+//    private String timeDescription(String pDescription,int pTime) {
+//        return putTimeInXX(pDescription,secondsToString(pTime));
+//    }
+//
+//    private String putTimeInXX(String inputDescription,String pTime) {
+//        return inputDescription.replace("XX",pTime);
+//    }
 
 }

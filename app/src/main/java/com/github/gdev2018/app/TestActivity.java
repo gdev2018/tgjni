@@ -15,7 +15,7 @@ import java.util.Locale;
 import com.github.gdev2018.app.R;
 import com.github.gdev2018.master.Utilities;
 
-import static com.github.gdev2018.master.AndroidUtilities.secondsToString;
+//import static com.github.gdev2018.master.AndroidUtilities.secondsToString;
 import static com.github.gdev2018.master.tgnet.ConnectionsManager.native_getCurrentTimeMillis2;
 
 
@@ -37,7 +37,7 @@ public class TestActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        seconds = secondsToString(123);
+//        seconds = secondsToString(123);
 
         seconds = Long.toString(getCurrentTimeMillis2());
         ((TextView)findViewById(R.id.seconds_textView)).setText(seconds);

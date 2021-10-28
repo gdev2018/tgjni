@@ -548,16 +548,12 @@ public class Utilities {
 //        }
 //    }
 
-    public static String durationInMillis(Date start, Date end) {
-        return durationInMillis(getMilliSecExpense(start, end));
+    public static String durationInMillis(Date start, Date end, String format) {
+        return durationInMillis(getMilliSecExpense(start, end), format);
     }
 
     public static String durationInMillis(long durationInMillis) {
         return durationInMillis(durationInMillis, "HH:mm:ss.SSS");
-    }
-
-    public static String durationInMillis(long durationInMillis, String format) {
-        return durationInMillis(durationInMillis, format);
     }
 
     public static String durationInMillis(long durationInMillis, String format) {

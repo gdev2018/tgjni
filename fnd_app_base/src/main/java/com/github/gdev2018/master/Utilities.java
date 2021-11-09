@@ -569,15 +569,15 @@ public class Utilities {
                 if (day == 0) {
                     if (hour == 0) {
                         if (minute == 0) {
-                            msg = String.format("%d sec%n", second);
+                            msg = String.format("%d sec", second);
                         } else {
-                            msg = String.format("%d min %d sec%n", minute, second);
+                            msg = String.format("%d min %d sec", minute, second);
                         }
                     } else {
-                        msg = String.format("%d hrs %d min%n", hour, minute);
+                        msg = String.format("%d hrs %d min", hour, minute);
                     }
                 } else {
-                    msg = String.format("%d days %d hrs %d min%n", day, hour, minute);
+                    msg = String.format("%d days %d hrs %d min", day, hour, minute);
                 }
                 break;
             case "HH:mm:ss.SSS":

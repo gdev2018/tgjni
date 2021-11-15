@@ -41,6 +41,9 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 public class Utilities {
 
     public static final int RESULT_SUCCESS = 1;
@@ -510,43 +513,8 @@ public class Utilities {
         return expense;
     }
 
-//    public static String getPrettyTimeExpense(Date startDate, Date endDate) {
-//        //milliseconds
-//        long different = getMilliSecExpense(startDate, endDate);
-//        return getPrettyTimeExpense(different);
-//    }
 
-//    public static String getPrettyTimeExpense(long timeInMillisec) {
-//        long secondsInMilli = 1000;
-//        long minutesInMilli = secondsInMilli * 60;
-//        long hoursInMilli = minutesInMilli * 60;
-//        long daysInMilli = hoursInMilli * 24;
-//
-//        long elapsedDays = timeInMillisec / daysInMilli;
-//        timeInMillisec = timeInMillisec % daysInMilli;
-//
-//        long elapsedHours = timeInMillisec / hoursInMilli;
-//        timeInMillisec = timeInMillisec % hoursInMilli;
-//
-//        long elapsedMinutes = timeInMillisec / minutesInMilli;
-//        timeInMillisec = timeInMillisec % minutesInMilli;
-//
-//        long elapsedSeconds = timeInMillisec / secondsInMilli;
-//
-//        if (elapsedDays == 0) {
-//            if (elapsedHours == 0) {
-//                if (elapsedMinutes == 0) {
-//                    return String.format("%d sec%n", elapsedSeconds);
-//                } else {
-//                    return String.format("%d min %d sec%n", elapsedMinutes, elapsedSeconds);
-//                }
-//            } else {
-//                return String.format("%d hrs %d min%n", elapsedHours, elapsedMinutes, elapsedSeconds);
-//            }
-//        } else {
-//            return String.format("%d days %d hrs %d min%n", elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds);
-//        }
-//    }
+    //todo-> join with formatDuration in AndroidUtilities
 
     public static String durationInMillis(Date start, Date end, String format) {
         return durationInMillis(getMilliSecExpense(start, end), format);
@@ -595,39 +563,6 @@ public class Utilities {
         }
         return msg;
     }
-
-//    public static String secondsToStringHMS(int pTime) {
-//        final int hrs = pTime / 3660;
-//        final int min = (pTime % 3660) / 60;
-//        final int sec = (pTime % 3660) % 60;
-//
-//        final String strHrs = Integer.toString(hrs);
-//        final String strMin = placeZeroIfNeeded(min);
-//        final String strSec = placeZeroIfNeeded(sec);
-//
-//        return String.format("%s:%s", strHrs, strMin);
-//    }
-//
-//    public static String secondsToString(int pTime) {
-//        final int min = pTime / 60;
-//        final int sec = pTime % 60;
-//
-//        final String strMin = placeZeroIfNeeded(min);
-//        final String strSec = placeZeroIfNeeded(sec);
-//        return String.format("%s:%s", strMin, strSec);
-//    }
-//
-//    private static String placeZeroIfNeeded(int number) {
-//        return (number >=10) ? Integer.toString(number) : String.format("0%s", Integer.toString(number));
-//    }
-//
-//    private static String timeDescription(String pDescription, int pTime) {
-//        return putTimeInXX(pDescription, secondsToString(pTime));
-//    }
-//
-//    private static String putTimeInXX(String inputDescription, String pTime) {
-//        return inputDescription.replace("XX", pTime);
-//    }
 
     public static String dateToString(Date date, String pattern) {
         if (date == null) {
@@ -712,6 +647,7 @@ public class Utilities {
             return c1.get(Calendar.MONTH) - c2.get(Calendar.MONTH);
         return c1.get(Calendar.DAY_OF_MONTH) - c2.get(Calendar.DAY_OF_MONTH);
     }
+
 
     // ************ other functions ************
 
@@ -863,5 +799,15 @@ public class Utilities {
             }
         }
         return false;
+    }
+    // <---- guava utils
+
+    private static Gson gson;
+    public static Gson getGsonParser() {
+        if(null == gson) {
+            GsonBuilder builder = new GsonBuilder();
+            gson = builder.create();
+        }
+        return gson;
     }
 }

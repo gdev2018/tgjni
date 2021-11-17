@@ -47,19 +47,26 @@ public class BaseApplication extends Application {
     public static volatile NetworkInfo currentNetworkInfo;
     public static volatile boolean unableGetCurrentNetwork;
     public static volatile Handler mApplicationHandler;
+
+    private static ConnectivityManager connectivityManager;
+    protected static volatile boolean mApplicationInited = false;
+
     public static SharedPreferences mGlobalMainSettings;
 
     public static volatile SharedPreferences mGlobalBroadcastingsPreferences;
     public static volatile SharedPreferences mGlobalMainPreferences;
     public static volatile SharedPreferences mGlobalEmojiPreferences;
 
-    protected static volatile boolean mApplicationInited = false;
+    public static long startTime;
+
     public static volatile boolean isScreenOn = false;
     public static volatile boolean mainInterfacePaused = true;
+    public static volatile boolean mainInterfaceStopped = true;
     public static volatile boolean externalInterfacePaused = true;
     public static volatile boolean mainInterfacePausedStageQueue = true;
+    public static boolean canDrawOverlays;
     public static volatile long mainInterfacePausedStageQueueTime;
-    private static ConnectivityManager connectivityManager;
+
 
 
     public static File getFilesDirFixed() {

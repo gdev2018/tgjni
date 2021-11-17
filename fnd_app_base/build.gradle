@@ -125,6 +125,7 @@ dependencies {
     // Espresso
     implementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
 
+    implementation 'com.google.code.gson:gson:2.8.9'
 
 //    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     // tg way --->
@@ -160,7 +161,7 @@ publish {
     groupId = 'com.github.gdev2018'
     repoName = 'tgjni'
     artifactId = 'fnd_app_base'
-    publishVersion = '1.5.7'
+    publishVersion = '1.5.8'
     desc = 'tgjni project - fnd_app_base module/package/artifact'
     licences = ['GPL-2.0']
     website = 'https://github.com/gdev2018/tgjni'

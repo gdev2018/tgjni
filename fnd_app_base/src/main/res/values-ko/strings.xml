@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="AppName">텔레그램</string>
-    <string name="AppNameBeta">Telegram Beta</string>
+    <string name="AppNameBeta">LaborBook Beta</string>
     <string name="LanguageName">한국어</string>
     <string name="English">영어</string>
     <string name="LanguageNameInEnglish">한국어</string>
@@ -1096,7 +1096,7 @@
     <string name="URL">URL</string>
     <string name="MapPreviewProvider">지도 미리보기 제공 기관</string>
     <string name="MapPreviewProviderTitle">지도 미리보기 제공 기관</string>
-    <string name="MapPreviewProviderTelegram">텔레그램</string>
+    <string name="MapPreviewProviderPlabor">텔레그램</string>
     <string name="MapPreviewProviderGoogle">Google</string>
     <string name="MapPreviewProviderYandex">Yandex</string>
     <string name="MapPreviewProviderNobody">미리보기 없음</string>
@@ -2065,7 +2065,7 @@
     <string name="UseProxyUsername">사용자명</string>
     <string name="UseProxySocks5">SOCKS5 프록시</string>
     <string name="UseProxyTelegram">MTProto 프록시</string>
-    <string name="UseProxyTelegramError">사용하고 계신 프록시는 올바르게 설정되지 않았기에 비활성화될 것입니다. 다른 프록시를 사용해 주세요.</string>
+    <string name="UseProxyPlaborError">사용하고 계신 프록시는 올바르게 설정되지 않았기에 비활성화될 것입니다. 다른 프록시를 사용해 주세요.</string>
     <string name="UseProxySponsor">프록시 협찬</string>
     <string name="UseProxySponsorInfo">이 채널은 회원님의 프록시 서버로 인해 나타났습니다. 채널을 대화방 목록에서 제거하려면, 텔레그램 설정에서 프록시 사용을 해제하세요.</string>
     <string name="UseProxyInfo">SOCKS5 프록시 설정입니다.</string>
@@ -3301,13 +3301,13 @@
     <string name="NotificationsChartTitle">알림</string>
     <string name="DeviceStorage">기기 저장 공간</string>
     <string name="TotalDeviceFreeSize">%s 여유</string>
-    <string name="ClearTelegramCache">텔레그램 캐시 비우기</string>
+    <string name="ClearPlaborCache">텔레그램 캐시 비우기</string>
     <string name="StatisticOverview">개요</string>
     <string name="ViewsPerPost">게시글당 조회수</string>
     <string name="SharesPerPost">게시글당 공유수</string>
     <string name="EnabledNotifications">알림 켬</string>
     <string name="ClearLocalDatabase">로컬 데이터베이스 비우기</string>
-    <string name="TelegramCacheSize">%s 텔레그램 캐시</string>
+    <string name="PlaborCacheSize">%s 텔레그램 캐시</string>
     <string name="LocalDatabaseSize">%s 텔레그램 로컬 데이터베이스</string>
     <string name="CacheWasCleared">%s를 회원님 기기에 확보했습니다!</string>
     <string name="TotalDeviceSize">%s 기타 앱</string>

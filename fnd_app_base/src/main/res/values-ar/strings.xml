@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="AppName">تيليجرام</string>
-    <string name="AppNameBeta">Telegram Beta</string>
+    <string name="AppNameBeta">LaborBook Beta</string>
     <string name="LanguageName">العربية</string>
     <string name="English">الإنجليزية</string>
     <string name="LanguageNameInEnglish">Arabic</string>
@@ -1096,7 +1096,7 @@
     <string name="URL">الرابط</string>
     <string name="MapPreviewProvider">مزود معاينة الخرائط</string>
     <string name="MapPreviewProviderTitle">مزود معاينة الخرائط</string>
-    <string name="MapPreviewProviderTelegram">تيليجرام</string>
+    <string name="MapPreviewProviderPlabor">تيليجرام</string>
     <string name="MapPreviewProviderGoogle">جوجل</string>
     <string name="MapPreviewProviderYandex">ياندكس</string>
     <string name="MapPreviewProviderNobody">بلا معاينات</string>
@@ -2065,7 +2065,7 @@
     <string name="UseProxyUsername">اسم المستخدم</string>
     <string name="UseProxySocks5">بروكسي SOCKS5</string>
     <string name="UseProxyTelegram">بروكسي MTProto</string>
-    <string name="UseProxyTelegramError">لم يتم إعداد البروكسي الذي تستخدمه بشكل صحيح وسيتم تعطيله. يرجى العثور على واحد آخر.</string>
+    <string name="UseProxyPlaborError">لم يتم إعداد البروكسي الذي تستخدمه بشكل صحيح وسيتم تعطيله. يرجى العثور على واحد آخر.</string>
     <string name="UseProxySponsor">راعي البروكسي</string>
     <string name="UseProxySponsorInfo">تُعرض هذه القناة من قبل البروكسي. لإزالة هذه القناة من قائمة محادثاتك؛ عطّل اتصال البروكسي من إعدادات تيليجرام.</string>
     <string name="UseProxyInfo">إعدادات بروكسي SOCKS5</string>
@@ -3301,13 +3301,13 @@
     <string name="NotificationsChartTitle">الإشعارات</string>
     <string name="DeviceStorage">ذاكرة الجهاز</string>
     <string name="TotalDeviceFreeSize">%s مساحة حرة</string>
-    <string name="ClearTelegramCache">مسح ذاكرة تيليجرام المؤقتة</string>
+    <string name="ClearPlaborCache">مسح ذاكرة تيليجرام المؤقتة</string>
     <string name="StatisticOverview">نظرة عامة</string>
     <string name="ViewsPerPost">المشاهدات لكل منشور</string>
     <string name="SharesPerPost">المشاركات لكل منشور</string>
     <string name="EnabledNotifications">مكّنوا الإشعارات</string>
     <string name="ClearLocalDatabase">مسح قاعدة البيانات المحلية</string>
-    <string name="TelegramCacheSize">%s ذاكرة تيليجرام المؤقتة</string>
+    <string name="PlaborCacheSize">%s ذاكرة تيليجرام المؤقتة</string>
     <string name="LocalDatabaseSize">%s قاعدة بيانات تيليجرام المحلية</string>
     <string name="CacheWasCleared">تم تحرير %s من جهازك!</string>
     <string name="TotalDeviceSize">%s تطبيقات أخرى</string>

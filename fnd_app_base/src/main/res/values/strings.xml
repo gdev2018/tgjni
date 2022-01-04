@@ -3354,7 +3354,7 @@
     <string name="PermissionDrawAboveOtherApps">LaborBook needs access to draw above other apps to play videos in Picture-in-Picture mode.</string>
     <string name="PermissionDrawAboveOtherAppsGroupCall">Overlay mode lets you use push-to-talk and see who is talking even when you are outside of LaborBook.</string>
     <string name="PermissionOpenSettings">SETTINGS</string>
-    <string name="PermissionXiaomiLockscreen">Please allow LaborBook to be shown on the lock screen so that calls can work properly.</string>
+    <string name="PermissionXiaomiLockscreen">Please allow LaborBook to be shown on the lock screen so that service can work properly.</string>
     <string name="PermissionBackgroundLocation">To share your live location in this chat, LaborBook needs access to your location all the time, including while the app is in the background.\n\nWe will access your location only for the duration you choose, and you can stop sharing it any time. We won\'t use your location for any purpose other than sharing it in this chat.</string>
     <string name="PermissionDrawAboveOtherAppsTitle">Picture-in-Picture</string>
     <string name="PermissionDrawAboveOtherAppsGroupCallTitle">Voice Chat Overlay</string>

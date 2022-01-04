@@ -128,8 +128,8 @@
     <string name="NoChats">Welcome to LaborBook</string>
     <string name="RecentlyViewed">Recently viewed</string>
     <string name="RecentlyViewedHide">HIDE</string>
-    <string name="NoChatsHelp">Start messaging by tapping the pencil button in the bottom right corner.</string>
-    <string name="NoChatsContactsHelp">Start messaging by tapping the pencil button in the bottom right corner.</string>
+    <string name="NoChatsHelp">Start time tracking by tapping the play button in the bottom right corner.</string>
+    <string name="NoChatsContactsHelp">Start time tracking by tapping the play button in the bottom right corner.</string>
     <string name="WaitingForNetwork">Waiting for network...</string>
     <string name="Connecting">Connecting...</string>
     <string name="Connected">Connected</string>

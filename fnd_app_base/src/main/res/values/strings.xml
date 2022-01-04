@@ -3345,7 +3345,7 @@
     <string name="TosDeclineDeleteAccount">Warning, this will irreversibly delete your LaborBook account along with all the data you store in the LaborBook cloud.\n\nImportant: You can Cancel now and export your data before deleting your account instead of losing it all. (To do this, open the latest version of LaborBook Desktop and go to Settings &gt; Export LaborBook Data.)</string>
     <!--permissions-->
     <string name="PermissionContacts">To let you connect with friends across all your devices, your contacts will be continuously synced with LaborBook\'s heavily encrypted cloud servers.</string>
-    <string name="PermissionStorage">LaborBook needs storage access so you can send and save photos, videos, music and other media.</string>
+    <string name="PermissionStorage">LaborBook needs storage access so you can create local backups and restore the database.</string>
     <string name="PermissionNoAudio">LaborBook needs access to your microphone so that you can send voice messages.</string>
     <string name="PermissionNoAudioVideo">LaborBook needs access to your microphone so that you can record videos.</string>
     <string name="PermissionNoCamera">LaborBook needs camera access so that you can take photos and videos. Please enable it in Settings.</string>

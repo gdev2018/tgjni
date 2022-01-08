@@ -3366,20 +3366,6 @@
     <string name="ViewChannelStats">Kanaaalstatistieken weergeven</string>
     <string name="ViewMessageStatistic">Berichtstatistieken</string>
     <string name="ViewMessage">Open bericht</string>
-    <!--Intro view-->
-    <string name="Page1Title">LaborBook</string>
-    <string name="Page2Title">Snel</string>
-    <string name="Page3Title">Gratis</string>
-    <string name="Page4Title">Veilig</string>
-    <string name="Page5Title">Krachtig</string>
-    <string name="Page6Title">In de cloud</string>
-    <string name="Page1Message">\'s Werelds **snelste** berichtendienst.\nHet is **gratis** en **veilig**.</string>
-    <string name="Page2Message">**LaborBook** bezorgt berichten sneller dan\nelke andere applicatie.</string>
-    <string name="Page3Message">**LaborBook** is altijd gratis. Geen advertenties.\nGeen abonnementskosten.</string>
-    <string name="Page4Message">**LaborBook** beveiligt je berichten\ntegen aanvallen van hackers.</string>
-    <string name="Page5Message">**LaborBook** beperkt je niet in de grootte van\nje media of chats.</string>
-    <string name="Page6Message">**LaborBook** biedt toegang tot je berichten\nvanaf meerdere apparaten.</string>
-    <string name="StartMessaging">Begin met chatten</string>
     <!-- VoIP -->
     <string name="AccountSettings">Accountinstellingen</string>
     <string name="VoipUseLessData">Data besparen bij oproepen</string>

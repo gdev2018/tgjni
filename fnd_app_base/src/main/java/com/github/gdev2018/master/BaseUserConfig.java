@@ -209,17 +209,18 @@ public class BaseUserConfig {
 //                    editor.remove("tmpPassword");
 //                }*/
 
-                if (currentUser != null) {
-                    if (withFile) {
-                        SerializedData data = new SerializedData();
-                        currentUser.serializeToStream(data);
-                        String string = Base64.encodeToString(data.toByteArray(), Base64.DEFAULT);
-                        editor.putString("user", string);
-                        data.cleanup();
-                    }
-                } else {
-                    editor.remove("user");
-                }
+                // save user by UserConfig only
+///*                if (currentUser != null) {
+//                    if (withFile) {
+//                        SerializedData data = new SerializedData();
+//                        currentUser.serializeToStream(data);
+//                        String string = Base64.encodeToString(data.toByteArray(), Base64.DEFAULT);
+//                        editor.putString("user", string);
+//                        data.cleanup();
+//                    }
+//                } else {
+//                    editor.remove("user");
+//                }*/
 
                 editor.commit();
                 if (oldFile != null) {

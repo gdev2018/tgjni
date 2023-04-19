@@ -529,6 +529,7 @@ public class Utilities {
         long second = (durationInMillis / 1000) % 60;
         long minute = (durationInMillis / (1000 * 60)) % 60;
         long hour = (durationInMillis / (1000 * 60 * 60)) % 24;
+        long hours = (durationInMillis / (1000 * 60 * 60));
         long day = (durationInMillis / (1000 * 60 * 60 * 24));
 
         String msg = String.format("%02d:%02d:%02d", hour, minute, second);
@@ -556,6 +557,9 @@ public class Utilities {
                 break;
             case "HH:mm":
                 msg = String.format("%02d:%02d", hour, minute);
+                break;
+            case "HOURS:mm":
+                msg = String.format("%02d:%02d", hours, minute);
                 break;
             case "mm:ss":
                 msg = String.format("%02d:%02d", minute, second);
